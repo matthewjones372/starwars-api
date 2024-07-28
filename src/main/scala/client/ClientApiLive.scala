@@ -1,7 +1,7 @@
 package com.jones
 package client
 
-import client.ClientError.UnexpectedSeverError
+import client.ClientError.{UnexpectedClientError, UnexpectedSeverError}
 import model.*
 
 import nl.vroste.rezilience.{Policy, Retry}
@@ -14,16 +14,6 @@ final case class ClientApiLive(
   scope: Scope,
   httpConfig: HttpClientConfig
 ) extends ClientApi:
-
-  private val retryPolicy = Retry.make(
-    Retry.Schedules.whenCase { case _: UnexpectedSeverError => }(
-      Retry.Schedules.exponentialBackoff(min = 1.second, max = 5.second)
-    )
-  )
-  private val policy = for {
-    retry <- retryPolicy
-  } yield retry.toPolicy
-
   private val env = ZEnvironment(client, scope)
 
   override def getPersonFrom(id: Int): IO[ClientError, People] =
@@ -38,14 +28,13 @@ final case class ClientApiLive(
     get[Film](url).provideEnvironment(env)
 
   private def get[A: JsonDecoder](url: URL) =
-    policy.flatMap { rp =>
-      rp {
+    ResiliencyPolicy.policy.flatMap { run =>
+      run {
         (for
           response <- client.request(Request.get(url))
-          body     <- response.bodyOrResponseError(url)
-//          _        <- ZIO.logInfo(body)
+          body     <- response.bodyOrClientError(url)
           result <- ZIO.fromEither {
-                      body
+                      body //TODO: Fix this string manipulation you shouldn't need this. Raise an issue with zio-http
                         .stripPrefix("\"")
                         .stripSuffix("\"")
                         .replaceAll("""\\""", "")
@@ -53,15 +42,19 @@ final case class ClientApiLive(
                         .left
                         .map(err => ClientError.JsonDeserializationError(err))
                     }
-        yield result).catchAll { case err: ClientError =>
-          ZIO.logError(err.getMessage) *>
-            ZIO.fail(err)
+        yield result).catchAll {
+          case err: (UnexpectedClientError | UnexpectedSeverError) =>
+            ZIO.logError(err.getMessage) *>
+              ZIO.fail(err)
+          case err: ClientError =>
+            ZIO.logWarning(err.getMessage) *>
+              ZIO.fail(err)
         }
       }.mapError(Policy.unwrap)
     }
 
 extension (response: Response)
-  def bodyOrResponseError(url: URL): IO[ClientError, String] =
+  def bodyOrClientError(url: URL): IO[ClientError, String] =
     if response.status.isSuccess then
       response.body.asString.orElseFail(ClientError.ResponseDeserializationError("Error decoding response"))
     else if response.status.code == 404 then ZIO.fail(ClientError.NotFound(url.encode))
@@ -70,3 +63,13 @@ extension (response: Response)
     else if response.status.isServerError then
       ZIO.fail(ClientError.UnexpectedSeverError(s"Server error ${response.status} - url $url"))
     else ZIO.fail(ClientError.UnexpectedClientError(s"Unknown error ${response.status}"))
+
+object ResiliencyPolicy:
+  private val retryPolicy = Retry.make(
+    Retry.Schedules.whenCase { case _: UnexpectedSeverError => }(
+      Retry.Schedules.exponentialBackoff(min = 1.second, max = 5.second)
+    )
+  )
+  val policy = for {
+    retry <- retryPolicy
+  } yield retry.toPolicy

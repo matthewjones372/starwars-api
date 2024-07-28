@@ -14,8 +14,8 @@ final case class People(
   birthYear: String,
   gender: String,
   homeworld: String,
-  films: List[String],
-  species: List[String],
-  vehicles: List[String],
-  starships: List[String]
+  films: Set[String],
+  species: Set[String],
+  vehicles: Set[String],
+  starships: Set[String]
 ) derives JsonCodec

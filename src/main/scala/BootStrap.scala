@@ -7,7 +7,6 @@ import zio.http.*
 
 import java.net.URI
 
-
 object BootStrap extends ZIOAppDefault {
   def run = {
     val program = for {

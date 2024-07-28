@@ -8,7 +8,7 @@ import zio.http.URL
 
 final case class SWAPIServiceLive(clientApi: ClientApi) extends SWAPIService:
 
-  override def getFilmsFromPerson(id: Int): IO[ClientError, List[String]] = {
+  override def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]] = {
     for {
       people <- ClientApi.getPersonFrom(id)
       films <- ZIO.foreachPar(people.films) { url =>

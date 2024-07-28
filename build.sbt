@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
   "dev.zio"   %% "zio-json"          % "0.7.1",
   "dev.zio"   %% "zio-prelude"       % "1.0.0-RC27",
   "dev.zio"   %% "zio-schema-json"   % "1.3.0",
+  "dev.zio"   %% "zio-cache"         % "0.2.3",
   "nl.vroste" %% "rezilience"        % "0.9.4",
   "dev.zio"   %% "zio-http-testkit"  % "3.0.0-RC9" % Test,
   "dev.zio"   %% "zio-test"          % "2.1.5"     % Test,

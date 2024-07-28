@@ -15,10 +15,10 @@ object Generators:
     birthYear <- Gen.string
     gender    <- Gen.string
     homeworld <- Gen.string
-    films     <- Gen.listOf(Gen.string)
-    vehicles  <- Gen.listOf(Gen.string)
-    starships <- Gen.listOf(Gen.string)
-    species   <- Gen.listOf(Gen.string)
+    films     <- Gen.setOf(Gen.string)
+    vehicles  <- Gen.setOf(Gen.string)
+    starships <- Gen.setOf(Gen.string)
+    species   <- Gen.setOf(Gen.string)
   yield People(
     name,
     height,

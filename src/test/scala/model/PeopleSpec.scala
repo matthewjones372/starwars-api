@@ -14,24 +14,19 @@ object PeopleSpec extends ZIOSpecDefault:
       val people = json.mkString.fromJson[People]
 
       val expectedPerson = People(
-        "Luke Skywalker",
-        172,
-        77,
-        "blond",
-        "fair",
-        "blue",
-        "19BBY",
-        "male",
-        "https://swapi.dev/api/planets/1/",
-        List(
-          "https://swapi.dev/api/films/1/",
-          "https://swapi.dev/api/films/2/",
-          "https://swapi.dev/api/films/3/",
-          "https://swapi.dev/api/films/6/"
-        ),
-        List(),
-        List("https://swapi.dev/api/vehicles/14/", "https://swapi.dev/api/vehicles/30/"),
-        List("https://swapi.dev/api/starships/12/", "https://swapi.dev/api/starships/22/")
+        name = "C-3PO",
+        height = 167,
+        mass = 75,
+        hairColor = "n/a",
+        skinColor = "gold",
+        eyeColor = "yellow",
+        birthYear = "112BBY",
+        gender = "n/a",
+        homeworld = "https://swapi.dev/api/planets/1/",
+        films = Set("/films/1/?format=json", "/films/2/?format=json"),
+        species = Set("https://swapi.dev/api/species/2/"),
+        vehicles = Set(),
+        starships = Set()
       )
 
       assertTrue(people == Right(expectedPerson))

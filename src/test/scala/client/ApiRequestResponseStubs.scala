@@ -1,0 +1,43 @@
+package com.jones
+package client
+
+import zio.*
+import zio.http.*
+
+import java.net.URI
+import scala.io.Source
+
+object ApiRequestResponseStubs:
+  val baseUrl = "http://localhost"
+
+  val testEnv =
+    (Scope.default ++
+      ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI(baseUrl)).get)))
+      >>> SWAPIService.default
+
+  val film1Url  = "films/1/?format=json"
+  val film2Url  = "films/2/?format=json"
+  val personUrl = "people/1/?format=json"
+
+  val personRequest = Request.get(personUrl)
+  val filmRequest1  = Request.get(URL.decode(film1Url).toOption.get)
+  val filmRequest2  = Request.get(URL.decode(film2Url).toOption.get)
+
+  val personJson =
+    Source.fromResource("people_json.json").getLines().mkString
+
+  val personResponse = Response.json(
+    personJson
+  )
+
+  val film1Json = Source.fromResource("film1_json.json").getLines().mkString
+
+  val film1Response = Response.json(
+    film1Json
+  )
+
+  val film2Json = Source.fromResource("film2_json.json").getLines().mkString
+
+  val film2Response = Response.json(
+    film2Json
+  )

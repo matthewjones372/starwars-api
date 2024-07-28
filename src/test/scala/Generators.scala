@@ -1,9 +1,8 @@
 package com.jones
 
-import model.PeopleRaw
+import model.People
 
 import zio.test.*
-import zio.test.magnolia.*
 
 object Generators:
   val peopleGen = for
@@ -20,7 +19,7 @@ object Generators:
     vehicles  <- Gen.listOf(Gen.string)
     starships <- Gen.listOf(Gen.string)
     species   <- Gen.listOf(Gen.string)
-  yield PeopleRaw(
+  yield People(
     name,
     height,
     mass,

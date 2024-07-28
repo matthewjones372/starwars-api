@@ -4,7 +4,7 @@ package model
 import zio.json.*
 
 @jsonMemberNames(SnakeCase)
-final case class PeopleRaw(
+final case class People(
   name: String,
   height: Int,
   mass: Int,

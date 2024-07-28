@@ -7,13 +7,13 @@ import zio.test.Assertion.*
 import scala.io.Source
 import zio.json.*
 
-object PeopleRawSpec extends ZIOSpecDefault:
+object PeopleSpec extends ZIOSpecDefault:
   def spec = suite("People Spec")(
     test("People should be able to be decoded from JSON") {
       val json   = Source.fromResource("people_json.json").getLines().mkString
-      val people = json.mkString.fromJson[PeopleRaw]
+      val people = json.mkString.fromJson[People]
 
-      val expectedPerson = PeopleRaw(
+      val expectedPerson = People(
         "Luke Skywalker",
         172,
         77,

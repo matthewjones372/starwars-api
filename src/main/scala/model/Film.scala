@@ -4,7 +4,7 @@ package model
 import zio.json.*
 
 @jsonMemberNames(SnakeCase)
-final case class FilmRaw(
+final case class Film(
   title: String,
   episodeId: Int,
   openingCrawl: String,

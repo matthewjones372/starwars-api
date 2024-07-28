@@ -2,24 +2,19 @@ package com.jones
 package client
 
 import zio.*
+import zio.http.Client
 
 trait SWAPIService:
-  def getFilmsFromPerson(id: Int): IO[ClientServiceError, List[String]]
+  def getFilmsFromPerson(id: Int): IO[ClientError, List[String]]
 
 object SWAPIService:
+  type Env = Client & Scope & HttpClientConfig
+
   def getFilmsFromPerson(id: Int)(implicit trace: Trace) =
     ZIO.serviceWithZIO[SWAPIService](_.getFilmsFromPerson(id))
 
-  def layer =
-    ZLayer.fromFunction(SWAPIServiceLive.apply)
-    
-  def  default = PersonClientService.layer ++ FilmClientService.layer ++ SWAPIService.layer
 
-final case class SWAPIServiceLive(personClientService: PersonClientService, filmClientService: FilmClientService)
-    extends SWAPIService:
-  override def getFilmsFromPerson(id: Int): IO[ClientServiceError, List[String]] = {
-    for {
-      people <- PersonClientService.getFrom(id)
-      films  <- ZIO.foreachPar(people.films)(FilmClientService.getFromUrl)
-    } yield films.map(_.title)
-  }.provideEnvironment(ZEnvironment(personClientService, filmClientService))
+  val layer =
+    ZLayer.fromFunction(SWAPIServiceLive.apply)
+
+  val default = ClientApi.layer >>> SWAPIService.layer

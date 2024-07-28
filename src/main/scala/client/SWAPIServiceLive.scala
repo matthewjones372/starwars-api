@@ -6,13 +6,13 @@ import client.ClientError.InvalidUrl
 import zio.*
 import zio.http.URL
 
-final case class SWAPIServiceLive(clientApi: ClientApi) extends SWAPIService:
+final case class SWAPIServiceLive(clientApi: ApiClient) extends SWAPIService:
 
   override def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]] = {
     for {
-      people <- ClientApi.getPersonFrom(id)
+      people <- ApiClient.getPersonFrom(id)
       films <- ZIO.foreachPar(people.films) { url =>
-                 decodeUrlString(url).flatMap(ClientApi.getFilmFrom)
+                 decodeUrlString(url).flatMap(ApiClient.getFilmFrom)
                }
     } yield films.map(_.title)
   }.provideEnvironment(ZEnvironment(clientApi))

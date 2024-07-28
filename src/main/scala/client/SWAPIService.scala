@@ -16,4 +16,4 @@ object SWAPIService:
   val layer =
     ZLayer.fromFunction(SWAPIServiceLive.apply)
 
-  val default = ClientApi.layer >>> SWAPIService.layer
+  val default = ApiClient.live >>> SWAPIService.layer

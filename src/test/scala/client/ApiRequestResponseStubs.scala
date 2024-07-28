@@ -3,6 +3,8 @@ package client
 
 import zio.*
 import zio.http.*
+import zio.http.codec.QueryCodec
+import zio.http.endpoint.Endpoint
 
 import java.net.URI
 import scala.io.Source
@@ -41,3 +43,24 @@ object ApiRequestResponseStubs:
   val film2Response = Response.json(
     film2Json
   )
+
+  val getPersonEndpoint =
+    Endpoint(Method.GET / "people" / int("person") / "?format=json" / trailing)
+      .out[String]
+
+  def getFilmsEndpoint =
+    Endpoint(Method.GET / "films" / int("filmId") / trailing)
+      .query(QueryCodec.query("format"))
+      .out[String]
+
+  def getFilmSuccess = getFilmsEndpoint.implement { _ =>
+    ZIO.succeed(film1Json)
+  }
+
+  def addCallWithClientError(state: Ref[Int]) =
+    TestClient.addRoute(getPersonEndpoint.route -> handler {
+      state.getAndUpdate(_ + 1).as {
+        Response.status(Status.Unauthorized)
+      }
+    })
+

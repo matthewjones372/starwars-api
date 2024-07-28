@@ -1,7 +1,7 @@
 package com.jones
 package client
 
-import client.SWAPIService.Env
+
 import model.{Film, People}
 
 import zio.*
@@ -26,22 +26,4 @@ object ClientError:
 
   final case class ClientPolicyError(msg: String) extends ClientError(msg)
 
-trait ClientApi:
-  def getPersonFrom(id: Int): IO[ClientError, People]
 
-  def getFilmFrom(id: Int): IO[ClientError, Film]
-
-  def getFilmFrom(url: URL): IO[ClientError, Film]
-
-object ClientApi:
-  def getPersonFrom(id: Int)(implicit trace: Trace) =
-    ZIO.serviceWithZIO[ClientApi](_.getPersonFrom(id))
-
-  def getFilmFrom(id: Int)(implicit trace: Trace) =
-    ZIO.serviceWithZIO[ClientApi](_.getFilmFrom(id))
-
-  def getFilmFrom(url: URL)(implicit trace: Trace) =
-    ZIO.serviceWithZIO[ClientApi](_.getFilmFrom(url))
-
-  def layer: URLayer[Env, ClientApi] =
-    ZLayer.fromFunction(ClientApiLive.apply)

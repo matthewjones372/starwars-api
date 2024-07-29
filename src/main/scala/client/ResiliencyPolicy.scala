@@ -13,9 +13,9 @@ object ResiliencyPolicy:
     )
   )
 
-  private val policy = for {
-    backOff <- exponentialBackoff
-  } yield backOff.toPolicy
+  private val policy =
+    for backOff <- exponentialBackoff
+    yield backOff.toPolicy
 
   def run[R, E, A](zio: ZIO[R, E, A]) =
     policy.flatMap(r => r(zio)).mapError(Policy.unwrap)

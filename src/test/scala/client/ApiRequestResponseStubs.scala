@@ -9,12 +9,13 @@ import zio.http.endpoint.Endpoint
 import java.net.URI
 import scala.io.Source
 
+
 object ApiRequestResponseStubs:
   val baseUrl = "http://localhost"
 
   val testEnv =
     (Scope.default ++
-      ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI(baseUrl)).get)))
+      ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI(baseUrl)).get, 1000)))
       >>> SWAPIService.default
 
   val film1Url  = "films/1/?format=json"
@@ -28,21 +29,19 @@ object ApiRequestResponseStubs:
   val personJson =
     Source.fromResource("people_json.json").getLines().mkString
 
-  val personResponse = Response.json(
-    personJson
+  val personResponse = Response(
+    status = Status.Ok, body = Body.fromString(personJson)
   )
 
   val film1Json = Source.fromResource("film1_json.json").getLines().mkString
 
-  val film1Response = Response.json(
-    film1Json
+  val film1Response = Response(
+    status = Status.Ok, body = Body.fromString(film1Json)
   )
 
   val film2Json = Source.fromResource("film2_json.json").getLines().mkString
 
-  val film2Response = Response.json(
-    film2Json
-  )
+  val film2Response = Response(status = Status.Ok, body = Body.fromString(film2Json))
 
   val getPersonEndpoint =
     Endpoint(Method.GET / "people" / int("person") / "?format=json" / trailing)

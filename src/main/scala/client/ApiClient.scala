@@ -1,13 +1,13 @@
 package com.jones
 package client
 
-import client.ClientError.{UnexpectedClientError, UnexpectedSeverError}
+import client.ClientError.*
 import model.*
 
 import zio.*
 import zio.http.*
 import zio.json.*
-import client.SWAPIService.Env
+import client.SWAPIService.SWAPIEnv
 
 import zio.cache.*
 
@@ -33,28 +33,29 @@ object ApiClient:
     case PersonIdKey(id: Int)
     case FilmCacheUrlKey(url: URL)
 
+  private type CacheEntities = Film | People
   private final class CachingApiClient(
-    cache: Cache[CacheKey, ClientError, Film | People]
+    cache: Cache[CacheKey, ClientError, CacheEntities]
   ) extends ApiClient:
     override def getFilmFrom(url: URL): IO[ClientError, Film] =
       cache.get(CacheKey.FilmCacheUrlKey(url)).map {
         case film: Film => film
-        case _          => throw UnexpectedClientError("Film not found")
+        case _          => throw UnreachableError
       }
 
     override def getPersonFrom(id: Int): IO[ClientError, People] =
       cache.get(CacheKey.PersonIdKey(id)).map {
         case people: People => people
-        case _              => throw UnexpectedClientError("Person not found")
+        case _              => throw UnreachableError
       }
 
     override def getFilmFrom(id: Int): IO[ClientError, Film] =
       cache.get(CacheKey.FilmIdKey(id)).map {
         case film: Film => film
-        case _          => throw UnexpectedClientError("Film not found")
+        case _          => throw UnreachableError
       }
 
-  def live: RLayer[Env, ApiClient] =
+  def live: RLayer[SWAPIEnv, ApiClient] =
     ZLayer.fromZIO {
       for
         client     <- ZIO.service[Client]
@@ -65,7 +66,7 @@ object ApiClient:
           for
             filmCache <-
               Cache.makeWith(
-                1000,
+                httpConfig.cacheSize,
                 Lookup {
                   case CacheKey.FilmIdKey(id) =>
                     apiClient.getFilmFrom(id)
@@ -103,7 +104,7 @@ object ApiClient:
           response <- client.request(Request.get(url))
           body     <- response.bodyOrClientError(url)
           result <- ZIO.fromEither {
-                      body //TODO: Fix this string manipulation you shouldn't need this. Raise an issue with zio-http
+                      body //TODO: Fix this string manipulation you shouldn't need this.
                         .stripPrefix("\"")
                         .stripSuffix("\"")
                         .replaceAll("""\\""", "")

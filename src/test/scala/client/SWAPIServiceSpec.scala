@@ -8,7 +8,7 @@ import zio.test.*
 import zio.test.Assertion.*
 import zio.*
 
-object SWAPIServiceLiveSpec extends ZIOSpecDefault:
+object SWAPIServiceSpec extends ZIOSpecDefault:
 
   def spec = suite("SWAPIServiceLive Spec")(
     suite("API Response Behavior")(test("can resolve the correct films from a person") {

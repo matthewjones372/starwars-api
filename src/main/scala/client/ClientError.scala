@@ -1,29 +1,13 @@
 package com.jones
 package client
 
-
-import model.{Film, People}
-
-import zio.*
-import zio.http.{Client, URL}
-
-abstract class ClientError(msg: String) extends RuntimeException(msg)
-
-object ClientError:
-  final case class NotFound(request: String) extends ClientError(s"Request for $request not found.")
-
-  final case class JsonDeserializationError(msg: String) extends ClientError(s"Error decoding message: $msg")
-
-  final case class ResponseDeserializationError(msg: String) extends ClientError(msg)
-
-  final case class UnexpectedClientError(msg: String) extends ClientError(msg)
-
-  final case class UnexpectedSeverError(msg: String) extends ClientError(msg)
-
-  final case class InvalidUrl(url: String) extends ClientError(url)
-
-  final case class RateLimited(msg: String) extends ClientError(msg)
-
-  final case class ClientPolicyError(msg: String) extends ClientError(msg)
-
-
+enum ClientError(msg: String) extends RuntimeException(msg):
+  case NotFound(request: String) extends ClientError(s"Request for $request not found.")
+  case JsonDeserializationError(msg: String) extends ClientError(s"Error decoding message: $msg)")
+  case ResponseDeserializationError(msg: String) extends ClientError(msg)
+  case UnexpectedClientError(msg: String) extends ClientError(msg)
+  case UnexpectedSeverError(msg: String) extends ClientError(msg)
+  case InvalidUrl(url: String) extends ClientError(url)
+  case RateLimited(msg: String) extends ClientError(msg)
+  case ClientPolicyError(msg: String, exception: Throwable) extends ClientError(msg)
+  case UnreachableError extends ClientError("Unreachable error")

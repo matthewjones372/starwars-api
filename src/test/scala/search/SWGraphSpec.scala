@@ -15,7 +15,13 @@ object SWGraphSpec extends ZIOSpecDefault:
         )
         val graph = SWGraph(peopleFilmMap)
         val expectedPath =
-          Chunk(("Boba Fett", "A New Hope"), ("Luke", "A New Hope"), ("Lobot", "The Empire Strikes Back"))
+          Path(
+            start = "Lobot",
+            end = "Boba Fett",
+            path = Some(
+              Chunk(("Lobot", "The Empire Strikes Back"), ("Luke", "A New Hope"), ("Boba Fett", "A New Hope"))
+            )
+          )
 
         assertTrue(
           graph

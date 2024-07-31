@@ -21,7 +21,7 @@ class SWGraph[A](private val peopleFilmMap: Map[A, Set[A]]) {
         val (currentPoint, newRemaining) = remaining.dequeue
         val currentPath                  = paths.getOrElse(currentPoint, Chunk.empty)
         if (currentPoint == target) {
-          Some((target, currentPath.head._1) +: currentPath)
+          currentPath.lastOption.map(last => (target, last._2) +: currentPath.reverse)
         } else {
           val (updatedRemaining, updatedPaths, updatedVisited) = peopleFilmMap
             .get(currentPoint)

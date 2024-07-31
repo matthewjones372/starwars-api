@@ -1,10 +1,10 @@
 package com.jones
 package client
 
+import client.ClientError.InvalidUrl
+
 import zio.*
 import zio.http.*
-
-import ClientError.InvalidUrl
 
 extension (response: Response)
   def bodyOrClientError(url: URL): IO[ClientError, String] =

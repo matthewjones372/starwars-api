@@ -1,16 +1,18 @@
 package com.jones
-package model
+package domain
 
 import zio.json.*
+import zio.schema.*
+import zio.schema.annotation.fieldName
 
 @jsonMemberNames(SnakeCase)
 final case class Film(
   title: String,
-  episodeId: Int,
-  openingCrawl: String,
+  @fieldName("episode_id") episodeId: Int,
+  @fieldName("opening_crawl") openingCrawl: String,
   director: String,
   producer: String,
-  releaseDate: String,
+  @fieldName("release_date") releaseDate: String,
   characters: Set[String],
   planets: Set[String],
   starships: Set[String],
@@ -20,3 +22,6 @@ final case class Film(
   edited: String,
   url: String
 ) derives JsonCodec
+
+object Film:
+  given Schema[Film] = DeriveSchema.gen

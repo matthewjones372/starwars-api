@@ -1,5 +1,5 @@
 package com.jones
-package model
+package domain
 
 import zio.test.*
 import zio.test.Assertion.*
@@ -15,8 +15,8 @@ object PeopleSpec extends ZIOSpecDefault:
 
       val expectedPerson = People(
         name = "C-3PO",
-        height = 167,
-        mass = 75,
+        height = "167",
+        mass = "75",
         hairColor = "n/a",
         skinColor = "gold",
         eyeColor = "yellow",

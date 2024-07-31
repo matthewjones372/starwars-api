@@ -3,7 +3,7 @@ package client
 
 enum ClientError(msg: String) extends RuntimeException(msg):
   case NotFound(request: String) extends ClientError(s"Request for $request not found.")
-  case JsonDeserializationError(msg: String) extends ClientError(s"Error decoding message: $msg)")
+  case JsonDeserializationError(body: String, msg: String) extends ClientError(s"Error decoding message: $msg) JSON BODY: $body")
   case ResponseDeserializationError(msg: String) extends ClientError(msg)
   case UnexpectedClientError(msg: String) extends ClientError(msg)
   case UnexpectedSeverError(msg: String) extends ClientError(msg)

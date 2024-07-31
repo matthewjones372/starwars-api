@@ -17,10 +17,11 @@ libraryDependencies ++= Seq(
   "dev.zio"   %% "zio-cache"         % "0.2.3",
   "dev.zio"   %% "zio-concurrent"    % "2.1.6",
   "nl.vroste" %% "rezilience"        % "0.9.4",
-  "dev.zio"   %% "zio-http-testkit"  % "3.0.0-RC9" % Test,
-  "dev.zio"   %% "zio-test"          % "2.1.5"     % Test,
-  "dev.zio"   %% "zio-test-sbt"      % "2.1.6"     % Test,
-  "dev.zio"   %% "zio-test-magnolia" % "2.1.6"     % Test
+  "dev.zio"   %% "zio-http-testkit"  % "3.0.0-RC9"  % Test,
+  "dev.zio"   %% "zio-test"          % "2.1.5"      % Test,
+  "dev.zio"   %% "zio-test-sbt"      % "2.1.6"      % Test,
+  "dev.zio"   %% "zio-test-magnolia" % "2.1.6"      % Test,
+  "dev.zio"   %% "zio-mock"          % "1.0.0-RC12" % Test
 )
 
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")

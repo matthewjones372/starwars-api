@@ -7,6 +7,7 @@ import zio.http.*
 import zio.test.*
 import zio.test.Assertion.*
 import zio.*
+import zio.json.*
 
 object SWAPIServiceSpec extends ZIOSpecDefault:
 
@@ -16,7 +17,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
         _   <- TestClient.addRequestResponse(personRequest, response = personResponse)
         _   <- TestClient.addRequestResponse(filmRequest1, response = film1Response)
         _   <- TestClient.addRequestResponse(filmRequest2, response = film2Response)
-        f1  <- SWAPIService.getFilmsFromPerson(1).fork
+        f1  <- SWAPIClientService.getFilmsFromPerson(1).fork
         _   <- TestClock.adjust(5.seconds)
         res <- f1.join
       yield assertTrue(res == Set("A New Hope", "The Empire Strikes Back"))
@@ -27,7 +28,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
 
         for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.notFound)
-          f1  <- SWAPIService.getFilmsFromPerson(1).exit.fork
+          f1  <- SWAPIClientService.getFilmsFromPerson(1).exit.fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield {
@@ -39,7 +40,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
 
         for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.status(Status.TooManyRequests))
-          f1  <- SWAPIService.getFilmsFromPerson(1).exit.fork
+          f1  <- SWAPIClientService.getFilmsFromPerson(1).exit.fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield {
@@ -47,11 +48,11 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
         }
       },
       test("returns the correct error when poorly formatted json is returned") {
-        val expectedFailure = ClientError.JsonDeserializationError(msg = "(expected '{' got 'B')")
+        val expectedFailure = ClientError.JsonDeserializationError(body = "BAD JSON", msg = "(expected '{' got 'B')")
 
         for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.text("BAD JSON"))
-          f1  <- SWAPIService.getFilmsFromPerson(1).exit.fork
+          f1  <- SWAPIClientService.getFilmsFromPerson(1).exit.fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield {
@@ -64,7 +65,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
             state.getAndUpdate(_ + 1).flatMap {
               case 0 => ZIO.fail(throw new RuntimeException("Boom"))
               case _ =>
-                ZIO.succeed(personJson)
+                ZIO.succeed(person.toJson)
             }
           }.sandbox
 
@@ -72,7 +73,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
             state <- Ref.make(0)
             routes = Routes(getPersonWithInitialFailure(state), getFilmSuccess)
             _     <- TestClient.addRoutes(routes)
-            f1    <- SWAPIService.getFilmsFromPerson(1).fork
+            f1    <- SWAPIClientService.getFilmsFromPerson(1).fork
             _     <- TestClock.adjust(10.seconds)
             res   <- f1.join
           yield assertTrue(res == Set("The Empire Strikes Back"))
@@ -81,7 +82,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
           for
             state         <- Ref.make(0)
             _             <- addCallWithClientError(state)
-            f1            <- SWAPIService.getFilmsFromPerson(1).fork
+            f1            <- SWAPIClientService.getFilmsFromPerson(1).fork
             _             <- TestClock.adjust(10.seconds)
             numberOfCalls <- state.get
           yield assertTrue(numberOfCalls == 1) // There should only be one call
@@ -91,14 +92,14 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
     suite("API Caching behavior")(
       test("calls the cache on the first call") {
         def successfulPersonCall(state: Ref[Int]) = getPersonEndpoint.implement { _ =>
-          state.getAndUpdate(_ + 1).as(personJson)
+          state.getAndUpdate(_ + 1).as(person.toJson)
         }.sandbox
 
         for
           callRef   <- Ref.make(1)
           routes     = Routes(successfulPersonCall(callRef), getFilmSuccess)
           _         <- TestClient.addRoutes(routes)
-          f1        <- SWAPIService.getFilmsFromPerson(1).fork
+          f1        <- SWAPIClientService.getFilmsFromPerson(1).fork
           _         <- TestClock.adjust(5.seconds)
           _         <- f1.join
           cacheHits <- callRef.get

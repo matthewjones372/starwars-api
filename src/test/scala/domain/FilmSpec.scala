@@ -1,5 +1,5 @@
 package com.jones
-package model
+package domain
 
 import zio.test.*
 import zio.test.Assertion.*

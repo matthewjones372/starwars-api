@@ -1,14 +1,13 @@
 package com.jones
-
-import model.People
+package domain
 
 import zio.test.*
 
 object Generators:
   val peopleGen = for
     name      <- Gen.string
-    height    <- Gen.int
-    mass      <- Gen.int
+    height    <- Gen.string
+    mass      <- Gen.string
     hairColor <- Gen.string
     skinColor <- Gen.string
     eyeColor  <- Gen.string

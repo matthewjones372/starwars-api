@@ -10,6 +10,15 @@ object SWAPIServerError:
   object PersonNotFound:
     given Schema[PersonNotFound] = DeriveSchema.gen
 
+  case class FilmNotFound(message: String, filmId: Int) extends SWAPIServerError(message)
+  object FilmNotFound:
+    given Schema[FilmNotFound] = DeriveSchema.gen
+
+  case class UnexpectedError(message: String) extends SWAPIServerError(message)
+
+  object UnexpectedError:
+    given Schema[UnexpectedError] = DeriveSchema.gen
+
   case class ServerError() extends SWAPIServerError("Internal server error")
   object ServerError:
     given Schema[ServerError] = DeriveSchema.gen

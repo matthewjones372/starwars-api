@@ -5,11 +5,10 @@ import client.ClientError.*
 import client.SWAPIClientService.SWAPIEnv
 import domain.*
 
-import com.jones.client.ApiClient.ApiLiveClient.Peoples
 import zio.*
 import zio.cache.*
 import zio.http.*
-import zio.json.{JsonCodec, SnakeCase, jsonMemberNames}
+import zio.json.JsonCodec
 
 trait ApiClient:
   def getPersonFrom(id: Int): IO[ClientError, People]
@@ -18,9 +17,9 @@ trait ApiClient:
 
   def getFilmFrom(url: URL): IO[ClientError, Film]
 
-  def getPeopleFromPage(page: Int): IO[ClientError, Set[People]]
-
   def getPeople: IO[ClientError, Set[People]]
+
+  def getFilms: IO[ClientError, Set[Film]]
 
 object ApiClient:
   def getPersonFrom(id: Int)(using Trace) =
@@ -35,19 +34,23 @@ object ApiClient:
   def getPeople(using Trace) =
     ZIO.serviceWithZIO[ApiClient](_.getPeople)
 
+  def getFilms(using Trace) =
+    ZIO.serviceWithZIO[ApiClient](_.getFilms)
+
   private enum CacheKey:
     case FilmId(id: Int)
     case FilmUrl(url: URL)
+    case Films
     case PersonId(id: Int)
-
-  private enum PageCacheKey:
-    case Page(page: Int)
     case People
 
-  private type CacheEntities = Film | People
+  private final case class FilmSet(films: Set[Film])      extends AnyVal
+  private final case class PeopleSet(people: Set[People]) extends AnyVal
+
+  private type CacheEntities = Film | People | FilmSet | PeopleSet
+
   private final class CachingApiClient(
-    cache: Cache[CacheKey, ClientError, CacheEntities],
-    pageCache: Cache[PageCacheKey, ClientError, Set[People]]
+    cache: Cache[CacheKey, ClientError, CacheEntities]
   ) extends ApiClient:
     override def getFilmFrom(url: URL): IO[ClientError, Film] =
       cache.get(CacheKey.FilmUrl(url)).map {
@@ -68,19 +71,31 @@ object ApiClient:
       }
 
     override def getPeople: IO[ClientError, Set[People]] =
-      pageCache.get(PageCacheKey.People).map {
-        case people: Set[People] => people
-        case null                => throw UnreachableError
+      cache.get(CacheKey.People).map {
+        case PeopleSet(people) => people
+        case _                 => throw UnreachableError
       }
 
-    override def getPeopleFromPage(page: Int): IO[ClientError, Set[People]] =
-      pageCache.get(PageCacheKey.Page(page)).map {
-        case people: Set[People] => people
-        case null                => throw UnreachableError
+    override def getFilms: IO[ClientError, Set[Film]] =
+      cache.get(CacheKey.Films).map {
+        case FilmSet(films) => films
+        case _              => throw UnreachableError
       }
 
   def live: RLayer[SWAPIEnv, ApiClient] =
     ZLayer.fromZIO {
+      def lookup(client: ApiClient): Lookup[Any, Any, ClientError, CacheEntities] = Lookup {
+        case CacheKey.FilmId(id) =>
+          client.getFilmFrom(id)
+        case CacheKey.PersonId(id) =>
+          client.getPersonFrom(id)
+        case CacheKey.FilmUrl(url) =>
+          client.getFilmFrom(url)
+        case CacheKey.People =>
+          client.getPeople.map(PeopleSet.apply)
+        case CacheKey.Films =>
+          client.getFilms.map(FilmSet.apply)
+      }
       for
         client     <- ZIO.service[Client]
         httpConfig <- ZIO.service[HttpClientConfig]
@@ -89,28 +104,12 @@ object ApiClient:
 
         client <-
           for
-            pageCache <- Cache.makeWith(
-                           httpConfig.cacheSize,
-                           Lookup {
-                             case PageCacheKey.Page(page) =>
-                               apiClient.getPeopleFromPage(page)
-                             case PageCacheKey.People =>
-                               apiClient.getPeople
-                           }
-                         )(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
             cache <-
               Cache.makeWith(
                 httpConfig.cacheSize,
-                Lookup {
-                  case CacheKey.FilmId(id) =>
-                    apiClient.getFilmFrom(id)
-                  case CacheKey.PersonId(id) =>
-                    apiClient.getPersonFrom(id)
-                  case CacheKey.FilmUrl(url) =>
-                    apiClient.getFilmFrom(url)
-                }
+                lookup(apiClient)
               )(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
-          yield CachingApiClient(cache, pageCache)
+          yield CachingApiClient(cache)
       yield client
     }
 
@@ -123,11 +122,6 @@ object ApiClient:
 
     override def getPersonFrom(id: Int): IO[ClientError, People] =
       get[People](httpConfig.baseUrl / "people" / id.toString / "?format=json")
-        .provideEnvironment(env)
-
-    override def getPeopleFromPage(page: Int): IO[ClientError, Set[People]] =
-      get[Peoples](httpConfig.baseUrl / "people" / s"?format=json&page=$page")
-        .map(_.results.toSet)
         .provideEnvironment(env)
 
     override def getPeople: IO[ClientError, Set[People]] = {
@@ -148,6 +142,28 @@ object ApiClient:
 
     override def getFilmFrom(url: URL): IO[ClientError, Film] =
       get[Film](url).provideEnvironment(env)
+
+    override def getFilms: IO[ClientError, Set[Film]] = {
+      val firstPage = get[Films](httpConfig.baseUrl / "films" / "?format=json")
+
+      firstPage.flatMap { case Films(count, _, _, firstPage) =>
+        // API returns a max of 10 results per call
+        val pages = (count / 10) + 1
+        ZIO
+          .foreachPar(2 to pages)(getFilmsFromPage)
+          .map(films => (films.flatten ++ firstPage).toSet)
+      }.orElseFail(ClientError.UnreachableError)
+    }.provideEnvironment(env)
+
+    private def getFilmsFromPage(page: Int): IO[ClientError, Set[Film]] =
+      get[Films](httpConfig.baseUrl / "films" / s"?format=json&page=$page")
+        .map(_.results.toSet)
+        .provideEnvironment(env)
+
+    private def getPeopleFromPage(page: Int): IO[ClientError, Set[People]] =
+      get[Peoples](httpConfig.baseUrl / "people" / s"?format=json&page=$page")
+        .map(_.results.toSet)
+        .provideEnvironment(env)
 
     private def get[A](url: URL)(using codec: JsonCodec[A]) =
       ResiliencyPolicy.run {
@@ -174,8 +190,3 @@ object ApiClient:
               ZIO.fail(err)
         }
       }
-
-  object ApiLiveClient:
-    @jsonMemberNames(SnakeCase)
-    final case class Peoples(count: Int, next: Option[String], previous: Option[String], results: List[People])
-        derives JsonCodec

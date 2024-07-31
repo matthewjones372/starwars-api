@@ -24,3 +24,7 @@ final case class People(
 
 object People:
   given Schema[People] = DeriveSchema.gen
+
+@jsonMemberNames(SnakeCase)
+final case class Peoples(count: Int, next: Option[String], previous: Option[String], results: List[People])
+    derives JsonCodec

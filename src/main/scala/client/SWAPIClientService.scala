@@ -9,6 +9,7 @@ trait SWAPIClientService:
   def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]]
   def getPeople: IO[ClientError, Set[People]]
   def getFilmsFromPeople: IO[ClientError, Map[String, Set[String]]]
+  def getFilms: IO[ClientError, Set[Film]]
 
 object SWAPIClientService:
   type SWAPIEnv = Client & Scope & HttpClientConfig
@@ -22,12 +23,18 @@ object SWAPIClientService:
   def getFilmsFromPeople(using Trace): ZIO[SWAPIClientService, ClientError, Map[String, Set[String]]] =
     ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromPeople)
 
+  def getFilms(using Trace): ZIO[SWAPIClientService, ClientError, Set[Film]] =
+    ZIO.serviceWithZIO[SWAPIClientService](_.getFilms)
+
   private val layer =
     ZLayer.fromFunction(SWAPIServiceLive.apply)
 
   val default: RLayer[SWAPIEnv, SWAPIClientService] = ApiClient.live >>> SWAPIClientService.layer
 
 final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPIClientService:
+
+  override def getFilms: IO[ClientError, Set[Film]] =
+    ApiClient.getFilms.provideEnvironment(ZEnvironment(apiClient))
 
   override def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]] = {
     for

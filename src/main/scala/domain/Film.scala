@@ -25,3 +25,7 @@ final case class Film(
 
 object Film:
   given Schema[Film] = DeriveSchema.gen
+
+@jsonMemberNames(SnakeCase)
+final case class Films(count: Int, next: Option[String], previous: Option[String], results: List[Film])
+    derives JsonCodec

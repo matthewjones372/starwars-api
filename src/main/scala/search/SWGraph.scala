@@ -1,46 +1,49 @@
 package com.jones
 package search
 
-import zio.*
+import zio.Chunk
 
 import scala.annotation.tailrec
+import scala.collection.immutable.{HashSet, Queue}
 
-class SWGraph(private val peopleFilmMap: Map[String, Set[String]]) {
-  private val filmPeopleMap = peopleFilmMap.foldLeft(Map.empty[String, Set[String]]) { case (acc, (k, vs)) =>
+class SWGraph[A](private val peopleFilmMap: Map[A, Set[A]]) {
+  private val filmPeopleMap: Map[A, Set[A]] = peopleFilmMap.foldLeft(Map.empty[A, Set[A]]) { case (acc, (k, vs)) =>
     vs.foldLeft(acc) { case (acc, v) =>
       acc.updated(v, acc.getOrElse(v, Set.empty) + k)
     }
   }
 
-  def bfs(start: String, target: String): Option[Chunk[(String, String)]] = {
+  def bfs(start: A, target: A): Option[Path[A]] = {
     @tailrec
-    def loop(remaining: Chunk[String], paths: Map[String, Chunk[(String, String)]]): Option[Chunk[(String, String)]] =
+    def loop(remaining: Queue[A], paths: Map[A, Chunk[(A, A)]], visited: HashSet[A]): Option[Chunk[(A, A)]] =
       if (remaining.isEmpty) None
       else {
-        val currentPoint = remaining.head
-        val currentPath  = paths.getOrElse(currentPoint, Chunk.empty)
+        val (currentPoint, newRemaining) = remaining.dequeue
+        val currentPath                  = paths.getOrElse(currentPoint, Chunk.empty)
         if (currentPoint == target) {
-          currentPath.lastOption.map(_._2).map(l => (target, l) +: currentPath.reverse)
+          Some((target, currentPath.head._1) +: currentPath)
         } else {
-          val (newRemaining, newPaths) = peopleFilmMap
+          val (updatedRemaining, updatedPaths, updatedVisited) = peopleFilmMap
             .get(currentPoint)
             .map { films =>
               films
-                .flatMap(film => filmPeopleMap(film).map((_, film)))          // Get the neighbors and the films connecting them
-                .filterNot { case (neighbor, _) => paths.contains(neighbor) } // Filter out visited nodes
-                .foldLeft((remaining.tail, paths)) { case ((remAcc, pathAcc), (neighbor, film)) =>
-                  (
-                    remAcc :+ neighbor,
-                    pathAcc.updated(neighbor, currentPath :+ (currentPoint -> film))
-                  )
+                .flatMap(film => filmPeopleMap(film).map((_, film))) // Get the neighbors and the films connecting them
+                .foldLeft((newRemaining, paths, visited)) { case ((remAcc, pathAcc, visitAcc), (neighbor, film)) =>
+                  if (!visitAcc.contains(neighbor)) {
+                    (
+                      remAcc.enqueue(neighbor),
+                      pathAcc.updated(neighbor, currentPath :+ (currentPoint -> film)),
+                      visitAcc + neighbor
+                    )
+                  } else (remAcc, pathAcc, visitAcc)
                 }
             }
-            .getOrElse((remaining.tail, paths))
+            .getOrElse((newRemaining, paths, visited))
 
-          loop(newRemaining, newPaths)
+          loop(updatedRemaining, updatedPaths, updatedVisited)
         }
       }
 
-    loop(Chunk(start), Map(start -> Chunk.empty))
+    loop(Queue(start), Map(start -> Chunk.empty), HashSet(start)).map(path => Path(start, target, Some(path.reverse)))
   }
 }

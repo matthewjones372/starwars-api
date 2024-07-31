@@ -2,9 +2,10 @@ package com.jones
 package api
 
 import api.mocking.MockSWDataRepo
-import domain.Film
+import data.DataRepoError
+import domain.Generators.*
 
-import com.jones.data.DataRepoError
+import com.jones.domain.People
 import zio.*
 import zio.http.*
 import zio.http.netty.NettyConfig
@@ -15,7 +16,7 @@ import zio.test.Assertion.*
 
 object SWApiSpec extends ZIOSpecDefault:
   def spec = suite("SWApiSpec")(
-    suite("getFilmFrom")(
+    suite("getPeopleFrom")(
       test("returns a film when given a valid id") {
         (for
           client      <- ZIO.service[Client]
@@ -24,9 +25,9 @@ object SWApiSpec extends ZIOSpecDefault:
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
         yield assertTrue(response.status == Status.Ok)).provideSome[Client & Driver](
-          MockSWDataRepo.GetFilm(
+          MockSWDataRepo.GetPerson(
             assertion = equalTo(1),
-            result = value(film1)
+            result = value(person)
           ),
           Scope.default,
           TestServer.layer
@@ -40,7 +41,7 @@ object SWApiSpec extends ZIOSpecDefault:
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
         yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](
-          MockSWDataRepo.GetFilm(
+          MockSWDataRepo.GetPerson(
             assertion = equalTo(1),
             result = failure(DataRepoError.PersonNotFound("Person not found", 1))
           ),
@@ -56,7 +57,7 @@ object SWApiSpec extends ZIOSpecDefault:
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
         yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
-          MockSWDataRepo.GetFilm(
+          MockSWDataRepo.GetPerson(
             assertion = equalTo(1),
             result = failure(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
           ),
@@ -72,48 +73,26 @@ object SWApiSpec extends ZIOSpecDefault:
     ZLayer.succeed(NettyConfig.defaultWithFastShutdown)
   )
 
+  val person =
+    People(
+      "C-3PO",
+      "167",
+      "75",
+      "n/a",
+      "gold",
+      "yellow",
+      "112BBY",
+      "n/a",
+      "https://swapi.dev/api/planets/1/",
+      Set("/films/1/?format=json", "/films/2/?format=json"),
+      Set("https://swapi.dev/api/species/2/"),
+      Set(),
+      Set()
+    )
+
   def requestToCorrectPort =
     for
       p    <- ZIO.serviceWith[Server](_.port)
       port <- p
     yield Request
       .get(url = URL.root.port(port))
-
-  val film1 = Film(
-    "The Empire Strikes Back",
-    5,
-    "opening",
-    "Irvin Kershner",
-    "Gary Kurtz",
-    "Rick McCallum",
-    Set(),
-    Set(),
-    Set(
-      "https://swapi.dev/api/planets/4/",
-      "https://swapi.dev/api/planets/5/",
-      "https://swapi.dev/api/planets/6/",
-      "https://swapi.dev/api/planets/27/"
-    ),
-    Set(
-      "https://swapi.dev/api/starships/11/",
-      "https://swapi.dev/api/starships/22/",
-      "https://swapi.dev/api/starships/15/",
-      "https://swapi.dev/api/starships/10/",
-      "https://swapi.dev/api/starships/3/",
-      "https://swapi.dev/api/starships/23/",
-      "https://swapi.dev/api/starships/12/",
-      "https://swapi.dev/api/starships/21/",
-      "https://swapi.dev/api/starships/17/"
-    ),
-    Set(
-      "https://swapi.dev/api/vehicles/16/",
-      "https://swapi.dev/api/vehicles/14/",
-      "https://swapi.dev/api/vehicles/19/",
-      "https://swapi.dev/api/vehicles/18/",
-      "https://swapi.dev/api/vehicles/20/",
-      "https://swapi.dev/api/vehicles/8/"
-    ),
-    "",
-    "2014-12-12T11:26:24.656000Z",
-    "2014-12-15T13:07:53.386000Z"
-  )

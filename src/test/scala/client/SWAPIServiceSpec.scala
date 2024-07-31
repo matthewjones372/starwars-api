@@ -12,16 +12,39 @@ import zio.json.*
 object SWAPIServiceSpec extends ZIOSpecDefault:
 
   def spec = suite("SWAPIServiceLive Spec")(
-    suite("API Response Behavior")(test("can resolve the correct films from a person") {
-      for
-        _   <- TestClient.addRequestResponse(personRequest, response = personResponse)
-        _   <- TestClient.addRequestResponse(filmRequest1, response = film1Response)
-        _   <- TestClient.addRequestResponse(filmRequest2, response = film2Response)
-        f1  <- SWAPIClientService.getFilmsFromPerson(1).fork
-        _   <- TestClock.adjust(5.seconds)
-        res <- f1.join
-      yield assertTrue(res == Set("A New Hope", "The Empire Strikes Back"))
-    }),
+    suite("API Response Behavior")(
+      test("can resolve the correct films from a person") {
+        for
+          _   <- TestClient.addRequestResponse(personRequest, response = personResponse)
+          _   <- TestClient.addRequestResponse(filmRequest1, response = film1Response)
+          _   <- TestClient.addRequestResponse(filmRequest2, response = film2Response)
+          f1  <- SWAPIClientService.getFilmsFromPerson(1).fork
+          _   <- TestClock.adjust(5.seconds)
+          res <- f1.join
+        yield assertTrue(res == Set("A New Hope", "The Empire Strikes Back"))
+      },
+      test("can resolve all people from a paged response") {
+        for
+          _ <- TestClient.addRequestResponse(personPagedRequest, response = pagedPersonResponse)
+          _ <- ZIO.foreachDiscard(1 to 2) { page =>
+                 for _ <- TestClient.addRequestResponse(personPagedUrlWith(page), response = pagedPersonResponse)
+                 yield ()
+               }
+          f1  <- SWAPIClientService.getPeople.fork
+          _   <- TestClock.adjust(5.seconds)
+          res <- f1.join
+        yield assertTrue(res.size == 12)
+      },
+      test("returns the correct error when failing to get paged responses") {
+        val expectedFailure = ClientError.FailedToGetPagedResponse
+        for
+          _   <- TestClient.addRequestResponse(personPagedRequest, response = Response.notFound)
+          f1  <- SWAPIClientService.getPeople.exit.fork
+          _   <- TestClock.adjust(5.seconds)
+          res <- f1.join
+        yield assert(res)(fails(equalTo(expectedFailure)))
+      }
+    ),
     suite("API Error Behavior")(
       test("returns the correct error when an entity is not found") {
         val expectedFailure = ClientError.NotFound(s"$baseUrl/$personUrl")

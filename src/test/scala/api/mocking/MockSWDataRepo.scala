@@ -10,6 +10,7 @@ import zio.mock.*
 object MockSWDataRepo extends Mock[SWDataRepo]:
 
   object GetFilm   extends Effect[Int, DataRepoError, Film]
+  object GetFilms  extends Effect[Int, DataRepoError, Set[Film]]
   object GetPerson extends Effect[Int, DataRepoError, People]
   object GetPeople extends Effect[Int, DataRepoError, Set[People]]
 
@@ -22,5 +23,8 @@ object MockSWDataRepo extends Mock[SWDataRepo]:
 
         override def getPeople: IO[DataRepoError, Set[People]] =
           proxy(GetPeople, 0)
+
+        override def getFilms: IO[DataRepoError, Set[Film]] =
+          proxy(GetFilms, 0)
     }
   }

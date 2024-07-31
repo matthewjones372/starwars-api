@@ -10,4 +10,5 @@ enum ClientError(msg: String) extends RuntimeException(msg):
   case InvalidUrl(url: String) extends ClientError(url)
   case RateLimited(msg: String) extends ClientError(msg)
   case ClientPolicyError(msg: String, exception: Throwable) extends ClientError(msg)
+  case FailedToGetPagedResponse extends ClientError("Failed to Get Paged Response")
   case UnreachableError extends ClientError("Unreachable error")

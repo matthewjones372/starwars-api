@@ -47,7 +47,7 @@ private final case class SWServer(private val SWApi: SWApi):
 
   private val getPeopleHandler = getPeopleEndpoint.implement { _ =>
     SWApi.getPeople.tapError(err => ZIO.logError(s"getPeopleEndpoint error: $err")).catchAll {
-      case err: SWAPIServerError =>
+      case (err: SWAPIServerError) =>
         ZIO.fail(err)
     }
   }.sandbox
@@ -61,10 +61,10 @@ private final case class SWServer(private val SWApi: SWApi):
       )
 
   private def getFilmHandler = getFilmsEndpoint.implement { _ =>
-    SWApi.getFilms.catchAll { case err: SWAPIServerError =>
+    SWApi.getFilms.catchAll { case (err: SWAPIServerError) =>
       ZIO.fail(err)
     }
-  }
+  }.sandbox
 
   private val openAPI =
     OpenAPIGen.fromEndpoints(

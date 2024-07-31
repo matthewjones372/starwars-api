@@ -133,7 +133,7 @@ object ApiClient:
         ZIO
           .foreachPar(2 to pages)(getPeopleFromPage)
           .map(peoples => (peoples.flatten ++ firstPage).toSet)
-      }.orElseFail(ClientError.UnreachableError)
+      }.mapError(err => ClientError.FailedToGetPagedResponse)
     }.provideEnvironment(env)
 
     override def getFilmFrom(id: Int): IO[ClientError, Film] =
@@ -152,7 +152,7 @@ object ApiClient:
         ZIO
           .foreachPar(2 to pages)(getFilmsFromPage)
           .map(films => (films.flatten ++ firstPage).toSet)
-      }.orElseFail(ClientError.UnreachableError)
+      }.mapError(err => ClientError.FailedToGetPagedResponse)
     }.provideEnvironment(env)
 
     private def getFilmsFromPage(page: Int): IO[ClientError, Set[Film]] =

@@ -4,8 +4,8 @@ package api
 import api.mocking.MockSWDataRepo
 import data.DataRepoError
 import domain.Generators.*
+import domain.{Film, People}
 
-import com.jones.domain.People
 import zio.*
 import zio.http.*
 import zio.http.netty.NettyConfig
@@ -16,6 +16,80 @@ import zio.test.Assertion.*
 
 object SWApiSpec extends ZIOSpecDefault:
   def spec = suite("SWApiSpec")(
+    suite("getFilms")(
+      test("returns a set of films") {
+        {
+          for
+            client      <- ZIO.service[Client]
+            swServer    <- SWServer.default
+            _           <- swServer.start.fork
+            testRequest <- requestToCorrectPort
+            response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "films")))
+          yield assertTrue(response.status == Status.Ok)
+        }.provideSome[Client & Driver](
+          MockSWDataRepo.GetFilms(
+            assertion = anything,
+            result = value(Set(film))
+          ),
+          Scope.default,
+          TestServer.layer
+        )
+      },
+      test("returns a server error when there is a issue with the data repo") {
+        {
+          for
+            client      <- ZIO.service[Client]
+            swServer    <- SWServer.default
+            _           <- swServer.start.fork
+            testRequest <- requestToCorrectPort
+            response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "films")))
+          yield assertTrue(response.status == Status.InternalServerError)
+        }.provideSome[Client & Driver](
+          MockSWDataRepo.GetFilms(
+            assertion = anything,
+            result = failure(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
+          ),
+          Scope.default,
+          TestServer.layer
+        )
+      }
+    ),
+    suite("getPeople")(
+      test("returns a set of people") {
+        (for
+          client      <- ZIO.service[Client]
+          swServer    <- SWServer.default
+          _           <- swServer.start.fork
+          testRequest <- requestToCorrectPort
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
+        yield assertTrue(
+          response.status == Status.Ok
+        )).provideSome[Client & Driver](
+          MockSWDataRepo.GetPeople(
+            assertion = anything,
+            result = value(Set(person))
+          ),
+          Scope.default,
+          TestServer.layer
+        )
+      },
+      test("returns a server error when there is a issue with the data repo") {
+        (for
+          client      <- ZIO.service[Client]
+          swServer    <- SWServer.default
+          _           <- swServer.start.fork
+          testRequest <- requestToCorrectPort
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
+        yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
+          MockSWDataRepo.GetPeople(
+            assertion = anything,
+            result = failure(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
+          ),
+          Scope.default,
+          TestServer.layer
+        )
+      }
+    ),
     suite("getPeopleFrom")(
       test("returns a film when given a valid id") {
         (for
@@ -73,21 +147,39 @@ object SWApiSpec extends ZIOSpecDefault:
     ZLayer.succeed(NettyConfig.defaultWithFastShutdown)
   )
 
+  val film =
+    Film(
+      "The Phantom Menace",
+      1,
+      "worst film",
+      "George Lucas",
+      "",
+      "",
+      Set.empty,
+      Set.empty,
+      Set.empty,
+      Set.empty,
+      Set.empty,
+      "",
+      "",
+      ""
+    )
+
   val person =
     People(
-      "C-3PO",
-      "167",
-      "75",
-      "n/a",
-      "gold",
-      "yellow",
-      "112BBY",
-      "n/a",
-      "https://swapi.dev/api/planets/1/",
-      Set("/films/1/?format=json", "/films/2/?format=json"),
-      Set("https://swapi.dev/api/species/2/"),
-      Set(),
-      Set()
+      name = "C-3PO",
+      height = "167",
+      mass = "75",
+      hairColor = "n/a",
+      skinColor = "gold",
+      eyeColor = "yellow",
+      birthYear = "112BBY",
+      gender = "n/a",
+      homeworld = "https://swapi.dev/api/planets/1/",
+      films = Set("/films/1/?format=json", "/films/2/?format=json"),
+      species = Set("https://swapi.dev/api/species/2/"),
+      vehicles = Set(),
+      starships = Set()
     )
 
   def requestToCorrectPort =

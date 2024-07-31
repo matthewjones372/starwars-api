@@ -1,7 +1,7 @@
 package com.jones
 package client
 
-import domain.{Film, People}
+import domain.{Film, People, Peoples}
 
 import zio.*
 import zio.http.*
@@ -19,13 +19,18 @@ object ApiRequestResponseStubs:
       ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI(baseUrl)).get, 1000)))
       >>> SWAPIClientService.default
 
-  val film1Url  = "films/1/?format=json"
-  val film2Url  = "films/2/?format=json"
-  val personUrl = "people/1/?format=json"
+  val film1Url       = "films/1/?format=json"
+  val film2Url       = "films/2/?format=json"
+  val personUrl      = "people/1/?format=json"
+  val personPagedUrl = "people/?format=json"
 
-  val personRequest = Request.get(personUrl)
-  val filmRequest1  = Request.get(URL.decode(film1Url).toOption.get)
-  val filmRequest2  = Request.get(URL.decode(film2Url).toOption.get)
+  def personPagedUrlWith(page: Int) =
+    Request.get(s"people/?format=json&page=$page")
+
+  val personRequest      = Request.get(personUrl)
+  val filmRequest1       = Request.get(URL.decode(film1Url).toOption.get)
+  val filmRequest2       = Request.get(URL.decode(film2Url).toOption.get)
+  val personPagedRequest = Request.get(personPagedUrl)
 
   val person =
     People(
@@ -43,6 +48,35 @@ object ApiRequestResponseStubs:
       Set(),
       Set()
     )
+
+  def personWithDiff(height: Int): People =
+    person.copy(height = height.toString)
+
+  val pagedPersonJson =
+    Peoples(
+      11,
+      None,
+      None,
+      results = List(
+        personWithDiff(1),
+        personWithDiff(2),
+        personWithDiff(3),
+        personWithDiff(4),
+        personWithDiff(5),
+        personWithDiff(6),
+        personWithDiff(7),
+        personWithDiff(8),
+        personWithDiff(9),
+        personWithDiff(10),
+        personWithDiff(11),
+        personWithDiff(12)
+      )
+    )
+
+  val pagedPersonResponse = Response(
+    status = Status.Ok,
+    body = Body.fromString(pagedPersonJson.toJson)
+  )
 
   val personResponse = Response(
     status = Status.Ok,

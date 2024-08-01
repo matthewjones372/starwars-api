@@ -28,4 +28,4 @@ object Film:
 
 @jsonMemberNames(SnakeCase)
 final case class Films(count: Int, next: Option[String], previous: Option[String], results: List[Film])
-    derives JsonCodec
+    extends Paged[Film] derives JsonCodec

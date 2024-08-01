@@ -27,4 +27,4 @@ object People:
 
 @jsonMemberNames(SnakeCase)
 final case class Peoples(count: Int, next: Option[String], previous: Option[String], results: List[People])
-    derives JsonCodec
+    extends Paged[People] derives JsonCodec

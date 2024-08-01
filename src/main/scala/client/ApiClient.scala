@@ -84,30 +84,28 @@ object ApiClient:
 
   def live: RLayer[SWAPIEnv, ApiClient] =
     ZLayer.fromZIO {
-      def lookup(client: ApiClient): Lookup[Any, Any, ClientError, CacheEntities] = Lookup {
-        case CacheKey.FilmId(id) =>
-          client.getFilmFrom(id)
-        case CacheKey.PersonId(id) =>
-          client.getPersonFrom(id)
-        case CacheKey.FilmUrl(url) =>
-          client.getFilmFrom(url)
-        case CacheKey.People =>
-          client.getPeople.map(PeopleSet.apply)
-        case CacheKey.Films =>
-          client.getFilms.map(FilmSet.apply)
-      }
       for
         client     <- ZIO.service[Client]
         httpConfig <- ZIO.service[HttpClientConfig]
         scope      <- ZIO.service[Scope]
         apiClient   = ApiLiveClient(client, httpConfig, scope)
-
         client <-
           for
             cache <-
               Cache.makeWith(
                 httpConfig.cacheSize,
-                lookup(apiClient)
+                Lookup {
+                  case CacheKey.FilmId(id) =>
+                    apiClient.getFilmFrom(id)
+                  case CacheKey.PersonId(id) =>
+                    apiClient.getPersonFrom(id)
+                  case CacheKey.FilmUrl(url) =>
+                    apiClient.getFilmFrom(url)
+                  case CacheKey.People =>
+                    apiClient.getPeople.map(PeopleSet.apply)
+                  case CacheKey.Films =>
+                    apiClient.getFilms.map(FilmSet.apply)
+                }
               )(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
           yield CachingApiClient(cache)
       yield client
@@ -121,49 +119,37 @@ object ApiClient:
     private val env = ZEnvironment(client, scope)
 
     override def getPersonFrom(id: Int): IO[ClientError, People] =
-      get[People](httpConfig.baseUrl / "people" / id.toString / "?format=json")
+      get[People]((httpConfig.baseUrl / "people" / id.toString).addQueryParam("format", "json"))
         .provideEnvironment(env)
 
-    override def getPeople: IO[ClientError, Set[People]] = {
-      val firstPage = get[Peoples](httpConfig.baseUrl / "people" / "?format=json")
-
-      firstPage.flatMap { case Peoples(count, _, _, firstPage) =>
-        // API returns a max of 10 results per call
-        val pages = (count / 10) + 1
-        ZIO
-          .foreachPar(2 to pages)(getPeopleFromPage)
-          .map(peoples => (peoples.flatten ++ firstPage).toSet)
-      }.mapError(err => ClientError.FailedToGetPagedResponse)
-    }.provideEnvironment(env)
+    override def getPeople: IO[ClientError, Set[People]] =
+      getPagedResponse[Peoples, People]("people").provideEnvironment(env)
 
     override def getFilmFrom(id: Int): IO[ClientError, Film] =
-      get[Film](httpConfig.baseUrl / "films" / id.toString / "?format=json")
+      get[Film]((httpConfig.baseUrl / "films" / id.toString).addQueryParam("format", "json"))
         .provideEnvironment(env)
 
     override def getFilmFrom(url: URL): IO[ClientError, Film] =
       get[Film](url).provideEnvironment(env)
 
-    override def getFilms: IO[ClientError, Set[Film]] = {
-      val firstPage = get[Films](httpConfig.baseUrl / "films" / "?format=json")
+    override def getFilms: IO[ClientError, Set[Film]] =
+      getPagedResponse[Films, Film]("films").provideEnvironment(env)
 
-      firstPage.flatMap { case Films(count, _, _, firstPage) =>
-        // API returns a max of 10 results per call
-        val pages = (count / 10) + 1
+    private def getPagedResponse[A <: Paged[B]: JsonCodec, B](entity: String) = {
+      get[A]((httpConfig.baseUrl / entity).addQueryParam("format", "json")).flatMap { firstPage =>
         ZIO
-          .foreachPar(2 to pages)(getFilmsFromPage)
-          .map(films => (films.flatten ++ firstPage).toSet)
-      }.mapError(err => ClientError.FailedToGetPagedResponse)
+          .foreachPar(2 to firstPage.pageCount)(page =>
+            get[A](
+              (httpConfig.baseUrl / entity)
+                .addQueryParam("format", "json")
+                .addQueryParam("page", page.toString)
+            )
+          )
+          .map { entity =>
+            (entity.flatMap(_.results.toSet) ++ firstPage.results).toSet
+          }
+      }.orElseFail(ClientError.FailedToGetPagedResponse)
     }.provideEnvironment(env)
-
-    private def getFilmsFromPage(page: Int): IO[ClientError, Set[Film]] =
-      get[Films](httpConfig.baseUrl / "films" / s"?format=json&page=$page")
-        .map(_.results.toSet)
-        .provideEnvironment(env)
-
-    private def getPeopleFromPage(page: Int): IO[ClientError, Set[People]] =
-      get[Peoples](httpConfig.baseUrl / "people" / s"?format=json&page=$page")
-        .map(_.results.toSet)
-        .provideEnvironment(env)
 
     private def get[A](url: URL)(using codec: JsonCodec[A]) =
       ResiliencyPolicy.run {
@@ -177,7 +163,7 @@ object ApiClient:
                   body //TODO: Fix this string manipulation we shouldn't need this. we want to use zio schema and the .to[People]
                     .stripPrefix("\"")
                     .stripSuffix("\"")
-                    .replaceAll("""\\(?!r)""", "")
+                    .replaceAll("""\\(?![nr])""", "")
                 )
               )
               .mapError(err => ClientError.JsonDeserializationError(body, err))

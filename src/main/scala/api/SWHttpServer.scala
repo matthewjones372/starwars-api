@@ -12,14 +12,14 @@ import zio.http.codec.PathCodec.*
 import zio.http.endpoint.*
 import zio.http.endpoint.openapi.*
 
-object SWServer:
+object SWHttpServer:
   def default =
     (for
       dataRepo <- ZIO.service[SWDataRepo]
       swapi    <- ZIO.service[SWApi]
-    yield SWServer(swapi)).provideSomeLayer(SWApi.layer)
+    yield SWHttpServer(swapi)).provideSomeLayer(SWApi.layer)
 
-private final case class SWServer(private val SWApi: SWApi):
+private final case class SWHttpServer(private val SWApi: SWApi):
 
   private val getPersonEndpoint =
     Endpoint(Method.GET / "people" / PathCodec.int("person"))

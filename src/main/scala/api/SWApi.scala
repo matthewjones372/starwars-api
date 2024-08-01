@@ -3,13 +3,11 @@ package api
 
 import api.SWAPIServerError.*
 import data.{DataRepoError, SWDataRepo}
-import domain.{Film, People}
+import domain.*
 
 import zio.*
 
 trait SWApi:
-  def getFilmsFromPerson(personId: Int): IO[SWAPIServerError, List[Film]]
-
   def getFilmFrom(id: Int): IO[SWAPIServerError, Film]
 
   def getFilms: IO[SWAPIServerError, Set[Film]]
@@ -22,9 +20,6 @@ object SWApi:
   def layer = ZLayer.fromFunction(SWAPIImpl.apply)
 
 private case class SWAPIImpl(dataRepo: SWDataRepo) extends SWApi:
-  override def getFilmsFromPerson(personId: Int): IO[SWAPIServerError, List[Film]] =
-    ???
-
   override def getFilmFrom(id: Int): IO[SWAPIServerError, Film] =
     dataRepo.getFilm(id).mapError {
       case DataRepoError.FilmNotFound(message, filmId) =>

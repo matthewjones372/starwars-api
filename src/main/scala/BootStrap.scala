@@ -1,6 +1,6 @@
 package com.jones
 
-import api.SWServer
+import api.SWHttpServer
 import client.{HttpClientConfig, SWAPIClientService}
 import data.SWDataRepo
 import search.SWGraph
@@ -36,6 +36,6 @@ object BootStrapClientExample extends ZIOAppDefault:
 object BootStrapServerExample extends ZIOAppDefault:
 
   def run = (for
-    server <- SWServer.default
+    server <- SWHttpServer.default
     _      <- server.start
   yield ()).provide(SWDataRepo.layer, Server.default)

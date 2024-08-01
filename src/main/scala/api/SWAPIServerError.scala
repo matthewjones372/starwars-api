@@ -6,19 +6,12 @@ import zio.schema.*
 abstract class SWAPIServerError(message: String)
 
 object SWAPIServerError:
-  case class PersonNotFound(message: String, personId: Int) extends SWAPIServerError(message)
-  object PersonNotFound:
-    given Schema[PersonNotFound] = DeriveSchema.gen
+  final case class PersonNotFound(message: String, personId: Int) extends SWAPIServerError(message)
+  final case class FilmNotFound(message: String, filmId: Int)     extends SWAPIServerError(message)
+  final case class UnexpectedError(message: String)               extends SWAPIServerError(message)
+  final case class ServerError()                                  extends SWAPIServerError("Internal server error")
 
-  case class FilmNotFound(message: String, filmId: Int) extends SWAPIServerError(message)
-  object FilmNotFound:
-    given Schema[FilmNotFound] = DeriveSchema.gen
-
-  case class UnexpectedError(message: String) extends SWAPIServerError(message)
-
-  object UnexpectedError:
-    given Schema[UnexpectedError] = DeriveSchema.gen
-
-  case class ServerError() extends SWAPIServerError("Internal server error")
-  object ServerError:
-    given Schema[ServerError] = DeriveSchema.gen
+  given Schema[PersonNotFound]  = DeriveSchema.gen
+  given Schema[FilmNotFound]    = DeriveSchema.gen
+  given Schema[UnexpectedError] = DeriveSchema.gen
+  given Schema[ServerError]     = DeriveSchema.gen

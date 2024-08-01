@@ -47,7 +47,7 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
     ApiClient.getPeople.provideEnvironment(ZEnvironment(apiClient))
 
   override def getFilmsFromPeople: IO[ClientError, Map[String, Set[String]]] =
-    ((for
+    (for
       people <- ApiClient.getPeople
       films <-
         ZIO
@@ -56,4 +56,4 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
               .foreachPar(person.films)(url => decodeUrlString(url).flatMap(ApiClient.getFilmFrom).map(_.title))
               .map(films => (person.name, films))
           }
-    yield films).map(_.toMap)).provideEnvironment(ZEnvironment(apiClient))
+    yield films).map(_.toMap).provideEnvironment(ZEnvironment(apiClient))

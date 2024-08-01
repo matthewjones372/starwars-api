@@ -6,15 +6,17 @@ import zio.Chunk
 final case class Path[A](start: A, end: A, path: Option[Chunk[(A, A)]]):
   def length: Int = path.map(_.length - 1).getOrElse(0)
 
-  private def render = path.map {
-    _.toList.zipWithIndex.map { case ((name, movie), index) =>
-      val indentation = " " * index
-      val color       = Path.colors(index % Path.colors.length)
-      s"${indentation}${color}${name} -> ${movie}${Path.resetColor}"
-    }
-  }.getOrElse(List.empty)
+  private def render =
+    val lastIndex = path.map(_.length - 1).getOrElse(0)
+    path.map {
+      _.toList.zipWithIndex.map { case ((name, movie), index) =>
+        val color = Path.colors(index % Path.colors.length)
+        if index == lastIndex then s"${color}${name}${Path.resetColor}"
+        else s"(${color}${name} is in ${movie}${Path.resetColor})"
+      }
+    }.getOrElse(List.empty)
 
-  override def toString: String = render.mkString("\n")
+  override def toString: String = render.mkString(" -> ")
 
 object Path:
   // ANSI color codes

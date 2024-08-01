@@ -177,7 +177,7 @@ object ApiClient:
                   body //TODO: Fix this string manipulation we shouldn't need this. we want to use zio schema and the .to[People]
                     .stripPrefix("\"")
                     .stripSuffix("\"")
-                    .replaceAll("""\\""", "")
+                    .replaceAll("""\\(?!r)""", "")
                 )
               )
               .mapError(err => ClientError.JsonDeserializationError(body, err))

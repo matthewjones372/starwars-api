@@ -47,7 +47,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
     ),
     suite("API Error Behavior")(
       test("returns the correct error when an entity is not found") {
-        val expectedFailure = ClientError.NotFound(s"$baseUrl/$personUrl")
+        val expectedFailure = ClientError.NotFound(s"$baseUrl/$personUrl?format=json")
 
         for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.notFound)

@@ -21,16 +21,28 @@ object ApiRequestResponseStubs:
 
   val film1Url       = "films/1/?format=json"
   val film2Url       = "films/2/?format=json"
-  val personUrl      = "people/1/?format=json"
-  val personPagedUrl = "people/?format=json"
+  val personUrl      = "people/1"
+  val personPagedUrl = "people"
+
+  extension (url: Either[Exception, URL])
+    def addJsonQueryParam: Either[Exception, URL] =
+      url.map(_.addQueryParam("format", "json"))
+
+    def addPageQueryParam(page: Int): Either[Exception, URL] =
+      url.map(_.addQueryParam("page", page.toString))
+
+    def unsafeGet: URL =
+      url.toOption.get
 
   def personPagedUrlWith(page: Int) =
-    Request.get(s"people/?format=json&page=$page")
+    Request.get(
+      URL.decode("people").addJsonQueryParam.addPageQueryParam(page).unsafeGet
+    )
 
-  val personRequest      = Request.get(personUrl)
-  val filmRequest1       = Request.get(URL.decode(film1Url).toOption.get)
-  val filmRequest2       = Request.get(URL.decode(film2Url).toOption.get)
-  val personPagedRequest = Request.get(personPagedUrl)
+  val personRequest      = Request.get(URL.decode(personUrl).addJsonQueryParam.unsafeGet)
+  val filmRequest1       = Request.get(URL.decode(film1Url).unsafeGet)
+  val filmRequest2       = Request.get(URL.decode(film2Url).unsafeGet)
+  val personPagedRequest = Request.get(URL.decode(personPagedUrl).addJsonQueryParam.unsafeGet)
 
   val person =
     People(
@@ -169,7 +181,8 @@ object ApiRequestResponseStubs:
   val film2Response = Response(status = Status.Ok, body = Body.fromString(film2.toJson))
 
   val getPersonEndpoint =
-    Endpoint(Method.GET / "people" / int("person") / "?format=json" / trailing)
+    Endpoint(Method.GET / "people" / int("person"))
+      .query(QueryCodec.query("format"))
       .out[String]
 
   def getFilmsEndpoint =

@@ -44,7 +44,7 @@ object SWHttpServer:
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
-  private val endPoints = 
+  private val endPoints =
     Chunk(getPersonEndpoint, getPeopleEndpoint, getFilmsEndpoint)
 
   private val openAPI =

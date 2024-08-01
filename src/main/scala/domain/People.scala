@@ -20,11 +20,8 @@ final case class People(
   species: Set[String],
   vehicles: Set[String],
   starships: Set[String]
-) derives JsonCodec
+) derives JsonCodec,
+      Schema
 
-object People:
-  given Schema[People] = DeriveSchema.gen
-
-@jsonMemberNames(SnakeCase)
 final case class Peoples(count: Int, next: Option[String], previous: Option[String], results: List[People])
     extends Paged[People] derives JsonCodec

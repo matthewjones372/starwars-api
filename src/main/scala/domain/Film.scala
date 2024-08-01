@@ -21,11 +21,8 @@ final case class Film(
   created: String,
   edited: String,
   url: String
-) derives JsonCodec
+) derives JsonCodec,
+      Schema
 
-object Film:
-  given Schema[Film] = DeriveSchema.gen
-
-@jsonMemberNames(SnakeCase)
 final case class Films(count: Int, next: Option[String], previous: Option[String], results: List[Film])
     extends Paged[Film] derives JsonCodec

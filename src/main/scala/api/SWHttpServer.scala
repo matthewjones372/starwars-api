@@ -19,8 +19,6 @@ object SWHttpServer:
       swapi    <- ZIO.service[SWApi]
     yield SWHttpServer(swapi)).provideSomeLayer(SWApi.layer)
 
-private final case class SWHttpServer(private val SWApi: SWApi):
-
   private val getPersonEndpoint =
     Endpoint(Method.GET / "people" / PathCodec.int("person"))
       .out[People]
@@ -30,13 +28,6 @@ private final case class SWHttpServer(private val SWApi: SWApi):
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
-  private val getPersonHandler = getPersonEndpoint.implement { personId =>
-    SWApi.getPerson(personId).tapError(err => ZIO.logError(s"getPersonEndpoint error: $err")).catchAll {
-      (err: SWAPIServerError) =>
-        ZIO.fail(err)
-    }
-  }.sandbox
-
   private val getPeopleEndpoint =
     Endpoint(Method.GET / "people")
       .out[Set[People]]
@@ -44,13 +35,6 @@ private final case class SWHttpServer(private val SWApi: SWApi):
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
-
-  private val getPeopleHandler = getPeopleEndpoint.implement { _ =>
-    SWApi.getPeople.tapError(err => ZIO.logError(s"getPeopleEndpoint error: $err")).catchAll {
-      case (err: SWAPIServerError) =>
-        ZIO.fail(err)
-    }
-  }.sandbox
 
   private val getFilmsEndpoint =
     Endpoint(Method.GET / "films")
@@ -60,25 +44,43 @@ private final case class SWHttpServer(private val SWApi: SWApi):
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
-  private def getFilmHandler = getFilmsEndpoint.implement { _ =>
-    SWApi.getFilms.catchAll { case (err: SWAPIServerError) =>
-      ZIO.fail(err)
-    }
-  }.sandbox
+  private val endPoints = 
+    Chunk(getPersonEndpoint, getPeopleEndpoint, getFilmsEndpoint)
 
   private val openAPI =
     OpenAPIGen.fromEndpoints(
       title = "Star Wars API",
       version = "1.0",
-      getPersonEndpoint,
-      getPeopleEndpoint,
-      getFilmsEndpoint
+      endPoints
     )
-  private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", openAPI)
+
+private final case class SWHttpServer(private val SWApi: SWApi):
+
+  private val getPersonHandler = SWHttpServer.getPersonEndpoint.implement { personId =>
+    SWApi.getPerson(personId).tapError(err => ZIO.logError(s"getPersonEndpoint error: $err")).catchAll {
+      (err: SWAPIServerError) =>
+        ZIO.fail(err)
+    }
+  }.sandbox
+
+  private val getPeopleHandler = SWHttpServer.getPeopleEndpoint.implement { _ =>
+    SWApi.getPeople.tapError(err => ZIO.logError(s"getPeopleEndpoint error: $err")).catchAll {
+      case (err: SWAPIServerError) =>
+        ZIO.fail(err)
+    }
+  }.sandbox
+
+  private def getFilmHandler = SWHttpServer.getFilmsEndpoint.implement { _ =>
+    SWApi.getFilms.catchAll { case (err: SWAPIServerError) =>
+      ZIO.fail(err)
+    }
+  }.sandbox
+
+  private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", SWHttpServer.openAPI)
+
+  private val handlers = Chunk(getPersonHandler, getPeopleHandler, getFilmHandler)
+
   private val routes =
-    (getPersonHandler.toRoutes ++
-      getPeopleHandler.toRoutes ++
-      getFilmHandler.toRoutes ++
-      swaggerRoutes) @@ Middleware.debug
+    (Routes(handlers) ++ swaggerRoutes) @@ Middleware.debug
 
   def start = Server.serve(routes)

@@ -1,14 +1,13 @@
 package com.jones
 package client
 
-import domain.{Film, People, Peoples}
+import domain.*
 
 import zio.*
 import zio.http.*
 import zio.http.codec.QueryCodec
 import zio.http.endpoint.Endpoint
 import zio.json.*
-
 import java.net.URI
 
 object ApiRequestResponseStubs:
@@ -47,8 +46,8 @@ object ApiRequestResponseStubs:
   val person =
     People(
       "C-3PO",
-      "167",
-      "75",
+      Some(167),
+      Some(75),
       "n/a",
       "gold",
       "yellow",
@@ -62,13 +61,11 @@ object ApiRequestResponseStubs:
     )
 
   def personWithDiff(height: Int): People =
-    person.copy(height = height.toString)
+    person.copy(height = Some(height))
 
   val pagedPersonJson =
     Peoples(
       11,
-      None,
-      None,
       results = List(
         personWithDiff(1),
         personWithDiff(2),

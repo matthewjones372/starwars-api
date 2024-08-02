@@ -6,8 +6,8 @@ import zio.test.*
 object Generators:
   val peopleGen = for
     name      <- Gen.string
-    height    <- Gen.string
-    mass      <- Gen.string
+    height    <- Gen.option(Gen.int)
+    mass      <- Gen.option(Gen.int)
     hairColor <- Gen.string
     skinColor <- Gen.string
     eyeColor  <- Gen.string

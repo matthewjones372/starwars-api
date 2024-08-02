@@ -21,22 +21,23 @@ class SWGraph[A](private val peopleFilmMap: Map[A, Set[A]]) {
       else {
         val (currentPoint, newRemaining) = remaining.dequeue
         val currentPath                  = paths.getOrElse(currentPoint, Chunk.empty)
-        if (currentPoint == target) {
-          currentPath.lastOption.map(last => (target, last._2) +: currentPath.reverse)
-        } else {
+        
+        if (currentPoint == target)
+          currentPath.lastOption.map { case (_, movie) => (target, movie) +: currentPath.reverse }
+        else {
           val (updatedRemaining, updatedPaths, updatedVisited) = peopleFilmMap
             .get(currentPoint)
             .map { films =>
               films
                 .flatMap(film => filmPeopleMap(film).map((_, film))) // Get the neighbors and the films connecting them
                 .foldLeft((newRemaining, paths, visited)) { case ((remAcc, pathAcc, visitAcc), (neighbor, film)) =>
-                  if (!visitAcc.contains(neighbor)) {
+                  if (!visitAcc.contains(neighbor)) // Filter out visited nodes
                     (
                       remAcc.enqueue(neighbor),
                       pathAcc.updated(neighbor, currentPath :+ (currentPoint -> film)),
                       visitAcc + neighbor
                     )
-                  } else (remAcc, pathAcc, visitAcc)
+                  else (remAcc, pathAcc, visitAcc)
                 }
             }
             .getOrElse((newRemaining, paths, visited))

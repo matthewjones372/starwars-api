@@ -24,5 +24,4 @@ final case class Film(
 ) derives JsonCodec,
       Schema
 
-final case class Films(count: Int, next: Option[String], previous: Option[String], results: List[Film])
-    extends Paged[Film] derives JsonCodec
+final case class Films(count: Int, results: List[Film]) extends Paged[Film] derives JsonCodec

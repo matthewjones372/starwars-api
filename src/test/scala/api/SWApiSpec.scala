@@ -163,8 +163,8 @@ object SWApiSpec extends ZIOSpecDefault:
   val person =
     People(
       name = "C-3PO",
-      height = "167",
-      mass = "75",
+      height = Some(167),
+      mass = Some(75),
       hairColor = "n/a",
       skinColor = "gold",
       eyeColor = "yellow",

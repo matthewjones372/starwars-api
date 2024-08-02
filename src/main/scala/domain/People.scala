@@ -27,5 +27,4 @@ object People:
   given JsonDecoder[Option[Int]] = JsonDecoder[String].map(_.toIntOption)
   given JsonEncoder[Option[Int]] = JsonEncoder[String].contramap(_.map(_.toString).getOrElse(""))
 
-final case class Peoples(count: Int, results: List[People])
-    extends Paged[People] derives JsonCodec
+final case class Peoples(count: Int, results: List[People]) extends Paged[People] derives JsonCodec

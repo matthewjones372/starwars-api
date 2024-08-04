@@ -15,8 +15,8 @@ object PeopleSpec extends ZIOSpecDefault:
 
       val expectedPerson = People(
         name = "C-3PO",
-        height = "167",
-        mass = "75",
+        height = Some(167),
+        mass = Some(75),
         hairColor = "n/a",
         skinColor = "gold",
         eyeColor = "yellow",
@@ -30,5 +30,29 @@ object PeopleSpec extends ZIOSpecDefault:
       )
 
       assertTrue(people == Right(expectedPerson))
+    },
+    test("Can deal with unknown int values") {
+      val aPerson = """
+                      |  {
+                      |    "name": "Cliegg Lars",
+                      |    "height": "unknown",
+                      |    "mass": "182",
+                      |    "eye_color": "blue",
+                      |    "species": [],
+                      |    "vehicles": [],
+                      |    "starships": [],
+                      |    "hair_color": "brown",
+                      |    "skin_color": "fair",
+                      |    "eyeColor": "blue",
+                      |    "birth_year": "82BBY",
+                      |    "gender": "male",
+                      |    "homeworld": "https://swapi.dev/api/planets/1/",
+                      |    "films": [
+                      |    ]
+                      |  }
+                      |""".stripMargin
+
+      val result = aPerson.fromJson[People]
+      assertTrue(result.map(_.height) == Right(None))
     }
   )

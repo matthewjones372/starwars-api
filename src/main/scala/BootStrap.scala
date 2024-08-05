@@ -35,4 +35,4 @@ object BootStrapServerExample extends ZIOAppDefault:
   def run = (for
     server <- SWHttpServer.default
     _      <- server.start
-  yield ()).provide(SWDataRepo.layer, Server.default)
+  yield ()).provide(Server.default)

@@ -20,7 +20,7 @@ object SWApiSpec extends ZIOSpecDefault:
             _ <- stub[SWDataRepo](_.getFilms) {
                    ZIO.attempt(Set(film)).orElseFail(DataRepoError.FilmsNotFound)
                  }
-            swServer    <- SWHttpServer.default
+            swServer    <- ZIO.service[SWHttpServer]
             _           <- swServer.start.fork
             testRequest <- requestToCorrectPort
             response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "films")))
@@ -28,7 +28,8 @@ object SWApiSpec extends ZIOSpecDefault:
         }.provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo]
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
         )
       },
       test("returns a server error when there is a issue with the data repo") {
@@ -38,7 +39,7 @@ object SWApiSpec extends ZIOSpecDefault:
                    ZIO.fail(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
                  }
             client      <- ZIO.service[Client]
-            swServer    <- SWHttpServer.default
+            swServer    <- ZIO.service[SWHttpServer]
             _           <- swServer.start.fork
             testRequest <- requestToCorrectPort
             response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "films")))
@@ -46,7 +47,8 @@ object SWApiSpec extends ZIOSpecDefault:
         }.provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo]
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
         )
       }
     ),
@@ -57,7 +59,7 @@ object SWApiSpec extends ZIOSpecDefault:
                  ZIO.attempt(Set(person)).orElseFail(DataRepoError.FilmsNotFound)
                }
           client      <- ZIO.service[Client]
-          swServer    <- SWHttpServer.default
+          swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
@@ -66,7 +68,8 @@ object SWApiSpec extends ZIOSpecDefault:
         )).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo]
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
         )
       },
       test("returns a server error when there is a issue with the data repo") {
@@ -75,14 +78,15 @@ object SWApiSpec extends ZIOSpecDefault:
                  ZIO.fail(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
                }
           client      <- ZIO.service[Client]
-          swServer    <- SWHttpServer.default
+          swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
         yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo]
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
         )
       }
     ),
@@ -93,12 +97,12 @@ object SWApiSpec extends ZIOSpecDefault:
                  ZIO.attempt(person).orElseFail(DataRepoError.FilmsNotFound)
                }
           client      <- ZIO.service[Client]
-          swServer    <- SWHttpServer.default
+          swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
         yield assertTrue(response.status == Status.Ok))
-          .provideSome[Client & Driver](Scope.default, TestServer.layer, stubbed[SWDataRepo])
+          .provideSome[Client & Driver](Scope.default, TestServer.layer, stubbed[SWDataRepo], SWHttpServer.layer)
       },
       test("returns a 404 when given an invalid id") {
         (for
@@ -106,14 +110,15 @@ object SWApiSpec extends ZIOSpecDefault:
                  ZIO.fail(DataRepoError.PersonNotFound("Person not found", 1))
                }
           client      <- ZIO.service[Client]
-          swServer    <- SWHttpServer.default
+          swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
         yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo]
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
         )
       },
       test("returns an appropriate error when there is a server error") {
@@ -122,14 +127,15 @@ object SWApiSpec extends ZIOSpecDefault:
                  ZIO.fail(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
                }
           client      <- ZIO.service[Client]
-          swServer    <- SWHttpServer.default
+          swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
         yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo]
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
         )
       }
     )

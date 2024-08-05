@@ -49,9 +49,6 @@ jobs:
           name: coverage-report
           path: target/scala-*/scoverage-report
 
-      - name: List coverage report files
-        run: ls -R target/scala-*/scoverage-report
-
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
@@ -71,6 +68,8 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Determine version
         id: determine_version

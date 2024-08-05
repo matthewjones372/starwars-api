@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   build:
@@ -16,15 +17,57 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        cache: 'sbt'
-    - name: Check scalafmt
-      run: sbt scalafmtCheckAll
+      - uses: actions/checkout@v4
 
-    - name: Run tests
-      run: sbt test
+      - name: Cache sbt
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.ivy2/cache
+            ~/.sbt
+            ~/.coursier
+          key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt') }}
+          restore-keys: |
+            ${{ runner.os }}-sbt-
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'sbt'
+
+      - name: Check scalafmt
+        run: sbt scalafmtCheckAll
+
+      - name: Run tests
+        run: sbt test
+
+      - name: Run coverage
+        run: sbt clean coverage test coverageReport
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: target/scala-*/scoverage-report
+
+      - name: Determine version
+        id: determine_version
+        run: echo "VERSION=$(sbt dynverCurrentVersion | tail -n 1 | awk '{print $2}')" >> $GITHUB_ENV
+
+      - name: Publish snapshot
+        if: github.ref_type == 'branch'
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
+        run: sbt publish
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
+        run: sbt publish

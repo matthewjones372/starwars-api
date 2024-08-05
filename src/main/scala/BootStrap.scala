@@ -1,14 +1,13 @@
 package com.jones
 
-import api.SWHttpServer
-import client.{HttpClientConfig, SWAPIClientService}
-import data.SWDataRepo
-import search.SWGraph
-
-import zio.*
-import zio.http.*
+import com.matthewjones372.api.client.{HttpClientConfig, SWAPIClientService}
+import com.matthewjones372.data.SWDataRepo
+import com.matthewjones372.http.api.SWHttpServer
+import com.matthewjones372.search.SWGraph
 
 import java.net.URI
+import zio.*
+import zio.http.*
 
 object BootStrapClientExample extends ZIOAppDefault:
 

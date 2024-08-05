@@ -40,20 +40,17 @@ jobs:
       - name: Check scalafmt
         run: sbt scalafmtCheckAll
 
-      - name: Run tests
-        run: sbt test
-
-      - name: Run coverage
+      - name: Run test coverage
         run: sbt clean coverage test coverageAggregate
-
-      - name: Code Coverage Summary
-        uses: irongut/CodeCoverageSummary@v1.3.0
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
           path: target/scala-*/scoverage-report
+
+      - name: Code Coverage Summary
+        uses: irongut/CodeCoverageSummary@v1.3.0
 
       - name: Determine version
         id: determine_version

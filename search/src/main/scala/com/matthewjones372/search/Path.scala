@@ -2,7 +2,7 @@ package com.matthewjones372.search
 
 import zio.*
 
-final case class Path[A](start: A, end: A, path: Option[Chunk[(A, A)]]):
+final case class Path[A, B](start: A, end: A, path: Option[Chunk[(A, B)]]):
   def length: Int = path.map(_.length - 1).getOrElse(0)
 
   private def render =

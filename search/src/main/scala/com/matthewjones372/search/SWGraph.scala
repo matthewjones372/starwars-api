@@ -5,17 +5,17 @@ import zio.*
 import scala.annotation.tailrec
 import scala.collection.immutable.{HashSet, Queue}
 
-class SWGraph[A](private val peopleFilmMap: Map[A, Set[A]]) {
+class SWGraph[A, B](private val peopleFilmMap: Map[A, Set[B]]) {
   // We flip the people map so that we can easily find the neighbors of a film
-  private val filmPeopleMap: Map[A, Set[A]] = peopleFilmMap.foldLeft(Map.empty[A, Set[A]]) { case (acc, (k, vs)) =>
+  private val filmPeopleMap: Map[B, Set[A]] = peopleFilmMap.foldLeft(Map.empty[B, Set[A]]) { case (acc, (k, vs)) =>
     vs.foldLeft(acc) { case (acc, v) =>
       acc.updated(v, acc.getOrElse(v, Set.empty) + k)
     }
   }
 
-  def bfs(start: A, target: A): Option[Path[A]] = {
+  def bfs(start: A, target: A): Option[Path[A, B]] = {
     @tailrec
-    def loop(remaining: Queue[A], paths: Map[A, Chunk[(A, A)]], visited: HashSet[A]): Option[Chunk[(A, A)]] =
+    def loop(remaining: Queue[A], paths: Map[A, Chunk[(A, B)]], visited: HashSet[A]): Option[Chunk[(A, B)]] =
       if (remaining.isEmpty) None
       else {
         val (currentPoint, newRemaining) = remaining.dequeue

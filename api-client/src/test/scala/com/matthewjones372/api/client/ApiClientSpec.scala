@@ -7,7 +7,7 @@ import zio.json.*
 import zio.test.*
 import zio.test.Assertion.*
 
-object SWAPIServiceSpec extends ZIOSpecDefault:
+object ApiClientSpec extends ZIOSpecDefault:
 
   def spec = suite("SWAPIServiceLive Spec")(
     suite("API Response Behavior")(
@@ -16,10 +16,10 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
           _   <- TestClient.addRequestResponse(personRequest, response = personResponse)
           _   <- TestClient.addRequestResponse(filmRequest1, response = film1Response)
           _   <- TestClient.addRequestResponse(filmRequest2, response = film2Response)
-          f1  <- SWAPIClientService.getFilmsFromPerson(1).fork
+          f1  <- ApiClient.getFilmsFromPerson(1).fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
-        yield assertTrue(res == Set("A New Hope", "The Empire Strikes Back"))
+        yield assertTrue(res.map(_.title) == Set("A New Hope", "The Empire Strikes Back"))
       },
       test("can resolve all people from a paged response") {
         for
@@ -28,7 +28,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
                  for _ <- TestClient.addRequestResponse(personPagedUrlWith(page), response = pagedPersonResponse)
                  yield ()
                }
-          f1  <- SWAPIClientService.getPeople.fork
+          f1  <- ApiClient.getPeople.fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield assertTrue(res.size == 12)
@@ -37,7 +37,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
         val expectedFailure = ClientError.FailedToGetPagedResponse
         for
           _   <- TestClient.addRequestResponse(personPagedRequest, response = Response.notFound)
-          f1  <- SWAPIClientService.getPeople.exit.fork
+          f1  <- ApiClient.getPeople.exit.fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield assert(res)(fails(equalTo(expectedFailure)))
@@ -49,7 +49,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
 
         for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.notFound)
-          f1  <- SWAPIClientService.getFilmsFromPerson(1).exit.fork
+          f1  <- ApiClient.getFilmsFromPerson(1).exit.fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield {
@@ -61,7 +61,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
 
         for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.status(Status.TooManyRequests))
-          f1  <- SWAPIClientService.getFilmsFromPerson(1).exit.fork
+          f1  <- ApiClient.getFilmsFromPerson(1).exit.fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield {
@@ -73,7 +73,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
 
         for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.text("BAD JSON"))
-          f1  <- SWAPIClientService.getFilmsFromPerson(1).exit.fork
+          f1  <- ApiClient.getFilmsFromPerson(1).exit.fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield {
@@ -93,16 +93,16 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
           for
             state <- Ref.make(0)
             _     <- TestClient.addRoutes(Routes(getPersonWithInitialFailure(state), getFilmSuccess))
-            f1    <- SWAPIClientService.getFilmsFromPerson(1).fork
+            f1    <- ApiClient.getFilmsFromPerson(1).fork
             _     <- TestClock.adjust(10.seconds)
             res   <- f1.join
-          yield assertTrue(res == Set("The Empire Strikes Back"))
+          yield assertTrue(res.map(_.title) == Set("The Empire Strikes Back"))
         },
         test("API does not retry a request when there is a clientError") {
           for
             state         <- Ref.make(0)
             _             <- addCallWithClientError(state)
-            f1            <- SWAPIClientService.getFilmsFromPerson(1).fork
+            f1            <- ApiClient.getFilmsFromPerson(1).fork
             _             <- TestClock.adjust(10.seconds)
             numberOfCalls <- state.get
           yield assertTrue(numberOfCalls == 1) // There should only be one call
@@ -118,7 +118,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
         for
           callRef   <- Ref.make(1)
           _         <- TestClient.addRoutes(Routes(successfulPersonCall(callRef), getFilmSuccess))
-          f1        <- SWAPIClientService.getFilmsFromPerson(1).fork
+          f1        <- ApiClient.getFilmsFromPerson(1).fork
           _         <- TestClock.adjust(5.seconds)
           _         <- f1.join
           cacheHits <- callRef.get

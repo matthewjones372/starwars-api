@@ -49,10 +49,13 @@ jobs:
           name: coverage-report
           path: target/scala-*/scoverage-report
 
+      - name: List coverage report files
+        run: ls -R target/scala-*/scoverage-report
+
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: target/scala-*/scoverage.xml
+          filename: target/scala-*/scoverage-report
           badge: true
           fail_below_min: true
           format: markdown

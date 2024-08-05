@@ -51,6 +51,9 @@ jobs:
 
       - name: Code Coverage Summary
         uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          test-coverage-json-file: target/scala-*/scoverage-report/scoverage.xml
+          badge-summary: true
 
       - name: Determine version
         id: determine_version

@@ -1,4 +1,5 @@
-import sbtdynver.DynVerPlugin.autoImport._
+import sbtdynver.DynVerPlugin.autoImport.*
+
 
 ThisBuild / organization         := "com.matthewjones372"
 ThisBuild / name                 := "starwars-api"

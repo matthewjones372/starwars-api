@@ -10,7 +10,7 @@ object Projects {
         Compile / javacOptions ++= Seq("-source", "21", "release", "17")
       )
       .settings(
-        Test / fork := false,
+        Test / fork := true,
         run / fork  := true
       )
 }

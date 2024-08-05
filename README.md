@@ -25,8 +25,9 @@ To set up the project locally, follow these steps:
 Build the project:
 Ensure you have SBT installed. Then, run the following command:
 
-sbt compile
+```sbt compile```
+
 Run the tests:
 To run the tests, use:
 
-sbt test
+```sbt test```

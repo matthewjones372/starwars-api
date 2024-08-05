@@ -1,18 +1,12 @@
 import sbtdynver.DynVerPlugin.autoImport.*
 
-
 ThisBuild / organization         := "com.matthewjones372"
 ThisBuild / name                 := "starwars-api"
 ThisBuild / organizationHomepage := Some(url("https://github.com/matthewjones372"))
 ThisBuild / scalaVersion         := "3.4.2"
-//version                          := dynver.value
 
 ThisBuild / publishTo := {
-  val gh = s"https://maven.pkg.github.com/matthewjones372/starwars-api"
-  if (isSnapshot.value)
-    Some("GitHub Package Registry" at gh)
-  else
-    Some("GitHub Package Registry" at gh)
+  Some("GitHub Package Registry" at s"https://maven.pkg.github.com/matthewjones372/starwars-api")
 }
 
 ThisBuild / credentials += Credentials(

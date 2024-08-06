@@ -1,21 +1,19 @@
 package com.matthewjones372.api.client
 
-import com.matthewjones372.api.client.config.HttpClientConfig
 import com.matthewjones372.domain.*
 import com.matthewjones372.http.api.SWHttpServer
 import zio.*
 import zio.http.*
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
-import java.net.URI
-
 object ApiRequestResponseStubs:
-  val baseUrl = "http://localhost"
+  lazy val baseUrl = "http://localhost"
 
-  val film1Url       = "films/1/?format=json"
-  val film2Url       = "films/2/?format=json"
-  val personUrl      = "people/1"
-  val personPagedUrl = "people"
+  lazy val film1Url       = "films/1/?format=json"
+  lazy val film2Url       = "films/2/?format=json"
+  lazy val personUrl      = "people/1"
+  lazy val personPagedUrl = "people"
+  lazy val filmPagedUrl   = "films"
 
   extension (url: Either[Exception, URL])
     def addJsonQueryParam: Either[Exception, URL] =
@@ -29,13 +27,19 @@ object ApiRequestResponseStubs:
 
   def personPagedUrlWith(page: Int) =
     Request.get(
-      URL.decode("people").addJsonQueryParam.addPageQueryParam(page).unsafeGet
+      URL.decode(personPagedUrl).addJsonQueryParam.addPageQueryParam(page).unsafeGet
+    )
+
+  def filmPagedUrlWith(page: Int) =
+    Request.get(
+      URL.decode(filmPagedUrl).addJsonQueryParam.addPageQueryParam(page).unsafeGet
     )
 
   val personRequest      = Request.get(URL.decode(personUrl).addJsonQueryParam.unsafeGet)
   val filmRequest1       = Request.get(URL.decode(film1Url).unsafeGet)
   val filmRequest2       = Request.get(URL.decode(film2Url).unsafeGet)
   val personPagedRequest = Request.get(URL.decode(personPagedUrl).addJsonQueryParam.unsafeGet)
+  val filmPagedRequest   = Request.get(URL.decode(filmPagedUrl).addJsonQueryParam.unsafeGet)
 
   val person =
     People(
@@ -55,8 +59,34 @@ object ApiRequestResponseStubs:
       ""
     )
 
-  def personWithDiff(height: Int): People =
-    person.copy(height = Some(height))
+  def personWithDiff(name: Int): People =
+    person.copy(name = name.toString, films = Set(s"http://localhost/$name"))
+
+  def filmWithDiff(title: String): Film =
+    film1.copy(title = title)
+
+  val pagedFilmJson = Films(
+    11,
+    results = List(
+      filmWithDiff("1"),
+      filmWithDiff("2"),
+      filmWithDiff("3"),
+      filmWithDiff("4"),
+      filmWithDiff("5"),
+      filmWithDiff("6"),
+      filmWithDiff("7"),
+      filmWithDiff("8"),
+      filmWithDiff("9"),
+      filmWithDiff("10"),
+      filmWithDiff("11"),
+      filmWithDiff("12")
+    )
+  )
+
+  val pagedFilmResponse = Response(
+    status = Status.Ok,
+    body = Body.from[Films](pagedFilmJson)
+  )
 
   val pagedPersonJson =
     Peoples(
@@ -77,17 +107,17 @@ object ApiRequestResponseStubs:
       )
     )
 
-  val pagedPersonResponse = Response(
+  lazy val pagedPersonResponse = Response(
     status = Status.Ok,
     body = Body.from[Peoples](pagedPersonJson)
   )
 
-  val personResponse = Response(
+  lazy val personResponse = Response(
     status = Status.Ok,
     body = Body.from(person)
   )
 
-  val film1 = Film(
+  lazy val film1 = Film(
     title = "The Empire Strikes Back",
     episodeId = 5,
     openingCrawl = "opening",
@@ -126,12 +156,12 @@ object ApiRequestResponseStubs:
     url = "2014-12-15T13:07:53.386000Z"
   )
 
-  val film1Response = Response(
+  lazy val film1Response = Response(
     status = Status.Ok,
     body = Body.from(film1)
   )
 
-  val film2 = Film(
+  lazy val film2 = Film(
     "A New Hope",
     5,
     "opening",
@@ -170,7 +200,7 @@ object ApiRequestResponseStubs:
     "2014-12-15T13:07:53.386000Z"
   )
 
-  val film2Response = Response(status = Status.Ok, body = Body.from(film2))
+  lazy val film2Response = Response(status = Status.Ok, body = Body.from(film2))
 
   def getFilmSuccess = SWHttpServer.getFilmEndpoint.implement { _ =>
     ZIO.succeed(film1)

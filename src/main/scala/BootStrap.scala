@@ -1,12 +1,18 @@
-import com.matthewjones372.api.client.{HttpClientConfig, SWAPIClientService}
+import com.matthewjones372.api.client.SWAPIClientService
 import com.matthewjones372.http.api.SWHttpServer
 import com.matthewjones372.search.SWGraph
-
-import java.net.URI
 import zio.*
+import zio.Runtime.removeDefaultLoggers
+import zio.config.typesafe.TypesafeConfigProvider
 import zio.http.*
+import zio.logging.LogFormat
+import zio.logging.backend.SLF4J
 
 object ClientExample extends ZIOAppDefault:
+
+  override val bootstrap: ZLayer[ZIOAppArgs, Any, Any] =
+    (Runtime.removeDefaultLoggers >>> SLF4J.slf4j >>> Runtime.setUnhandledErrorLogLevel(LogLevel.Debug)) ++
+      Runtime.setConfigProvider(TypesafeConfigProvider.fromResourcePath())
 
   def run =
     (for
@@ -24,8 +30,6 @@ object ClientExample extends ZIOAppDefault:
     yield ExitCode.success)
       .provide(
         SWAPIClientService.default,
-//        ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI("https://swapi.dev/api")).get, 1000)),
-        ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI("http://localhost:8080")).get, 1000)),
         Scope.default,
         Client.default
       )
@@ -35,4 +39,8 @@ object ServerExample extends ZIOAppDefault:
   def run = (for
     server <- SWHttpServer.default
     _      <- server.start
-  yield ()).provide(Server.default)
+  yield ()).provide(
+    Server.default,
+    SLF4J.slf4j(LogFormat.colored),
+    removeDefaultLoggers
+  )

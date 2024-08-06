@@ -1,5 +1,6 @@
 package com.matthewjones372.api.client
 
+import com.matthewjones372.api.client.config.HttpClientConfig
 import com.matthewjones372.domain.*
 import com.matthewjones372.http.api.SWHttpServer
 import zio.*

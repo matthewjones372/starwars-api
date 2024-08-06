@@ -1,5 +1,6 @@
 package com.matthewjones372.api.client
 
+import com.matthewjones372.api.client.config.HttpClientConfig
 import com.matthewjones372.domain.*
 import zio.*
 import zio.http.Client
@@ -11,7 +12,7 @@ trait SWAPIClientService:
   def getFilms: IO[ClientError, Set[Film]]
 
 object SWAPIClientService:
-  type SWAPIEnv = Client & Scope & HttpClientConfig
+  type SWAPIEnv = Client & Scope
 
   def getFilmsFromPerson(id: Int)(using Trace): ZIO[SWAPIClientService, ClientError, Set[String]] =
     ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromPerson(id))

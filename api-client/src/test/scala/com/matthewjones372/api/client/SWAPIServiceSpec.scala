@@ -41,6 +41,18 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
         yield assert(res)(fails(equalTo(expectedFailure)))
+      },
+      test("Can get all films from a paged response") {
+        for
+          _ <- TestClient.addRequestResponse(filmPagedRequest, response = pagedFilmResponse)
+          _ <- ZIO.foreachDiscard(1 to 2) { page =>
+                 for _ <- TestClient.addRequestResponse(filmPagedUrlWith(page), response = pagedPersonResponse)
+                 yield ()
+               }
+          f1  <- SWAPIClientService.getFilms.fork
+          _   <- TestClock.adjust(5.seconds)
+          res <- f1.join
+        yield assertTrue(res.size == 12)
       }
     ),
     suite("API Error Behavior")(
@@ -69,8 +81,6 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
         }
       },
       test("returns the correct error when poorly formatted json is returned") {
-//        val expectedFailure = ClientError.JsonDeserializationError(body = "BAD JSON", msg = "(expected '{' got 'B')")
-
         (for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.text("BAD JSON"))
           f1  <- SWAPIClientService.getFilmsFromPerson(1).fork
@@ -115,7 +125,6 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
     ),
     suite("API Caching behavior")(
       test("calls the cache on the first call") {
-        import zio.http.*
         def successfulPersonCall(state: Ref[Boolean]) = SWHttpServer.getPersonEndpoint.implement { _ =>
           state.modify {
             case false => (person, true)

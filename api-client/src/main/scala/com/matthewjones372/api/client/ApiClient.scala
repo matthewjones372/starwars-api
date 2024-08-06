@@ -15,7 +15,7 @@ trait ApiClient:
 
   def getFilmFrom(id: Int): IO[ClientError, Film]
 
-  def getFilmFrom(url: URL): IO[ClientError, Film]
+  def getFilmFromUrl(url: URL): IO[ClientError, Film]
 
   def getPeople: IO[ClientError, Set[People]]
 
@@ -28,8 +28,8 @@ object ApiClient:
   def getFilmFrom(id: Int)(using Trace) =
     ZIO.serviceWithZIO[ApiClient](_.getFilmFrom(id))
 
-  def getFilmFrom(url: URL)(using Trace) =
-    ZIO.serviceWithZIO[ApiClient](_.getFilmFrom(url))
+  def getFilmFromUrl(url: URL)(using Trace) =
+    ZIO.serviceWithZIO[ApiClient](_.getFilmFromUrl(url))
 
   def getPeople(using Trace) =
     ZIO.serviceWithZIO[ApiClient](_.getPeople)
@@ -52,7 +52,7 @@ object ApiClient:
   private final class CachingApiClient(
     cache: Cache[CacheKey, ClientError, CacheEntities]
   ) extends ApiClient:
-    override def getFilmFrom(url: URL): IO[ClientError, Film] =
+    override def getFilmFromUrl(url: URL): IO[ClientError, Film] =
       cache.get(CacheKey.FilmUrl(url)).map {
         case film: Film => film
         case _          => throw UnreachableError
@@ -100,7 +100,7 @@ object ApiClient:
                   case CacheKey.PersonId(id) =>
                     apiClient.getPersonFrom(id)
                   case CacheKey.FilmUrl(url) =>
-                    apiClient.getFilmFrom(url)
+                    apiClient.getFilmFromUrl(url)
                   case CacheKey.People =>
                     apiClient.getPeople.map(PeopleSet.apply)
                   case CacheKey.Films =>
@@ -129,7 +129,7 @@ object ApiClient:
       get[Film]((httpConfig.baseUrl / "films" / id.toString).addQueryParam("format", "json"))
         .provideEnvironment(env)
 
-    override def getFilmFrom(url: URL): IO[ClientError, Film] =
+    override def getFilmFromUrl(url: URL): IO[ClientError, Film] =
       get[Film](url).provideEnvironment(env)
 
     override def getFilms: IO[ClientError, Set[Film]] =

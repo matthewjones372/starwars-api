@@ -2,7 +2,7 @@ package com.matthewjones372.api.client
 
 import com.matthewjones372.domain.*
 import zio.*
-import zio.http.Client
+import zio.http.*
 
 trait SWAPIClientService:
   def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]]
@@ -38,7 +38,7 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
   override def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]] = {
     for
       people <- ApiClient.getPersonFrom(id)
-      films  <- ZIO.foreachPar(people.films)(url => decodeUrlString(url).flatMap(ApiClient.getFilmFrom))
+      films  <- ZIO.foreachPar(people.films)(url => decodeUrlString(url).flatMap(ApiClient.getFilmFromUrl))
     yield films.map(_.title)
   }.provideEnvironment(ZEnvironment(apiClient))
 
@@ -53,7 +53,7 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
           .foreachPar(people) { person =>
             ZIO
               .foreachPar(person.films) { url =>
-                decodeUrlString(url).flatMap(ApiClient.getFilmFrom).map(_.title)
+                decodeUrlString(url).flatMap(ApiClient.getFilmFromUrl).map(_.title)
               }
               .map(films => (person.name, films))
           }

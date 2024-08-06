@@ -9,7 +9,6 @@ import zio.test.*
 import zio.test.Assertion.*
 
 object SWAPIServiceSpec extends ZIOSpecDefault:
-
   def spec = suite("SWAPIServiceLive Spec")(
     suite("API Response Behavior")(
       test("can resolve the correct films from a person") {
@@ -135,6 +134,14 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
       }
     )
   ).provide(
-    testEnv,
+    SWAPIClientService.default,
+    Scope.default,
     TestClient.layer
-  ) @@ TestAspect.timeout(10.seconds)
+  ) @@ TestAspect.timeout(10.seconds) @@ TestAspect.withConfigProvider(
+    ConfigProvider.fromMap(
+      Map(
+        "clientConfig.baseUrl"   -> "http://localhost",
+        "clientConfig.cacheSize" -> "100"
+      )
+    )
+  )

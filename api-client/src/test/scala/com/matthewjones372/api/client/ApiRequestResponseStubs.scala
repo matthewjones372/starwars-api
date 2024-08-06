@@ -12,11 +12,6 @@ import java.net.URI
 object ApiRequestResponseStubs:
   val baseUrl = "http://localhost"
 
-  val testEnv =
-    (Scope.default ++
-      ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI(baseUrl)).get, 1000)))
-      >>> SWAPIClientService.default
-
   val film1Url       = "films/1/?format=json"
   val film2Url       = "films/2/?format=json"
   val personUrl      = "people/1"

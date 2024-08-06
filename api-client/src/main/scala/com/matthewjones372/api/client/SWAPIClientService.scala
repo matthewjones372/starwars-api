@@ -1,6 +1,5 @@
 package com.matthewjones372.api.client
 
-import com.matthewjones372.api.client.config.HttpClientConfig
 import com.matthewjones372.domain.*
 import zio.*
 import zio.http.Client

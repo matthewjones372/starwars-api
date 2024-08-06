@@ -11,12 +11,12 @@ object Generators:
     skinColor <- Gen.string
     eyeColor  <- Gen.string
     birthYear <- Gen.string
-    gender    <- Gen.string
-    homeworld <- Gen.string
+    gender    <- Gen.option(Gen.string)
+    homeworld <- Gen.option(Gen.string)
     films     <- Gen.setOf(Gen.string)
-    vehicles  <- Gen.setOf(Gen.string)
-    starships <- Gen.setOf(Gen.string)
-    species   <- Gen.setOf(Gen.string)
+    vehicles  <- Gen.option(Gen.setOf(Gen.string))
+    starships <- Gen.option(Gen.setOf(Gen.string))
+    species   <- Gen.option(Gen.setOf(Gen.string))
   yield People(
     name,
     height,

@@ -2,7 +2,7 @@ package com.matthewjones372.http.api
 
 import SWAPIServerError.*
 import com.matthewjones372.data.{DataRepoError, SWDataRepo}
-import com.matthewjones372.domain.{Film, People}
+import com.matthewjones372.domain.*
 import zio.*
 import zio.http.*
 import zio.http.codec.*
@@ -31,7 +31,8 @@ object SWHttpServer:
 
   val getPeopleEndpoint =
     Endpoint(Method.GET / "people")
-      .out[Set[People]]
+      .query(QueryCodec.queryInt("page").optional)
+      .out[Peoples]
       .outErrors[SWAPIServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
@@ -39,14 +40,24 @@ object SWHttpServer:
 
   val getFilmsEndpoint =
     Endpoint(Method.GET / "films")
-      .out[Set[Film]]
+      .query(QueryCodec.queryInt("page").optional)
+      .out[Films]
       .outErrors[SWAPIServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
+  val getFilmEndpoint =
+    Endpoint(Method.GET / "films" / PathCodec.int("film"))
+      .out[Film]
+      .outErrors[SWAPIServerError](
+        HttpCodec.error[FilmNotFound](Status.NotFound),
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
   private val endPoints =
-    Chunk(getPersonEndpoint, getPeopleEndpoint, getFilmsEndpoint)
+    Chunk(getPersonEndpoint, getPeopleEndpoint, getFilmsEndpoint, getFilmEndpoint)
 
   val openAPI =
     OpenAPIGen.fromEndpoints(
@@ -68,21 +79,31 @@ private final case class SWHttpServerImpl(private val dataRepo: SWDataRepo) exte
       }
   }.sandbox
 
-  private val getPeopleHandler = SWHttpServer.getPeopleEndpoint.implement { _ =>
-    dataRepo.getPeople.catchAll { err =>
+  private val getPeopleHandler = SWHttpServer.getPeopleEndpoint.implement { page =>
+    dataRepo.getPeople(page, Some(10)).catchAll { err =>
       ZIO.fail(UnexpectedError(err.getMessage))
     }
   }.sandbox
 
-  private def getFilmHandler = SWHttpServer.getFilmsEndpoint.implement { _ =>
-    dataRepo.getFilms.catchAll { err =>
+  private def getFilmHandler = SWHttpServer.getFilmEndpoint.implement { filmId =>
+    dataRepo.getFilm(filmId).catchAll {
+      case DataRepoError.FilmNotFound(message, _) =>
+        ZIO.fail(FilmNotFound(message, filmId))
+      case err =>
+        ZIO.fail(UnexpectedError(err.getMessage))
+    }
+
+  }
+
+  private def getFilmsHandler = SWHttpServer.getFilmsEndpoint.implement { page =>
+    dataRepo.getFilms(page, Some(10)).catchAll { err =>
       ZIO.fail(UnexpectedError(err.getMessage))
     }
   }.sandbox
 
   private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", SWHttpServer.openAPI)
 
-  private val handlers = Chunk(getPersonHandler, getPeopleHandler, getFilmHandler)
+  private val handlers = Chunk(getPersonHandler, getPeopleHandler, getFilmsHandler, getFilmHandler)
 
   private val routes =
     (Routes(handlers) ++ swaggerRoutes) @@ Middleware.debug

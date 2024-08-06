@@ -1,7 +1,7 @@
 package com.matthewjones372.http.api
 
 import com.matthewjones372.data.{DataRepoError, SWDataRepo}
-import com.matthewjones372.domain.{Film, People}
+import com.matthewjones372.domain.{Film, Films, People, Peoples}
 import stubby.*
 import zio.*
 import zio.http.*
@@ -18,7 +18,7 @@ object SWApiSpec extends ZIOSpecDefault:
           for
             client <- ZIO.service[Client]
             _ <- stub[SWDataRepo](_.getFilms) {
-                   ZIO.attempt(Set(film)).orElseFail(DataRepoError.FilmsNotFound)
+                   ZIO.attempt(Films(1, List(film))).orElseFail(DataRepoError.FilmsNotFound)
                  }
             swServer    <- ZIO.service[SWHttpServer]
             _           <- swServer.start.fork
@@ -56,7 +56,7 @@ object SWApiSpec extends ZIOSpecDefault:
       test("returns a set of people") {
         (for
           _ <- stub[SWDataRepo](_.getPeople) {
-                 ZIO.attempt(Set(person)).orElseFail(DataRepoError.FilmsNotFound)
+                 ZIO.attempt(Peoples(1, List(person))).orElseFail(DataRepoError.FilmsNotFound)
                }
           client      <- ZIO.service[Client]
           swServer    <- ZIO.service[SWHttpServer]
@@ -173,12 +173,12 @@ object SWApiSpec extends ZIOSpecDefault:
       skinColor = "gold",
       eyeColor = "yellow",
       birthYear = "112BBY",
-      gender = "n/a",
-      homeworld = "https://swapi.dev/api/planets/1/",
+      gender = None,
+      homeworld = None,
       films = Set("/films/1/?format=json", "/films/2/?format=json"),
-      species = Set("https://swapi.dev/api/species/2/"),
-      vehicles = Set(),
-      starships = Set()
+      species = None,
+      vehicles = None,
+      starships = None
     )
 
   def requestToCorrectPort =

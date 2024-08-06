@@ -2,6 +2,7 @@ package com.matthewjones372.domain
 
 import zio.json.*
 import zio.schema.*
+import zio.schema.Schema.primitive
 import zio.schema.annotation.fieldName
 
 @jsonMemberNames(SnakeCase)
@@ -11,19 +12,18 @@ final case class People(
   mass: Option[Int],
   @fieldName("hair_color") hairColor: String,
   @fieldName("skin_color") skinColor: String,
-  eyeColor: String,
+  @fieldName("eye_color") eyeColor: String,
   @fieldName("birth_year") birthYear: String,
-  gender: String,
-  homeworld: String,
+  gender: Option[String],
+  homeworld: Option[String],
   films: Set[String],
-  species: Set[String],
-  vehicles: Set[String],
-  starships: Set[String]
-) derives JsonCodec,
-      Schema
+  species: Option[Set[String]],
+  vehicles: Option[Set[String]],
+  starships: Option[Set[String]]
+)
 
 object People:
-  given JsonDecoder[Option[Int]] = JsonDecoder[String].map(_.toIntOption)
-  given JsonEncoder[Option[Int]] = JsonEncoder[String].contramap(_.map(_.toString).getOrElse(""))
+  given Schema[Option[Int]] = primitive[String].transform(_.toIntOption, _.map(_.toString).getOrElse(""))
+  given Schema[People]      = DeriveSchema.gen
 
-final case class Peoples(count: Int, results: List[People]) extends Paged[People] derives JsonCodec
+final case class Peoples(count: Int, results: List[People]) extends Paged[People] derives Schema

@@ -1,12 +1,13 @@
 package com.matthewjones372.api.client
 
+import com.matthewjones372.api.client.ClientError.*
+import com.matthewjones372.api.client.SWAPIClientService.SWAPIEnv
+import com.matthewjones372.domain.*
 import zio.*
-import zio.http.*
-import zio.json.*
-import ClientError.*
-import SWAPIClientService.SWAPIEnv
-import com.matthewjones372.domain.{Film, Films, Paged, People, Peoples}
 import zio.cache.*
+import zio.http.*
+import zio.schema.codec.BinaryCodec
+import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
 trait ApiClient:
   def getPersonFrom(id: Int): IO[ClientError, People]
@@ -133,7 +134,7 @@ object ApiClient:
     override def getFilms: IO[ClientError, Set[Film]] =
       getPagedResponse[Films, Film]("films").provideEnvironment(env)
 
-    private def getPagedResponse[A <: Paged[B]: JsonCodec, B](entity: String) = {
+    private def getPagedResponse[A <: Paged[B]: BinaryCodec, B](entity: String) = {
       get[A]((httpConfig.baseUrl / entity).addQueryParam("format", "json")).flatMap { firstPage =>
         ZIO
           .foreachPar(2 to firstPage.pageCount)(page =>
@@ -149,22 +150,11 @@ object ApiClient:
       }.orElseFail(ClientError.FailedToGetPagedResponse)
     }.provideEnvironment(env)
 
-    private def get[A](url: URL)(using codec: JsonCodec[A]) =
+    private def get[A: BinaryCodec](url: URL) =
       ResiliencyPolicy.run {
         (for
           response <- client.request(Request.get(url))
-          body     <- response.bodyOrClientError(url)
-          result <-
-            ZIO
-              .fromEither(
-                codec.decodeJson(
-                  body //TODO: Fix this string manipulation we shouldn't need this. we want to use zio schema and the .to[People]
-                    .stripPrefix("\"")
-                    .stripSuffix("\"")
-                    .replaceAll("""\\(?![nr])""", "")
-                )
-              )
-              .mapError(err => ClientError.JsonDeserializationError(body, err))
+          result   <- response.bodyOrClientError(url)
         yield result).catchAll {
           case err: UnexpectedSeverError =>
             ZIO.logError(err.getMessage) *>

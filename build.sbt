@@ -41,30 +41,13 @@ lazy val domain = Projects
   .create("domain")
   .settings(
     Libraries.zioSchema,
-    Libraries.zioJson,
     Libraries.zioTest
-  )
-
-lazy val client = Projects
-  .create("api-client")
-  .settings(
-    Libraries.zioHttp,
-    Libraries.zioCache,
-    Libraries.resilience,
-    Libraries.zioTest
-  )
-  .settings(
-    publish / skip := false
-  )
-  .dependsOn(
-    domain % oneToOneClassMapping
   )
 
 lazy val data = Projects
   .create("data")
   .settings(
     Libraries.zio,
-    Libraries.zioJson,
     Libraries.zioTest
   )
   .dependsOn(
@@ -81,6 +64,23 @@ lazy val `http-api` = Projects
   .dependsOn(
     domain % oneToOneClassMapping,
     data   % oneToOneClassMapping
+  )
+
+lazy val client = Projects
+  .create("api-client")
+  .settings(
+    Libraries.zioHttp,
+    Libraries.zioCache,
+    Libraries.resilience,
+    Libraries.zioJson,
+    Libraries.zioTest
+  )
+  .settings(
+    publish / skip := false
+  )
+  .dependsOn(
+    domain     % oneToOneClassMapping,
+    `http-api` % oneToOneClassMapping
   )
 
 lazy val search = Projects

@@ -1,5 +1,4 @@
 import com.matthewjones372.api.client.{HttpClientConfig, SWAPIClientService}
-import com.matthewjones372.data.SWDataRepo
 import com.matthewjones372.http.api.SWHttpServer
 import com.matthewjones372.search.SWGraph
 
@@ -25,7 +24,8 @@ object BootStrapClientExample extends ZIOAppDefault:
     yield ExitCode.success)
       .provide(
         SWAPIClientService.default,
-        ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI("https://swapi.dev/api")).get, 1000)),
+//        ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI("https://swapi.dev/api")).get, 1000)),
+        ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI("http://localhost:8080")).get, 1000)),
         Scope.default,
         Client.default
       )

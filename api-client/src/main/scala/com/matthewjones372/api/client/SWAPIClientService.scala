@@ -1,6 +1,6 @@
 package com.matthewjones372.api.client
 
-import com.matthewjones372.domain.{Film, People}
+import com.matthewjones372.domain.*
 import zio.*
 import zio.http.Client
 
@@ -52,7 +52,9 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
         ZIO
           .foreachPar(people) { person =>
             ZIO
-              .foreachPar(person.films)(url => decodeUrlString(url).flatMap(ApiClient.getFilmFrom).map(_.title))
+              .foreachPar(person.films) { url =>
+                decodeUrlString(url).flatMap(ApiClient.getFilmFrom).map(_.title)
+              }
               .map(films => (person.name, films))
           }
     yield films).map(_.toMap).provideEnvironment(ZEnvironment(apiClient))

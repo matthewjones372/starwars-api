@@ -1,13 +1,13 @@
 package com.matthewjones372.api.client
 
-import com.matthewjones372.domain.{Film, People, Peoples}
+import com.matthewjones372.domain.*
+import com.matthewjones372.http.api.SWHttpServer
 import zio.*
 import zio.http.*
+import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
+
 
 import java.net.URI
-import zio.json.*
-import zio.http.codec.QueryCodec
-import zio.http.endpoint.Endpoint
 
 object ApiRequestResponseStubs:
   val baseUrl = "http://localhost"
@@ -51,12 +51,12 @@ object ApiRequestResponseStubs:
       "gold",
       "yellow",
       "112BBY",
-      "n/a",
-      "https://swapi.dev/api/planets/1/",
+      None,
+      None,
       Set("/films/1/?format=json", "/films/2/?format=json"),
-      Set("https://swapi.dev/api/species/2/"),
-      Set(),
-      Set()
+      None,
+      None,
+      None
     )
 
   def personWithDiff(height: Int): People =
@@ -83,30 +83,30 @@ object ApiRequestResponseStubs:
 
   val pagedPersonResponse = Response(
     status = Status.Ok,
-    body = Body.fromString(pagedPersonJson.toJson)
+    body = Body.from[Peoples](pagedPersonJson)
   )
 
   val personResponse = Response(
     status = Status.Ok,
-    body = Body.fromString(person.toJson)
+    body = Body.from(person)
   )
 
   val film1 = Film(
-    "The Empire Strikes Back",
-    5,
-    "opening",
-    "Irvin Kershner",
-    "Gary Kurtz",
-    "Rick McCallum",
-    Set(),
-    Set(),
-    Set(
+    title = "The Empire Strikes Back",
+    episodeId = 5,
+    openingCrawl = "opening",
+    director = "Irvin Kershner",
+    producer = "Gary Kurtz",
+    releaseDate = "Rick McCallum",
+    characters = Set("John", "marty"),
+    planets = Set("Earth"),
+    starships = Set(
       "https://swapi.dev/api/planets/4/",
       "https://swapi.dev/api/planets/5/",
       "https://swapi.dev/api/planets/6/",
       "https://swapi.dev/api/planets/27/"
     ),
-    Set(
+    vehicles = Set(
       "https://swapi.dev/api/starships/11/",
       "https://swapi.dev/api/starships/22/",
       "https://swapi.dev/api/starships/15/",
@@ -117,7 +117,7 @@ object ApiRequestResponseStubs:
       "https://swapi.dev/api/starships/21/",
       "https://swapi.dev/api/starships/17/"
     ),
-    Set(
+    species = Set(
       "https://swapi.dev/api/vehicles/16/",
       "https://swapi.dev/api/vehicles/14/",
       "https://swapi.dev/api/vehicles/19/",
@@ -125,14 +125,14 @@ object ApiRequestResponseStubs:
       "https://swapi.dev/api/vehicles/20/",
       "https://swapi.dev/api/vehicles/8/"
     ),
-    "",
-    "2014-12-12T11:26:24.656000Z",
-    "2014-12-15T13:07:53.386000Z"
+    created = "",
+    edited = "2014-12-12T11:26:24.656000Z",
+    url = "2014-12-15T13:07:53.386000Z"
   )
 
   val film1Response = Response(
     status = Status.Ok,
-    body = Body.fromString(film1.toJson)
+    body = Body.from(film1)
   )
 
   val film2 = Film(
@@ -174,24 +174,14 @@ object ApiRequestResponseStubs:
     "2014-12-15T13:07:53.386000Z"
   )
 
-  val film2Response = Response(status = Status.Ok, body = Body.fromString(film2.toJson))
+  val film2Response = Response(status = Status.Ok, body = Body.from(film2))
 
-  val getPersonEndpoint =
-    Endpoint(Method.GET / "people" / int("person"))
-      .query(QueryCodec.query("format"))
-      .out[String]
-
-  def getFilmsEndpoint =
-    Endpoint(Method.GET / "films" / int("filmId") / trailing)
-      .query(QueryCodec.query("format"))
-      .out[String]
-
-  def getFilmSuccess = getFilmsEndpoint.implement { _ =>
-    ZIO.succeed(film1.toJson)
+  def getFilmSuccess = SWHttpServer.getFilmEndpoint.implement { _ =>
+    ZIO.succeed(film1)
   }
 
   def addCallWithClientError(state: Ref[Int]) =
-    TestClient.addRoute(getPersonEndpoint.route -> handler {
+    TestClient.addRoute(SWHttpServer.getPersonEndpoint.route -> handler {
       state.getAndUpdate(_ + 1).as {
         Response.status(Status.Unauthorized)
       }

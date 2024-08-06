@@ -1,10 +1,8 @@
 package com.matthewjones372.domain
 
-import zio.json.*
 import zio.schema.*
 import zio.schema.annotation.fieldName
 
-@jsonMemberNames(SnakeCase)
 final case class Film(
   title: String,
   @fieldName("episode_id") episodeId: Int,
@@ -20,7 +18,6 @@ final case class Film(
   created: String,
   edited: String,
   url: String
-) derives JsonCodec,
-      Schema
+) derives Schema
 
-final case class Films(count: Int, results: List[Film]) extends Paged[Film] derives JsonCodec
+final case class Films(count: Int, results: List[Film]) extends Paged[Film] derives Schema

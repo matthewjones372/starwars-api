@@ -6,3 +6,5 @@ enum DataRepoError(msg: String) extends RuntimeException(msg):
   case UnexpectedError(message: String, exception: Exception)
       extends DataRepoError(s"Data-Repo has encountered an unexpected error: $message. Exception: $exception")
   case FilmsNotFound extends DataRepoError(s"No films found.")
+  case PaginatedResponseError
+      extends DataRepoError("You need to provide both an offset and a fetch size or provide nothing")

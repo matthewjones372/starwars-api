@@ -1,15 +1,16 @@
 package com.matthewjones372.domain
 
-import scala.io.Source
-
+import zio.schema.codec.DecodeError
+import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 import zio.test.*
-import zio.json.*
+
+import scala.io.Source
 
 object PeopleSpec extends ZIOSpecDefault:
   def spec = suite("People Spec")(
     test("People should be able to be decoded from JSON") {
       val json   = Source.fromResource("people_json.json").getLines().mkString
-      val people = json.mkString.fromJson[People]
+      val people = json.to[People]
 
       val expectedPerson = People(
         name = "C-3PO",
@@ -19,12 +20,13 @@ object PeopleSpec extends ZIOSpecDefault:
         skinColor = "gold",
         eyeColor = "yellow",
         birthYear = "112BBY",
-        gender = "n/a",
-        homeworld = "https://swapi.dev/api/planets/1/",
+        gender = Some("n/a"),
+        homeworld = Some("https://swapi.dev/api/planets/1/"),
         films = Set("/films/1/?format=json", "/films/2/?format=json"),
-        species = Set("https://swapi.dev/api/species/2/"),
-        vehicles = Set(),
-        starships = Set()
+        species = Some(Set("https://swapi.dev/api/species/2/")),
+        vehicles = Some(Set.empty),
+        starships = Some(Set.empty),
+        url = "https://swapi.dev/api/people/2/"
       )
 
       assertTrue(people == Right(expectedPerson))
@@ -37,8 +39,6 @@ object PeopleSpec extends ZIOSpecDefault:
                       |    "mass": "182",
                       |    "eye_color": "blue",
                       |    "species": [],
-                      |    "vehicles": [],
-                      |    "starships": [],
                       |    "hair_color": "brown",
                       |    "skin_color": "fair",
                       |    "eyeColor": "blue",
@@ -46,11 +46,12 @@ object PeopleSpec extends ZIOSpecDefault:
                       |    "gender": "male",
                       |    "homeworld": "https://swapi.dev/api/planets/1/",
                       |    "films": [
-                      |    ]
+                      |    ],
+                      |    "url": "https://swapi.dev/api/species/2/"
                       |  }
                       |""".stripMargin
 
-      val result = aPerson.fromJson[People]
+      val result = aPerson.to[People]
       assertTrue(result.map(_.height) == Right(None))
     }
   )

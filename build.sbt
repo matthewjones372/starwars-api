@@ -73,7 +73,6 @@ lazy val client = Projects
     Libraries.zioHttp,
     Libraries.zioCache,
     Libraries.resilience,
-    Libraries.zioJson,
     Libraries.zioTest
   )
   .settings(

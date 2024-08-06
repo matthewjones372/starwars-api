@@ -5,6 +5,8 @@ import zio.*
 import zio.concurrent.ConcurrentMap
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
+import zio.http.*
+
 trait SWDataRepo:
   def getFilm(id: Int): IO[DataRepoError, Film]
   def getPerson(id: Int): IO[DataRepoError, People]
@@ -12,16 +14,28 @@ trait SWDataRepo:
   def getFilms(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Films]
 
 object SWDataRepo:
+
+  private def getId(url: String) =
+    URL.decode(url).map(_.path.segments.last).toOption.get.toInt - 1
+
   def layer: RLayer[Any, SWDataRepo] = ZLayer.fromZIO {
     for
       peopleData <- ConcurrentMap.empty[Int, People]
       filmData   <- ConcurrentMap.empty[Int, Film]
+
+      _          <- ZIO.logInfo("Reading in Star Wars Data")
       peopleJson <- ZIO.readFile("src/main/resources/people_data.json")
-      peoples    <- ZIO.fromEither(peopleJson.to[List[People]]).mapError(e => new RuntimeException(e))
-      _          <- peopleData.putAll(peoples.zipWithIndex.map((p, id) => (id, p))*)
       filmJson   <- ZIO.readFile("src/main/resources/film_data.json")
-      films      <- ZIO.fromEither(filmJson.to[List[Film]]).mapError(e => new RuntimeException(e))
-      _          <- filmData.putAll(films.zipWithIndex.map((f, id) => (id, f))*)
+
+      peoples <- ZIO
+                   .fromEither(peopleJson.to[List[People]])
+                   .tapError(e => ZIO.logError(s"Failed to parse ${e}"))
+                   .mapError(e => new RuntimeException(e))
+      films <- ZIO.fromEither(filmJson.to[List[Film]]).mapError(e => new RuntimeException(e))
+
+      _ <- ZIO.logInfo("Parsed....")
+      _ <- filmData.putAll(films.map(film => (getId(film.url), film))*)
+      _ <- peopleData.putAll(peoples.map(person => (getId(person.url), person))*)
     yield InMemoryDataRepo(peopleData, filmData)
   }
 
@@ -73,6 +87,6 @@ final private case class InMemoryDataRepo(peopleData: ConcurrentMap[Int, People]
   extension [A](data: List[A])
     private def getPage(page: Int, pageSize: Int): List[A] = {
       val from = (page - 1) * pageSize
-      val to   = from + pageSize
+      val to   = from + pageSize + 1
       data.slice(from, to)
     }

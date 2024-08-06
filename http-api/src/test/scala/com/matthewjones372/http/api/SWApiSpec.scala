@@ -178,7 +178,8 @@ object SWApiSpec extends ZIOSpecDefault:
       films = Set("/films/1/?format=json", "/films/2/?format=json"),
       species = None,
       vehicles = None,
-      starships = None
+      starships = None,
+      url = "https://swapi.dev/api/species/2/"
     )
 
   def requestToCorrectPort =

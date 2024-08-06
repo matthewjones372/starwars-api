@@ -6,7 +6,7 @@ import java.net.URI
 import zio.*
 import zio.http.*
 
-object BootStrapClientExample extends ZIOAppDefault:
+object ClientExample extends ZIOAppDefault:
 
   def run =
     (for
@@ -30,7 +30,7 @@ object BootStrapClientExample extends ZIOAppDefault:
         Client.default
       )
 
-object BootStrapServerExample extends ZIOAppDefault:
+object ServerExample extends ZIOAppDefault:
 
   def run = (for
     server <- SWHttpServer.default

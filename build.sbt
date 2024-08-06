@@ -48,6 +48,7 @@ lazy val data = Projects
   .create("data")
   .settings(
     Libraries.zio,
+    Libraries.zioHttp,
     Libraries.zioTest
   )
   .dependsOn(

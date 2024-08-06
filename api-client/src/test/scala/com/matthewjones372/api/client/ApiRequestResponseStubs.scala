@@ -6,7 +6,6 @@ import zio.*
 import zio.http.*
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
-
 import java.net.URI
 
 object ApiRequestResponseStubs:
@@ -56,7 +55,8 @@ object ApiRequestResponseStubs:
       Set("/films/1/?format=json", "/films/2/?format=json"),
       None,
       None,
-      None
+      None,
+      ""
     )
 
   def personWithDiff(height: Int): People =

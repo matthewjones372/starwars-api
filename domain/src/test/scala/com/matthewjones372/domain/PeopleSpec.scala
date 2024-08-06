@@ -25,7 +25,8 @@ object PeopleSpec extends ZIOSpecDefault:
         films = Set("/films/1/?format=json", "/films/2/?format=json"),
         species = Some(Set("https://swapi.dev/api/species/2/")),
         vehicles = Some(Set.empty),
-        starships = Some(Set.empty)
+        starships = Some(Set.empty),
+        url = "https://swapi.dev/api/people/2/"
       )
 
       assertTrue(people == Right(expectedPerson))
@@ -45,7 +46,8 @@ object PeopleSpec extends ZIOSpecDefault:
                       |    "gender": "male",
                       |    "homeworld": "https://swapi.dev/api/planets/1/",
                       |    "films": [
-                      |    ]
+                      |    ],
+                      |    "url": "https://swapi.dev/api/species/2/"
                       |  }
                       |""".stripMargin
 

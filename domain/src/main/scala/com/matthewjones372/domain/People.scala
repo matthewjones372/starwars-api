@@ -1,11 +1,9 @@
 package com.matthewjones372.domain
 
-import zio.json.*
 import zio.schema.*
 import zio.schema.Schema.primitive
 import zio.schema.annotation.fieldName
 
-@jsonMemberNames(SnakeCase)
 final case class People(
   name: String,
   height: Option[Int],
@@ -19,7 +17,8 @@ final case class People(
   films: Set[String],
   species: Option[Set[String]],
   vehicles: Option[Set[String]],
-  starships: Option[Set[String]]
+  starships: Option[Set[String]],
+  url: String
 )
 
 object People:

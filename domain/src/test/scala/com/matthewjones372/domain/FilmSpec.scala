@@ -1,14 +1,14 @@
 package com.matthewjones372.domain
 
-import scala.io.Source
 import zio.test.*
-import zio.json.*
+import scala.io.Source
+import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
 object FilmSpec extends ZIOSpecDefault:
   def spec = suite("Films Spec")(
     test("Films should be able to be decoded from JSON") {
       val json = Source.fromResource("film1_json.json").getLines().mkString
-      val film = json.mkString.fromJson[Film]
+      val film = json.mkString.to[Film]
 
       val expectedFilm =
         Film(

@@ -1,412 +1,879 @@
 [
   {
-    "name" : "Chewbacca",
-    "height" : "228",
-    "mass" : "112",
-    "hair_color" : "brown",
-    "skin_color" : "unknown",
-    "eye_color" : "blue",
-    "birth_year" : "200BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/14/",
-    "films" : [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
+    "name": "Tarfful",
+    "height": "234",
+    "mass": "136",
+    "hair_color": "brown",
+    "skin_color": "brown",
+    "eye_color": "blue",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/14/",
+    "films": [
       "http://localhost:8080/films/6/"
     ],
-    "species" : [
+    "species": [
       "http://localhost:8080/species/3/"
     ],
-    "vehicles" : [
-      "http://localhost:8080/vehicles/19/"
-    ],
-    "starships" : [
-      "http://localhost:8080/starships/10/",
-      "http://localhost:8080/starships/22/"
-    ]
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/80/"
   },
   {
-    "name" : "Dooku",
-    "height" : "193",
-    "mass" : "80",
-    "hair_color" : "white",
-    "skin_color" : "fair",
-    "eye_color" : "brown",
-    "birth_year" : "102BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/52/",
-    "films" : [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/1/"
-    ],
-    "vehicles" : [
-      "http://localhost:8080/vehicles/55/"
-    ],
-    "starships" : []
-  },
-  {
-    "name" : "Quarsh Panaka",
-    "height" : "183",
-    "mass" : "unknown",
-    "hair_color" : "black",
-    "skin_color" : "dark",
-    "eye_color" : "brown",
-    "birth_year" : "62BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
-      "http://localhost:8080/films/4/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Jango Fett",
-    "height" : "183",
-    "mass" : "79",
-    "hair_color" : "black",
-    "skin_color" : "tan",
-    "eye_color" : "brown",
-    "birth_year" : "66BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/53/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "R5-D4",
-    "height" : "97",
-    "mass" : "32",
-    "hair_color" : "n/a",
-    "skin_color" : "white, red",
-    "eye_color" : "red",
-    "birth_year" : "unknown",
-    "gender" : "n/a",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
-      "http://localhost:8080/films/1/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/2/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Arvel Crynyd",
-    "height" : "unknown",
-    "mass" : "unknown",
-    "hair_color" : "brown",
-    "skin_color" : "fair",
-    "eye_color" : "brown",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/28/",
-    "films" : [
-      "http://localhost:8080/films/3/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/28/"
-    ]
-  },
-  {
-    "name" : "Greedo",
-    "height" : "173",
-    "mass" : "74",
-    "hair_color" : "n/a",
-    "skin_color" : "green",
-    "eye_color" : "black",
-    "birth_year" : "44BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/23/",
-    "films" : [
-      "http://localhost:8080/films/1/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/4/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Darth Vader",
-    "height" : "202",
-    "mass" : "136",
-    "hair_color" : "none",
-    "skin_color" : "white",
-    "eye_color" : "yellow",
-    "birth_year" : "41.9BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/13/"
-    ]
-  },
-  {
-    "name" : "Dud Bolt",
-    "height" : "94",
-    "mass" : "45",
-    "hair_color" : "none",
-    "skin_color" : "blue, grey",
-    "eye_color" : "yellow",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/39/",
-    "films" : [
-      "http://localhost:8080/films/4/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/17/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Leia Organa",
-    "height" : "150",
-    "mass" : "49",
-    "hair_color" : "brown",
-    "skin_color" : "light",
-    "eye_color" : "brown",
-    "birth_year" : "19BBY",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/2/",
-    "films" : [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [],
-    "vehicles" : [
-      "http://localhost:8080/vehicles/30/"
-    ],
-    "starships" : []
-  },
-  {
-    "name" : "Cliegg Lars",
-    "height" : "183",
-    "mass" : "unknown",
-    "hair_color" : "brown",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "82BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Mon Mothma",
-    "height" : "150",
-    "mass" : "unknown",
-    "hair_color" : "auburn",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "48BBY",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/32/",
-    "films" : [
-      "http://localhost:8080/films/3/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Han Solo",
-    "height" : "180",
-    "mass" : "80",
-    "hair_color" : "brown",
-    "skin_color" : "fair",
-    "eye_color" : "brown",
-    "birth_year" : "29BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/22/",
-    "films" : [
+    "name": "Wedge Antilles",
+    "height": "170",
+    "mass": "77",
+    "hair_color": "brown",
+    "skin_color": "fair",
+    "eye_color": "hazel",
+    "birth_year": "21BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/22/",
+    "films": [
       "http://localhost:8080/films/1/",
       "http://localhost:8080/films/2/",
       "http://localhost:8080/films/3/"
     ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/10/",
-      "http://localhost:8080/starships/22/"
-    ]
-  },
-  {
-    "name" : "Wedge Antilles",
-    "height" : "170",
-    "mass" : "77",
-    "hair_color" : "brown",
-    "skin_color" : "fair",
-    "eye_color" : "hazel",
-    "birth_year" : "21BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/22/",
-    "films" : [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/"
-    ],
-    "species" : [],
-    "vehicles" : [
+    "species": [],
+    "vehicles": [
       "http://localhost:8080/vehicles/14/"
     ],
-    "starships" : [
+    "starships": [
       "http://localhost:8080/starships/12/"
-    ]
+    ],
+    "url": "http://localhost:8080/people/18/"
   },
   {
-    "name" : "Tion Medon",
-    "height" : "206",
-    "mass" : "80",
-    "hair_color" : "none",
-    "skin_color" : "grey",
-    "eye_color" : "black",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/12/",
-    "films" : [
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/37/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Sly Moore",
-    "height" : "178",
-    "mass" : "48",
-    "hair_color" : "none",
-    "skin_color" : "pale",
-    "eye_color" : "white",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/60/",
-    "films" : [
+    "name": "Ki-Adi-Mundi",
+    "height": "198",
+    "mass": "82",
+    "hair_color": "white",
+    "skin_color": "pale",
+    "eye_color": "yellow",
+    "birth_year": "92BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/43/",
+    "films": [
+      "http://localhost:8080/films/4/",
       "http://localhost:8080/films/5/",
       "http://localhost:8080/films/6/"
     ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
+    "species": [
+      "http://localhost:8080/species/20/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/52/"
   },
   {
-    "name" : "Zam Wesell",
-    "height" : "168",
-    "mass" : "55",
-    "hair_color" : "blonde",
-    "skin_color" : "fair, green, yellow",
-    "eye_color" : "yellow",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/54/",
-    "films" : [
-      "http://localhost:8080/films/5/"
+    "name": "Mon Mothma",
+    "height": "150",
+    "mass": "",
+    "hair_color": "auburn",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "48BBY",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/32/",
+    "films": [
+      "http://localhost:8080/films/3/"
     ],
-    "species" : [
-      "http://localhost:8080/species/30/"
-    ],
-    "vehicles" : [
-      "http://localhost:8080/vehicles/45/"
-    ],
-    "starships" : []
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/28/"
   },
   {
-    "name" : "Taun We",
-    "height" : "213",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "grey",
-    "eye_color" : "black",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/10/",
-    "films" : [
-      "http://localhost:8080/films/5/"
+    "name": "Bib Fortuna",
+    "height": "180",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "pale",
+    "eye_color": "pink",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/37/",
+    "films": [
+      "http://localhost:8080/films/3/"
     ],
-    "species" : [
-      "http://localhost:8080/species/32/"
+    "species": [
+      "http://localhost:8080/species/15/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/45/"
   },
   {
-    "name" : "Lama Su",
-    "height" : "229",
-    "mass" : "88",
-    "hair_color" : "none",
-    "skin_color" : "grey",
-    "eye_color" : "black",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/10/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/32/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Rugor Nass",
-    "height" : "206",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "green",
-    "eye_color" : "orange",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
+    "name": "Finis Valorum",
+    "height": "170",
+    "mass": "",
+    "hair_color": "blond",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "91BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/9/",
+    "films": [
       "http://localhost:8080/films/4/"
     ],
-    "species" : [
-      "http://localhost:8080/species/12/"
-    ],
-    "vehicles" : [],
-    "starships" : []
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/34/"
   },
   {
-    "name" : "Obi-Wan Kenobi",
-    "height" : "182",
-    "mass" : "77",
-    "hair_color" : "auburn, white",
-    "skin_color" : "fair",
-    "eye_color" : "blue-gray",
-    "birth_year" : "57BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/20/",
-    "films" : [
+    "name": "Dooku",
+    "height": "193",
+    "mass": "80",
+    "hair_color": "white",
+    "skin_color": "fair",
+    "eye_color": "brown",
+    "birth_year": "102BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/52/",
+    "films": [
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/55/"
+    ],
+    "starships": [],
+    "url": "http://localhost:8080/people/67/"
+  },
+  {
+    "name": "Wilhuff Tarkin",
+    "height": "180",
+    "mass": "",
+    "hair_color": "auburn, grey",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "64BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/21/",
+    "films": [
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/12/"
+  },
+  {
+    "name": "Dormé",
+    "height": "165",
+    "mass": "",
+    "hair_color": "brown",
+    "skin_color": "light",
+    "eye_color": "brown",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/66/"
+  },
+  {
+    "name": "Mace Windu",
+    "height": "188",
+    "mass": "84",
+    "hair_color": "none",
+    "skin_color": "dark",
+    "eye_color": "brown",
+    "birth_year": "72BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/42/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/51/"
+  },
+  {
+    "name": "R5-D4",
+    "height": "97",
+    "mass": "32",
+    "hair_color": "n/a",
+    "skin_color": "white, red",
+    "eye_color": "red",
+    "birth_year": "unknown",
+    "gender": "n/a",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
+      "http://localhost:8080/films/1/"
+    ],
+    "species": [
+      "http://localhost:8080/species/2/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/8/"
+  },
+  {
+    "name": "Taun We",
+    "height": "213",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "grey",
+    "eye_color": "black",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/10/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [
+      "http://localhost:8080/species/32/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/73/"
+  },
+  {
+    "name": "Shaak Ti",
+    "height": "178",
+    "mass": "57",
+    "hair_color": "none",
+    "skin_color": "red, blue, white",
+    "eye_color": "black",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/58/",
+    "films": [
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/35/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/78/"
+  },
+  {
+    "name": "Jek Tono Porkins",
+    "height": "180",
+    "mass": "110",
+    "hair_color": "brown",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/26/",
+    "films": [
+      "http://localhost:8080/films/1/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/12/"
+    ],
+    "url": "http://localhost:8080/people/19/"
+  },
+  {
+    "name": "IG-88",
+    "height": "200",
+    "mass": "140",
+    "hair_color": "none",
+    "skin_color": "metal",
+    "eye_color": "red",
+    "birth_year": "15BBY",
+    "gender": "none",
+    "homeworld": "http://localhost:8080/planets/28/",
+    "films": [
+      "http://localhost:8080/films/2/"
+    ],
+    "species": [
+      "http://localhost:8080/species/2/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/23/"
+  },
+  {
+    "name": "Cliegg Lars",
+    "height": "183",
+    "mass": "",
+    "hair_color": "brown",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "82BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/62/"
+  },
+  {
+    "name": "Darth Vader",
+    "height": "202",
+    "mass": "136",
+    "hair_color": "none",
+    "skin_color": "white",
+    "eye_color": "yellow",
+    "birth_year": "41.9BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/2/",
+      "http://localhost:8080/films/3/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/13/"
+    ],
+    "url": "http://localhost:8080/people/4/"
+  },
+  {
+    "name": "San Hill",
+    "height": "191",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "grey",
+    "eye_color": "gold",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/57/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [
+      "http://localhost:8080/species/34/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/77/"
+  },
+  {
+    "name": "Watto",
+    "height": "137",
+    "mass": "",
+    "hair_color": "black",
+    "skin_color": "blue, grey",
+    "eye_color": "yellow",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/34/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [
+      "http://localhost:8080/species/13/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/40/"
+  },
+  {
+    "name": "Greedo",
+    "height": "173",
+    "mass": "74",
+    "hair_color": "n/a",
+    "skin_color": "green",
+    "eye_color": "black",
+    "birth_year": "44BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/23/",
+    "films": [
+      "http://localhost:8080/films/1/"
+    ],
+    "species": [
+      "http://localhost:8080/species/4/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/15/"
+  },
+  {
+    "name": "Anakin Skywalker",
+    "height": "188",
+    "mass": "84",
+    "hair_color": "blond",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "41.9BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [
+      "http://localhost:8080/vehicles/44/",
+      "http://localhost:8080/vehicles/46/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/39/",
+      "http://localhost:8080/starships/59/",
+      "http://localhost:8080/starships/65/"
+    ],
+    "url": "http://localhost:8080/people/11/"
+  },
+  {
+    "name": "Biggs Darklighter",
+    "height": "183",
+    "mass": "84",
+    "hair_color": "black",
+    "skin_color": "light",
+    "eye_color": "brown",
+    "birth_year": "24BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
+      "http://localhost:8080/films/1/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/12/"
+    ],
+    "url": "http://localhost:8080/people/9/"
+  },
+  {
+    "name": "Darth Maul",
+    "height": "175",
+    "mass": "80",
+    "hair_color": "none",
+    "skin_color": "red",
+    "eye_color": "yellow",
+    "birth_year": "54BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/36/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [
+      "http://localhost:8080/species/22/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/42/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/41/"
+    ],
+    "url": "http://localhost:8080/people/44/"
+  },
+  {
+    "name": "Nute Gunray",
+    "height": "191",
+    "mass": "90",
+    "hair_color": "none",
+    "skin_color": "mottled green",
+    "eye_color": "red",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/18/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/11/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/33/"
+  },
+  {
+    "name": "Boba Fett",
+    "height": "183",
+    "mass": "",
+    "hair_color": "black",
+    "skin_color": "fair",
+    "eye_color": "brown",
+    "birth_year": "31.5BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/10/",
+    "films": [
+      "http://localhost:8080/films/2/",
+      "http://localhost:8080/films/3/",
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/21/"
+    ],
+    "url": "http://localhost:8080/people/22/"
+  },
+  {
+    "name": "Saesee Tiin",
+    "height": "188",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "pale",
+    "eye_color": "orange",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/47/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/24/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/56/"
+  },
+  {
+    "name": "Adi Gallia",
+    "height": "184",
+    "mass": "50",
+    "hair_color": "none",
+    "skin_color": "dark",
+    "eye_color": "blue",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/9/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/23/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/55/"
+  },
+  {
+    "name": "Lobot",
+    "height": "175",
+    "mass": "79",
+    "hair_color": "none",
+    "skin_color": "light",
+    "eye_color": "blue",
+    "birth_year": "37BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/6/",
+    "films": [
+      "http://localhost:8080/films/2/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/26/"
+  },
+  {
+    "name": "Ben Quadinaros",
+    "height": "163",
+    "mass": "65",
+    "hair_color": "none",
+    "skin_color": "grey, green, yellow",
+    "eye_color": "orange",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/41/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [
+      "http://localhost:8080/species/19/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/50/"
+  },
+  {
+    "name": "Roos Tarpals",
+    "height": "224",
+    "mass": "82",
+    "hair_color": "none",
+    "skin_color": "grey",
+    "eye_color": "orange",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [
+      "http://localhost:8080/species/12/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/37/"
+  },
+  {
+    "name": "Bail Prestor Organa",
+    "height": "191",
+    "mass": "",
+    "hair_color": "black",
+    "skin_color": "tan",
+    "eye_color": "brown",
+    "birth_year": "67BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/2/",
+    "films": [
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/68/"
+  },
+  {
+    "name": "Cordé",
+    "height": "157",
+    "mass": "",
+    "hair_color": "brown",
+    "skin_color": "light",
+    "eye_color": "brown",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/61/"
+  },
+  {
+    "name": "Chewbacca",
+    "height": "228",
+    "mass": "112",
+    "hair_color": "brown",
+    "skin_color": "unknown",
+    "eye_color": "blue",
+    "birth_year": "200BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/14/",
+    "films": [
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/2/",
+      "http://localhost:8080/films/3/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/3/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/19/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/10/",
+      "http://localhost:8080/starships/22/"
+    ],
+    "url": "http://localhost:8080/people/13/"
+  },
+  {
+    "name": "Ayla Secura",
+    "height": "178",
+    "mass": "55",
+    "hair_color": "none",
+    "skin_color": "blue",
+    "eye_color": "hazel",
+    "birth_year": "48BBY",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/37/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/15/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/46/"
+  },
+  {
+    "name": "Bossk",
+    "height": "190",
+    "mass": "113",
+    "hair_color": "none",
+    "skin_color": "green",
+    "eye_color": "red",
+    "birth_year": "53BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/29/",
+    "films": [
+      "http://localhost:8080/films/2/"
+    ],
+    "species": [
+      "http://localhost:8080/species/7/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/24/"
+  },
+  {
+    "name": "Tion Medon",
+    "height": "206",
+    "mass": "80",
+    "hair_color": "none",
+    "skin_color": "grey",
+    "eye_color": "black",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/12/",
+    "films": [
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/37/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/83/"
+  },
+  {
+    "name": "Padmé Amidala",
+    "height": "185",
+    "mass": "45",
+    "hair_color": "brown",
+    "skin_color": "light",
+    "eye_color": "brown",
+    "birth_year": "46BBY",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/39/",
+      "http://localhost:8080/starships/49/",
+      "http://localhost:8080/starships/64/"
+    ],
+    "url": "http://localhost:8080/people/35/"
+  },
+  {
+    "name": "Jabba Desilijic Tiure",
+    "height": "175",
+    "mass": "",
+    "hair_color": "n/a",
+    "skin_color": "green-tan, brown",
+    "eye_color": "orange",
+    "birth_year": "600BBY",
+    "gender": "hermaphrodite",
+    "homeworld": "http://localhost:8080/planets/24/",
+    "films": [
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/3/",
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [
+      "http://localhost:8080/species/5/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/16/"
+  },
+  {
+    "name": "Grievous",
+    "height": "216",
+    "mass": "159",
+    "hair_color": "none",
+    "skin_color": "brown, white",
+    "eye_color": "green, yellow",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/59/",
+    "films": [
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/36/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/60/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/74/"
+    ],
+    "url": "http://localhost:8080/people/79/"
+  },
+  {
+    "name": "Leia Organa",
+    "height": "150",
+    "mass": "49",
+    "hair_color": "brown",
+    "skin_color": "light",
+    "eye_color": "brown",
+    "birth_year": "19BBY",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/2/",
+    "films": [
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/2/",
+      "http://localhost:8080/films/3/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [
+      "http://localhost:8080/vehicles/30/"
+    ],
+    "starships": [],
+    "url": "http://localhost:8080/people/5/"
+  },
+  {
+    "name": "Lama Su",
+    "height": "229",
+    "mass": "88",
+    "hair_color": "none",
+    "skin_color": "grey",
+    "eye_color": "black",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/10/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [
+      "http://localhost:8080/species/32/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/72/"
+  },
+  {
+    "name": "Obi-Wan Kenobi",
+    "height": "182",
+    "mass": "77",
+    "hair_color": "auburn, white",
+    "skin_color": "fair",
+    "eye_color": "blue-gray",
+    "birth_year": "57BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/20/",
+    "films": [
       "http://localhost:8080/films/3/",
       "http://localhost:8080/films/4/",
       "http://localhost:8080/films/1/",
@@ -414,1130 +881,654 @@
       "http://localhost:8080/films/6/",
       "http://localhost:8080/films/2/"
     ],
-    "species" : [],
-    "vehicles" : [
+    "species": [],
+    "vehicles": [
       "http://localhost:8080/vehicles/38/"
     ],
-    "starships" : [
+    "starships": [
       "http://localhost:8080/starships/64/",
       "http://localhost:8080/starships/59/",
       "http://localhost:8080/starships/48/",
       "http://localhost:8080/starships/65/",
       "http://localhost:8080/starships/74/"
-    ]
+    ],
+    "url": "http://localhost:8080/people/10/"
   },
   {
-    "name" : "Shmi Skywalker",
-    "height" : "163",
-    "mass" : "unknown",
-    "hair_color" : "black",
-    "skin_color" : "fair",
-    "eye_color" : "brown",
-    "birth_year" : "72BBY",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
+    "name": "Mas Amedda",
+    "height": "196",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "blue",
+    "eye_color": "blue",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/50/",
+    "films": [
       "http://localhost:8080/films/4/",
       "http://localhost:8080/films/5/"
     ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
+    "species": [
+      "http://localhost:8080/species/27/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/59/"
   },
   {
-    "name" : "Adi Gallia",
-    "height" : "184",
-    "mass" : "50",
-    "hair_color" : "none",
-    "skin_color" : "dark",
-    "eye_color" : "blue",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/9/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/23/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Ayla Secura",
-    "height" : "178",
-    "mass" : "55",
-    "hair_color" : "none",
-    "skin_color" : "blue",
-    "eye_color" : "hazel",
-    "birth_year" : "48BBY",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/37/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/15/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Lobot",
-    "height" : "175",
-    "mass" : "79",
-    "hair_color" : "none",
-    "skin_color" : "light",
-    "eye_color" : "blue",
-    "birth_year" : "37BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/6/",
-    "films" : [
-      "http://localhost:8080/films/2/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Nien Nunb",
-    "height" : "160",
-    "mass" : "68",
-    "hair_color" : "none",
-    "skin_color" : "grey",
-    "eye_color" : "black",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/33/",
-    "films" : [
-      "http://localhost:8080/films/3/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/10/"
-    ],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/10/"
-    ]
-  },
-  {
-    "name" : "Shaak Ti",
-    "height" : "178",
-    "mass" : "57",
-    "hair_color" : "none",
-    "skin_color" : "red, blue, white",
-    "eye_color" : "black",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/58/",
-    "films" : [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/35/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Ratts Tyerel",
-    "height" : "79",
-    "mass" : "15",
-    "hair_color" : "none",
-    "skin_color" : "grey, blue",
-    "eye_color" : "unknown",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/38/",
-    "films" : [
+    "name": "Dud Bolt",
+    "height": "94",
+    "mass": "45",
+    "hair_color": "none",
+    "skin_color": "blue, grey",
+    "eye_color": "yellow",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/39/",
+    "films": [
       "http://localhost:8080/films/4/"
     ],
-    "species" : [
-      "http://localhost:8080/species/16/"
+    "species": [
+      "http://localhost:8080/species/17/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/48/"
   },
   {
-    "name" : "Ben Quadinaros",
-    "height" : "163",
-    "mass" : "65",
-    "hair_color" : "none",
-    "skin_color" : "grey, green, yellow",
-    "eye_color" : "orange",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/41/",
-    "films" : [
-      "http://localhost:8080/films/4/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/19/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Yarael Poof",
-    "height" : "264",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "white",
-    "eye_color" : "yellow",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/48/",
-    "films" : [
-      "http://localhost:8080/films/4/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/25/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Ackbar",
-    "height" : "180",
-    "mass" : "83",
-    "hair_color" : "none",
-    "skin_color" : "brown mottle",
-    "eye_color" : "orange",
-    "birth_year" : "41BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/31/",
-    "films" : [
-      "http://localhost:8080/films/3/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/8/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Saesee Tiin",
-    "height" : "188",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "pale",
-    "eye_color" : "orange",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/47/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/24/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Jar Jar Binks",
-    "height" : "196",
-    "mass" : "66",
-    "hair_color" : "none",
-    "skin_color" : "orange",
-    "eye_color" : "orange",
-    "birth_year" : "52BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/12/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Jek Tono Porkins",
-    "height" : "180",
-    "mass" : "110",
-    "hair_color" : "brown",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/26/",
-    "films" : [
-      "http://localhost:8080/films/1/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/12/"
-    ]
-  },
-  {
-    "name" : "Lando Calrissian",
-    "height" : "177",
-    "mass" : "79",
-    "hair_color" : "black",
-    "skin_color" : "dark",
-    "eye_color" : "brown",
-    "birth_year" : "31BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/30/",
-    "films" : [
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/10/"
-    ]
-  },
-  {
-    "name" : "Yoda",
-    "height" : "66",
-    "mass" : "17",
-    "hair_color" : "white",
-    "skin_color" : "green",
-    "eye_color" : "brown",
-    "birth_year" : "896BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/28/",
-    "films" : [
+    "name": "Palpatine",
+    "height": "170",
+    "mass": "75",
+    "hair_color": "grey",
+    "skin_color": "pale",
+    "eye_color": "yellow",
+    "birth_year": "82BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
       "http://localhost:8080/films/5/",
       "http://localhost:8080/films/3/",
       "http://localhost:8080/films/4/",
       "http://localhost:8080/films/6/",
       "http://localhost:8080/films/2/"
     ],
-    "species" : [
-      "http://localhost:8080/species/6/"
-    ],
-    "vehicles" : [],
-    "starships" : []
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/21/"
   },
   {
-    "name" : "Eeth Koth",
-    "height" : "171",
-    "mass" : "unknown",
-    "hair_color" : "black",
-    "skin_color" : "brown",
-    "eye_color" : "brown",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/45/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/22/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "R4-P17",
-    "height" : "96",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "silver, red",
-    "eye_color" : "red, blue",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/28/",
-    "films" : [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Ki-Adi-Mundi",
-    "height" : "198",
-    "mass" : "82",
-    "hair_color" : "white",
-    "skin_color" : "pale",
-    "eye_color" : "yellow",
-    "birth_year" : "92BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/43/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/20/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Owen Lars",
-    "height" : "178",
-    "mass" : "120",
-    "hair_color" : "brown, grey",
-    "skin_color" : "light",
-    "eye_color" : "blue",
-    "birth_year" : "52BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Ric Olié",
-    "height" : "183",
-    "mass" : "unknown",
-    "hair_color" : "brown",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
-      "http://localhost:8080/films/4/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/40/"
-    ]
-  },
-  {
-    "name" : "Nute Gunray",
-    "height" : "191",
-    "mass" : "90",
-    "hair_color" : "none",
-    "skin_color" : "mottled green",
-    "eye_color" : "red",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/18/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/11/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Plo Koon",
-    "height" : "188",
-    "mass" : "80",
-    "hair_color" : "none",
-    "skin_color" : "orange",
-    "eye_color" : "black",
-    "birth_year" : "22BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/49/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/26/"
-    ],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/48/"
-    ]
-  },
-  {
-    "name" : "Bib Fortuna",
-    "height" : "180",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "pale",
-    "eye_color" : "pink",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/37/",
-    "films" : [
-      "http://localhost:8080/films/3/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/15/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Luminara Unduli",
-    "height" : "170",
-    "mass" : "56.2",
-    "hair_color" : "black",
-    "skin_color" : "yellow",
-    "eye_color" : "blue",
-    "birth_year" : "58BBY",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/51/",
-    "films" : [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/29/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Boba Fett",
-    "height" : "183",
-    "mass" : "78.2",
-    "hair_color" : "black",
-    "skin_color" : "fair",
-    "eye_color" : "brown",
-    "birth_year" : "31.5BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/10/",
-    "films" : [
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
+    "name": "Wat Tambor",
+    "height": "193",
+    "mass": "48",
+    "hair_color": "none",
+    "skin_color": "green, grey",
+    "eye_color": "unknown",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/56/",
+    "films": [
       "http://localhost:8080/films/5/"
     ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/21/"
-    ]
-  },
-  {
-    "name" : "Jabba Desilijic Tiure",
-    "height" : "175",
-    "mass" : "1,358",
-    "hair_color" : "n/a",
-    "skin_color" : "green-tan, brown",
-    "eye_color" : "orange",
-    "birth_year" : "600BBY",
-    "gender" : "hermaphrodite",
-    "homeworld" : "http://localhost:8080/planets/24/",
-    "films" : [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/5/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Palpatine",
-    "height" : "170",
-    "mass" : "75",
-    "hair_color" : "grey",
-    "skin_color" : "pale",
-    "eye_color" : "yellow",
-    "birth_year" : "82BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/2/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Barriss Offee",
-    "height" : "166",
-    "mass" : "50",
-    "hair_color" : "black",
-    "skin_color" : "yellow",
-    "eye_color" : "blue",
-    "birth_year" : "40BBY",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/51/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/29/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Wilhuff Tarkin",
-    "height" : "180",
-    "mass" : "unknown",
-    "hair_color" : "auburn, grey",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "64BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/21/",
-    "films" : [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Grievous",
-    "height" : "216",
-    "mass" : "159",
-    "hair_color" : "none",
-    "skin_color" : "brown, white",
-    "eye_color" : "green, yellow",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/59/",
-    "films" : [
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/36/"
-    ],
-    "vehicles" : [
-      "http://localhost:8080/vehicles/60/"
-    ],
-    "starships" : [
-      "http://localhost:8080/starships/74/"
-    ]
-  },
-  {
-    "name" : "C-3PO",
-    "height" : "167",
-    "mass" : "75",
-    "hair_color" : "n/a",
-    "skin_color" : "gold",
-    "eye_color" : "yellow",
-    "birth_year" : "112BBY",
-    "gender" : "n/a",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/2/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/2/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Watto",
-    "height" : "137",
-    "mass" : "unknown",
-    "hair_color" : "black",
-    "skin_color" : "blue, grey",
-    "eye_color" : "yellow",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/34/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/13/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Dexter Jettster",
-    "height" : "198",
-    "mass" : "102",
-    "hair_color" : "none",
-    "skin_color" : "brown",
-    "eye_color" : "yellow",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/55/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/31/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Padmé Amidala",
-    "height" : "185",
-    "mass" : "45",
-    "hair_color" : "brown",
-    "skin_color" : "light",
-    "eye_color" : "brown",
-    "birth_year" : "46BBY",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/39/",
-      "http://localhost:8080/starships/49/",
-      "http://localhost:8080/starships/64/"
-    ]
-  },
-  {
-    "name" : "Gregar Typho",
-    "height" : "185",
-    "mass" : "85",
-    "hair_color" : "black",
-    "skin_color" : "dark",
-    "eye_color" : "brown",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/39/"
-    ]
-  },
-  {
-    "name" : "Bail Prestor Organa",
-    "height" : "191",
-    "mass" : "unknown",
-    "hair_color" : "black",
-    "skin_color" : "tan",
-    "eye_color" : "brown",
-    "birth_year" : "67BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/2/",
-    "films" : [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/1/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Finis Valorum",
-    "height" : "170",
-    "mass" : "unknown",
-    "hair_color" : "blond",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "91BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/9/",
-    "films" : [
-      "http://localhost:8080/films/4/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "San Hill",
-    "height" : "191",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "grey",
-    "eye_color" : "gold",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/57/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/34/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Mace Windu",
-    "height" : "188",
-    "mass" : "84",
-    "hair_color" : "none",
-    "skin_color" : "dark",
-    "eye_color" : "brown",
-    "birth_year" : "72BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/42/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Darth Maul",
-    "height" : "175",
-    "mass" : "80",
-    "hair_color" : "none",
-    "skin_color" : "red",
-    "eye_color" : "yellow",
-    "birth_year" : "54BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/36/",
-    "films" : [
-      "http://localhost:8080/films/4/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/22/"
-    ],
-    "vehicles" : [
-      "http://localhost:8080/vehicles/42/"
-    ],
-    "starships" : [
-      "http://localhost:8080/starships/41/"
-    ]
-  },
-  {
-    "name" : "Poggle the Lesser",
-    "height" : "183",
-    "mass" : "80",
-    "hair_color" : "none",
-    "skin_color" : "green",
-    "eye_color" : "yellow",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/11/",
-    "films" : [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/28/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Wat Tambor",
-    "height" : "193",
-    "mass" : "48",
-    "hair_color" : "none",
-    "skin_color" : "green, grey",
-    "eye_color" : "unknown",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/56/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
+    "species": [
       "http://localhost:8080/species/33/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/76/"
   },
   {
-    "name" : "Raymus Antilles",
-    "height" : "188",
-    "mass" : "79",
-    "hair_color" : "brown",
-    "skin_color" : "light",
-    "eye_color" : "brown",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/2/",
-    "films" : [
-      "http://localhost:8080/films/1/",
+    "name": "Eeth Koth",
+    "height": "171",
+    "mass": "",
+    "hair_color": "black",
+    "skin_color": "brown",
+    "eye_color": "brown",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/45/",
+    "films": [
+      "http://localhost:8080/films/4/",
       "http://localhost:8080/films/6/"
     ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
+    "species": [
+      "http://localhost:8080/species/22/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/54/"
   },
   {
-    "name" : "Cordé",
-    "height" : "157",
-    "mass" : "unknown",
-    "hair_color" : "brown",
-    "skin_color" : "light",
-    "eye_color" : "brown",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
+    "name": "Shmi Skywalker",
+    "height": "163",
+    "mass": "",
+    "hair_color": "black",
+    "skin_color": "fair",
+    "eye_color": "brown",
+    "birth_year": "72BBY",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
+      "http://localhost:8080/films/4/",
       "http://localhost:8080/films/5/"
     ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/43/"
   },
   {
-    "name" : "Kit Fisto",
-    "height" : "196",
-    "mass" : "87",
-    "hair_color" : "none",
-    "skin_color" : "green",
-    "eye_color" : "black",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/44/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+    "name": "Barriss Offee",
+    "height": "166",
+    "mass": "50",
+    "hair_color": "black",
+    "skin_color": "yellow",
+    "eye_color": "blue",
+    "birth_year": "40BBY",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/51/",
+    "films": [
+      "http://localhost:8080/films/5/"
     ],
-    "species" : [
-      "http://localhost:8080/species/21/"
+    "species": [
+      "http://localhost:8080/species/29/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/65/"
   },
   {
-    "name" : "Beru Whitesun lars",
-    "height" : "165",
-    "mass" : "75",
-    "hair_color" : "brown",
-    "skin_color" : "light",
-    "eye_color" : "blue",
-    "birth_year" : "47BBY",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
+    "name": "Dexter Jettster",
+    "height": "198",
+    "mass": "102",
+    "hair_color": "none",
+    "skin_color": "brown",
+    "eye_color": "yellow",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/55/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [
+      "http://localhost:8080/species/31/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/71/"
+  },
+  {
+    "name": "Yarael Poof",
+    "height": "264",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "white",
+    "eye_color": "yellow",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/48/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [
+      "http://localhost:8080/species/25/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/57/"
+  },
+  {
+    "name": "Qui-Gon Jinn",
+    "height": "193",
+    "mass": "89",
+    "hair_color": "brown",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "92BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/28/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [],
+    "vehicles": [
+      "http://localhost:8080/vehicles/38/"
+    ],
+    "starships": [],
+    "url": "http://localhost:8080/people/32/"
+  },
+  {
+    "name": "Owen Lars",
+    "height": "178",
+    "mass": "120",
+    "hair_color": "brown, grey",
+    "skin_color": "light",
+    "eye_color": "blue",
+    "birth_year": "52BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
       "http://localhost:8080/films/1/",
       "http://localhost:8080/films/5/",
       "http://localhost:8080/films/6/"
     ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : []
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/6/"
   },
   {
-    "name" : "Luke Skywalker",
-    "height" : "172",
-    "mass" : "77",
-    "hair_color" : "blond",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "19BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
+    "name": "Jar Jar Binks",
+    "height": "196",
+    "mass": "66",
+    "hair_color": "none",
+    "skin_color": "orange",
+    "eye_color": "orange",
+    "birth_year": "52BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [
+      "http://localhost:8080/species/12/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/36/"
+  },
+  {
+    "name": "Luke Skywalker",
+    "height": "172",
+    "mass": "77",
+    "hair_color": "blond",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "19BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
       "http://localhost:8080/films/1/",
       "http://localhost:8080/films/2/",
       "http://localhost:8080/films/3/",
       "http://localhost:8080/films/6/"
     ],
-    "species" : [],
-    "vehicles" : [
+    "species": [],
+    "vehicles": [
       "http://localhost:8080/vehicles/14/",
       "http://localhost:8080/vehicles/30/"
     ],
-    "starships" : [
+    "starships": [
       "http://localhost:8080/starships/12/",
       "http://localhost:8080/starships/22/"
-    ]
+    ],
+    "url": "http://localhost:8080/people/1/"
   },
   {
-    "name" : "Roos Tarpals",
-    "height" : "224",
-    "mass" : "82",
-    "hair_color" : "none",
-    "skin_color" : "grey",
-    "eye_color" : "orange",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
+    "name": "Ric Olié",
+    "height": "183",
+    "mass": "",
+    "hair_color": "brown",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
       "http://localhost:8080/films/4/"
     ],
-    "species" : [
-      "http://localhost:8080/species/12/"
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/40/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "url": "http://localhost:8080/people/39/"
   },
   {
-    "name" : "Biggs Darklighter",
-    "height" : "183",
-    "mass" : "84",
-    "hair_color" : "black",
-    "skin_color" : "light",
-    "eye_color" : "brown",
-    "birth_year" : "24BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
-      "http://localhost:8080/films/1/"
+    "name": "Sly Moore",
+    "height": "178",
+    "mass": "48",
+    "hair_color": "none",
+    "skin_color": "pale",
+    "eye_color": "white",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/60/",
+    "films": [
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
     ],
-    "species" : [],
-    "vehicles" : [],
-    "starships" : [
-      "http://localhost:8080/starships/12/"
-    ]
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/82/"
   },
   {
-    "name" : "Anakin Skywalker",
-    "height" : "188",
-    "mass" : "84",
-    "hair_color" : "blond",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "41.9BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/1/",
-    "films" : [
+    "name": "Gasgano",
+    "height": "122",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "white, blue",
+    "eye_color": "black",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/40/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [
+      "http://localhost:8080/species/18/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/49/"
+  },
+  {
+    "name": "Lando Calrissian",
+    "height": "177",
+    "mass": "79",
+    "hair_color": "black",
+    "skin_color": "dark",
+    "eye_color": "brown",
+    "birth_year": "31BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/30/",
+    "films": [
+      "http://localhost:8080/films/2/",
+      "http://localhost:8080/films/3/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/10/"
+    ],
+    "url": "http://localhost:8080/people/25/"
+  },
+  {
+    "name": "Gregar Typho",
+    "height": "185",
+    "mass": "85",
+    "hair_color": "black",
+    "skin_color": "dark",
+    "eye_color": "brown",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/39/"
+    ],
+    "url": "http://localhost:8080/people/60/"
+  },
+  {
+    "name": "Han Solo",
+    "height": "180",
+    "mass": "80",
+    "hair_color": "brown",
+    "skin_color": "fair",
+    "eye_color": "brown",
+    "birth_year": "29BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/22/",
+    "films": [
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/2/",
+      "http://localhost:8080/films/3/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/10/",
+      "http://localhost:8080/starships/22/"
+    ],
+    "url": "http://localhost:8080/people/14/"
+  },
+  {
+    "name": "Ratts Tyerel",
+    "height": "79",
+    "mass": "15",
+    "hair_color": "none",
+    "skin_color": "grey, blue",
+    "eye_color": "unknown",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/38/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [
+      "http://localhost:8080/species/16/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/47/"
+  },
+  {
+    "name": "Nien Nunb",
+    "height": "160",
+    "mass": "68",
+    "hair_color": "none",
+    "skin_color": "grey",
+    "eye_color": "black",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/33/",
+    "films": [
+      "http://localhost:8080/films/3/"
+    ],
+    "species": [
+      "http://localhost:8080/species/10/"
+    ],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/10/"
+    ],
+    "url": "http://localhost:8080/people/31/"
+  },
+  {
+    "name": "Jango Fett",
+    "height": "183",
+    "mass": "79",
+    "hair_color": "black",
+    "skin_color": "tan",
+    "eye_color": "brown",
+    "birth_year": "66BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/53/",
+    "films": [
+      "http://localhost:8080/films/5/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/69/"
+  },
+  {
+    "name": "Plo Koon",
+    "height": "188",
+    "mass": "80",
+    "hair_color": "none",
+    "skin_color": "orange",
+    "eye_color": "black",
+    "birth_year": "22BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/49/",
+    "films": [
       "http://localhost:8080/films/4/",
       "http://localhost:8080/films/5/",
       "http://localhost:8080/films/6/"
     ],
-    "species" : [],
-    "vehicles" : [
-      "http://localhost:8080/vehicles/44/",
-      "http://localhost:8080/vehicles/46/"
+    "species": [
+      "http://localhost:8080/species/26/"
     ],
-    "starships" : [
-      "http://localhost:8080/starships/39/",
-      "http://localhost:8080/starships/59/",
-      "http://localhost:8080/starships/65/"
-    ]
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/48/"
+    ],
+    "url": "http://localhost:8080/people/58/"
   },
   {
-    "name" : "Wicket Systri Warrick",
-    "height" : "88",
-    "mass" : "20",
-    "hair_color" : "brown",
-    "skin_color" : "brown",
-    "eye_color" : "brown",
-    "birth_year" : "8BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/7/",
-    "films" : [
-      "http://localhost:8080/films/3/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/9/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Mas Amedda",
-    "height" : "196",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "blue",
-    "eye_color" : "blue",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/50/",
-    "films" : [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/27/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Bossk",
-    "height" : "190",
-    "mass" : "113",
-    "hair_color" : "none",
-    "skin_color" : "green",
-    "eye_color" : "red",
-    "birth_year" : "53BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/29/",
-    "films" : [
-      "http://localhost:8080/films/2/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/7/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Tarfful",
-    "height" : "234",
-    "mass" : "136",
-    "hair_color" : "brown",
-    "skin_color" : "brown",
-    "eye_color" : "blue",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/14/",
-    "films" : [
+    "name": "Luminara Unduli",
+    "height": "170",
+    "mass": "",
+    "hair_color": "black",
+    "skin_color": "yellow",
+    "eye_color": "blue",
+    "birth_year": "58BBY",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/51/",
+    "films": [
+      "http://localhost:8080/films/5/",
       "http://localhost:8080/films/6/"
     ],
-    "species" : [
-      "http://localhost:8080/species/3/"
+    "species": [
+      "http://localhost:8080/species/29/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/64/"
   },
   {
-    "name" : "Jocasta Nu",
-    "height" : "167",
-    "mass" : "unknown",
-    "hair_color" : "white",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/9/",
-    "films" : [
+    "name": "Kit Fisto",
+    "height": "196",
+    "mass": "87",
+    "hair_color": "none",
+    "skin_color": "green",
+    "eye_color": "black",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/44/",
+    "films": [
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [
+      "http://localhost:8080/species/21/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/53/"
+  },
+  {
+    "name": "Quarsh Panaka",
+    "height": "183",
+    "mass": "",
+    "hair_color": "black",
+    "skin_color": "dark",
+    "eye_color": "brown",
+    "birth_year": "62BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/42/"
+  },
+  {
+    "name": "R4-P17",
+    "height": "96",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "silver, red",
+    "eye_color": "red, blue",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/28/",
+    "films": [
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/75/"
+  },
+  {
+    "name": "Yoda",
+    "height": "66",
+    "mass": "17",
+    "hair_color": "white",
+    "skin_color": "green",
+    "eye_color": "brown",
+    "birth_year": "896BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/28/",
+    "films": [
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/3/",
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/6/",
+      "http://localhost:8080/films/2/"
+    ],
+    "species": [
+      "http://localhost:8080/species/6/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/20/"
+  },
+  {
+    "name": "Ackbar",
+    "height": "180",
+    "mass": "83",
+    "hair_color": "none",
+    "skin_color": "brown mottle",
+    "eye_color": "orange",
+    "birth_year": "41BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/31/",
+    "films": [
+      "http://localhost:8080/films/3/"
+    ],
+    "species": [
+      "http://localhost:8080/species/8/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/27/"
+  },
+  {
+    "name": "Zam Wesell",
+    "height": "168",
+    "mass": "55",
+    "hair_color": "blonde",
+    "skin_color": "fair, green, yellow",
+    "eye_color": "yellow",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/54/",
+    "films": [
       "http://localhost:8080/films/5/"
     ],
-    "species" : [
-      "http://localhost:8080/species/1/"
+    "species": [
+      "http://localhost:8080/species/30/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [
+      "http://localhost:8080/vehicles/45/"
+    ],
+    "starships": [],
+    "url": "http://localhost:8080/people/70/"
   },
   {
-    "name" : "R2-D2",
-    "height" : "96",
-    "mass" : "32",
-    "hair_color" : "n/a",
-    "skin_color" : "white, blue",
-    "eye_color" : "red",
-    "birth_year" : "33BBY",
-    "gender" : "n/a",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
+    "name": "C-3PO",
+    "height": "167",
+    "mass": "75",
+    "hair_color": "n/a",
+    "skin_color": "gold",
+    "eye_color": "yellow",
+    "birth_year": "112BBY",
+    "gender": "n/a",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
       "http://localhost:8080/films/3/",
       "http://localhost:8080/films/4/",
       "http://localhost:8080/films/1/",
@@ -1545,105 +1536,196 @@
       "http://localhost:8080/films/6/",
       "http://localhost:8080/films/2/"
     ],
-    "species" : [
+    "species": [
       "http://localhost:8080/species/2/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/2/"
   },
   {
-    "name" : "Dormé",
-    "height" : "165",
-    "mass" : "unknown",
-    "hair_color" : "brown",
-    "skin_color" : "light",
-    "eye_color" : "brown",
-    "birth_year" : "unknown",
-    "gender" : "female",
-    "homeworld" : "http://localhost:8080/planets/8/",
-    "films" : [
-      "http://localhost:8080/films/5/"
-    ],
-    "species" : [
-      "http://localhost:8080/species/1/"
-    ],
-    "vehicles" : [],
-    "starships" : []
-  },
-  {
-    "name" : "Sebulba",
-    "height" : "112",
-    "mass" : "40",
-    "hair_color" : "none",
-    "skin_color" : "grey, red",
-    "eye_color" : "orange",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/35/",
-    "films" : [
+    "name": "Rugor Nass",
+    "height": "206",
+    "mass": "",
+    "hair_color": "none",
+    "skin_color": "green",
+    "eye_color": "orange",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
       "http://localhost:8080/films/4/"
     ],
-    "species" : [
+    "species": [
+      "http://localhost:8080/species/12/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/38/"
+  },
+  {
+    "name": "Raymus Antilles",
+    "height": "188",
+    "mass": "79",
+    "hair_color": "brown",
+    "skin_color": "light",
+    "eye_color": "brown",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/2/",
+    "films": [
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/81/"
+  },
+  {
+    "name": "Wicket Systri Warrick",
+    "height": "88",
+    "mass": "20",
+    "hair_color": "brown",
+    "skin_color": "brown",
+    "eye_color": "brown",
+    "birth_year": "8BBY",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/7/",
+    "films": [
+      "http://localhost:8080/films/3/"
+    ],
+    "species": [
+      "http://localhost:8080/species/9/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/30/"
+  },
+  {
+    "name": "Beru Whitesun lars",
+    "height": "165",
+    "mass": "75",
+    "hair_color": "brown",
+    "skin_color": "light",
+    "eye_color": "blue",
+    "birth_year": "47BBY",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/1/",
+    "films": [
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/7/"
+  },
+  {
+    "name": "Arvel Crynyd",
+    "height": "",
+    "mass": "",
+    "hair_color": "brown",
+    "skin_color": "fair",
+    "eye_color": "brown",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/28/",
+    "films": [
+      "http://localhost:8080/films/3/"
+    ],
+    "species": [],
+    "vehicles": [],
+    "starships": [
+      "http://localhost:8080/starships/28/"
+    ],
+    "url": "http://localhost:8080/people/29/"
+  },
+  {
+    "name": "Sebulba",
+    "height": "112",
+    "mass": "40",
+    "hair_color": "none",
+    "skin_color": "grey, red",
+    "eye_color": "orange",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/35/",
+    "films": [
+      "http://localhost:8080/films/4/"
+    ],
+    "species": [
       "http://localhost:8080/species/14/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/41/"
   },
   {
-    "name" : "Gasgano",
-    "height" : "122",
-    "mass" : "unknown",
-    "hair_color" : "none",
-    "skin_color" : "white, blue",
-    "eye_color" : "black",
-    "birth_year" : "unknown",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/40/",
-    "films" : [
-      "http://localhost:8080/films/4/"
+    "name": "Poggle the Lesser",
+    "height": "183",
+    "mass": "80",
+    "hair_color": "none",
+    "skin_color": "green",
+    "eye_color": "yellow",
+    "birth_year": "unknown",
+    "gender": "male",
+    "homeworld": "http://localhost:8080/planets/11/",
+    "films": [
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/"
     ],
-    "species" : [
-      "http://localhost:8080/species/18/"
+    "species": [
+      "http://localhost:8080/species/28/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/63/"
   },
   {
-    "name" : "IG-88",
-    "height" : "200",
-    "mass" : "140",
-    "hair_color" : "none",
-    "skin_color" : "metal",
-    "eye_color" : "red",
-    "birth_year" : "15BBY",
-    "gender" : "none",
-    "homeworld" : "http://localhost:8080/planets/28/",
-    "films" : [
+    "name": "R2-D2",
+    "height": "96",
+    "mass": "32",
+    "hair_color": "n/a",
+    "skin_color": "white, blue",
+    "eye_color": "red",
+    "birth_year": "33BBY",
+    "gender": "n/a",
+    "homeworld": "http://localhost:8080/planets/8/",
+    "films": [
+      "http://localhost:8080/films/3/",
+      "http://localhost:8080/films/4/",
+      "http://localhost:8080/films/1/",
+      "http://localhost:8080/films/5/",
+      "http://localhost:8080/films/6/",
       "http://localhost:8080/films/2/"
     ],
-    "species" : [
+    "species": [
       "http://localhost:8080/species/2/"
     ],
-    "vehicles" : [],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/3/"
   },
   {
-    "name" : "Qui-Gon Jinn",
-    "height" : "193",
-    "mass" : "89",
-    "hair_color" : "brown",
-    "skin_color" : "fair",
-    "eye_color" : "blue",
-    "birth_year" : "92BBY",
-    "gender" : "male",
-    "homeworld" : "http://localhost:8080/planets/28/",
-    "films" : [
-      "http://localhost:8080/films/4/"
+    "name": "Jocasta Nu",
+    "height": "167",
+    "mass": "",
+    "hair_color": "white",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "unknown",
+    "gender": "female",
+    "homeworld": "http://localhost:8080/planets/9/",
+    "films": [
+      "http://localhost:8080/films/5/"
     ],
-    "species" : [],
-    "vehicles" : [
-      "http://localhost:8080/vehicles/38/"
+    "species": [
+      "http://localhost:8080/species/1/"
     ],
-    "starships" : []
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/74/"
   }
 ]

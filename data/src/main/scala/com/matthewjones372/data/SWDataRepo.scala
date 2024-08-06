@@ -1,41 +1,92 @@
 package com.matthewjones372.data
 
-import com.matthewjones372.domain.{Film, People}
+import com.matthewjones372.domain.*
 import zio.*
 import zio.concurrent.ConcurrentMap
-import zio.json.*
+import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
+
+import zio.http.*
 
 trait SWDataRepo:
   def getFilm(id: Int): IO[DataRepoError, Film]
   def getPerson(id: Int): IO[DataRepoError, People]
-  def getPeople: IO[DataRepoError, Set[People]]
-  def getFilms: IO[DataRepoError, Set[Film]]
+  def getPeople(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Peoples]
+  def getFilms(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Films]
 
 object SWDataRepo:
+
+  private def getId(url: String) =
+    URL.decode(url).map(_.path.segments.last).toOption.get.toInt - 1
+
   def layer: RLayer[Any, SWDataRepo] = ZLayer.fromZIO {
     for
       peopleData <- ConcurrentMap.empty[Int, People]
       filmData   <- ConcurrentMap.empty[Int, Film]
+
+      _          <- ZIO.logInfo("Reading in Star Wars Data")
       peopleJson <- ZIO.readFile("src/main/resources/people_data.json")
-      peoples    <- ZIO.fromEither(peopleJson.fromJson[List[People]]).mapError(e => new RuntimeException(e))
-      _          <- peopleData.putAll(peoples.zipWithIndex.map((p, id) => (id, p))*)
       filmJson   <- ZIO.readFile("src/main/resources/film_data.json")
-      films      <- ZIO.fromEither(filmJson.fromJson[List[Film]]).mapError(e => new RuntimeException(e))
-      _          <- filmData.putAll(films.zipWithIndex.map((f, id) => (id, f))*)
+
+      peoples <- ZIO
+                   .fromEither(peopleJson.to[List[People]])
+                   .tapError(e => ZIO.logError(s"Failed to parse ${e}"))
+                   .mapError(e => new RuntimeException(e))
+      films <- ZIO.fromEither(filmJson.to[List[Film]]).mapError(e => new RuntimeException(e))
+
+      _ <- ZIO.logInfo("Parsed....")
+      _ <- filmData.putAll(films.map(film => (getId(film.url), film))*)
+      _ <- peopleData.putAll(peoples.map(person => (getId(person.url), person))*)
     yield InMemoryDataRepo(peopleData, filmData)
   }
 
 final private case class InMemoryDataRepo(peopleData: ConcurrentMap[Int, People], filmData: ConcurrentMap[Int, Film])
     extends SWDataRepo:
 
-  override def getFilms: IO[DataRepoError, Set[Film]] =
-    filmData.toList.map(_.map { case (_, film) => film }).map(_.toSet)
+  private val peopleDataList  = peopleData.toList
+  private val peopleDataCount = peopleDataList.map(_.size)
+  private val filmDataList    = filmData.toList
+  private val filmDataCount   = filmData.toList.map(_.size)
+
+  override def getFilms(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Films] =
+    val data = (from, fetchSize) match
+      case (Some(from), Some(fetchSize)) =>
+        filmDataList.map(_.getPage(from, fetchSize))
+      case (None, None) =>
+        filmDataList
+      case (None, Some(fetchSize)) =>
+        filmDataList.map(_.slice(0, fetchSize))
+
+      case (Some(from), None) =>
+        filmDataList.map(_.slice(0, 10))
+
+    for
+      count <- filmDataCount
+      films <- data.map(_.map { case (_, film) => film })
+    yield Films(count, films)
 
   override def getFilm(id: Int): IO[DataRepoError, Film] =
-    filmData.get(id).someOrFail(DataRepoError.FilmNotFound("Film not found", id))
+    filmData.get(id - 1).someOrFail(DataRepoError.FilmNotFound("Film not found", id))
 
   override def getPerson(id: Int): IO[DataRepoError, People] =
-    peopleData.get(id).someOrFail(DataRepoError.PersonNotFound("Person not found", id))
+    peopleData.get(id - 1).someOrFail(DataRepoError.PersonNotFound("Person not found", id))
 
-  override def getPeople: IO[DataRepoError, Set[People]] =
-    peopleData.toList.map(_.map { case (_, person) => person }).map(_.toSet)
+  override def getPeople(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Peoples] =
+    val data = (from, fetchSize) match
+      case (Some(from), Some(fetchSize)) =>
+        peopleDataList.map(_.getPage(from, fetchSize))
+      case (None, None)            => peopleDataList
+      case (None, Some(fetchSize)) => peopleDataList.map(_.slice(0, fetchSize))
+      case (Some(from), None) =>
+        peopleDataList.map(_.slice(0, 10))
+
+    for
+      count  <- peopleDataCount
+      people <- data.map(_.map { case (_, film) => film })
+    yield Peoples(count, people)
+
+  extension [A](data: List[A])
+    private def getPage(page: Int, pageSize: Int): List[A] = {
+      val from = (page - 1) * pageSize
+      val to   = from + pageSize + 1
+      data.slice(from, to)
+    }

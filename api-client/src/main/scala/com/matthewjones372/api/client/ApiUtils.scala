@@ -1,13 +1,16 @@
 package com.matthewjones372.api.client
 
+import com.matthewjones372.api.client.ClientError.*
 import zio.*
 import zio.http.*
-import ClientError.*
+import zio.schema.codec.BinaryCodec
 
 extension (response: Response)
-  def bodyOrClientError(url: URL): IO[ClientError, String] =
+  def bodyOrClientError[A: BinaryCodec](url: URL): IO[ClientError, A] =
     if response.status.isSuccess then
-      response.body.asString.orElseFail(ClientError.ResponseDeserializationError("Error decoding response"))
+      response.body
+        .to[A]
+        .orElseFail(ClientError.ResponseDeserializationError("Error decoding response"))
     else if response.status.code == 404 then ZIO.fail(ClientError.NotFound(url.encode))
     else if response.status.code == 429 then ZIO.fail(ClientError.RateLimited("Rate limited"))
     else if response.status.isClientError then ZIO.fail(ClientError.UnexpectedClientError("Client error"))

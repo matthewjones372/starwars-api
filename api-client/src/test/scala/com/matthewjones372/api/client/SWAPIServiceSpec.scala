@@ -1,9 +1,10 @@
 package com.matthewjones372.api.client
 
-import ApiRequestResponseStubs.*
+import com.matthewjones372.api.client.ApiRequestResponseStubs.*
+import com.matthewjones372.domain.People
+import com.matthewjones372.http.api.SWHttpServer
 import zio.*
 import zio.http.*
-import zio.json.*
 import zio.test.*
 import zio.test.Assertion.*
 
@@ -69,24 +70,28 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
         }
       },
       test("returns the correct error when poorly formatted json is returned") {
-        val expectedFailure = ClientError.JsonDeserializationError(body = "BAD JSON", msg = "(expected '{' got 'B')")
+//        val expectedFailure = ClientError.JsonDeserializationError(body = "BAD JSON", msg = "(expected '{' got 'B')")
 
-        for
+        (for
           _   <- TestClient.addRequestResponse(personRequest, response = Response.text("BAD JSON"))
-          f1  <- SWAPIClientService.getFilmsFromPerson(1).exit.fork
+          f1  <- SWAPIClientService.getFilmsFromPerson(1).fork
           _   <- TestClock.adjust(5.seconds)
           res <- f1.join
-        yield {
-          assert(res)(fails(equalTo(expectedFailure)))
-        }
+        yield assertCompletes)
+      } @@ TestAspect.failing[ClientError] {
+        case e @ TestFailure
+              .Runtime(Cause.Fail(ClientError.ResponseDeserializationError("Error decoding response"), _), _) =>
+          true
+        case _ =>
+          false
       },
       suite("Retrying Behavior")(
         test("API retries a request when there is a sever error") {
-          def getPersonWithInitialFailure(state: Ref[Int]) = getPersonEndpoint.implement { _ =>
+          def getPersonWithInitialFailure(state: Ref[Int]) = SWHttpServer.getPersonEndpoint.implement { _ =>
             state.getAndUpdate(_ + 1).flatMap {
               case 0 => ZIO.fail(throw new RuntimeException("Boom"))
               case _ =>
-                ZIO.succeed(person.toJson)
+                ZIO.succeed(person)
             }
           }.sandbox
 
@@ -111,18 +116,21 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
     ),
     suite("API Caching behavior")(
       test("calls the cache on the first call") {
-        def successfulPersonCall(state: Ref[Int]) = getPersonEndpoint.implement { _ =>
-          state.getAndUpdate(_ + 1).as(person.toJson)
+        import zio.http.*
+        def successfulPersonCall(state: Ref[Boolean]) = SWHttpServer.getPersonEndpoint.implement { _ =>
+          state.modify {
+            case false => (person, true)
+            case true  => (throw ClientError.UnreachableError, true)
+          }
         }.sandbox
 
         for
-          callRef   <- Ref.make(1)
-          _         <- TestClient.addRoutes(Routes(successfulPersonCall(callRef), getFilmSuccess))
-          f1        <- SWAPIClientService.getFilmsFromPerson(1).fork
-          _         <- TestClock.adjust(5.seconds)
-          _         <- f1.join
-          cacheHits <- callRef.get
-        yield assertTrue(cacheHits == 2)
+          callRef <- Ref.make(false)
+          _       <- TestClient.addRoutes(Routes(successfulPersonCall(callRef), getFilmSuccess))
+          r1      <- SWAPIClientService.getFilmsFromPerson(1)
+          r2      <- SWAPIClientService.getFilmsFromPerson(1)
+          _       <- TestClock.adjust(5.seconds)
+        yield assertTrue(r1 == r2)
 
       }
     )

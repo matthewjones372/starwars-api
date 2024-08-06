@@ -25,12 +25,6 @@ object Libraries {
     )
   )
 
-  lazy val zioJson = Seq(
-    libraryDependencies ++= Seq(
-      Dependencies.zioJson
-    )
-  )
-
   lazy val zioSchema = Seq(
     libraryDependencies ++= Seq(
       Dependencies.zioSchemaJson,
@@ -41,6 +35,22 @@ object Libraries {
   lazy val zioCache = Seq(
     libraryDependencies ++= Seq(
       Dependencies.zioCache
+    )
+  )
+
+  lazy val zioConfig = Seq(
+    libraryDependencies ++= Seq(
+      Dependencies.zioConfig,
+      Dependencies.zioConfigMagnolia,
+      Dependencies.zioConfigTypeSafe
+    )
+  )
+
+  lazy val zioLogging = Seq(
+    libraryDependencies ++= Seq(
+      Dependencies.zioLoggingSl4j,
+      Dependencies.sl4jApi,
+      Dependencies.sl4jSimple
     )
   )
 

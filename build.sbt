@@ -48,6 +48,8 @@ lazy val data = Projects
   .create("data")
   .settings(
     Libraries.zio,
+    Libraries.zioConfig,
+    Libraries.zioLogging,
     Libraries.zioHttp,
     Libraries.zioTest
   )
@@ -60,6 +62,8 @@ lazy val `http-api` = Projects
   .settings(
     Libraries.zio,
     Libraries.zioHttp,
+    Libraries.zioLogging,
+    Libraries.zioConfig,
     Libraries.zioTest
   )
   .dependsOn(
@@ -73,7 +77,8 @@ lazy val client = Projects
     Libraries.zioHttp,
     Libraries.zioCache,
     Libraries.resilience,
-    Libraries.zioJson,
+    Libraries.zioConfig,
+    Libraries.zioLogging,
     Libraries.zioTest
   )
   .settings(

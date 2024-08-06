@@ -1,12 +1,10 @@
 package scripts
 
-import com.matthewjones372.api.client.{HttpClientConfig, SWAPIClientService}
+import com.matthewjones372.api.client.SWAPIClientService
 import com.matthewjones372.domain.*
 import zio.*
 import zio.http.*
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
-
-import java.net.URI
 /*
  Scripts used to scrape data from swapi https://swapi.dev/api
  */
@@ -27,8 +25,6 @@ object GenerateDataFromSwapi extends ZIOAppDefault:
     yield ExitCode.success)
       .provide(
         SWAPIClientService.default,
-//        ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI("https://swapi.dev/api")).get, 1000)),
-        ZLayer.succeed(HttpClientConfig(URL.fromURI(new URI("http://localhost:8080")).get, 1000)),
         Scope.default,
         Client.default
       )

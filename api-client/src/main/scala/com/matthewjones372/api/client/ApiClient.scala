@@ -2,6 +2,7 @@ package com.matthewjones372.api.client
 
 import com.matthewjones372.api.client.ClientError.*
 import com.matthewjones372.api.client.SWAPIClientService.SWAPIEnv
+import com.matthewjones372.api.client.config.HttpClientConfig
 import com.matthewjones372.domain.*
 import zio.*
 import zio.cache.*
@@ -85,7 +86,7 @@ object ApiClient:
     ZLayer.fromZIO {
       for
         client     <- ZIO.service[Client]
-        httpConfig <- ZIO.service[HttpClientConfig]
+        httpConfig <- ZIO.config(HttpClientConfig.config)
         scope      <- ZIO.service[Scope]
         apiClient   = ApiLiveClient(client, httpConfig, scope)
         client <-

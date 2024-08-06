@@ -11,7 +11,7 @@ trait SWAPIClientService:
   def getFilms: IO[ClientError, Set[Film]]
 
 object SWAPIClientService:
-  type SWAPIEnv = Client & Scope & HttpClientConfig
+  type SWAPIEnv = Client & Scope
 
   def getFilmsFromPerson(id: Int)(using Trace): ZIO[SWAPIClientService, ClientError, Set[String]] =
     ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromPerson(id))

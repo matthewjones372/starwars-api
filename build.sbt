@@ -32,6 +32,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "swapi"
   )
+  .enablePlugins(GenerateOpenApiTask)
   .dependsOn(
     modules.map(_ % oneToOneClassMapping): _*
   )

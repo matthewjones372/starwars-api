@@ -64,18 +64,13 @@ jobs:
         id: determine_version
         run: echo "VERSION=$(sbt dynverCurrentVersion | tail -n 1 | awk '{print $2}')" >> $GITHUB_ENV
 
-      - name: Publish snapshot
-        if: github.ref_type == 'branch'
-        env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ env.VERSION }}
-        run: sbt publish
+      - name: Generate OpenAPI Docs
+        if: github.ref == 'refs/heads/main'
+        run: sbt generateOpenAPIDocs
 
-      - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/v')
-        env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ env.VERSION }}
-        run: sbt publish
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/openapi

@@ -21,7 +21,7 @@ object SWHttpServer:
   def layer = ZLayer.fromFunction(SWHttpServerImpl.apply)
 
   val getPersonEndpoint =
-    Endpoint(Method.GET / "people" / PathCodec.int("person"))
+    Endpoint(Method.GET / "people" / PathCodec.int("personId"))
       .out[People]
       .outErrors[SWAPIServerError](
         HttpCodec.error[PersonNotFound](Status.NotFound),
@@ -48,7 +48,7 @@ object SWHttpServer:
       )
 
   val getFilmEndpoint =
-    Endpoint(Method.GET / "films" / PathCodec.int("film"))
+    Endpoint(Method.GET / "films" / PathCodec.int("filmId"))
       .out[Film]
       .outErrors[SWAPIServerError](
         HttpCodec.error[FilmNotFound](Status.NotFound),

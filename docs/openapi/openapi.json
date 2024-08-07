@@ -1,0 +1,555 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "Star Wars API",
+    "version" : "1.0"
+  },
+  "paths" : {
+    "/films" : {
+      "get" : {
+        "parameters" : [
+          
+            {
+            "name" : "page",
+            "in" : "query",
+            "schema" : 
+              {
+              "type" : 
+                "integer",
+              "format" : "int32"
+            },
+            "allowReserved" : false,
+            "style" : "form"
+          }
+        ],
+        "responses" : {
+          "200" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "$ref" : "#/components/schemas/Films"
+                }
+              }
+            }
+          },
+          "500" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/UnexpectedError"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/ServerError"
+                    }
+                  ],
+                  "description" : ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/films/{filmId}" : {
+      "get" : {
+        "parameters" : [
+          
+            {
+            "name" : "filmId",
+            "in" : "path",
+            "required" : true,
+            "schema" : 
+              {
+              "type" : 
+                "integer",
+              "format" : "int32"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "$ref" : "#/components/schemas/Film"
+                }
+              }
+            }
+          },
+          "500" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/UnexpectedError"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/ServerError"
+                    }
+                  ],
+                  "description" : ""
+                }
+              }
+            }
+          },
+          "404" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "$ref" : "#/components/schemas/FilmNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/people" : {
+      "get" : {
+        "parameters" : [
+          
+            {
+            "name" : "page",
+            "in" : "query",
+            "schema" : 
+              {
+              "type" : 
+                "integer",
+              "format" : "int32"
+            },
+            "allowReserved" : false,
+            "style" : "form"
+          }
+        ],
+        "responses" : {
+          "200" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "$ref" : "#/components/schemas/Peoples"
+                }
+              }
+            }
+          },
+          "500" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/UnexpectedError"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/ServerError"
+                    }
+                  ],
+                  "description" : ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/people/{personId}" : {
+      "get" : {
+        "parameters" : [
+          
+            {
+            "name" : "personId",
+            "in" : "path",
+            "required" : true,
+            "schema" : 
+              {
+              "type" : 
+                "integer",
+              "format" : "int32"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "$ref" : "#/components/schemas/People"
+                }
+              }
+            }
+          },
+          "500" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/UnexpectedError"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/ServerError"
+                    }
+                  ],
+                  "description" : ""
+                }
+              }
+            }
+          },
+          "404" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "$ref" : "#/components/schemas/PersonNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Films" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "count" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          },
+          "results" : {
+            "type" : 
+              "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Film"
+            }
+          }
+        },
+        "required" : [
+          "count",
+          "results"
+        ]
+      },
+      "People" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "eye_color" : {
+            "type" : 
+              "string"
+          },
+          "url" : {
+            "type" : 
+              "string"
+          },
+          "homeworld" : {
+            "type" : 
+              [
+              "string",
+              "null"
+            ]
+          },
+          "films" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "starships" : {
+            "type" : 
+              [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "skin_color" : {
+            "type" : 
+              "string"
+          },
+          "species" : {
+            "type" : 
+              [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "mass" : {
+            "type" : 
+              "string"
+          },
+          "hair_color" : {
+            "type" : 
+              "string"
+          },
+          "name" : {
+            "type" : 
+              "string"
+          },
+          "height" : {
+            "type" : 
+              "string"
+          },
+          "vehicles" : {
+            "type" : 
+              [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "birth_year" : {
+            "type" : 
+              "string"
+          },
+          "gender" : {
+            "type" : 
+              [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required" : [
+          "name",
+          "height",
+          "mass",
+          "hair_color",
+          "skin_color",
+          "eye_color",
+          "birth_year",
+          "gender",
+          "homeworld",
+          "films",
+          "species",
+          "vehicles",
+          "starships",
+          "url"
+        ]
+      },
+      "Film" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "species" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "url" : {
+            "type" : 
+              "string"
+          },
+          "episode_id" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          },
+          "characters" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "opening_crawl" : {
+            "type" : 
+              "string"
+          },
+          "release_date" : {
+            "type" : 
+              "string"
+          },
+          "edited" : {
+            "type" : 
+              "string"
+          },
+          "title" : {
+            "type" : 
+              "string"
+          },
+          "planets" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "vehicles" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "director" : {
+            "type" : 
+              "string"
+          },
+          "starships" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "producer" : {
+            "type" : 
+              "string"
+          },
+          "created" : {
+            "type" : 
+              "string"
+          }
+        },
+        "required" : [
+          "title",
+          "episode_id",
+          "opening_crawl",
+          "director",
+          "producer",
+          "release_date",
+          "characters",
+          "planets",
+          "starships",
+          "vehicles",
+          "species",
+          "created",
+          "edited",
+          "url"
+        ]
+      },
+      "Peoples" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "count" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          },
+          "results" : {
+            "type" : 
+              "array",
+            "items" : {
+              "$ref" : "#/components/schemas/People"
+            }
+          }
+        },
+        "required" : [
+          "count",
+          "results"
+        ]
+      },
+      "ServerError" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {}
+      },
+      "PersonNotFound" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "message" : {
+            "type" : 
+              "string"
+          },
+          "personId" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [
+          "message",
+          "personId"
+        ]
+      },
+      "FilmNotFound" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "message" : {
+            "type" : 
+              "string"
+          },
+          "filmId" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [
+          "message",
+          "filmId"
+        ]
+      },
+      "UnexpectedError" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "message" : {
+            "type" : 
+              "string"
+          }
+        },
+        "required" : [
+          "message"
+        ]
+      }
+    }
+  }
+}

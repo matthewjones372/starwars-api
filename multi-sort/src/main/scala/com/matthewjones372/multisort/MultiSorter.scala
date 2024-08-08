@@ -1,5 +1,3 @@
-package com.matthewjones372.multisort
-
 import scala.deriving.*
 import scala.compiletime.*
 
@@ -7,13 +5,28 @@ enum FieldOrdering:
   case ASC
   case DESC
 
-final case class SortBy(key: String, ordering: FieldOrdering)
+trait Transformer[A]:
+  def transform(value: A): Any
+
+object Transformer:
+  def apply[A](using t: Transformer[A]): Transformer[A] = t
+
+  given Transformer[String] with
+    def transform(value: String): Any = value
+
+  given Transformer[Int] with
+    def transform(value: Int): Any = value
+
+  given lengthTransformer: Transformer[String] with
+    def transform(value: String): Any = value.length
+
+final case class SortBy[T](key: String, ordering: FieldOrdering, transformer: Option[Transformer[T]] = None)
 
 trait Sorter[A]:
-  def sort(input: List[A], sortBys: List[SortBy]): List[A]
+  def sort(input: List[A], sortBys: List[SortBy[_]]): List[A]
 
 object Sorter:
-  def sort[A](input: List[A], sortBys: List[SortBy])(using sorter: Sorter[A]): List[A] =
+  def sort[A](input: List[A], sortBys: List[SortBy[_]])(using sorter: Sorter[A]): List[A] =
     sorter.sort(input, sortBys)
 
   inline def derived[A <: Product](using A: Mirror.ProductOf[A]): Sorter[A] =
@@ -23,9 +36,9 @@ object Sorter:
     val cachedOrders   = fieldNames.zip(vectorOfOrders).toMap
 
     new Sorter[A] {
-      override def sort(input: List[A], sortBys: List[SortBy]): List[A] = {
-        val chained = Function.chain[List[A]] {
-          sortBys.map { sort =>
+      override def sort(input: List[A], sortBys: List[SortBy[_]]): List[A] =
+        input.sorted { (a, b) =>
+          sortBys.iterator.map { sort =>
             cachedOrders
               .get(sort.key)
               .map { case (ord, idx) =>
@@ -34,17 +47,35 @@ object Sorter:
                   case FieldOrdering.DESC => ord.reverse
                 }
 
-                (a: List[A]) => a.sortBy(value => value.productElement(idx))(rightOrderOrders)
+                val valueA = sort.transformer
+                  .map(_.asInstanceOf[Transformer[Any]].transform(a.productElement(idx)))
+                  .getOrElse(a.productElement(idx))
+
+                val valueB = sort.transformer
+                  .map(_.asInstanceOf[Transformer[Any]].transform(b.productElement(idx)))
+                  .getOrElse(b.productElement(idx))
+
+                rightOrderOrders.compare(valueA, valueB)
               }
-              .getOrElse(identity[List[A]])
+              .getOrElse(0)
           }
+            .find(_ != 0)
+            .getOrElse(0)
         }
-        chained(input)
-      }
     }
 
-object Test extends App:
-  case class Starship(name: String, age: Int) derives Sorter
+object Example extends App:
+  case class Starship(name: String, age: Int)
 
-  val res = Sorter.sort(List(Starship("A", 22), Starship("B", 33)), List(SortBy("name", FieldOrdering.DESC)))
-  println(res)
+  val starships = List(Starship("Enterprise", 50), Starship("Falcon", 100), Starship("Z", 3))
+
+  val sortBys = List(
+    SortBy("name", FieldOrdering.ASC, Some(Transformer.lengthTransformer)),
+    SortBy("age", FieldOrdering.DESC, None)
+  )
+
+  given Sorter[Starship] = Sorter.derived[Starship]
+
+  val sortedStarships = Sorter.sort(starships, sortBys)
+
+  sortedStarships.foreach(println)

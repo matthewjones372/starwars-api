@@ -5,39 +5,24 @@ enum FieldOrdering:
   case ASC
   case DESC
 
-trait Transformer[A]:
-  def transform(value: A): Any
+final case class SortBy(key: String, ordering: FieldOrdering)
 
-object Transformer:
-  def apply[A](using t: Transformer[A]): Transformer[A] = t
+trait MultiSorter[A]:
+  def sort(input: List[A], sortBys: List[SortBy]): List[A]
 
-  given Transformer[String] with
-    def transform(value: String): Any = value
+object MultiSorter:
+  def sort[A](input: List[A], by: List[SortBy])(using sorter: MultiSorter[A]): List[A] =
+    sorter.sort(input, by)
 
-  given Transformer[Int] with
-    def transform(value: Int): Any = value
-
-  given lengthTransformer: Transformer[String] with
-    def transform(value: String): Any = value.length
-
-final case class SortBy[T](key: String, ordering: FieldOrdering, transformer: Option[Transformer[T]] = None)
-
-trait Sorter[A]:
-  def sort(input: List[A], sortBys: List[SortBy[_]]): List[A]
-
-object Sorter:
-  def sort[A](input: List[A], sortBys: List[SortBy[_]])(using sorter: Sorter[A]): List[A] =
-    sorter.sort(input, sortBys)
-
-  inline def derived[A <: Product](using A: Mirror.ProductOf[A]): Sorter[A] =
+  inline def derived[A <: Product](using A: Mirror.ProductOf[A]): MultiSorter[A] =
     val orders         = summonAll[Tuple.Map[A.MirroredElemTypes, Ordering]]
     val fieldNames     = constValueTuple[A.MirroredElemLabels].toList.asInstanceOf[List[String]]
     val vectorOfOrders = orders.toList.asInstanceOf[List[Ordering[Any]]].zipWithIndex
     val cachedOrders   = fieldNames.zip(vectorOfOrders).toMap
 
-    new Sorter[A] {
-      override def sort(input: List[A], sortBys: List[SortBy[_]]): List[A] =
-        input.sorted { (a, b) =>
+    new MultiSorter[A] {
+      override def sort(input: List[A], sortBys: List[SortBy]): List[A] =
+        input.sorted { (left, right) =>
           sortBys.iterator.map { sort =>
             cachedOrders
               .get(sort.key)
@@ -46,16 +31,7 @@ object Sorter:
                   case FieldOrdering.ASC  => ord
                   case FieldOrdering.DESC => ord.reverse
                 }
-
-                val valueA = sort.transformer
-                  .map(_.asInstanceOf[Transformer[Any]].transform(a.productElement(idx)))
-                  .getOrElse(a.productElement(idx))
-
-                val valueB = sort.transformer
-                  .map(_.asInstanceOf[Transformer[Any]].transform(b.productElement(idx)))
-                  .getOrElse(b.productElement(idx))
-
-                rightOrderOrders.compare(valueA, valueB)
+                rightOrderOrders.compare(left.productElement(idx), right.productElement(idx))
               }
               .getOrElse(0)
           }
@@ -65,17 +41,13 @@ object Sorter:
     }
 
 object Example extends App:
-  case class Starship(name: String, age: Int)
+  case class Starship(name: String, age: Int) derives MultiSorter // we derive a MultisSorter for this type
 
   val starships = List(Starship("Enterprise", 50), Starship("Falcon", 100), Starship("Z", 3))
 
   val sortBys = List(
-    SortBy("name", FieldOrdering.ASC, Some(Transformer.lengthTransformer)),
-    SortBy("age", FieldOrdering.DESC, None)
+    SortBy("name", FieldOrdering.DESC),
+    SortBy("age", FieldOrdering.ASC)
   )
 
-  given Sorter[Starship] = Sorter.derived[Starship]
-
-  val sortedStarships = Sorter.sort(starships, sortBys)
-
-  sortedStarships.foreach(println)
+  println(MultiSorter.sort(starships, sortBys))  // List(Starship(Z,3), Starship(Falcon,100), Starship(Enterprise,50))

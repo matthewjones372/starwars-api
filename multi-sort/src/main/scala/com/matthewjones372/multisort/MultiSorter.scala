@@ -18,7 +18,7 @@ object Sorter:
 
   inline def derived[A <: Product](using A: Mirror.ProductOf[A]): Sorter[A] =
     val orders         = summonAll[Tuple.Map[A.MirroredElemTypes, Ordering]]
-    val fieldNames     = constValueTuple[A.MirroredElemTypes].toList.asInstanceOf[List[String]]
+    val fieldNames     = constValueTuple[A.MirroredElemLabels].toList.asInstanceOf[List[String]]
     val vectorOfOrders = orders.toList.asInstanceOf[List[Ordering[Any]]].zipWithIndex
     val cachedOrders   = fieldNames.zip(vectorOfOrders).toMap
 
@@ -46,5 +46,5 @@ object Sorter:
 object Test extends App:
   case class Starship(name: String, age: Int) derives Sorter
 
-  val res = Sorter.sort(List(Starship("A", 22), Starship("B", 33)), List(SortBy("name", FieldOrdering.ASC)))
+  val res = Sorter.sort(List(Starship("A", 22), Starship("B", 33)), List(SortBy("name", FieldOrdering.DESC)))
   println(res)

@@ -72,6 +72,11 @@ lazy val `http-api` = Projects
     data   % oneToOneClassMapping
   )
 
+lazy val dynamicSorting = Projects
+  .create("multi-sort")
+  .settings(Libraries.zioTest)
+  .settings(publish / skip := false)
+
 lazy val client = Projects
   .create("api-client")
   .settings(
@@ -100,4 +105,4 @@ lazy val search = Projects
     domain % oneToOneClassMapping
   )
 
-lazy val modules: Seq[ProjectReference] = Seq(domain, client, data, `http-api`, search)
+lazy val modules: Seq[ProjectReference] = Seq(domain, client, data, `http-api`, search, dynamicSorting)

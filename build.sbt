@@ -3,7 +3,7 @@ import sbtdynver.DynVerPlugin.autoImport.*
 ThisBuild / organization         := "com.matthewjones372"
 ThisBuild / name                 := "starwars-api"
 ThisBuild / organizationHomepage := Some(url("https://github.com/matthewjones372"))
-ThisBuild / scalaVersion         := "3.3.3"
+ThisBuild / scalaVersion         := "3.4.2"
 
 ThisBuild / publishTo := {
   Some("GitHub Package Registry" at s"https://maven.pkg.github.com/matthewjones372/starwars-api")
@@ -71,8 +71,9 @@ lazy val `http-api` = Projects
     data   % oneToOneClassMapping
   )
 
-lazy val multiSorter = Projects
+lazy val dynamicSorting = Projects
   .create("multi-sort")
+  .settings(Libraries.zioTest)
   .settings(publish / skip := false)
 
 lazy val client = Projects
@@ -103,4 +104,4 @@ lazy val search = Projects
     domain % oneToOneClassMapping
   )
 
-lazy val modules: Seq[ProjectReference] = Seq(domain, client, data, `http-api`, search)
+lazy val modules: Seq[ProjectReference] = Seq(domain, client, data, `http-api`, search, dynamicSorting)

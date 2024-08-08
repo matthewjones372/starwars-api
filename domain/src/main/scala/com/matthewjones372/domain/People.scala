@@ -1,8 +1,11 @@
 package com.matthewjones372.domain
 
+import com.matthewjones372.sorting.DynamicMultiSorter
 import zio.schema.*
 import zio.schema.Schema.primitive
 import zio.schema.annotation.fieldName
+import scala.math.Ordering.ordered
+import scala.math.Ordered.orderingToOrdered
 
 final case class People(
   name: String,
@@ -19,7 +22,7 @@ final case class People(
   vehicles: Option[Set[String]],
   starships: Option[Set[String]],
   url: String
-)
+) derives DynamicMultiSorter
 
 object People:
   given Schema[Option[Int]] = primitive[String].transform(_.toIntOption, _.map(_.toString).getOrElse(""))

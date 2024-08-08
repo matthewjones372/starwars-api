@@ -1,16 +1,16 @@
 package com.matthewjones372.data
 
 import com.matthewjones372.domain.*
+import com.matthewjones372.sorting.{DynamicMultiSorter, SortBy}
 import zio.*
 import zio.concurrent.ConcurrentMap
-import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
-
 import zio.http.*
+import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
 trait SWDataRepo:
   def getFilm(id: Int): IO[DataRepoError, Film]
   def getPerson(id: Int): IO[DataRepoError, People]
-  def getPeople(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Peoples]
+  def getPeople(from: Option[Int], fetchSize: Option[Int], sortBy: Option[List[SortBy]]): IO[DataRepoError, Peoples]
   def getFilms(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Films]
 
 object SWDataRepo:
@@ -58,7 +58,6 @@ final private case class InMemoryDataRepo(peopleData: ConcurrentMap[Int, People]
 
       case (Some(from), None) =>
         filmDataList.map(_.slice(0, 10))
-
     for
       count <- filmDataCount
       films <- data.map(_.map { case (_, film) => film })
@@ -70,14 +69,28 @@ final private case class InMemoryDataRepo(peopleData: ConcurrentMap[Int, People]
   override def getPerson(id: Int): IO[DataRepoError, People] =
     peopleData.get(id - 1).someOrFail(DataRepoError.PersonNotFound("Person not found", id))
 
-  override def getPeople(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Peoples] =
+  override def getPeople(
+    from: Option[Int],
+    fetchSize: Option[Int],
+    sortBy: Option[List[SortBy]]
+  ): IO[DataRepoError, Peoples] =
+
+    // We wouldn't need to  do  this with a database...
+    val peopleDataListSorted = peopleDataList
+      .map(_.unzip)
+      .map { case (idx, people) =>
+        sortBy.map { sorts =>
+          idx.zip(DynamicMultiSorter.sort(people, sorts))
+        }.getOrElse(idx.zip(people))
+      }
+
     val data = (from, fetchSize) match
       case (Some(from), Some(fetchSize)) =>
-        peopleDataList.map(_.getPage(from, fetchSize))
-      case (None, None)            => peopleDataList
-      case (None, Some(fetchSize)) => peopleDataList.map(_.slice(0, fetchSize))
+        peopleDataListSorted.map(_.getPage(from, fetchSize))
+      case (None, None)            => peopleDataListSorted
+      case (None, Some(fetchSize)) => peopleDataListSorted.map(_.slice(0, fetchSize))
       case (Some(from), None) =>
-        peopleDataList.map(_.slice(0, 10))
+        peopleDataListSorted.map(_.slice(0, 10))
 
     for
       count  <- peopleDataCount

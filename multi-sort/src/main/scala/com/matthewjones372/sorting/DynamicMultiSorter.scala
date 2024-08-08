@@ -1,7 +1,8 @@
 package com.matthewjones372.sorting
 
-import scala.deriving.*
+import scala.annotation.nowarn
 import scala.compiletime.*
+import scala.deriving.*
 
 enum FieldOrdering:
   case ASC
@@ -25,7 +26,7 @@ object DynamicMultiSorter:
     new DynamicMultiSorter[A] {
       override def sort(input: List[A], sortBys: List[SortBy]): List[A] =
         input.sorted { (left, right) =>
-          sortBys.iterator.map { sort =>
+          sortBys.map { sort =>
             cachedOrders
               .get(sort.key)
               .map { case (ord, idx) =>

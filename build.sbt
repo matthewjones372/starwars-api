@@ -44,6 +44,9 @@ lazy val domain = Projects
     Libraries.zioSchema,
     Libraries.zioTest
   )
+  .dependsOn(
+    dynamicSorting % oneToOneClassMapping
+  )
 
 lazy val data = Projects
   .create("data")

@@ -1,7 +1,11 @@
 package com.matthewjones372.domain
 
+import com.matthewjones372.sorting.DynamicMultiSorter
 import zio.schema.*
 import zio.schema.annotation.fieldName
+
+import scala.math.Ordered.orderingToOrdered
+import scala.math.Ordering.ordered
 
 final case class Film(
   title: String,
@@ -18,6 +22,7 @@ final case class Film(
   created: String,
   edited: String,
   url: String
-) derives Schema
+) derives Schema,
+      DynamicMultiSorter
 
 final case class Films(count: Int, results: List[Film]) extends Paged[Film] derives Schema

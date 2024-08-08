@@ -41,13 +41,36 @@ object MultiSorter:
     }
 
 object Example extends App:
-  case class Starship(name: String, age: Int) derives MultiSorter // we derive a MultisSorter for this type
+  import scala.math.Ordering.Implicits.*
+
+  // we don't have to do that manual work for every case class we create, the Multi sorter will be generated at compile time
+  case class Starship(name: String, age: Int) derives MultiSorter // we derive a MultiSorter for this type
+
+  case class People(name: String, films: List[String], url: String) derives MultiSorter
 
   val starships = List(Starship("Enterprise", 50), Starship("Falcon", 100), Starship("Z", 3))
 
-  val sortBys = List(
-    SortBy("name", FieldOrdering.DESC),
-    SortBy("age", FieldOrdering.ASC)
+  val people = List(
+    People("Luke Skywalker", List("A New Hope", "ZFILM"), "luke.com"),
+    People("Darth Vader", List("A New Hope", "A Film"), "darth.com"),
+    People("Bart Simpson", List("B Film", "ZFILM"), "bart.com")
   )
 
-  println(MultiSorter.sort(starships, sortBys))  // List(Starship(Z,3), Starship(Falcon,100), Starship(Enterprise,50))
+  println {
+    MultiSorter.sort(
+      starships,
+      List(
+        SortBy("name", FieldOrdering.DESC),
+        SortBy("age", FieldOrdering.ASC)
+      )
+    )
+  } // List(Starship(Z,3), Starship(Falcon,100), Starship(Enterprise,50))
+
+  println {
+    MultiSorter.sort(
+      people,
+      List(
+        SortBy("films", FieldOrdering.DESC)
+      )
+    )
+  } // List(People(Bart Simpson,List(B Film, ZFILM),bart.com), People(Luke Skywalker,List(A New Hope, ZFILM),luke.com), People(Darth Vader,List(A New Hope, A Film),darth.com))

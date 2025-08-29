@@ -37,50 +37,34 @@ object ApiClient:
   def getFilms(using Trace) =
     ZIO.serviceWithZIO[ApiClient](_.getFilms)
 
-  private enum CacheKey:
-    case FilmId(id: Int)
-    case FilmUrl(url: URL)
-    case Films
-    case PersonId(id: Int)
-    case People
-
-  private final case class FilmSet(films: Set[Film])      extends AnyVal
-  private final case class PeopleSet(people: Set[People]) extends AnyVal
-
-  private type CacheEntities = Film | People | FilmSet | PeopleSet
+  private sealed trait CacheKey[A]
+  private object CacheKey:
+    final case class FilmId(id: Int)       extends CacheKey[Film]
+    final case class FilmUrl(url: URL)     extends CacheKey[Film]
+    case object Films                      extends CacheKey[Set[Film]]
+    final case class PersonId(id: Int)     extends CacheKey[People]
+    case object People                     extends CacheKey[Set[People]]
 
   private final class CachingApiClient(
-    cache: Cache[CacheKey, ClientError, CacheEntities]
+    cache: Cache[CacheKey[?], ClientError, Any]
   ) extends ApiClient:
+    private def fromCache[A](key: CacheKey[A]): IO[ClientError, A] =
+      cache.get(key).map(_.asInstanceOf[A])
+
     override def getFilmFromUrl(url: URL): IO[ClientError, Film] =
-      cache.get(CacheKey.FilmUrl(url)).map {
-        case film: Film => film
-        case _          => throw UnreachableError
-      }
+      fromCache(CacheKey.FilmUrl(url))
 
     override def getFilmFrom(id: Int): IO[ClientError, Film] =
-      cache.get(CacheKey.FilmId(id)).map {
-        case film: Film => film
-        case _          => throw UnreachableError
-      }
+      fromCache(CacheKey.FilmId(id))
 
     override def getPersonFrom(id: Int): IO[ClientError, People] =
-      cache.get(CacheKey.PersonId(id)).map {
-        case people: People => people
-        case _              => throw UnreachableError
-      }
+      fromCache(CacheKey.PersonId(id))
 
     override def getPeople: IO[ClientError, Set[People]] =
-      cache.get(CacheKey.People).map {
-        case PeopleSet(people) => people
-        case _                 => throw UnreachableError
-      }
+      fromCache(CacheKey.People)
 
     override def getFilms: IO[ClientError, Set[Film]] =
-      cache.get(CacheKey.Films).map {
-        case FilmSet(films) => films
-        case _              => throw UnreachableError
-      }
+      fromCache(CacheKey.Films)
 
   def live: RLayer[SWAPIEnv, ApiClient] =
     ZLayer.fromZIO {
@@ -91,22 +75,18 @@ object ApiClient:
         apiClient   = ApiLiveClient(client, httpConfig, scope)
         client <-
           for
-            cache <-
-              Cache.makeWith(
-                httpConfig.cacheSize,
-                Lookup {
-                  case CacheKey.FilmId(id) =>
-                    apiClient.getFilmFrom(id)
-                  case CacheKey.PersonId(id) =>
-                    apiClient.getPersonFrom(id)
-                  case CacheKey.FilmUrl(url) =>
-                    apiClient.getFilmFromUrl(url)
-                  case CacheKey.People =>
-                    apiClient.getPeople.map(PeopleSet.apply)
-                  case CacheKey.Films =>
-                    apiClient.getFilms.map(FilmSet.apply)
-                }
-              )(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
+              cache <-
+                Cache
+                  .makeWith[CacheKey[?], ClientError, Any](
+                    httpConfig.cacheSize,
+                    Lookup {
+                      case CacheKey.FilmId(id)   => apiClient.getFilmFrom(id)
+                      case CacheKey.PersonId(id) => apiClient.getPersonFrom(id)
+                      case CacheKey.FilmUrl(url) => apiClient.getFilmFromUrl(url)
+                      case CacheKey.People       => apiClient.getPeople
+                      case CacheKey.Films        => apiClient.getFilms
+                    }
+                  )(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
           yield CachingApiClient(cache)
       yield client
     }

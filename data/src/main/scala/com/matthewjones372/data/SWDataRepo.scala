@@ -33,7 +33,7 @@ object SWDataRepo:
   private[data] def paginate[A](data: List[A], page: Option[Int], pageSize: Option[Int]): List[A] =
     (page, pageSize) match
       case (None, None) => data
-      case _ =>
+      case _            =>
         val size   = pageSize.getOrElse(defaultPageSize)
         val offset = (page.getOrElse(1) - 1) * size
         data.slice(offset, offset + size)

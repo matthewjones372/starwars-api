@@ -37,7 +37,7 @@ object SWGraphSpec extends ZIOSpecDefault:
 
     def loop(frontier: Queue[(A, Int)], seen: Set[A]): Option[Int] =
       frontier.dequeueOption match
-        case None => None
+        case None                           => None
         case Some(((current, depth), rest)) =>
           if current == target then Some(depth)
           else

@@ -17,7 +17,7 @@ object SWApiSpec extends ZIOSpecDefault:
         {
           for
             client <- ZIO.service[Client]
-            _ <- stub[SWDataRepo](_.getFilms) {
+            _      <- stub[SWDataRepo](_.getFilms) {
                    ZIO.attempt(Films(1, List(film))).orElseFail(DataRepoError.FilmsNotFound)
                  }
             swServer    <- ZIO.service[SWHttpServer]
@@ -149,7 +149,7 @@ object SWApiSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response <- client(
+          response    <- client(
                         testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1" / "path-to" / "3"))
                       )
           body <- response.body.asString
@@ -171,7 +171,7 @@ object SWApiSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response <- client(
+          response    <- client(
                         testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1" / "path-to" / "2"))
                       )
         yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](
@@ -187,7 +187,7 @@ object SWApiSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response <- client(
+          response    <- client(
                         testRequest.copy(url = testRequest.url.path(Path.root / "people" / "99" / "path-to" / "1"))
                       )
         yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](

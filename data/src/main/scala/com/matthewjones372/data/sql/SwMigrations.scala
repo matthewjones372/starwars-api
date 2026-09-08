@@ -9,7 +9,7 @@ object SwMigrations:
   def migrate: RIO[DataSource, Int] =
     for
       dataSource <- ZIO.service[DataSource]
-      applied <- ZIO.attemptBlocking {
+      applied    <- ZIO.attemptBlocking {
                    Flyway
                      .configure()
                      .dataSource(dataSource)

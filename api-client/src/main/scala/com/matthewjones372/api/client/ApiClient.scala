@@ -77,9 +77,8 @@ object ApiClient:
         httpConfig <- ZIO.config(HttpClientConfig.config)
         scope      <- ZIO.service[Scope]
         apiClient   = ApiLiveClient(client, httpConfig, scope)
-        client <-
-          for
-            cache <-
+        client     <-
+          for cache <-
               Cache.makeWith(
                 httpConfig.cacheSize,
                 Lookup { (key: CacheKey) =>

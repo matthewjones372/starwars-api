@@ -15,7 +15,7 @@ object SwSeed:
       transactor <- ZIO.service[ZTransactor]
       peopleById <- ZIO.foreach(people)(person => idOf(person.url).map(_ -> person))
       filmsById  <- ZIO.foreach(films)(film => idOf(film.url).map(_ -> film))
-      _ <- transactor.transact {
+      _          <- transactor.transact {
              filmsById.foreach(insertFilm)
              peopleById.foreach(insertPerson)
            }
@@ -27,7 +27,7 @@ object SwSeed:
 
   private def insertPerson(entry: (Int, Character))(using DbCon): Unit =
     val (id, person) = entry
-    val _ =
+    val _            =
       sql"""insert into people (id, name, height, mass, hair_color, skin_color, eye_color, birth_year, gender, homeworld, url)
             values ($id, ${person.name}, ${person.height}, ${person.mass}, ${person.hairColor}, ${person.skinColor},
                     ${person.eyeColor}, ${person.birthYear}, ${person.gender}, ${person.homeworld}, ${person.url})
@@ -40,7 +40,7 @@ object SwSeed:
 
   private def insertFilm(entry: (Int, Film))(using DbCon): Unit =
     val (id, film) = entry
-    val _ =
+    val _          =
       sql"""insert into films (id, title, episode_id, opening_crawl, director, producer, release_date, created, edited, url)
             values ($id, ${film.title}, ${film.episodeId}, ${film.openingCrawl}, ${film.director}, ${film.producer},
                     ${film.releaseDate}, ${film.created}, ${film.edited}, ${film.url})

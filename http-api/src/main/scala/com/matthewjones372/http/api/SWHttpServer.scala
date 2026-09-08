@@ -151,7 +151,7 @@ private final case class SWHttpServerImpl(
       start  <- characterOrError(characterId)
       target <- characterOrError(targetId)
       graph  <- characterGraph.mapError(err => UnexpectedError(err.getMessage))
-      path <- ZIO
+      path   <- ZIO
                 .fromOption(graph.bfs(start.name, target.name))
                 .orElseFail(PathNotFound(s"No path between ${start.name} and ${target.name}"))
     yield SWHttpServer.toShortestPath(start.name, target.name, path)

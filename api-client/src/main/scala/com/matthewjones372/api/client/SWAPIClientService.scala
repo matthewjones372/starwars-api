@@ -44,7 +44,7 @@ final private case class SWAPIServiceLive(apiClient: ApiClient, maxConcurrency: 
   override def getFilmsFromCharacter(id: Int): IO[ClientError, Set[String]] = {
     for
       people <- ApiClient.getCharacterFrom(id)
-      films <- ZIO
+      films  <- ZIO
                  .foreachPar(people.films)(url => decodeUrlString(url).flatMap(ApiClient.getFilmFromUrl))
                  .withParallelism(maxConcurrency)
     yield films.map(_.title)
@@ -56,7 +56,7 @@ final private case class SWAPIServiceLive(apiClient: ApiClient, maxConcurrency: 
   override def getFilmsFromCharacters: IO[ClientError, Map[String, Set[String]]] =
     (for
       people <- ApiClient.getCharacters
-      films <-
+      films  <-
         ZIO
           .foreachPar(people) { person =>
             ZIO

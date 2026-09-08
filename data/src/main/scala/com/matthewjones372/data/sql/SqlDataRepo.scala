@@ -38,7 +38,7 @@ object SqlDataRepo:
   private[sql] def offsetFor(page: Option[Int], pageSize: Option[Int]): Option[(Int, Int)] =
     (page, pageSize) match
       case (None, None) => None
-      case _ =>
+      case _            =>
         val size = pageSize.getOrElse(defaultPageSize)
         Some(math.max((page.getOrElse(1) - 1) * size, 0) -> size)
 

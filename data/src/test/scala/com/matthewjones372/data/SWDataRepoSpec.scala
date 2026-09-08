@@ -204,8 +204,8 @@ object SWDataRepoSpec extends ZIOSpecDefault:
     ).provideShared(SWDataRepo.layer),
     suite("fromEntities")(
       test("fails rather than throwing when an entity url has no id") {
-        for
-          result <- SWDataRepo.fromEntities(List(personWithId(1).copy(url = "http://localhost:8080/people/")), Nil).exit
+        for result <-
+            SWDataRepo.fromEntities(List(personWithId(1).copy(url = "http://localhost:8080/people/")), Nil).exit
         yield assert(result)(Assertion.failsWithA[DataRepoError.UnexpectedError])
       }
     )

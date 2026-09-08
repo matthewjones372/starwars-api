@@ -13,12 +13,11 @@ object HttpClientConfigSpec extends ZIOSpecDefault:
       yield assertTrue(config.maxConcurrency == 8, config.cacheSize == 10)
     },
     test("reads maxConcurrency when it is configured") {
-      for
-        config <- load(
-                    "clientConfig.baseUrl"        -> "http://localhost",
-                    "clientConfig.cacheSize"      -> "10",
-                    "clientConfig.maxConcurrency" -> "3"
-                  )
+      for config <- load(
+                      "clientConfig.baseUrl"        -> "http://localhost",
+                      "clientConfig.cacheSize"      -> "10",
+                      "clientConfig.maxConcurrency" -> "3"
+                    )
       yield assertTrue(config.maxConcurrency == 3)
     },
     test("fails rather than throwing when the base url cannot be read") {

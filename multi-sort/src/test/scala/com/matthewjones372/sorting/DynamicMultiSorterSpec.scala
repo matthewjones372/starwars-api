@@ -31,7 +31,7 @@ object DynamicMultiSorterSpec extends ZIOSpecDefault:
         MultipleFields("Z", 100)
       )
 
-      val sorts = List(SortBy("age", FieldOrdering.DESC), SortBy("name", FieldOrdering.ASC))
+      val sorts         = List(SortBy("age", FieldOrdering.DESC), SortBy("name", FieldOrdering.ASC))
       val expectedCases = List(
         MultipleFields(
           name = "C",

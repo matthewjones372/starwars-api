@@ -23,7 +23,7 @@ object ClientExample extends ZIOAppDefault:
       _                     <- Console.printLine(s"There are ${films.size} films and it took ${time2.toMillis} ms")
       (time3, shortestPath) <- ZIO.succeed(SWGraph(people).bfs("Darth Maul", "Greedo")).timed
       _                     <- Console.printLine(s"bfs took ${time3.toMillis} ms")
-      _ <- Console.printLine(
+      _                     <- Console.printLine(
              s"The shortest path between Darth Maul and Greedo is: ${shortestPath.map(_.length).getOrElse(0)} films"
            )
       _ <- Console.printLine(shortestPath.mkString)

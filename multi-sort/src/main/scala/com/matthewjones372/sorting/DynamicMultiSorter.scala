@@ -28,24 +28,27 @@ object DynamicMultiSorter:
     val orders         = summonAll[Tuple.Map[A.MirroredElemTypes, Ordering]]
     val fieldNames     = constValueTuple[A.MirroredElemLabels].toList.asInstanceOf[List[String]]
     val vectorOfOrders = orders.toList.asInstanceOf[List[Ordering[Any]]].zipWithIndex
-    val cachedOrders   = fieldNames.zip(vectorOfOrders).toMap
+    fromFieldOrderings(fieldNames.zip(vectorOfOrders).toMap)
 
-    new DynamicMultiSorter[A] {
+  // Kept out of `derived` so the class is defined once rather than at every derivation site.
+  private def fromFieldOrderings[A <: Product](
+    cachedOrders: Map[String, (Ordering[Any], Int)]
+  ): DynamicMultiSorter[A] =
+    new DynamicMultiSorter[A]:
       override def sort(input: List[A], sortBys: List[SortBy]): List[A] =
-        input.sorted { (left, right) =>
-          sortBys.map { sort =>
-            cachedOrders
-              .get(sort.key)
-              .map { case (ord, idx) =>
-                val rightOrderOrders = sort.ordering match {
-                  case FieldOrdering.ASC  => ord
-                  case FieldOrdering.DESC => ord.reverse
+        input.sorted(using
+          (left, right) =>
+            sortBys.map { sort =>
+              cachedOrders
+                .get(sort.key)
+                .map { case (ord, idx) =>
+                  val fieldOrdering = sort.ordering match
+                    case FieldOrdering.ASC  => ord
+                    case FieldOrdering.DESC => ord.reverse
+                  fieldOrdering.compare(left.productElement(idx), right.productElement(idx))
                 }
-                rightOrderOrders.compare(left.productElement(idx), right.productElement(idx))
-              }
+                .getOrElse(0)
+            }
+              .find(_ != 0)
               .getOrElse(0)
-          }
-            .find(_ != 0)
-            .getOrElse(0)
-        }
-    }
+        )

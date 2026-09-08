@@ -3,7 +3,7 @@ import sbtdynver.DynVerPlugin.autoImport.*
 ThisBuild / organization         := "com.matthewjones372"
 ThisBuild / name                 := "starwars-api"
 ThisBuild / organizationHomepage := Some(url("https://github.com/matthewjones372"))
-ThisBuild / scalaVersion         := "3.4.2"
+ThisBuild / scalaVersion         := "3.8.4"
 
 ThisBuild / publishTo := {
   Some("GitHub Package Registry" at s"https://maven.pkg.github.com/matthewjones372/starwars-api")

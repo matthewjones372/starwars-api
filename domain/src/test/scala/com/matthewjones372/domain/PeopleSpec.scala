@@ -1,6 +1,5 @@
 package com.matthewjones372.domain
 
-import zio.schema.codec.DecodeError
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 import zio.test.*
 

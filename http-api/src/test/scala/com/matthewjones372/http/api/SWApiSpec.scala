@@ -8,7 +8,6 @@ import zio.http.*
 import zio.http.netty.NettyConfig
 import zio.http.netty.server.NettyDriver
 import zio.test.*
-import zio.test.Assertion.*
 
 object SWApiSpec extends ZIOSpecDefault:
   def spec = suite("SWApiSpec")(

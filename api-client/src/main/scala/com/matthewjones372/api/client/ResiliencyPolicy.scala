@@ -2,7 +2,6 @@ package com.matthewjones372.api.client
 
 import nl.vroste.rezilience.{Policy, Retry}
 import zio.*
-import ClientError.*
 import com.matthewjones372.api.client.ClientError.UnexpectedSeverError
 
 object ResiliencyPolicy:

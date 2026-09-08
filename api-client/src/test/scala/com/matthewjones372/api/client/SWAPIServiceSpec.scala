@@ -82,13 +82,13 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
       },
       test("returns the correct error when poorly formatted json is returned") {
         (for
-          _   <- TestClient.addRequestResponse(personRequest, response = Response.text("BAD JSON"))
-          f1  <- SWAPIClientService.getFilmsFromPerson(1).fork
-          _   <- TestClock.adjust(5.seconds)
-          res <- f1.join
+          _  <- TestClient.addRequestResponse(personRequest, response = Response.text("BAD JSON"))
+          f1 <- SWAPIClientService.getFilmsFromPerson(1).fork
+          _  <- TestClock.adjust(5.seconds)
+          _  <- f1.join
         yield assertCompletes)
       } @@ TestAspect.failing[ClientError] {
-        case e @ TestFailure
+        case TestFailure
               .Runtime(Cause.Fail(ClientError.ResponseDeserializationError("Error decoding response"), _), _) =>
           true
         case _ =>
@@ -116,7 +116,7 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
           for
             state         <- Ref.make(0)
             _             <- addCallWithClientError(state)
-            f1            <- SWAPIClientService.getFilmsFromPerson(1).fork
+            _             <- SWAPIClientService.getFilmsFromPerson(1).fork
             _             <- TestClock.adjust(10.seconds)
             numberOfCalls <- state.get
           yield assertTrue(numberOfCalls == 1) // There should only be one call

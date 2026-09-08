@@ -11,14 +11,19 @@ is not a failure anybody wants in a test run they did not ask for.
 
 ```sh
 # once, in a checkout of the kestrel repo
-./gradlew :kestrel-scala:publishToMavenLocal :kestrel-zio-test:publishToMavenLocal
+./gradlew :kestrel-scala:publishToMavenLocal :kestrel-zio-test:publishToMavenLocal \
+  :kestrel-report-html:publishToMavenLocal :kestrel-report-github:publishToMavenLocal
 
 # here
-sbt "load-test/writeClasspath"
-load-test/sweep.sh
+load-test/sweep.sh          # the rate ladder, twice
+load-test/profile.sh 6000   # JFR on the server at one rate
 ```
 
-`sweep.sh` writes a markdown table per variant into `load-test/target/`.
+Both scripts refresh the classpath themselves before running.
+
+Into `load-test/target/` each writes the comparison table, a self-contained HTML
+report per rung, and one markdown file. On GitHub Actions each rung's table is
+also appended to the job summary; off Actions that call writes nothing.
 
 ## Test 0 — where the wall is, and whose it is
 
@@ -54,8 +59,9 @@ it sits on the path every response takes — which is what it is for while a hum
 is reading the log, and a cost a measurement has to be able to subtract. The
 delta between the two tables is what that middleware costs.
 
-`SWHttpServer.default` keeps it, as it always did. `SWHttpServer
-.withRequestLogging(false)` is what the quiet half of the sweep runs.
+`SWHttpServer.default` no longer carries it — that is what this measurement
+changed. `withRequestLogging(true)` puts it back for a human reading the log,
+and is what the noisy half of the sweep runs.
 
 ## What these numbers are not
 

@@ -45,7 +45,7 @@ object SWDataRepo:
       .fromEither(parseEntityId(url))
       .mapError(message => DataRepoError.UnexpectedError(message, new IllegalArgumentException(message)))
 
-  def layer: RLayer[Any, SWDataRepo] = ZLayer.fromZIO {
+  private[data] def bundledEntities: Task[(List[People], List[Film])] =
     for
       _          <- ZIO.logInfo("Reading in Star Wars Data")
       peopleJson <- readResource("people_data.json")
@@ -53,8 +53,10 @@ object SWDataRepo:
       people     <- decode[People](peopleJson, "people")
       films      <- decode[Film](filmJson, "films")
       _          <- ZIO.logInfo(s"Parsed ${people.size} people and ${films.size} films")
-      repo       <- fromEntities(people, films)
-    yield repo
+    yield (people, films)
+
+  def layer: RLayer[Any, SWDataRepo] = ZLayer.fromZIO {
+    bundledEntities.flatMap { case (people, films) => fromEntities(people, films) }
   }
 
   private def readResource(name: String): Task[String] =

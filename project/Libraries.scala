@@ -58,6 +58,8 @@ object Libraries {
       Dependencies.magnum,
       Dependencies.postgres,
       Dependencies.hikari,
+      Dependencies.flyway,
+      Dependencies.flywayPostgres,
       Dependencies.testContainersPostgres
     )
   )

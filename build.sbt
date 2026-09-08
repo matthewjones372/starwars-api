@@ -140,7 +140,10 @@ lazy val loadTest = Projects
       // turns a classpath into paths another JVM can be started with.
       val converter = fileConverter.value
       val entries   = (Runtime / fullClasspath).value.map(entry => converter.toPath(entry.data))
-      val out       = target.value / "load-test-cp.txt"
+      // Under the module rather than sbt 2's out/ tree, so sweep.sh has a
+      // fixed path to read and does not have to know the scala version.
+      val out       = baseDirectory.value / "target" / "load-test-cp.txt"
+      IO.createDirectory(out.getParentFile)
       IO.write(out, entries.mkString(java.io.File.pathSeparator))
       streams.value.log.info(s"wrote $out")
     }

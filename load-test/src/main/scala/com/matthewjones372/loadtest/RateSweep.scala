@@ -5,7 +5,6 @@ import io.github.matthewjones372.kestrel.ConcurrencyKt
 import io.github.matthewjones372.kestrel.OfferedKt
 import io.github.matthewjones372.kestrel.RunResult
 import io.github.matthewjones372.kestrel.RunResultKt
-import io.github.matthewjones372.kestrel.StepName
 import io.github.matthewjones372.kestrel.java.Simulations
 import io.github.matthewjones372.kestrel.scala.apply
 import io.github.matthewjones372.kestrel.scala.exec
@@ -42,9 +41,9 @@ object RateSweep extends ZIOAppDefault:
 
   private[loadtest] val person = step("GET /people/{id}")
 
-  private val ladder = List(100, 250, 500, 1000, 1500, 2000, 3000)
+  private val ladder = List(1000, 2000, 4000, 6000, 8000, 12000, 16000)
 
-  private val perRung = FiniteDuration(15, TimeUnit.SECONDS)
+  private val perRung = FiniteDuration(20, TimeUnit.SECONDS)
 
   def run =
     for
@@ -57,10 +56,18 @@ object RateSweep extends ZIOAppDefault:
       _      <- Console.printLine(table(rows))
     yield ()
 
-  /** Discarded: the opening seconds of a JVM measure the interpreter. */
+  /**
+   * Discarded, and long on purpose.
+   *
+   * A first pass at this warmed for ten seconds at 200 a second and the ladder
+   * that followed reported service time *falling* as the rate climbed, by a
+   * factor of three from end to end — a JVM still compiling, read as a server
+   * getting faster under load. Sixty thousand requests is past the thresholds
+   * that were still being crossed inside the measurement.
+   */
   private def warmUp(baseUrl: String) =
-    Console.printLine("warming up (discarded)") *>
-      kestrel.run(Simulations.at(lookups(baseUrl), 200.perSecond, FiniteDuration(10, TimeUnit.SECONDS))).unit
+    Console.printLine("warming up 60s (discarded)") *>
+      kestrel.run(Simulations.at(lookups(baseUrl), 1000.perSecond, FiniteDuration(60, TimeUnit.SECONDS))).unit
 
   private def lookups(baseUrl: String) =
     val api = http.baseUrl(baseUrl)

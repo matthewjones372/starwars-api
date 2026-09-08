@@ -3,26 +3,26 @@ package com.matthewjones372.data.sql
 import com.augustnagro.magnum.*
 import com.matthewjones372.data.{DataRepoError, SWDataRepo}
 import com.matthewjones372.domain.*
-import com.matthewjones372.sorting.{FieldOrdering, SortBy}
+import com.matthewjones372.sorting.{DynamicMultiSorter, FieldOrdering, SortBy}
 import zio.*
 
 object SqlDataRepo:
   private val defaultPageSize = 10
 
-  // sortBy arrives from the query string and an order by clause cannot be parameterised,
-  // so only names appearing here ever reach the SQL.
-  private[sql] val sortableColumns = Map(
-    "name"      -> "name",
-    "height"    -> "height",
-    "mass"      -> "mass",
-    "hairColor" -> "hair_color",
-    "skinColor" -> "skin_color",
-    "eyeColor"  -> "eye_color",
-    "birthYear" -> "birth_year",
-    "gender"    -> "gender",
-    "homeworld" -> "homeworld",
-    "url"       -> "url"
-  )
+  // The url sets live in child tables, so they can be sorted in memory but never named in an order by.
+  private val nonSortableFields = Set("films", "species", "vehicles", "starships")
+
+  private[sql] def toColumn(field: String): String =
+    field.flatMap(character => if character.isUpper then s"_${character.toLower}" else character.toString)
+
+  // sortBy arrives from the query string and an order by clause cannot be parameterised, so the
+  // accepted keys are derived from the case class rather than written out and left to drift.
+  private[sql] val sortableColumns: Map[String, String] =
+    DynamicMultiSorter
+      .fieldNames[Character]
+      .filterNot(nonSortableFields)
+      .map(field => field -> toColumn(field))
+      .toMap
 
   private[sql] def orderByClause(sortBy: Option[List[SortBy]]): String =
     val clauses = sortBy.getOrElse(Nil).flatMap { sort =>

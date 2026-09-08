@@ -68,6 +68,20 @@ object DynamicMultiSorterSpec extends ZIOSpecDefault:
       val sorts = List(SortBy("tags", FieldOrdering.ASC), SortBy("name", FieldOrdering.ASC))
       assertTrue(DynamicMultiSorter.sort(items, sorts).map(_.name) == List("a", "b"))
     },
+    test("reports the fields it can sort on, in declaration order") {
+      assertTrue(
+        DynamicMultiSorter.fieldNames[MultipleFields] == List("name", "age"),
+        DynamicMultiSorter.fieldNames[SimpleCaseClass] == List("name")
+      )
+    },
+    test("validate keeps known fields and drops the rest") {
+      val sorts = List(SortBy("age", FieldOrdering.ASC), SortBy("nonsense", FieldOrdering.DESC))
+
+      assertTrue(
+        DynamicMultiSorter.validate[MultipleFields](sorts) == List(SortBy("age", FieldOrdering.ASC)),
+        DynamicMultiSorter.validate[MultipleFields](Nil).isEmpty
+      )
+    },
     test("returns the list  in order when given no sorts") {
       assertTrue(
         DynamicMultiSorter.sort(

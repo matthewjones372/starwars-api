@@ -53,6 +53,35 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
             "order by height desc, id asc"
         )
       },
+      test("every derived sort column exists in the people table") {
+        val ddl         = scala.io.Source.fromResource("db/migration/V1__initial_schema.sql").mkString
+        val peopleTable = ddl.split("create table").find(_.trim.startsWith("people (")).getOrElse("")
+        val columns     = "(?m)^\\s+([a-z_]+)\\s+(integer|text)".r.findAllMatchIn(peopleTable).map(_.group(1)).toSet
+
+        assertTrue(
+          columns.nonEmpty,
+          SqlDataRepo.sortableColumns.values.forall(columns.contains)
+        )
+      },
+      test("derives its keys from the character fields, leaving out the url sets") {
+        assertTrue(
+          SqlDataRepo.sortableColumns.keySet ==
+            Set(
+              "name",
+              "height",
+              "mass",
+              "hairColor",
+              "skinColor",
+              "eyeColor",
+              "birthYear",
+              "gender",
+              "homeworld",
+              "url"
+            ),
+          SqlDataRepo.toColumn("hairColor") == "hair_color",
+          SqlDataRepo.toColumn("name") == "name"
+        )
+      },
       test("drops sort keys that are not columns, including injection attempts") {
         val injection = Some(List(SortBy("name; drop table people --", FieldOrdering.ASC)))
 

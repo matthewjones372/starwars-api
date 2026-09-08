@@ -41,18 +41,21 @@ object RateSweep extends ZIOAppDefault:
 
   private[loadtest] val person = step("GET /people/{id}")
 
-  private val ladder = List(1000, 2000, 4000, 6000, 8000, 12000, 16000)
+  private val defaultLadder = List(1000, 2000, 4000, 6000, 8000, 12000, 16000)
 
-  private val perRung = FiniteDuration(20, TimeUnit.SECONDS)
+  private val defaultRung = 20
 
   def run =
     for
       args   <- getArgs
       baseUrl = args.headOption.getOrElse("http://localhost:8080")
       label   = args.lift(1).getOrElse("run")
+      ladder  = args.lift(2).map(_.split(",").toList.flatMap(_.trim.toIntOption)).filter(_.nonEmpty)
+                  .getOrElse(defaultLadder)
+      perRung = FiniteDuration(args.lift(3).flatMap(_.toIntOption).getOrElse(defaultRung), TimeUnit.SECONDS)
       _      <- Console.printLine(s"# $label — $baseUrl, ${perRung.toSeconds}s a rung")
       _      <- warmUp(baseUrl)
-      rows   <- ZIO.foreach(ladder)(rate => measure(baseUrl, rate))
+      rows   <- ZIO.foreach(ladder)(rate => measure(baseUrl, rate, perRung))
       _      <- Console.printLine(table(rows))
     yield ()
 
@@ -73,7 +76,7 @@ object RateSweep extends ZIOAppDefault:
     val api = http.baseUrl(baseUrl)
     scenario("person by id")(exec(person, api.get("/people/1").expecting(200)))
 
-  private def measure(baseUrl: String, rate: Int) =
+  private def measure(baseUrl: String, rate: Int, perRung: FiniteDuration) =
     for
       _      <- Console.printLine(s"  rung $rate/s ...")
       result <- kestrel.run(Simulations.at(lookups(baseUrl), rate.perSecond, perRung))

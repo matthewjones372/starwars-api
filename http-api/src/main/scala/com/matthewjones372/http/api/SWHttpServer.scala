@@ -19,16 +19,19 @@ trait SWHttpServer:
   def start: URIO[Server, Nothing]
 
 object SWHttpServer:
-  def default = withRequestLogging(true)
-
   /**
-   * The same server with `Middleware.debug` left off.
+   * Without `Middleware.debug`, which used to be on this route stack.
    *
-   * The debug middleware logs a line per request, so it sits on the path every
-   * response takes. That is what it is for while a human is reading the log,
-   * and it is a cost a measurement has to be able to subtract: a load test that
-   * cannot turn it off reports the logger's latency as the API's.
+   * It logs a line per request, so it sat on the path every response takes.
+   * Measured, that was three times this API's capacity: the knee moved from
+   * between 2,000 and 4,000 requests a second to between 8,000 and 12,000, and
+   * at 4,000 the same handler answered in 774us without it against 25,559us
+   * with it. See `load-test/FINDINGS.md`.
+   *
+   * `withRequestLogging(true)` puts it back for a human who is reading the log.
    */
+  def default = withRequestLogging(false)
+
   def withRequestLogging(enabled: Boolean) =
     (for
       dataRepo <- ZIO.service[SWDataRepo]
@@ -39,7 +42,7 @@ object SWHttpServer:
     for
       dataRepo <- ZIO.service[SWDataRepo]
       graph    <- characterGraph(dataRepo).memoize
-    yield SWHttpServerImpl(dataRepo, graph, true)
+    yield SWHttpServerImpl(dataRepo, graph, false)
   }
 
   // Characters are joined by the films they share, so film urls resolve to titles for the edge labels.

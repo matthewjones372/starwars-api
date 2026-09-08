@@ -1,6 +1,5 @@
 package com.matthewjones372.sorting
 
-import scala.annotation.nowarn
 import scala.compiletime.*
 import scala.deriving.*
 
@@ -18,6 +17,11 @@ object DynamicMultiSorter:
     sorter.sort(input, by)
 
   inline def derived[A <: Product](using A: Mirror.ProductOf[A]): DynamicMultiSorter[A] =
+    import scala.math.Ordering.Implicits.seqOrdering
+
+    // Sets have no intrinsic order, so compare their sorted contents rather than iteration order.
+    given setOrdering[B: Ordering]: Ordering[Set[B]] = Ordering.by(_.toSeq.sorted)
+
     val orders         = summonAll[Tuple.Map[A.MirroredElemTypes, Ordering]]
     val fieldNames     = constValueTuple[A.MirroredElemLabels].toList.asInstanceOf[List[String]]
     val vectorOfOrders = orders.toList.asInstanceOf[List[Ordering[Any]]].zipWithIndex

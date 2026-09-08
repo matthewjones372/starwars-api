@@ -27,9 +27,9 @@ object SWHttpServer:
   inline private def fieldNames[A <: Product](using A: Mirror.ProductOf[A]): List[String] =
     constValueTuple[A.MirroredElemLabels].toList.asInstanceOf[List[String]]
 
-  private def fieldDocString[T <: Product] =
+  inline private def fieldDocString[A <: Product](using Mirror.ProductOf[A]) =
     Doc.p(
-      s"Fields: ${fieldNames[People].mkString(",")}"
+      s"Fields: ${fieldNames[A].mkString(",")}"
     )
 
   val getPersonEndpoint =
@@ -112,8 +112,7 @@ private final case class SWHttpServerImpl(private val dataRepo: SWDataRepo) exte
       case err =>
         ZIO.fail(UnexpectedError(err.getMessage))
     }
-
-  }
+  }.sandbox
 
   private def getFilmsHandler = SWHttpServer.getFilmsEndpoint.implement { page =>
     dataRepo.getFilms(page, Some(10)).catchAll { err =>

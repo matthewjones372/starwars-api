@@ -6,6 +6,7 @@ import zio.test.Assertion.*
 object DynamicMultiSorterSpec extends ZIOSpecDefault:
   case class SimpleCaseClass(name: String) derives DynamicMultiSorter
   case class MultipleFields(name: String, age: Int) derives DynamicMultiSorter
+  case class WithSetField(name: String, tags: Set[String]) derives DynamicMultiSorter
 
   def spec = suite("Dynamic sorter")(
     test("can generate a sorter for a simple case class") {
@@ -56,6 +57,16 @@ object DynamicMultiSorterSpec extends ZIOSpecDefault:
       val simpleCases = List(SimpleCaseClass("Z"), SimpleCaseClass("B"), SimpleCaseClass("A"), SimpleCaseClass("D"))
       val sorts       = List(SortBy("non-class name blah bla", FieldOrdering.ASC))
       assertTrue(DynamicMultiSorter.sort(simpleCases, sorts) == simpleCases)
+    },
+    test("orders a set field by its sorted contents") {
+      val items = List(WithSetField("z", Set("b")), WithSetField("y", Set("a")), WithSetField("x", Set("c")))
+      val sorts = List(SortBy("tags", FieldOrdering.ASC))
+      assertTrue(DynamicMultiSorter.sort(items, sorts).map(_.name) == List("y", "z", "x"))
+    },
+    test("treats sets holding the same elements as equal whatever order they were built in") {
+      val items = List(WithSetField("b", Set("q", "p")), WithSetField("a", Set("p", "q")))
+      val sorts = List(SortBy("tags", FieldOrdering.ASC), SortBy("name", FieldOrdering.ASC))
+      assertTrue(DynamicMultiSorter.sort(items, sorts).map(_.name) == List("a", "b"))
     },
     test("returns the list  in order when given no sorts") {
       assertTrue(

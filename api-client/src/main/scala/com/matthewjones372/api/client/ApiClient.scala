@@ -52,35 +52,23 @@ object ApiClient:
   private final class CachingApiClient(
     cache: Cache[CacheKey, ClientError, CacheEntities]
   ) extends ApiClient:
+    private def getAs[A](key: CacheKey)(entity: PartialFunction[CacheEntities, A]): IO[ClientError, A] =
+      cache.get(key).flatMap(value => ZIO.fromOption(entity.lift(value)).orElseFail(UnreachableError))
+
     override def getFilmFromUrl(url: URL): IO[ClientError, Film] =
-      cache.get(CacheKey.FilmUrl(url)).map {
-        case film: Film => film
-        case _          => throw UnreachableError
-      }
+      getAs(CacheKey.FilmUrl(url)) { case film: Film => film }
 
     override def getFilmFrom(id: Int): IO[ClientError, Film] =
-      cache.get(CacheKey.FilmId(id)).map {
-        case film: Film => film
-        case _          => throw UnreachableError
-      }
+      getAs(CacheKey.FilmId(id)) { case film: Film => film }
 
     override def getPersonFrom(id: Int): IO[ClientError, People] =
-      cache.get(CacheKey.PersonId(id)).map {
-        case people: People => people
-        case _              => throw UnreachableError
-      }
+      getAs(CacheKey.PersonId(id)) { case people: People => people }
 
     override def getPeople: IO[ClientError, Set[People]] =
-      cache.get(CacheKey.People).map {
-        case PeopleSet(people) => people
-        case _                 => throw UnreachableError
-      }
+      getAs(CacheKey.People) { case PeopleSet(people) => people }
 
     override def getFilms: IO[ClientError, Set[Film]] =
-      cache.get(CacheKey.Films).map {
-        case FilmSet(films) => films
-        case _              => throw UnreachableError
-      }
+      getAs(CacheKey.Films) { case FilmSet(films) => films }
 
   def live: RLayer[SWAPIEnv, ApiClient] =
     ZLayer.fromZIO {

@@ -11,6 +11,10 @@ final case class HttpClientConfig(
 
 object HttpClientConfig:
   val config: Config[HttpClientConfig] =
-    (Config.uri("baseUrl").map(uri => URL.fromURI(uri).get) zip Config.int("cacheSize"))
+    (Config
+      .uri("baseUrl")
+      .mapOrFail(uri =>
+        URL.fromURI(uri).toRight(Config.Error.InvalidData(message = s"'$uri' is not a valid base url"))
+      ) zip Config.int("cacheSize"))
       .to[HttpClientConfig]
       .nested("clientConfig")

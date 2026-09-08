@@ -135,3 +135,63 @@ resources they point at.
 hot path to optimise; the cost is zio-schema, zio-json and the encoder beneath
 them. The remaining choices are architectural — pre-encoded bytes, a smaller
 payload, or accepting ~6,000/s as what this stack costs on four shared cores.
+
+# JVM flags: a negative result
+
+`load-test/jvm-sweep.sh` runs the same ladder against four server JVMs: stock,
+`-Xms2g -Xmx2g -XX:+AlwaysPreTouch`, that plus `-XX:+UseParallelGC`, and that
+plus `-XX:+UseZGC`. It was run twice.
+
+Service time p50 at 8,000 a second:
+
+| variant | run 1 | run 2 |
+|---|---:|---:|
+| stock | 157,286us | 1,720us |
+| fixed heap | 5,964us | 5,734us |
+| ParallelGC | 2,327us | 2,540us |
+| ZGC | 3,424us | 8,651us, and 6,855 failures |
+
+Run 1 says the stock JVM collapses and ZGC holds the best tail. Run 2 says the
+stock JVM is the fastest of the four and ZGC is the one that falls over. The
+ordering does not survive a repeat, so neither run is a result. The first
+reading of this — a 26x win from sizing the heap — was an artifact of one bad
+stock run and is withdrawn.
+
+**8,000 a second was the wrong place to measure.** It is the knee, and a queue
+at saturation is bistable: it drains or it grows without bound, and very little
+decides which. Comparing configurations at the one rate where the system is
+least stable measures the coin flip.
+
+Below the knee it is well behaved, and there the four are the same:
+
+| variant | run 1 | run 2 |
+|---|---:|---:|
+| stock | 737us | 614us |
+| fixed heap | 647us | 668us |
+| ParallelGC | 561us | 598us |
+| ZGC | 696us | 655us |
+
+Every configuration lands in 561-737us, and the gaps between them are no larger
+than the stock JVM's own spread between its two runs. Two samples cannot
+separate them.
+
+## Why this was predictable
+
+The profile above says three quarters of the on-CPU samples are UTF-8 encoding
+and zio-schema turning a `Character` into bytes. Heap and collector settings
+change pause behaviour and allocation headroom; they do not change how much CPU
+it takes to encode a string. There was no mechanism by which these flags could
+have moved the number that matters, and the measurement agrees.
+
+ParallelGC was the lowest at 4,000 in both runs, and it and the fixed heap were
+the only two that never had a catastrophic run. That is worth a default of
+`-Xms2g -Xmx2g -XX:+AlwaysPreTouch -XX:+UseParallelGC` on stability grounds, and
+it is not a measured claim. ZGC is worth avoiding on this evidence: it is the
+only variant that dropped requests.
+
+## What a real answer would need
+
+Measure below the knee, five or more repetitions a variant, interleaved rather
+than one variant at a time, comparing distributions rather than points — and
+with the generator on another machine, since it is competing for these four
+cores and is a large part of why the knee is so unstable.

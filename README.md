@@ -56,8 +56,8 @@ Paged responses carry the total alongside the current page:
 ```
 
 `height` and `mass` are carried as strings. Values recorded as `unknown`
-upstream decode to an absent value rather than failing, and serialise back as
-an empty string.
+upstream are absent from the response rather than reported as a number or an
+empty string.
 
 ## Sorting
 
@@ -184,7 +184,8 @@ not a known field never reaches the query.
 
 ## Building
 
-Requires JDK 25.
+Requires JDK 25. The Postgres tests start a container, so `sbt test` needs a
+running Docker daemon.
 
 ```sh
 sbt compile

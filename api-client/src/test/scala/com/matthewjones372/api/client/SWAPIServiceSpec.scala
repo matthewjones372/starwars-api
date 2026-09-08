@@ -137,10 +137,11 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
           for
             state         <- Ref.make(0)
             _             <- addCallWithClientError(state)
-            _             <- SWAPIClientService.getFilmsFromCharacter(1).fork
+            request       <- SWAPIClientService.getFilmsFromCharacter(1).exit.fork
             _             <- TestClock.adjust(10.seconds)
+            result        <- request.join
             numberOfCalls <- state.get
-          yield assertTrue(numberOfCalls == 1) // There should only be one call
+          yield assertTrue(result.isFailure, numberOfCalls == 1) // There should only be one call
         }
       )
     ),

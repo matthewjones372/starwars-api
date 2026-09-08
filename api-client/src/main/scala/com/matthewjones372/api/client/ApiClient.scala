@@ -144,7 +144,7 @@ object ApiClient:
     private def get[A: BinaryCodec](url: URL) =
       ResiliencyPolicy.run {
         (for
-          response <- client.request(Request.get(url))
+          response <- client.batched(Request.get(url))
           result   <- response.bodyOrClientError(url)
         yield result).catchAll {
           case err: UnexpectedSeverError =>

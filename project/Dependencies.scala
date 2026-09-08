@@ -2,8 +2,8 @@ import sbt._
 
 object Dependencies {
   private val zioV        = "2.1.26"
-  private val zioHttpV    = "3.0.0-RC9"
-  private val zioSchemaV  = "1.3.0"
+  private val zioHttpV    = "3.11.4"
+  private val zioSchemaV  = "1.8.6"
   private val zioCacheV   = "0.2.8"
   private val stubbyV     = "0.1.5"
   private val resilienceV = "0.10.5"

@@ -62,14 +62,12 @@ object SWHttpServer:
 
   val getCharactersEndpoint =
     (Endpoint(Method.GET / "people") ?? Doc.p("Get a list of  all people response is paged"))
-      .query(QueryCodec.queryInt("page").optional)
+      .query(QueryCodec.query[Int]("page").optional)
       .query(
         QueryCodec
-          .query("sortBy")
-          .optional
-          .examples(List(("example1", Some("name:ASC")), ("example2", Some("name:ASC,height:DESC")))) ?? fieldDocString[
-          Character
-        ]
+          .query[String]("sortBy")
+          .examples(List("example1" -> "name:ASC", "example2" -> "name:ASC,height:DESC"))
+          .optional ?? fieldDocString[Character]
       )
       .out[Characters]
       .outErrors[SWAPIServerError](
@@ -79,7 +77,7 @@ object SWHttpServer:
 
   val getFilmsEndpoint =
     Endpoint(Method.GET / "films")
-      .query(QueryCodec.queryInt("page").optional)
+      .query(QueryCodec.query[Int]("page").optional)
       .out[Films]
       .outErrors[SWAPIServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),

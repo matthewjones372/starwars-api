@@ -24,9 +24,6 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
       test("maps every person to the films they appear in") {
         for
           _ <- TestClient.addRequestResponse(personPagedRequest, response = pagedPersonResponse)
-          _ <- ZIO.foreachDiscard(1 to 2) { page =>
-                 TestClient.addRequestResponse(personPagedUrlWith(page), response = pagedPersonResponse)
-               }
           // each person in the paged fixture points at their own film url
           _ <- ZIO.foreachDiscard(1 to 12) { person =>
                  TestClient.addRequestResponse(
@@ -34,26 +31,18 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
                    response = film1Response
                  )
                }
-          f1  <- SWAPIClientService.getFilmsFromCharacters.fork
-          _   <- TestClock.adjust(5.seconds)
-          res <- f1.join
+          res <- SWAPIClientService.getFilmsFromCharacters
         yield assertTrue(
           res.size == 12,
           res.values.forall(_ == Set("The Empire Strikes Back"))
         )
-      },
+      } @@ TestAspect.withLiveClock,
       test("can resolve all people from a paged response") {
         for
-          _ <- TestClient.addRequestResponse(personPagedRequest, response = pagedPersonResponse)
-          _ <- ZIO.foreachDiscard(1 to 2) { page =>
-                 for _ <- TestClient.addRequestResponse(personPagedUrlWith(page), response = pagedPersonResponse)
-                 yield ()
-               }
-          f1  <- SWAPIClientService.getCharacters.fork
-          _   <- TestClock.adjust(5.seconds)
-          res <- f1.join
+          _   <- TestClient.addRequestResponse(personPagedRequest, response = pagedPersonResponse)
+          res <- SWAPIClientService.getCharacters
         yield assertTrue(res.size == 12)
-      },
+      } @@ TestAspect.withLiveClock,
       test("returns the correct error when failing to get paged responses") {
         val expectedFailure = ClientError.FailedToGetPagedResponse
         for
@@ -65,16 +54,10 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
       },
       test("Can get all films from a paged response") {
         for
-          _ <- TestClient.addRequestResponse(filmPagedRequest, response = pagedFilmResponse)
-          _ <- ZIO.foreachDiscard(1 to 2) { page =>
-                 for _ <- TestClient.addRequestResponse(filmPagedUrlWith(page), response = pagedPersonResponse)
-                 yield ()
-               }
-          f1  <- SWAPIClientService.getFilms.fork
-          _   <- TestClock.adjust(5.seconds)
-          res <- f1.join
+          _   <- TestClient.addRequestResponse(filmPagedRequest, response = pagedFilmResponse)
+          res <- SWAPIClientService.getFilms
         yield assertTrue(res.size == 12)
-      }
+      } @@ TestAspect.withLiveClock
     ),
     suite("API Error Behavior")(
       test("returns the correct error when an entity is not found") {

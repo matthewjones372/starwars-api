@@ -1,11 +1,11 @@
-import sbt._
-import Keys._
+import sbt.*
+import Keys.*
 
 object Libraries {
   lazy val zio = Seq(
     libraryDependencies ++= Seq(
       Dependencies.zio,
-      Dependencies.zioConcurrent
+      Dependencies.zioPrelude
     )
   )
 
@@ -51,6 +51,17 @@ object Libraries {
       Dependencies.zioLoggingSl4j,
       Dependencies.sl4jApi,
       Dependencies.sl4jSimple
+    )
+  )
+
+  lazy val sql = Seq(
+    libraryDependencies ++= Seq(
+      Dependencies.magnum,
+      Dependencies.postgres,
+      Dependencies.hikari,
+      Dependencies.flyway,
+      Dependencies.flywayPostgres,
+      Dependencies.testContainersPostgres
     )
   )
 

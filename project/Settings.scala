@@ -7,7 +7,8 @@ object Projects {
   def create(name: String, fileName: String): Project =
     Project(name, base = file(fileName))
       .settings(
-        Compile / javacOptions ++= Seq("-source", "21", "release", "17")
+        Compile / javacOptions ++= Seq("-release", "25"),
+        scalacOptions ++= Seq("-java-output-version", "25")
       )
       .settings(
         Test / fork := true,

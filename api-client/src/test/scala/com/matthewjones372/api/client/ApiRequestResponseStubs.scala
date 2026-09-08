@@ -42,7 +42,7 @@ object ApiRequestResponseStubs:
   val filmPagedRequest   = Request.get(URL.decode(filmPagedUrl).addJsonQueryParam.unsafeGet)
 
   val person =
-    People(
+    Character(
       "C-3PO",
       Some(167),
       Some(75),
@@ -59,7 +59,7 @@ object ApiRequestResponseStubs:
       ""
     )
 
-  def personWithDiff(name: Int): People =
+  def personWithDiff(name: Int): Character =
     person.copy(name = name.toString, films = Set(s"http://localhost/$name"))
 
   def filmWithDiff(title: String): Film =
@@ -89,7 +89,7 @@ object ApiRequestResponseStubs:
   )
 
   val pagedPersonJson =
-    Peoples(
+    Characters(
       11,
       results = List(
         personWithDiff(1),
@@ -109,7 +109,7 @@ object ApiRequestResponseStubs:
 
   lazy val pagedPersonResponse = Response(
     status = Status.Ok,
-    body = Body.from[Peoples](pagedPersonJson)
+    body = Body.from[Characters](pagedPersonJson)
   )
 
   lazy val personResponse = Response(
@@ -207,7 +207,7 @@ object ApiRequestResponseStubs:
   }
 
   def addCallWithClientError(state: Ref[Int]) =
-    TestClient.addRoute(SWHttpServer.getPersonEndpoint.route -> handler {
+    TestClient.addRoute(SWHttpServer.getCharacterEndpoint.route -> handler {
       state.getAndUpdate(_ + 1).as {
         Response.status(Status.Unauthorized)
       }

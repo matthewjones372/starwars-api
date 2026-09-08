@@ -2,7 +2,6 @@ package com.matthewjones372.search
 
 import zio.Chunk
 import zio.test.*
-import zio.test.Assertion.*
 
 object PathSpec extends ZIOSpecDefault:
   def spec = suite("PathSpec")(

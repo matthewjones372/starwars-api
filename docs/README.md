@@ -76,16 +76,14 @@ curl -i 'http://localhost:8080/people/0'        # 400
 The assertion is checked at compile time for literals and returns an `Either`
 for values read at runtime:
 
-```scala
+```scala mdoc
 import com.matthewjones372.domain.{EntityId, PageNumber, PageSize}
 
 PageNumber.from(0)
-// res0: Either[String, Type] = Left("0 did not satisfy greaterThan(0)")
 ```
 
-```scala
+```scala mdoc
 (EntityId(1), PageNumber.first, PageSize.default)
-// res1: Tuple3[Type, Type, Type] = (1, 1, 10)
 ```
 
 `PageSize` is bounded at 100, so a single request cannot pull the whole table.
@@ -107,24 +105,14 @@ Unknown field names are ignored rather than rejected.
 The sorter behind this is a standalone module with no dependencies. Derive it
 for any case class and sort by field name at runtime:
 
-```scala
+```scala mdoc
 import com.matthewjones372.sorting.*
 
 case class Crew(name: String, age: Int) derives DynamicMultiSorter
 
 val crew = List(Crew("Boba", 32), Crew("Ackbar", 41), Crew("Boba", 12))
-// crew: List[Crew] = List(
-//   Crew(name = "Boba", age = 32),
-//   Crew(name = "Ackbar", age = 41),
-//   Crew(name = "Boba", age = 12)
-// )
 
 DynamicMultiSorter.sort(crew, List(SortBy("name", FieldOrdering.ASC), SortBy("age", FieldOrdering.DESC)))
-// res2: List[Crew] = List(
-//   Crew(name = "Ackbar", age = 41),
-//   Crew(name = "Boba", age = 32),
-//   Crew(name = "Boba", age = 12)
-// )
 ```
 
 Orderings are summoned at compile time from the case class fields, so a sort
@@ -153,7 +141,7 @@ films connects them.
 
 The same search is available directly:
 
-```scala
+```scala mdoc:silent
 import com.matthewjones372.search.SWGraph
 
 val graph = SWGraph(
@@ -165,9 +153,8 @@ val graph = SWGraph(
 )
 ```
 
-```scala
+```scala mdoc
 graph.distance("Lobot", "Boba Fett")
-// res3: Option[Int] = Some(2)
 ```
 
 `bfs` returns the chain itself rather than its length. Its `toString` renders
@@ -183,7 +170,7 @@ The graph is built once per server and reused across requests.
 The client wraps the same API with caching, retries and typed errors. Failures
 arrive as `ClientError` values rather than exceptions.
 
-```scala
+```scala mdoc:compile-only
 import com.matthewjones372.api.client.SWAPIClientService
 import zio.*, zio.http.*
 
@@ -212,7 +199,7 @@ Darth Maul and Greedo.
 The repository can be backed by Postgres instead of memory. Flyway applies the
 schema and the bundled data seeds it.
 
-```scala
+```scala mdoc:compile-only
 import com.matthewjones372.data.sql.*
 import com.matthewjones372.domain.{PageNumber, PageSize}
 import zio.*

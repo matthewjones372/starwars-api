@@ -1,9 +1,8 @@
 import sbtdynver.DynVerPlugin.autoImport.*
 
 ThisBuild / organization         := "com.matthewjones372"
-ThisBuild / name                 := "starwars-api"
-ThisBuild / organizationHomepage := Some(url("https://github.com/matthewjones372"))
-ThisBuild / scalaVersion         := "3.4.2"
+ThisBuild / organizationHomepage := Some(uri("https://github.com/matthewjones372"))
+ThisBuild / scalaVersion         := "3.8.4"
 
 ThisBuild / publishTo := {
   Some("GitHub Package Registry" at s"https://maven.pkg.github.com/matthewjones372/starwars-api")
@@ -16,8 +15,6 @@ ThisBuild / credentials += Credentials(
   sys.env.getOrElse("GITHUB_TOKEN", "")
 )
 
-publishMavenStyle := true
-
 dynverVTagPrefix                    := false // No v-prefix in the version tags
 ThisBuild / dynverSonatypeSnapshots := true
 
@@ -26,21 +23,30 @@ ThisBuild / publish / skip    := true
 ThisBuild / publishMavenStyle := true
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
+// sbt 2 can restore a compile from its cache without running it, but scoverage writes its
+// data directory as an undeclared side effect of that compile, so a restored compile leaves
+// the instrumented classes with nowhere to write. Holding the cache in memory keeps it
+// within a session, where target and the cache cannot disagree.
+Global / cacheStores := Seq(new sbt.util.InMemoryActionCacheStore)
+
 lazy val oneToOneClassMapping = "test->test;compile->compile"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "swapi"
+    name := "swapi",
+    // Entry points and the scraping script are executables rather than library code.
+    coverageExcludedPackages := "<empty>;scripts\\..*"
   )
   .enablePlugins(GenerateOpenApiTask)
   .dependsOn(
-    modules.map(_ % oneToOneClassMapping): _*
+    modules.map(_ % oneToOneClassMapping) *
   )
-  .aggregate(modules: _*)
+  .aggregate(modules *)
 
 lazy val domain = Projects
   .create("domain")
   .settings(
+    Libraries.zio,
     Libraries.zioSchema,
     Libraries.zioTest
   )
@@ -55,7 +61,8 @@ lazy val data = Projects
     Libraries.zioConfig,
     Libraries.zioLogging,
     Libraries.zioHttp,
-    Libraries.zioTest
+    Libraries.zioTest,
+    Libraries.sql
   )
   .dependsOn(
     domain % oneToOneClassMapping
@@ -72,7 +79,8 @@ lazy val `http-api` = Projects
   )
   .dependsOn(
     domain % oneToOneClassMapping,
-    data   % oneToOneClassMapping
+    data   % oneToOneClassMapping,
+    search % oneToOneClassMapping
   )
 
 lazy val dynamicSorting = Projects
@@ -107,5 +115,17 @@ lazy val search = Projects
   .dependsOn(
     domain % oneToOneClassMapping
   )
+
+lazy val docs = project
+  .in(file("mdoc-docs"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    publish / skip := true,
+    mdocIn         := file("docs/README.md"),
+    mdocOut        := file("README.md"),
+    // mdoc wraps each snippet in generated code that trips the unused-value warnings
+    scalacOptions ~= (_.filterNot(Set("-Werror", "-Xfatal-warnings")))
+  )
+  .dependsOn(domain, search, dynamicSorting, client, data)
 
 lazy val modules: Seq[ProjectReference] = Seq(domain, client, data, `http-api`, search, dynamicSorting)

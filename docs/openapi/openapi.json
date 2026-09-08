@@ -8,14 +8,11 @@
     "/films" : {
       "get" : {
         "parameters" : [
-          
-            {
+          {
             "name" : "page",
             "in" : "query",
-            "schema" : 
-              {
-              "type" : 
-                "integer",
+            "schema" : {
+              "type" : "integer",
               "format" : "int32"
             },
             "allowReserved" : false,
@@ -23,23 +20,19 @@
           }
         ],
         "responses" : {
-          "200" : 
-            {
+          "200" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
+                "schema" : {
                   "$ref" : "#/components/schemas/Films"
                 }
               }
             }
           },
-          "500" : 
-            {
+          "500" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
+                "schema" : {
                   "anyOf" : [
                     {
                       "$ref" : "#/components/schemas/UnexpectedError"
@@ -59,38 +52,31 @@
     "/films/{filmId}" : {
       "get" : {
         "parameters" : [
-          
-            {
+          {
             "name" : "filmId",
             "in" : "path",
             "required" : true,
-            "schema" : 
-              {
-              "type" : 
-                "integer",
+            "schema" : {
+              "type" : "integer",
               "format" : "int32"
             },
             "style" : "simple"
           }
         ],
         "responses" : {
-          "200" : 
-            {
+          "200" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
+                "schema" : {
                   "$ref" : "#/components/schemas/Film"
                 }
               }
             }
           },
-          "500" : 
-            {
+          "500" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
+                "schema" : {
                   "anyOf" : [
                     {
                       "$ref" : "#/components/schemas/UnexpectedError"
@@ -104,12 +90,10 @@
               }
             }
           },
-          "404" : 
-            {
+          "404" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
+                "schema" : {
                   "$ref" : "#/components/schemas/FilmNotFound"
                 }
               }
@@ -119,40 +103,53 @@
       }
     },
     "/people" : {
+      "description" : "Get a list of  all people response is paged\n\n",
       "get" : {
+        "description" : "Get a list of  all people response is paged\n\n",
         "parameters" : [
-          
-            {
+          {
             "name" : "page",
             "in" : "query",
-            "schema" : 
-              {
-              "type" : 
-                "integer",
+            "schema" : {
+              "type" : "integer",
               "format" : "int32"
+            },
+            "allowReserved" : false,
+            "style" : "form"
+          },
+          {
+            "name" : "sortBy",
+            "in" : "query",
+            "description" : "Fields: name,height,mass,hairColor,skinColor,eyeColor,birthYear,gender,homeworld,films,species,vehicles,starships,url\n\n",
+            "schema" : {
+              "type" : "string"
+            },
+            "examples" : {
+              "example1_sortBy" : {
+                "value" : "name:ASC"
+              },
+              "example2_sortBy" : {
+                "value" : "name:ASC,height:DESC"
+              }
             },
             "allowReserved" : false,
             "style" : "form"
           }
         ],
         "responses" : {
-          "200" : 
-            {
+          "200" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
-                  "$ref" : "#/components/schemas/Peoples"
+                "schema" : {
+                  "$ref" : "#/components/schemas/Characters"
                 }
               }
             }
           },
-          "500" : 
-            {
+          "500" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
+                "schema" : {
                   "anyOf" : [
                     {
                       "$ref" : "#/components/schemas/UnexpectedError"
@@ -169,41 +166,34 @@
         }
       }
     },
-    "/people/{personId}" : {
+    "/people/{characterId}" : {
       "get" : {
         "parameters" : [
-          
-            {
-            "name" : "personId",
+          {
+            "name" : "characterId",
             "in" : "path",
             "required" : true,
-            "schema" : 
-              {
-              "type" : 
-                "integer",
+            "schema" : {
+              "type" : "integer",
               "format" : "int32"
             },
             "style" : "simple"
           }
         ],
         "responses" : {
-          "200" : 
-            {
+          "200" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
-                  "$ref" : "#/components/schemas/People"
+                "schema" : {
+                  "$ref" : "#/components/schemas/Character"
                 }
               }
             }
           },
-          "500" : 
-            {
+          "500" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
+                "schema" : {
                   "anyOf" : [
                     {
                       "$ref" : "#/components/schemas/UnexpectedError"
@@ -217,13 +207,84 @@
               }
             }
           },
-          "404" : 
-            {
+          "404" : {
             "content" : {
               "application/json" : {
-                "schema" : 
-                  {
-                  "$ref" : "#/components/schemas/PersonNotFound"
+                "schema" : {
+                  "$ref" : "#/components/schemas/CharacterNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/people/{characterId}/path-to/{targetId}" : {
+      "description" : "The shortest chain of shared films connecting two characters\n\n",
+      "get" : {
+        "description" : "The shortest chain of shared films connecting two characters\n\n",
+        "parameters" : [
+          {
+            "name" : "characterId",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "style" : "simple"
+          },
+          {
+            "name" : "targetId",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShortestPath"
+                }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/UnexpectedError"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/ServerError"
+                    }
+                  ],
+                  "description" : ""
+                }
+              }
+            }
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/CharacterNotFound"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/PathNotFound"
+                    }
+                  ],
+                  "description" : ""
                 }
               }
             }
@@ -234,21 +295,126 @@
   },
   "components" : {
     "schemas" : {
-      "Films" : 
-        {
-        "type" : 
-          "object",
+      "Character" : {
+        "type" : "object",
+        "properties" : {
+          "eye_color" : {
+            "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          },
+          "homeworld" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "films" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true
+          },
+          "starships" : {
+            "type" : [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true
+          },
+          "skin_color" : {
+            "type" : "string"
+          },
+          "species" : {
+            "type" : [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true
+          },
+          "mass" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "hair_color" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "height" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          },
+          "vehicles" : {
+            "type" : [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true
+          },
+          "birth_year" : {
+            "type" : "string"
+          },
+          "gender" : {
+            "type" : [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required" : [
+          "name",
+          "hair_color",
+          "skin_color",
+          "eye_color",
+          "birth_year",
+          "films",
+          "url"
+        ]
+      },
+      "CharacterNotFound" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          },
+          "characterId" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [
+          "message",
+          "characterId"
+        ]
+      },
+      "Characters" : {
+        "type" : "object",
         "properties" : {
           "count" : {
-            "type" : 
-              "integer",
+            "type" : "integer",
             "format" : "int32"
           },
           "results" : {
-            "type" : 
-              "array",
+            "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/Film"
+              "$ref" : "#/components/schemas/Character"
             }
           }
         },
@@ -257,197 +423,71 @@
           "results"
         ]
       },
-      "People" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {
-          "eye_color" : {
-            "type" : 
-              "string"
-          },
-          "url" : {
-            "type" : 
-              "string"
-          },
-          "homeworld" : {
-            "type" : 
-              [
-              "string",
-              "null"
-            ]
-          },
-          "films" : {
-            "type" : 
-              "array",
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "starships" : {
-            "type" : 
-              [
-              "array",
-              "null"
-            ],
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "skin_color" : {
-            "type" : 
-              "string"
-          },
-          "species" : {
-            "type" : 
-              [
-              "array",
-              "null"
-            ],
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "mass" : {
-            "type" : 
-              "string"
-          },
-          "hair_color" : {
-            "type" : 
-              "string"
-          },
-          "name" : {
-            "type" : 
-              "string"
-          },
-          "height" : {
-            "type" : 
-              "string"
-          },
-          "vehicles" : {
-            "type" : 
-              [
-              "array",
-              "null"
-            ],
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "birth_year" : {
-            "type" : 
-              "string"
-          },
-          "gender" : {
-            "type" : 
-              [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "required" : [
-          "name",
-          "height",
-          "mass",
-          "hair_color",
-          "skin_color",
-          "eye_color",
-          "birth_year",
-          "gender",
-          "homeworld",
-          "films",
-          "species",
-          "vehicles",
-          "starships",
-          "url"
-        ]
-      },
-      "Film" : 
-        {
-        "type" : 
-          "object",
+      "Film" : {
+        "type" : "object",
         "properties" : {
           "species" : {
-            "type" : 
-              "array",
+            "type" : "array",
             "items" : {
-              "type" : 
-                "string"
-            }
+              "type" : "string"
+            },
+            "uniqueItems" : true
           },
           "url" : {
-            "type" : 
-              "string"
+            "type" : "string"
           },
           "episode_id" : {
-            "type" : 
-              "integer",
+            "type" : "integer",
             "format" : "int32"
           },
           "characters" : {
-            "type" : 
-              "array",
+            "type" : "array",
             "items" : {
-              "type" : 
-                "string"
-            }
+              "type" : "string"
+            },
+            "uniqueItems" : true
           },
           "opening_crawl" : {
-            "type" : 
-              "string"
+            "type" : "string"
           },
           "release_date" : {
-            "type" : 
-              "string"
+            "type" : "string"
           },
           "edited" : {
-            "type" : 
-              "string"
+            "type" : "string"
           },
           "title" : {
-            "type" : 
-              "string"
+            "type" : "string"
           },
           "planets" : {
-            "type" : 
-              "array",
+            "type" : "array",
             "items" : {
-              "type" : 
-                "string"
-            }
+              "type" : "string"
+            },
+            "uniqueItems" : true
           },
           "vehicles" : {
-            "type" : 
-              "array",
+            "type" : "array",
             "items" : {
-              "type" : 
-                "string"
-            }
+              "type" : "string"
+            },
+            "uniqueItems" : true
           },
           "director" : {
-            "type" : 
-              "string"
+            "type" : "string"
           },
           "starships" : {
-            "type" : 
-              "array",
+            "type" : "array",
             "items" : {
-              "type" : 
-                "string"
-            }
+              "type" : "string"
+            },
+            "uniqueItems" : true
           },
           "producer" : {
-            "type" : 
-              "string"
+            "type" : "string"
           },
           "created" : {
-            "type" : 
-              "string"
+            "type" : "string"
           }
         },
         "required" : [
@@ -467,67 +507,14 @@
           "url"
         ]
       },
-      "Peoples" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {
-          "count" : {
-            "type" : 
-              "integer",
-            "format" : "int32"
-          },
-          "results" : {
-            "type" : 
-              "array",
-            "items" : {
-              "$ref" : "#/components/schemas/People"
-            }
-          }
-        },
-        "required" : [
-          "count",
-          "results"
-        ]
-      },
-      "ServerError" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {}
-      },
-      "PersonNotFound" : 
-        {
-        "type" : 
-          "object",
+      "FilmNotFound" : {
+        "type" : "object",
         "properties" : {
           "message" : {
-            "type" : 
-              "string"
-          },
-          "personId" : {
-            "type" : 
-              "integer",
-            "format" : "int32"
-          }
-        },
-        "required" : [
-          "message",
-          "personId"
-        ]
-      },
-      "FilmNotFound" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {
-          "message" : {
-            "type" : 
-              "string"
+            "type" : "string"
           },
           "filmId" : {
-            "type" : 
-              "integer",
+            "type" : "integer",
             "format" : "int32"
           }
         },
@@ -536,14 +523,87 @@
           "filmId"
         ]
       },
-      "UnexpectedError" : 
-        {
-        "type" : 
-          "object",
+      "Films" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Film"
+            }
+          }
+        },
+        "required" : [
+          "count",
+          "results"
+        ]
+      },
+      "PathNotFound" : {
+        "type" : "object",
         "properties" : {
           "message" : {
-            "type" : 
-              "string"
+            "type" : "string"
+          }
+        },
+        "required" : [
+          "message"
+        ]
+      },
+      "PathStep" : {
+        "type" : "object",
+        "properties" : {
+          "person" : {
+            "type" : "string"
+          },
+          "film" : {
+            "type" : "string"
+          }
+        },
+        "required" : [
+          "person",
+          "film"
+        ]
+      },
+      "ServerError" : {
+        "type" : "object",
+        "properties" : {}
+      },
+      "ShortestPath" : {
+        "type" : "object",
+        "properties" : {
+          "start" : {
+            "type" : "string"
+          },
+          "end" : {
+            "type" : "string"
+          },
+          "films" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "steps" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PathStep"
+            }
+          }
+        },
+        "required" : [
+          "start",
+          "end",
+          "films",
+          "steps"
+        ]
+      },
+      "UnexpectedError" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
           }
         },
         "required" : [

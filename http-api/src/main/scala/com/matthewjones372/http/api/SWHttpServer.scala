@@ -3,6 +3,7 @@ package com.matthewjones372.http.api
 import com.matthewjones372.data.{DataRepoError, SWDataRepo}
 import com.matthewjones372.domain.*
 import com.matthewjones372.http.api.SWAPIServerError.*
+import com.matthewjones372.search.{Path, SWGraph}
 import com.matthewjones372.sorting.{FieldOrdering, SortBy}
 import zio.*
 import zio.http.*
@@ -19,40 +20,63 @@ trait SWHttpServer:
 
 object SWHttpServer:
   def default =
-    (for dataRepo <- ZIO.service[SWDataRepo]
-    yield SWHttpServerImpl(dataRepo)).provideSomeLayer(SWDataRepo.layer)
+    (for
+      dataRepo <- ZIO.service[SWDataRepo]
+      graph    <- characterGraph(dataRepo).memoize
+    yield SWHttpServerImpl(dataRepo, graph)).provideSomeLayer(SWDataRepo.layer)
 
-  def layer = ZLayer.fromFunction(SWHttpServerImpl.apply)
+  def layer: ZLayer[SWDataRepo, Nothing, SWHttpServer] = ZLayer.fromZIO {
+    for
+      dataRepo <- ZIO.service[SWDataRepo]
+      graph    <- characterGraph(dataRepo).memoize
+    yield SWHttpServerImpl(dataRepo, graph)
+  }
+
+  // Characters are joined by the films they share, so film urls resolve to titles for the edge labels.
+  private[api] def characterGraph(dataRepo: SWDataRepo): IO[DataRepoError, SWGraph[String]] =
+    // Suspended so the repo is not touched until a request actually needs the graph.
+    ZIO.suspendSucceed {
+      for
+        people <- dataRepo.getCharacters(None, None, None)
+        films  <- dataRepo.getFilms(None, None)
+        titles  = films.results.map(film => film.url -> film.title).toMap
+      yield SWGraph(people.results.map(person => person.name -> person.films.flatMap(titles.get)).toMap)
+    }
 
   inline private def fieldNames[A <: Product](using A: Mirror.ProductOf[A]): List[String] =
     constValueTuple[A.MirroredElemLabels].toList.asInstanceOf[List[String]]
 
-  private def fieldDocString[T <: Product] =
+  inline private def fieldDocString[A <: Product](using Mirror.ProductOf[A]) =
     Doc.p(
-      s"Fields: ${fieldNames[People].mkString(",")}"
+      s"Fields: ${fieldNames[A].mkString(",")}"
     )
 
-  val getPersonEndpoint =
-    Endpoint(Method.GET / "people" / PathCodec.int("personId"))
-      .out[People]
+  private val characterIdPath = PathCodec.int("characterId").transformOrFailLeft(EntityId.from)(identity)
+  private val filmIdPath      = PathCodec.int("filmId").transformOrFailLeft(EntityId.from)(identity)
+  private val targetIdPath    = PathCodec.int("targetId").transformOrFailLeft(EntityId.from)(identity)
+
+  private val pageQuery =
+    QueryCodec.query[Int]("page").transformOrFail(PageNumber.from)(page => Right(page)).optional
+
+  val getCharacterEndpoint =
+    Endpoint(Method.GET / "people" / characterIdPath)
+      .out[Character]
       .outErrors[SWAPIServerError](
-        HttpCodec.error[PersonNotFound](Status.NotFound),
+        HttpCodec.error[CharacterNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
-  val getPeopleEndpoint =
+  val getCharactersEndpoint =
     (Endpoint(Method.GET / "people") ?? Doc.p("Get a list of  all people response is paged"))
-      .query(QueryCodec.queryInt("page").optional)
+      .query(pageQuery)
       .query(
         QueryCodec
-          .query("sortBy")
-          .optional
-          .examples(List(("example1", Some("name:ASC")), ("example2", Some("name:ASC,height:DESC")))) ?? fieldDocString[
-          People
-        ]
+          .query[String]("sortBy")
+          .examples(List("example1" -> "name:ASC", "example2" -> "name:ASC,height:DESC"))
+          .optional ?? fieldDocString[Character]
       )
-      .out[Peoples]
+      .out[Characters]
       .outErrors[SWAPIServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
@@ -60,7 +84,7 @@ object SWHttpServer:
 
   val getFilmsEndpoint =
     Endpoint(Method.GET / "films")
-      .query(QueryCodec.queryInt("page").optional)
+      .query(pageQuery)
       .out[Films]
       .outErrors[SWAPIServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
@@ -68,7 +92,7 @@ object SWHttpServer:
       )
 
   val getFilmEndpoint =
-    Endpoint(Method.GET / "films" / PathCodec.int("filmId"))
+    Endpoint(Method.GET / "films" / filmIdPath)
       .out[Film]
       .outErrors[SWAPIServerError](
         HttpCodec.error[FilmNotFound](Status.NotFound),
@@ -76,8 +100,38 @@ object SWHttpServer:
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
+  val getShortestPathEndpoint =
+    (Endpoint(Method.GET / "people" / characterIdPath / "path-to" / targetIdPath)
+      ?? Doc.p("The shortest chain of shared films connecting two characters"))
+      .out[ShortestPath]
+      .outErrors[SWAPIServerError](
+        HttpCodec.error[CharacterNotFound](Status.NotFound),
+        HttpCodec.error[PathNotFound](Status.NotFound),
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
+  private[api] def toShortestPath(start: String, end: String, path: Path[String]): ShortestPath =
+    val steps = path.path
+      .getOrElse(Chunk.empty)
+      .dropRight(1)
+      .map((person, film) => PathStep(person, film))
+      .toList
+    ShortestPath(start, end, path.length, steps)
+
+  private[api] def parseSortByList(sortByParam: String): List[SortBy] =
+    sortByParam.split(",").toList.flatMap(parseSortBy)
+
+  private[api] def parseSortBy(sortByString: String): Option[SortBy] =
+    val parts = sortByString.split(":")
+    if parts.length == 2 then
+      val key         = parts(0).trim
+      val orderingStr = parts(1).trim.toUpperCase
+      FieldOrdering.values.find(_.toString == orderingStr).map(ordering => SortBy(key, ordering))
+    else None
+
   private val endPoints =
-    Chunk(getPersonEndpoint, getPeopleEndpoint, getFilmsEndpoint, getFilmEndpoint)
+    Chunk(getCharacterEndpoint, getCharactersEndpoint, getFilmsEndpoint, getFilmEndpoint, getShortestPathEndpoint)
 
   val openAPI =
     OpenAPIGen.fromEndpoints(
@@ -86,22 +140,44 @@ object SWHttpServer:
       endPoints
     )
 
-private final case class SWHttpServerImpl(private val dataRepo: SWDataRepo) extends SWHttpServer:
+private final case class SWHttpServerImpl(
+  private val dataRepo: SWDataRepo,
+  private val characterGraph: IO[DataRepoError, SWGraph[String]]
+) extends SWHttpServer:
 
-  private val getPersonHandler = SWHttpServer.getPersonEndpoint.implement { personId =>
+  private def characterOrError(id: EntityId): IO[SWAPIServerError, Character] =
+    dataRepo.getCharacter(id).catchAll {
+      case DataRepoError.CharacterNotFound(message, characterId) =>
+        ZIO.fail(CharacterNotFound(message, characterId))
+      case err =>
+        ZIO.fail(UnexpectedError(err.getMessage))
+    }
+
+  private val getShortestPathHandler = SWHttpServer.getShortestPathEndpoint.implement { (characterId, targetId) =>
+    for
+      start  <- characterOrError(characterId)
+      target <- characterOrError(targetId)
+      graph  <- characterGraph.mapError(err => UnexpectedError(err.getMessage))
+      path   <- ZIO
+                .fromOption(graph.bfs(start.name, target.name))
+                .orElseFail(PathNotFound(s"No path between ${start.name} and ${target.name}"))
+    yield SWHttpServer.toShortestPath(start.name, target.name, path)
+  }.sandbox
+
+  private val getCharacterHandler = SWHttpServer.getCharacterEndpoint.implement { characterId =>
     dataRepo
-      .getPerson(personId)
+      .getCharacter(characterId)
       .catchAll {
-        case DataRepoError.PersonNotFound(message, personId) =>
-          ZIO.fail(PersonNotFound(message, personId))
+        case DataRepoError.CharacterNotFound(message, characterId) =>
+          ZIO.fail(CharacterNotFound(message, characterId))
         case err =>
           ZIO.fail(UnexpectedError(err.getMessage))
       }
   }.sandbox
 
-  private val getPeopleHandler = SWHttpServer.getPeopleEndpoint.implement { (page, sortByParams) =>
+  private val getCharactersHandler = SWHttpServer.getCharactersEndpoint.implement { (page, sortByParams) =>
     dataRepo
-      .getPeople(page, Some(10), sortByParams.map(parseSortByList))
+      .getCharacters(page, Some(PageSize.default), sortByParams.map(SWHttpServer.parseSortByList))
       .catchAll(err => ZIO.fail(UnexpectedError(err.getMessage)))
   }.sandbox
 
@@ -112,31 +188,18 @@ private final case class SWHttpServerImpl(private val dataRepo: SWDataRepo) exte
       case err =>
         ZIO.fail(UnexpectedError(err.getMessage))
     }
-
-  }
+  }.sandbox
 
   private def getFilmsHandler = SWHttpServer.getFilmsEndpoint.implement { page =>
-    dataRepo.getFilms(page, Some(10)).catchAll { err =>
+    dataRepo.getFilms(page, Some(PageSize.default)).catchAll { err =>
       ZIO.fail(UnexpectedError(err.getMessage))
     }
   }.sandbox
 
-  private def parseSortByList(sortByParam: String): List[SortBy] =
-    sortByParam.split(",").toList.flatMap(parseSortBy)
-
-  private def parseSortBy(sortByString: String): Option[SortBy] = {
-    val parts = sortByString.split(":")
-    if parts.length == 2 then
-      val key         = parts(0).trim
-      val orderingStr = parts(1).trim.toUpperCase
-      val orderingOpt = FieldOrdering.values.find(_.toString == orderingStr)
-      orderingOpt.map(ordering => SortBy(key, ordering))
-    else None
-  }
-
   private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", SWHttpServer.openAPI)
 
-  private val handlers = Chunk(getPersonHandler, getPeopleHandler, getFilmsHandler, getFilmHandler)
+  private val handlers =
+    Chunk(getCharacterHandler, getCharactersHandler, getFilmsHandler, getFilmHandler, getShortestPathHandler)
 
   private val routes =
     (Routes(handlers) ++ swaggerRoutes) @@ Middleware.debug

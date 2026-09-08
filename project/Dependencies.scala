@@ -10,6 +10,7 @@ object Dependencies {
   private val zioLoggingV = "2.5.3"
   private val slf4jApiV   = "2.0.19"
   private val zioConfigV  = "4.0.8"
+  private val zioPreludeV = "1.0.0-RC48"
 
   private val magnumV         = "1.3.1"
   private val postgresV       = "42.7.13"
@@ -17,7 +18,8 @@ object Dependencies {
   private val testcontainersV = "2.0.5"
   private val flywayV         = "13.5.0"
 
-  val zio = "dev.zio" %% "zio" % zioV
+  val zio        = "dev.zio" %% "zio"         % zioV
+  val zioPrelude = "dev.zio" %% "zio-prelude" % zioPreludeV
 
   val zioConfig         = "dev.zio" %% "zio-config"          % zioConfigV
   val zioConfigMagnolia = "dev.zio" %% "zio-config-magnolia" % zioConfigV

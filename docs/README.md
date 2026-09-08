@@ -62,6 +62,34 @@ Paged responses carry the total alongside the current page:
 upstream are absent from the response rather than reported as a number or an
 empty string.
 
+## Refined request parameters
+
+Ids and page numbers are refined types built on zio-prelude, so a request that
+cannot be served is rejected at the edge rather than answered with an empty
+page:
+
+```sh
+curl -i 'http://localhost:8080/people?page=0'   # 400
+curl -i 'http://localhost:8080/people/0'        # 400
+```
+
+The assertion is checked at compile time for literals and returns an `Either`
+for values read at runtime:
+
+```scala mdoc
+import com.matthewjones372.domain.{EntityId, PageNumber, PageSize}
+
+PageNumber.from(0)
+```
+
+```scala mdoc
+(EntityId(1), PageNumber.first, PageSize.default)
+```
+
+`PageSize` is bounded at 100, so a single request cannot pull the whole table.
+Because these are subtypes rather than wrappers, they are still `Int` wherever
+one is expected, and need no unwrapping to reach SQL or JSON.
+
 ## Sorting
 
 `sortBy` takes a comma separated list of `field:direction` pairs, applied left
@@ -126,14 +154,14 @@ val graph = SWGraph(
 ```
 
 ```scala mdoc
-graph.bfs("Lobot", "Boba Fett").map(_.length)
+graph.distance("Lobot", "Boba Fett")
 ```
 
-Its `toString` renders the chain with the film joining each pair, coloured for a
-terminal.
+`bfs` returns the chain itself rather than its length. Its `toString` renders
+the film joining each pair, coloured for a terminal.
 
-`bfs` returns `None` when no chain exists, and a zero length path when the
-start and target are the same character.
+Both return `None` when no chain exists, and a zero length path when the start
+and target are the same character.
 
 The graph is built once per server and reused across requests.
 
@@ -173,6 +201,7 @@ schema and the bundled data seeds it.
 
 ```scala mdoc:compile-only
 import com.matthewjones372.data.sql.*
+import com.matthewjones372.domain.{PageNumber, PageSize}
 import zio.*
 
 for
@@ -180,7 +209,7 @@ for
   _         <- SwMigrations.migrate
   transactor = ZTransactor(pool)
   _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
-  people    <- SqlDataRepo(transactor).getCharacters(Some(1), Some(10), None)
+  people    <- SqlDataRepo(transactor).getCharacters(Some(PageNumber.first), Some(PageSize.default), None)
 yield people
 ```
 

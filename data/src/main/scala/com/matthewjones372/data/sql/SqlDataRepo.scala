@@ -7,8 +7,6 @@ import com.matthewjones372.sorting.{DynamicMultiSorter, FieldOrdering, SortBy}
 import zio.*
 
 object SqlDataRepo:
-  private val defaultPageSize = 10
-
   // The url sets live in child tables, so they can be sorted in memory but never named in an order by.
   private val nonSortableFields = Set("films", "species", "vehicles", "starships")
 
@@ -35,12 +33,12 @@ object SqlDataRepo:
     }
     (clauses :+ "id asc").mkString("order by ", ", ", "")
 
-  private[sql] def offsetFor(page: Option[Int], pageSize: Option[Int]): Option[(Int, Int)] =
+  private[sql] def offsetFor(page: Option[PageNumber], pageSize: Option[PageSize]): Option[(Int, Int)] =
     (page, pageSize) match
       case (None, None) => None
       case _            =>
-        val size = pageSize.getOrElse(defaultPageSize)
-        Some(math.max((page.getOrElse(1) - 1) * size, 0) -> size)
+        val size = pageSize.getOrElse(PageSize.default)
+        Some((page.getOrElse(PageNumber.first) - 1) * size -> size)
 
   def apply(transactor: ZTransactor): SWDataRepo = SqlDataRepoLive(transactor)
 
@@ -109,7 +107,7 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
       .connect(query)
       .mapError(error => DataRepoError.UnexpectedError(s"$label failed", new RuntimeException(error)))
 
-  override def getCharacter(id: Int): IO[DataRepoError, Character] =
+  override def getCharacter(id: EntityId): IO[DataRepoError, Character] =
     run(s"Looking up person $id") {
       Frag(s"select $personColumns from people where id = $id").query[CharacterRow].run()
     }.flatMap { rows =>
@@ -118,7 +116,7 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
       }
     }
 
-  override def getFilm(id: Int): IO[DataRepoError, Film] =
+  override def getFilm(id: EntityId): IO[DataRepoError, Film] =
     run(s"Looking up film $id") {
       Frag(s"select $filmColumns from films where id = $id").query[FilmRow].run()
     }.flatMap { rows =>
@@ -128,8 +126,8 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
     }
 
   override def getCharacters(
-    from: Option[Int],
-    fetchSize: Option[Int],
+    from: Option[PageNumber],
+    fetchSize: Option[PageSize],
     sortBy: Option[List[SortBy]]
   ): IO[DataRepoError, Characters] =
     val limits = offsetFor(from, fetchSize).fold("")((offset, size) => s" limit $size offset $offset")
@@ -139,7 +137,7 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
       Characters(count, peopleFrom(rows))
     }
 
-  override def getFilms(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Films] =
+  override def getFilms(from: Option[PageNumber], fetchSize: Option[PageSize]): IO[DataRepoError, Films] =
     val limits = offsetFor(from, fetchSize).fold("")((offset, size) => s" limit $size offset $offset")
     run("Listing films") {
       val count = Frag("select count(*) from films").query[Int].run().head

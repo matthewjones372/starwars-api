@@ -62,6 +62,36 @@ Paged responses carry the total alongside the current page:
 upstream are absent from the response rather than reported as a number or an
 empty string.
 
+## Refined request parameters
+
+Ids and page numbers are refined types built on zio-prelude, so a request that
+cannot be served is rejected at the edge rather than answered with an empty
+page:
+
+```sh
+curl -i 'http://localhost:8080/people?page=0'   # 400
+curl -i 'http://localhost:8080/people/0'        # 400
+```
+
+The assertion is checked at compile time for literals and returns an `Either`
+for values read at runtime:
+
+```scala
+import com.matthewjones372.domain.{EntityId, PageNumber, PageSize}
+
+PageNumber.from(0)
+// res0: Either[String, Type] = Left("0 did not satisfy greaterThan(0)")
+```
+
+```scala
+(EntityId(1), PageNumber.first, PageSize.default)
+// res1: Tuple3[Type, Type, Type] = (1, 1, 10)
+```
+
+`PageSize` is bounded at 100, so a single request cannot pull the whole table.
+Because these are subtypes rather than wrappers, they are still `Int` wherever
+one is expected, and need no unwrapping to reach SQL or JSON.
+
 ## Sorting
 
 `sortBy` takes a comma separated list of `field:direction` pairs, applied left
@@ -90,7 +120,7 @@ val crew = List(Crew("Boba", 32), Crew("Ackbar", 41), Crew("Boba", 12))
 // )
 
 DynamicMultiSorter.sort(crew, List(SortBy("name", FieldOrdering.ASC), SortBy("age", FieldOrdering.DESC)))
-// res0: List[Crew] = List(
+// res2: List[Crew] = List(
 //   Crew(name = "Ackbar", age = 41),
 //   Crew(name = "Boba", age = 32),
 //   Crew(name = "Boba", age = 12)
@@ -136,15 +166,15 @@ val graph = SWGraph(
 ```
 
 ```scala
-graph.bfs("Lobot", "Boba Fett").map(_.length)
-// res1: Option[Int] = Some(2)
+graph.distance("Lobot", "Boba Fett")
+// res3: Option[Int] = Some(2)
 ```
 
-Its `toString` renders the chain with the film joining each pair, coloured for a
-terminal.
+`bfs` returns the chain itself rather than its length. Its `toString` renders
+the film joining each pair, coloured for a terminal.
 
-`bfs` returns `None` when no chain exists, and a zero length path when the
-start and target are the same character.
+Both return `None` when no chain exists, and a zero length path when the start
+and target are the same character.
 
 The graph is built once per server and reused across requests.
 
@@ -184,6 +214,7 @@ schema and the bundled data seeds it.
 
 ```scala
 import com.matthewjones372.data.sql.*
+import com.matthewjones372.domain.{PageNumber, PageSize}
 import zio.*
 
 for
@@ -191,7 +222,7 @@ for
   _         <- SwMigrations.migrate
   transactor = ZTransactor(pool)
   _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
-  people    <- SqlDataRepo(transactor).getCharacters(Some(1), Some(10), None)
+  people    <- SqlDataRepo(transactor).getCharacters(Some(PageNumber.first), Some(PageSize.default), None)
 yield people
 ```
 

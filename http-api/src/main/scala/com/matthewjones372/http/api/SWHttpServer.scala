@@ -51,8 +51,15 @@ object SWHttpServer:
       s"Fields: ${fieldNames[A].mkString(",")}"
     )
 
+  private val characterIdPath = PathCodec.int("characterId").transformOrFailLeft(EntityId.from)(identity)
+  private val filmIdPath      = PathCodec.int("filmId").transformOrFailLeft(EntityId.from)(identity)
+  private val targetIdPath    = PathCodec.int("targetId").transformOrFailLeft(EntityId.from)(identity)
+
+  private val pageQuery =
+    QueryCodec.query[Int]("page").transformOrFail(PageNumber.from)(page => Right(page)).optional
+
   val getCharacterEndpoint =
-    Endpoint(Method.GET / "people" / PathCodec.int("characterId"))
+    Endpoint(Method.GET / "people" / characterIdPath)
       .out[Character]
       .outErrors[SWAPIServerError](
         HttpCodec.error[CharacterNotFound](Status.NotFound),
@@ -62,7 +69,7 @@ object SWHttpServer:
 
   val getCharactersEndpoint =
     (Endpoint(Method.GET / "people") ?? Doc.p("Get a list of  all people response is paged"))
-      .query(QueryCodec.query[Int]("page").optional)
+      .query(pageQuery)
       .query(
         QueryCodec
           .query[String]("sortBy")
@@ -77,7 +84,7 @@ object SWHttpServer:
 
   val getFilmsEndpoint =
     Endpoint(Method.GET / "films")
-      .query(QueryCodec.query[Int]("page").optional)
+      .query(pageQuery)
       .out[Films]
       .outErrors[SWAPIServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
@@ -85,7 +92,7 @@ object SWHttpServer:
       )
 
   val getFilmEndpoint =
-    Endpoint(Method.GET / "films" / PathCodec.int("filmId"))
+    Endpoint(Method.GET / "films" / filmIdPath)
       .out[Film]
       .outErrors[SWAPIServerError](
         HttpCodec.error[FilmNotFound](Status.NotFound),
@@ -94,7 +101,7 @@ object SWHttpServer:
       )
 
   val getShortestPathEndpoint =
-    (Endpoint(Method.GET / "people" / PathCodec.int("characterId") / "path-to" / PathCodec.int("targetId"))
+    (Endpoint(Method.GET / "people" / characterIdPath / "path-to" / targetIdPath)
       ?? Doc.p("The shortest chain of shared films connecting two characters"))
       .out[ShortestPath]
       .outErrors[SWAPIServerError](
@@ -138,7 +145,7 @@ private final case class SWHttpServerImpl(
   private val characterGraph: IO[DataRepoError, SWGraph[String]]
 ) extends SWHttpServer:
 
-  private def characterOrError(id: Int): IO[SWAPIServerError, Character] =
+  private def characterOrError(id: EntityId): IO[SWAPIServerError, Character] =
     dataRepo.getCharacter(id).catchAll {
       case DataRepoError.CharacterNotFound(message, characterId) =>
         ZIO.fail(CharacterNotFound(message, characterId))
@@ -170,7 +177,7 @@ private final case class SWHttpServerImpl(
 
   private val getCharactersHandler = SWHttpServer.getCharactersEndpoint.implement { (page, sortByParams) =>
     dataRepo
-      .getCharacters(page, Some(10), sortByParams.map(SWHttpServer.parseSortByList))
+      .getCharacters(page, Some(PageSize.default), sortByParams.map(SWHttpServer.parseSortByList))
       .catchAll(err => ZIO.fail(UnexpectedError(err.getMessage)))
   }.sandbox
 
@@ -184,7 +191,7 @@ private final case class SWHttpServerImpl(
   }.sandbox
 
   private def getFilmsHandler = SWHttpServer.getFilmsEndpoint.implement { page =>
-    dataRepo.getFilms(page, Some(10)).catchAll { err =>
+    dataRepo.getFilms(page, Some(PageSize.default)).catchAll { err =>
       ZIO.fail(UnexpectedError(err.getMessage))
     }
   }.sandbox

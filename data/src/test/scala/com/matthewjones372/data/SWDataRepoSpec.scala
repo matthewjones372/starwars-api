@@ -51,31 +51,33 @@ object SWDataRepoSpec extends ZIOSpecDefault:
   def spec = suite("SWDataRepoSpec")(
     suite("paginate")(
       test("a page holds exactly the requested page size") {
-        val page = SWDataRepo.paginate((1 to 30).toList, Some(1), Some(10))
+        val page = SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(1)), Some(PageSize(10)))
         assertTrue(page.length == 10, page == (1 to 10).toList)
       },
       test("consecutive pages do not overlap") {
-        val first  = SWDataRepo.paginate((1 to 30).toList, Some(1), Some(10))
-        val second = SWDataRepo.paginate((1 to 30).toList, Some(2), Some(10))
+        val first  = SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(1)), Some(PageSize(10)))
+        val second = SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(2)), Some(PageSize(10)))
         assertTrue(first.intersect(second).isEmpty, second == (11 to 20).toList)
       },
       test("every page is reachable and the pages tile the data") {
-        val pages = (1 to 3).toList.map(page => SWDataRepo.paginate((1 to 30).toList, Some(page), Some(10)))
+        val pages =
+          List(PageNumber(1), PageNumber(2), PageNumber(3))
+            .map(page => SWDataRepo.paginate((1 to 30).toList, Some(page), Some(PageSize(10))))
         assertTrue(pages.flatten == (1 to 30).toList)
       },
       test("a final partial page is not padded") {
-        val page = SWDataRepo.paginate((1 to 25).toList, Some(3), Some(10))
+        val page = SWDataRepo.paginate((1 to 25).toList, Some(PageNumber(3)), Some(PageSize(10)))
         assertTrue(page == (21 to 25).toList)
       },
       test("a page beyond the data is empty") {
-        assertTrue(SWDataRepo.paginate((1 to 30).toList, Some(99), Some(10)).isEmpty)
+        assertTrue(SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(99)), Some(PageSize(10))).isEmpty)
       },
       test("a page without a fetch size uses the default page size") {
-        val page = SWDataRepo.paginate((1 to 30).toList, Some(2), None)
+        val page = SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(2)), None)
         assertTrue(page == (11 to 20).toList)
       },
       test("a fetch size without a page takes from the start") {
-        assertTrue(SWDataRepo.paginate((1 to 30).toList, None, Some(5)) == (1 to 5).toList)
+        assertTrue(SWDataRepo.paginate((1 to 30).toList, None, Some(PageSize(5))) == (1 to 5).toList)
       },
       test("neither a page nor a fetch size returns everything") {
         assertTrue(SWDataRepo.paginate((1 to 30).toList, None, None) == (1 to 30).toList)
@@ -99,14 +101,14 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("returns the total count alongside a single page of results") {
         for
           repo   <- repo
-          people <- repo.getCharacters(Some(1), Some(10), None)
+          people <- repo.getCharacters(Some(PageNumber(1)), Some(PageSize(10)), None)
         yield assertTrue(people.count == 30, people.results.length == 10)
       },
       test("pages are stable and ordered by id regardless of map ordering") {
         for
           repo   <- SWDataRepo.fromEntities(scala.util.Random.shuffle(thirtyPeople), thirtyFilms)
-          first  <- repo.getCharacters(Some(1), Some(10), None)
-          second <- repo.getCharacters(Some(2), Some(10), None)
+          first  <- repo.getCharacters(Some(PageNumber(1)), Some(PageSize(10)), None)
+          second <- repo.getCharacters(Some(PageNumber(2)), Some(PageSize(10)), None)
         yield assertTrue(
           first.results.map(_.name) == (1 to 10).map(id => s"person-$id").toList,
           second.results.map(_.name) == (11 to 20).map(id => s"person-$id").toList
@@ -115,15 +117,17 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("repeated requests for the same page return the same results") {
         for
           repo  <- repo
-          one   <- repo.getCharacters(Some(2), Some(10), None)
-          again <- repo.getCharacters(Some(2), Some(10), None)
+          one   <- repo.getCharacters(Some(PageNumber(2)), Some(PageSize(10)), None)
+          again <- repo.getCharacters(Some(PageNumber(2)), Some(PageSize(10)), None)
         yield assertTrue(one.results == again.results)
       },
       test("pageCount covers every person exactly once") {
         for
-          repo   <- repo
-          first  <- repo.getCharacters(Some(1), Some(10), None)
-          rest   <- ZIO.foreach(2 to first.pageCount)(page => repo.getCharacters(Some(page), Some(10), None))
+          repo  <- repo
+          first <- repo.getCharacters(Some(PageNumber(1)), Some(PageSize(10)), None)
+          rest  <- ZIO.foreach(2 to first.pageCount)(page =>
+                    repo.getCharacters(Some(page.asPageNumber), Some(PageSize(10)), None)
+                  )
           fetched = first.results ++ rest.flatMap(_.results)
         yield assertTrue(fetched.length == 30, fetched.map(_.name).distinct.length == 30)
       },
@@ -146,14 +150,14 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("returns the total count alongside a single page of results") {
         for
           repo  <- repo
-          films <- repo.getFilms(Some(1), Some(10))
+          films <- repo.getFilms(Some(PageNumber(1)), Some(PageSize(10)))
         yield assertTrue(films.count == 30, films.results.length == 10)
       },
       test("consecutive pages do not repeat a film") {
         for
           repo   <- repo
-          first  <- repo.getFilms(Some(1), Some(10))
-          second <- repo.getFilms(Some(2), Some(10))
+          first  <- repo.getFilms(Some(PageNumber(1)), Some(PageSize(10)))
+          second <- repo.getFilms(Some(PageNumber(2)), Some(PageSize(10)))
         yield assertTrue(first.results.intersect(second.results).isEmpty)
       }
     ),
@@ -161,20 +165,20 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("finds a person and a film by the id in their url") {
         for
           repo   <- repo
-          person <- repo.getCharacter(7)
-          film   <- repo.getFilm(7)
+          person <- repo.getCharacter(EntityId(7))
+          film   <- repo.getFilm(EntityId(7))
         yield assertTrue(person.name == "person-7", film.title == "film-7")
       },
       test("fails with CharacterNotFound for an unknown person") {
         for
           repo   <- repo
-          result <- repo.getCharacter(999).exit
+          result <- repo.getCharacter(EntityId(999)).exit
         yield assert(result)(Assertion.failsWithA[DataRepoError.CharacterNotFound])
       },
       test("fails with FilmNotFound for an unknown film") {
         for
           repo   <- repo
-          result <- repo.getFilm(999).exit
+          result <- repo.getFilm(EntityId(999)).exit
         yield assert(result)(Assertion.failsWithA[DataRepoError.FilmNotFound])
       }
     ),
@@ -184,8 +188,8 @@ object SWDataRepoSpec extends ZIOSpecDefault:
           repo   <- ZIO.service[SWDataRepo]
           people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
-          person <- repo.getCharacter(1)
-          film   <- repo.getFilm(1)
+          person <- repo.getCharacter(EntityId(1))
+          film   <- repo.getFilm(EntityId(1))
         yield assertTrue(
           people.count == 82,
           films.count == 6,
@@ -195,9 +199,11 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       },
       test("pages the bundled data without gaps or repeats") {
         for
-          repo   <- ZIO.service[SWDataRepo]
-          first  <- repo.getCharacters(Some(1), Some(10), None)
-          rest   <- ZIO.foreach(2 to first.pageCount)(page => repo.getCharacters(Some(page), Some(10), None))
+          repo  <- ZIO.service[SWDataRepo]
+          first <- repo.getCharacters(Some(PageNumber(1)), Some(PageSize(10)), None)
+          rest  <- ZIO.foreach(2 to first.pageCount)(page =>
+                    repo.getCharacters(Some(page.asPageNumber), Some(PageSize(10)), None)
+                  )
           fetched = first.results ++ rest.flatMap(_.results)
         yield assertTrue(fetched.length == 82, fetched.map(_.url).distinct.length == 82)
       }

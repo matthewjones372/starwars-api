@@ -4,6 +4,11 @@ import zio.http.URL
 import zio.*
 import zio.config.*
 
+/**
+ * @param cacheSize
+ *   entries held per cached entity type, films and characters each having their
+ *   own, rather than a single budget the two compete for.
+ */
 final case class HttpClientConfig(
   baseUrl: URL,
   cacheSize: Int,

@@ -37,38 +37,32 @@ object ApiClient:
   def getFilms(using Trace) =
     ZIO.serviceWithZIO[ApiClient](_.getFilms)
 
-  private enum CacheKey:
-    case FilmId(id: Int)
-    case FilmUrl(url: URL)
-    case Films
-    case PersonId(id: Int)
-    case Characters
+  // A film is reachable by id or by url, and both name the same entry.
+  private enum FilmKey:
+    case Id(id: Int)
+    case Url(url: URL)
 
-  private final case class FilmSet(films: Set[Film])            extends AnyVal
-  private final case class CharacterSet(people: Set[Character]) extends AnyVal
-
-  private type CacheEntities = Film | Character | FilmSet | CharacterSet
-
+  // A cache holds a single value type, so one cache over every key would have to
+  // widen its values and narrow them again on the way out. One cache per type
+  // keeps the lookup and its result in the same types the callers use.
   private final class CachingApiClient(
-    cache: Cache[CacheKey, ClientError, CacheEntities]
+    films: Cache[FilmKey, ClientError, Film],
+    characters: Cache[Int, ClientError, Character],
+    allFilms: Cache[Unit, ClientError, Set[Film]],
+    allCharacters: Cache[Unit, ClientError, Set[Character]]
   ) extends ApiClient:
-    private def getAs[A](key: CacheKey)(entity: PartialFunction[CacheEntities, A]): IO[ClientError, A] =
-      cache.get(key).flatMap(value => ZIO.fromOption(entity.lift(value)).orElseFail(UnreachableError))
+    override def getFilmFromUrl(url: URL): IO[ClientError, Film] = films.get(FilmKey.Url(url))
 
-    override def getFilmFromUrl(url: URL): IO[ClientError, Film] =
-      getAs(CacheKey.FilmUrl(url)) { case film: Film => film }
+    override def getFilmFrom(id: Int): IO[ClientError, Film] = films.get(FilmKey.Id(id))
 
-    override def getFilmFrom(id: Int): IO[ClientError, Film] =
-      getAs(CacheKey.FilmId(id)) { case film: Film => film }
+    override def getCharacterFrom(id: Int): IO[ClientError, Character] = characters.get(id)
 
-    override def getCharacterFrom(id: Int): IO[ClientError, Character] =
-      getAs(CacheKey.PersonId(id)) { case person: Character => person }
+    override def getCharacters: IO[ClientError, Set[Character]] = allCharacters.get(())
 
-    override def getCharacters: IO[ClientError, Set[Character]] =
-      getAs(CacheKey.Characters) { case CharacterSet(people) => people }
+    override def getFilms: IO[ClientError, Set[Film]] = allFilms.get(())
 
-    override def getFilms: IO[ClientError, Set[Film]] =
-      getAs(CacheKey.Films) { case FilmSet(films) => films }
+  private def cacheOf[K, V](capacity: Int)(lookup: K => IO[ClientError, V]) =
+    Cache.makeWith(capacity, Lookup(lookup))(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
 
   def live: RLayer[SWAPIEnv, ApiClient] =
     ZLayer.fromZIO {
@@ -78,24 +72,16 @@ object ApiClient:
         scope      <- ZIO.service[Scope]
         apiClient   = ApiLiveClient(client, httpConfig, scope)
         client     <-
-          for cache <-
-              Cache.makeWith(
-                httpConfig.cacheSize,
-                Lookup { (key: CacheKey) =>
-                  key match
-                    case CacheKey.FilmId(id) =>
-                      apiClient.getFilmFrom(id)
-                    case CacheKey.PersonId(id) =>
-                      apiClient.getCharacterFrom(id)
-                    case CacheKey.FilmUrl(url) =>
-                      apiClient.getFilmFromUrl(url)
-                    case CacheKey.Characters =>
-                      apiClient.getCharacters.map(CharacterSet.apply)
-                    case CacheKey.Films =>
-                      apiClient.getFilms.map(FilmSet.apply)
-                }
-              )(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
-          yield CachingApiClient(cache)
+          for
+            films <- cacheOf[FilmKey, Film](httpConfig.cacheSize) {
+                       case FilmKey.Id(id)   => apiClient.getFilmFrom(id)
+                       case FilmKey.Url(url) => apiClient.getFilmFromUrl(url)
+                     }
+            characters <- cacheOf[Int, Character](httpConfig.cacheSize)(apiClient.getCharacterFrom)
+            // Whole collection lookups have a single key, so they need a single entry.
+            allFilms      <- cacheOf[Unit, Set[Film]](1)(_ => apiClient.getFilms)
+            allCharacters <- cacheOf[Unit, Set[Character]](1)(_ => apiClient.getCharacters)
+          yield CachingApiClient(films, characters, allFilms, allCharacters)
       yield client
     }
 

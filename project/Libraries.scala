@@ -57,11 +57,9 @@ object Libraries {
   lazy val sql = Seq(
     libraryDependencies ++= Seq(
       Dependencies.magnum,
-      Dependencies.postgres,
-      Dependencies.hikari,
+      Dependencies.sqlite,
       Dependencies.flyway,
-      Dependencies.flywayPostgres,
-      Dependencies.testContainersPostgres
+      Dependencies.flywaySqlite
     )
   )
 

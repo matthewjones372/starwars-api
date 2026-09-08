@@ -12,11 +12,9 @@ object Dependencies {
   private val zioConfigV  = "4.0.8"
   private val zioPreludeV = "1.0.0-RC48"
 
-  private val magnumV         = "1.3.1"
-  private val postgresV       = "42.7.13"
-  private val hikariV         = "7.1.0"
-  private val testcontainersV = "2.0.5"
-  private val flywayV         = "13.5.0"
+  private val magnumV  = "1.3.1"
+  private val sqliteV  = "3.53.4.0"
+  private val flywayV  = "13.5.0"
 
   val zio        = "dev.zio" %% "zio"         % zioV
   val zioPrelude = "dev.zio" %% "zio-prelude" % zioPreludeV
@@ -44,12 +42,9 @@ object Dependencies {
 
   val stubby = "io.github.kitlangton" %% "stubby" % stubbyV % Test
 
-  val magnum   = "com.augustnagro" %% "magnum"     % magnumV
-  val postgres = "org.postgresql"   % "postgresql" % postgresV
-  val hikari   = "com.zaxxer"       % "HikariCP"   % hikariV
+  val magnum = "com.augustnagro" %% "magnum"      % magnumV
+  val sqlite = "org.xerial"       % "sqlite-jdbc" % sqliteV
 
-  val flyway         = "org.flywaydb" % "flyway-core"                % flywayV
-  val flywayPostgres = "org.flywaydb" % "flyway-database-postgresql" % flywayV
-
-  val testContainersPostgres = "org.testcontainers" % "testcontainers-postgresql" % testcontainersV % Test
+  val flyway       = "org.flywaydb" % "flyway-core"                % flywayV
+  val flywaySqlite = "org.flywaydb" % "flyway-database-nc-sqlite"  % flywayV
 }

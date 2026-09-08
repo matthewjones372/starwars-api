@@ -93,6 +93,16 @@ object SWGraphSpec extends ZIOSpecDefault:
 
         assertTrue(result.exists(_.length == 0), result.exists(_.path.contains(Chunk.empty)))
       },
+      test("distance reports the hops the path would take") {
+        val graph = SWGraph(peopleFilmMap)
+
+        assertTrue(
+          graph.distance("Lobot", "Boba Fett") == graph.bfs("Lobot", "Boba Fett").map(_.length),
+          graph.distance("Lobot", "Boba Fett").contains(2),
+          graph.distance("Lobot", "Lobot").contains(0),
+          SWGraph(disconnected).distance("Lobot", "Luke").isEmpty
+        )
+      },
       test("Returns a None when either character doesn't exist") {
         val graph = SWGraph(disconnected)
 

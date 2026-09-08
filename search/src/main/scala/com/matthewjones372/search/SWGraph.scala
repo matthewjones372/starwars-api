@@ -13,6 +13,12 @@ class SWGraph[A](private val peopleFilmMap: Map[A, Set[A]]) {
     }
   }
 
+  /**
+   * The number of hops between two characters, when a chain of shared films
+   * connects them.
+   */
+  def distance(start: A, target: A): Option[Int] = bfs(start, target).map(_.length)
+
   def bfs(start: A, target: A): Option[Path[A]] = {
     @tailrec
     def loop(remaining: Queue[A], paths: Map[A, Chunk[(A, A)]], visited: HashSet[A]): Option[Chunk[(A, A)]] =

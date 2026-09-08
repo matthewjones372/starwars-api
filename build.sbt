@@ -116,6 +116,39 @@ lazy val search = Projects
     domain % oneToOneClassMapping
   )
 
+// Deliberately outside `modules`: the load test resolves Kestrel from the local
+// maven repository, which a clean CI checkout does not have. Root aggregation
+// never reaches it, so `sbt test` is unaffected and `sbt "load-test/run"` is how
+// you ask for it (the project id is `load-test`). See load-test/README.md.
+lazy val loadTest = Projects
+  .create("load-test")
+  .settings(
+    Libraries.zio,
+    Libraries.zioHttp,
+    Libraries.zioLogging,
+    Libraries.kestrel
+  )
+  .settings(
+    publish / skip := true,
+    // The generator and the target must not share a heap, so the sweep starts
+    // the server in a JVM of its own rather than in this one.
+    run / fork := true,
+    // sweep.sh launches both JVMs itself, so it needs the classpath as a file
+    // rather than an sbt session holding one of them.
+    TaskKey[Unit]("writeClasspath") := {
+      // sbt 2 hands back virtual file references, so the converter is what
+      // turns a classpath into paths another JVM can be started with.
+      val converter = fileConverter.value
+      val entries   = (Runtime / fullClasspath).value.map(entry => converter.toPath(entry.data))
+      val out       = target.value / "load-test-cp.txt"
+      IO.write(out, entries.mkString(java.io.File.pathSeparator))
+      streams.value.log.info(s"wrote $out")
+    }
+  )
+  .dependsOn(
+    `http-api` % oneToOneClassMapping
+  )
+
 lazy val docs = project
   .in(file("mdoc-docs"))
   .enablePlugins(MdocPlugin)

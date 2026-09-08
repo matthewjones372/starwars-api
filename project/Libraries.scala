@@ -63,6 +63,14 @@ object Libraries {
     )
   )
 
+  lazy val kestrel = Seq(
+    resolvers += Resolver.mavenLocal,
+    libraryDependencies ++= Seq(
+      Dependencies.kestrelScala,
+      Dependencies.kestrelZioTest
+    )
+  )
+
   lazy val resilience = Seq(
     libraryDependencies ++= Seq(
       Dependencies.resilience

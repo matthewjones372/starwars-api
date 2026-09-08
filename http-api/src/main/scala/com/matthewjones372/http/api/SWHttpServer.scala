@@ -19,17 +19,27 @@ trait SWHttpServer:
   def start: URIO[Server, Nothing]
 
 object SWHttpServer:
-  def default =
+  def default = withRequestLogging(true)
+
+  /**
+   * The same server with `Middleware.debug` left off.
+   *
+   * The debug middleware logs a line per request, so it sits on the path every
+   * response takes. That is what it is for while a human is reading the log,
+   * and it is a cost a measurement has to be able to subtract: a load test that
+   * cannot turn it off reports the logger's latency as the API's.
+   */
+  def withRequestLogging(enabled: Boolean) =
     (for
       dataRepo <- ZIO.service[SWDataRepo]
       graph    <- characterGraph(dataRepo).memoize
-    yield SWHttpServerImpl(dataRepo, graph)).provideSomeLayer(SWDataRepo.layer)
+    yield SWHttpServerImpl(dataRepo, graph, enabled)).provideSomeLayer(SWDataRepo.layer)
 
   def layer: ZLayer[SWDataRepo, Nothing, SWHttpServer] = ZLayer.fromZIO {
     for
       dataRepo <- ZIO.service[SWDataRepo]
       graph    <- characterGraph(dataRepo).memoize
-    yield SWHttpServerImpl(dataRepo, graph)
+    yield SWHttpServerImpl(dataRepo, graph, true)
   }
 
   // Characters are joined by the films they share, so film urls resolve to titles for the edge labels.
@@ -142,7 +152,8 @@ object SWHttpServer:
 
 private final case class SWHttpServerImpl(
   private val dataRepo: SWDataRepo,
-  private val characterGraph: IO[DataRepoError, SWGraph[String]]
+  private val characterGraph: IO[DataRepoError, SWGraph[String]],
+  private val requestLogging: Boolean
 ) extends SWHttpServer:
 
   private def characterOrError(id: EntityId): IO[SWAPIServerError, Character] =
@@ -202,6 +213,7 @@ private final case class SWHttpServerImpl(
     Chunk(getCharacterHandler, getCharactersHandler, getFilmsHandler, getFilmHandler, getShortestPathHandler)
 
   private val routes =
-    (Routes(handlers) ++ swaggerRoutes) @@ Middleware.debug
+    val served = Routes(handlers) ++ swaggerRoutes
+    if requestLogging then served @@ Middleware.debug else served
 
   override def start: URIO[Server, Nothing] = Server.serve(routes)

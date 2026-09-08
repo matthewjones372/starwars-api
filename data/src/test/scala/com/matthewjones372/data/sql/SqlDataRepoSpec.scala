@@ -3,42 +3,28 @@ package com.matthewjones372.data.sql
 import com.matthewjones372.data.{DataRepoError, SWDataRepo}
 import com.matthewjones372.domain.*
 import com.matthewjones372.sorting.{FieldOrdering, SortBy}
-import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
-import org.testcontainers.postgresql.PostgreSQLContainer
 import zio.*
 import zio.test.*
 
+import java.nio.file.Files
 import javax.sql.DataSource
 
 object SqlDataRepoSpec extends ZIOSpecDefault:
 
+  // A file rather than :memory: so the database outlives any one connection.
   private val dataSource: ZIO[Scope, Throwable, DataSource] =
-    for
-      container <- ZIO.acquireRelease(
-                     ZIO.attemptBlocking {
-                       val started = PostgreSQLContainer("postgres:16-alpine")
-                       started.start()
-                       started
-                     }
-                   )(container => ZIO.attemptBlocking(container.stop()).orDie)
-      pool <- ZIO.acquireRelease(
-                ZIO.attemptBlocking {
-                  val config = HikariConfig()
-                  config.setJdbcUrl(container.getJdbcUrl)
-                  config.setUsername(container.getUsername)
-                  config.setPassword(container.getPassword)
-                  config.setMaximumPoolSize(4)
-                  HikariDataSource(config)
-                }
-              )(pool => ZIO.attemptBlocking(pool.close()).orDie)
-    yield pool
+    ZIO
+      .acquireRelease(ZIO.attemptBlocking(Files.createTempFile("swapi-test", ".db")))(path =>
+        ZIO.attemptBlocking(Files.deleteIfExists(path)).orDie
+      )
+      .map(SwDatabase.file)
 
   private val seededRepo: ZLayer[Any, Throwable, SWDataRepo] =
     ZLayer.scoped {
       for
-        pool      <- dataSource
-        _         <- SwMigrations.migrate.provideEnvironment(ZEnvironment(pool))
-        transactor = ZTransactor(pool)
+        source    <- dataSource
+        _         <- SwMigrations.migrate.provideEnvironment(ZEnvironment(source))
+        transactor = ZTransactor(source)
         _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
       yield SqlDataRepo(transactor)
     }
@@ -93,7 +79,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
         )
       }
     ),
-    suite("against postgres")(
+    suite("against sqlite")(
       test("migrates, seeds and reads back the bundled data") {
         for
           repo   <- ZIO.service[SWDataRepo]
@@ -161,5 +147,4 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
     ).provideShared(seededRepo)
       @@ TestAspect.sequential
       @@ TestAspect.withLiveClock
-      @@ TestAspect.tag("postgres")
   ) @@ TestAspect.timeout(5.minutes)

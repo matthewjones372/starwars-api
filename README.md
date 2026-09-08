@@ -207,36 +207,47 @@ sbt "runMain ClientExample"
 It fetches every character and film, then reports the shortest path between
 Darth Maul and Greedo.
 
-## Postgres
+## SQLite
 
-The repository can be backed by Postgres instead of memory. Flyway applies the
-schema and the bundled data seeds it.
+The repository can be backed by SQLite instead of memory. Flyway applies the
+schema and the bundled data seeds it. There is no server to run.
 
 ```scala
 import com.matthewjones372.data.sql.*
 import com.matthewjones372.domain.{PageNumber, PageSize}
 import zio.*
 
+import java.nio.file.Path
+
+val source = SwDatabase.file(Path.of("swapi.db"))
+
 for
-  pool      <- ZIO.service[javax.sql.DataSource]
-  _         <- SwMigrations.migrate
-  transactor = ZTransactor(pool)
+  _         <- SwMigrations.migrate.provideEnvironment(ZEnvironment(source))
+  transactor = ZTransactor(source)
   _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
   people    <- SqlDataRepo(transactor).getCharacters(Some(PageNumber.first), Some(PageSize.default), None)
 yield people
 ```
+
+The database is a file. SQLite's in-memory mode is deliberately not offered:
+a shared-cache in-memory database is destroyed when its last connection
+closes, so it cannot survive a `DataSource` that opens a connection per query.
+Use `SWDataRepo.layer` when you want the data held in memory.
 
 Characters and films are stored in normalised tables, with `people_films`
 carrying the relation the graph search walks. Paging and sorting run in SQL.
 Sort keys are matched against a column whitelist, so a `sortBy` value that is
 not a known field never reaches the query.
 
+Foreign keys are off by default in SQLite, so `SwDatabase` turns them on for
+every connection it hands out.
+
 ## Modules
 
 | Module | Contents |
 | ------ | -------- |
 | `domain` | Case classes and JSON codecs for characters and films |
-| `data` | In-memory and Postgres backed repositories, migrations and seeding |
+| `data` | In-memory and SQLite backed repositories, migrations and seeding |
 | `http-api` | Endpoint definitions, handlers and OpenAPI generation |
 | `api-client` | Caching HTTP client with retry policies |
 | `search` | Breadth first search over the character graph |
@@ -246,8 +257,8 @@ not a known field never reaches the query.
 
 ## Building
 
-Requires JDK 25. The Postgres tests start a container, so `sbt test` needs a
-running Docker daemon.
+Requires JDK 25. Nothing else: the SQLite tests run against a temporary file,
+so `sbt test` needs no database and no Docker.
 
 ```sh
 sbt compile

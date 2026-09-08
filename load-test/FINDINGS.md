@@ -89,3 +89,49 @@ reason. `lostGround` and `left` are the columns that carry the attribution.
 3. Then the differential tests — `sortBy=name:ASC` against `sortBy=films:ASC`,
    and `path-to` — run with the middleware off, since leaving it on would make
    every one of them a measurement of the logger.
+
+# After the middleware — what the server actually spends its time on
+
+`load-test/profile.sh 6000 60`: one rate held for a minute, JFR at `settings=profile`
+on the server's own JVM. The run itself was healthy — 5,902/s delivered, 360,000
+requests, nothing failed, 1,434us p50, 13.3 in flight against 14.9 predicted,
+Little's law agreeing.
+
+Leaf frame of each execution sample, grouped:
+
+| what | samples | frames |
+|---|---:|---|
+| **JSON serialization** | ~286 | `UTF_8$Encoder.encodeBufferLoop` 105, `zio.json…unsafeEncode` 86+12, `zio.schema.codec.JsonCodec…caseClassEncoder` 83 |
+| ZIO `Chunk` allocation | ~85 | `ClassTag$.apply` 58, `Chunk.isEmpty` 27 |
+| zio-http text codec | ~54 | `RichTextCodec.loop` 21, `.transform` 19, `.string` 14 |
+| Netty | ~48 | `ReferenceCountUtil.touch` 19, `writeAndFlush` 15, `DefaultHeaders.<init>` 14 |
+
+**Turning a `Character` into bytes is the bottleneck, by roughly three to one
+over anything else.** Nothing else is close, and the `Map` lookup this endpoint
+exists to do does not appear in the profile at all — neither does any other line
+of this repository. What is left after the logging middleware is the framework's
+response path.
+
+The `ClassTag$.apply` at number four is not a re-derivation bug in this code, and
+was worth checking rather than assuming: its callers are `Chunk$.fromArray`,
+`Chunk$Arr.<init>` and `Chunk$.fromByteBuffer`, which is zio-http allocating its
+own chunks.
+
+## What that suggests
+
+**Pre-encode the responses.** The data is read from a resource once at startup
+and never changes: `orderedPeople` and `peopleById` are immutable for the life of
+the process. Encoding each `Character` to bytes once and serving those bytes
+would remove most of the top three rows rather than making them faster. It is the
+one change here with a large ceiling, and it is available precisely because this
+API has no writes.
+
+**Payload size is the lever underneath it.** A person carries `homeworld` and
+four collections of URLs — `films`, `species`, `vehicles`, `starships`. Every one
+is a string to encode on every response, and this clone serves none of the
+resources they point at.
+
+**Do not look for a fix in this repository's own code.** There is nothing on the
+hot path to optimise; the cost is zio-schema, zio-json and the encoder beneath
+them. The remaining choices are architectural — pre-encoded bytes, a smaller
+payload, or accepting ~6,000/s as what this stack costs on four shared cores.

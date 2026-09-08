@@ -1,33 +1,199 @@
 # StarWars API
 
-## Overview
+[![Scala CI](https://github.com/matthewjones372/starwars-api/actions/workflows/scala.yml/badge.svg)](https://github.com/matthewjones372/starwars-api/actions/workflows/scala.yml)
+![Coverage](https://img.shields.io/badge/coverage-80%25-success)
+![Scala](https://img.shields.io/badge/scala-3.8.4-red)
+![JDK](https://img.shields.io/badge/JDK-25-orange)
 
-The StarWars API project is a Scala-based application that provides an interface to interact with Star Wars data. It leverages the ZIO library for functional programming and offers various modules for handling API requests, data management, and search functionalities.
+A Star Wars HTTP API in Scala 3 and ZIO, with a typed client, a shortest-path
+search over the character graph, and runtime-configurable multi-field sorting.
 
-## Project Structure
+Data covers 82 characters and 6 films, served from memory with no external
+services to start.
 
-The project is organized into multiple modules for better separation of concerns and maintainability:
+## Quick start
 
-- **api-client**: Handles API client functionalities.
-- **data**: Manages data repositories and related operations.
-- **domain**: Defines domain models and entities.
-- **http-api**: Exposes HTTP endpoints for the API.
-- **search**: Provides search capabilities within the Star Wars data.
+```sh
+sbt "runMain ServerExample"
+```
 
-## Installation
+The server listens on port 8080. Interactive API docs are at
+http://localhost:8080/docs/openapi.
 
-To set up the project locally, follow these steps:
+```sh
+curl 'http://localhost:8080/people/1'
+curl 'http://localhost:8080/films?page=1'
+curl 'http://localhost:8080/people?page=2&sortBy=height:DESC,name:ASC'
+```
 
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/matthewjones372/starwars-api.git
-   cd starwars-api
-Build the project:
-Ensure you have SBT installed. Then, run the following command:
+## Endpoints
 
-```sbt compile```
+| Method | Path | Query | Returns |
+| ------ | ---- | ----- | ------- |
+| GET | `/people` | `page`, `sortBy` | Paged characters |
+| GET | `/people/{personId}` | | One character |
+| GET | `/films` | `page` | Paged films |
+| GET | `/films/{filmId}` | | One film |
+| GET | `/docs/openapi` | | Swagger UI |
 
-Run the tests:
-To run the tests, use:
+Paged responses carry the total alongside the current page:
 
-```sbt test```
+```json
+{
+  "count": 82,
+  "results": [
+    {
+      "name": "Luke Skywalker",
+      "height": "172",
+      "mass": "77",
+      "hair_color": "blond",
+      "birth_year": "19BBY",
+      "films": ["http://localhost:8080/films/1/"],
+      "url": "http://localhost:8080/people/1/"
+    }
+  ]
+}
+```
+
+`height` and `mass` are carried as strings. Values recorded as `unknown`
+upstream decode to an absent value rather than failing, and serialise back as
+an empty string.
+
+## Sorting
+
+`sortBy` takes a comma separated list of `field:direction` pairs, applied left
+to right. Directions are `ASC` and `DESC`. Field names are the Scala field
+names, so `eyeColor` rather than `eye_color`.
+
+```sh
+curl 'http://localhost:8080/people?sortBy=eyeColor:ASC,height:DESC'
+```
+
+Unknown field names are ignored rather than rejected.
+
+The sorter behind this is a standalone module with no dependencies. Derive it
+for any case class and sort by field name at runtime:
+
+```scala
+import com.matthewjones372.sorting.*
+
+case class Person(name: String, age: Int) derives DynamicMultiSorter
+
+val people = List(Person("Boba", 32), Person("Ackbar", 41), Person("Boba", 12))
+
+DynamicMultiSorter.sort(
+  people,
+  List(SortBy("name", FieldOrdering.ASC), SortBy("age", FieldOrdering.DESC))
+)
+// List(Person(Ackbar,41), Person(Boba,32), Person(Boba,12))
+```
+
+Orderings are summoned at compile time from the case class fields, so a sort
+key that is not a field of the type compiles but has no effect.
+
+## Character graph search
+
+Two characters are connected when they appear in a film together. `SWGraph`
+finds the shortest such chain and reports the films that link it.
+
+```scala
+import com.matthewjones372.search.SWGraph
+
+val graph = SWGraph(
+  Map(
+    "Lobot"     -> Set("The Empire Strikes Back"),
+    "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
+    "Boba Fett" -> Set("A New Hope")
+  )
+)
+
+graph.bfs("Lobot", "Boba Fett").map(_.length)
+// Some(2)
+
+println(graph.bfs("Lobot", "Boba Fett").get)
+// (Lobot is in The Empire Strikes Back) -> (Luke is in A New Hope) -> Boba Fett
+```
+
+`bfs` returns `None` when no chain exists, and a zero length path when the
+start and target are the same character.
+
+## Typed client
+
+The client wraps the same API with caching, retries and typed errors. Failures
+arrive as `ClientError` values rather than exceptions.
+
+```scala
+import com.matthewjones372.api.client.SWAPIClientService
+import zio.*, zio.http.*
+
+object Example extends ZIOAppDefault:
+  def run =
+    (for
+      films <- SWAPIClientService.getFilmsFromPerson(1)
+      _     <- Console.printLine(films.mkString(", "))
+    yield ()).provide(SWAPIClientService.default, Scope.default, Client.default)
+```
+
+Responses are cached for 30 minutes. Server errors are retried with exponential
+backoff between 1 and 5 seconds; client errors are not retried.
+
+Run the bundled example against a live server:
+
+```sh
+sbt "runMain ClientExample"
+```
+
+It fetches every character and film, then reports the shortest path between
+Darth Maul and Greedo.
+
+## Postgres
+
+The repository can be backed by Postgres instead of memory. Flyway applies the
+schema and the bundled data seeds it.
+
+```scala
+import com.matthewjones372.data.sql.*
+import zio.*
+
+for
+  pool      <- ZIO.service[javax.sql.DataSource]
+  _         <- SwMigrations.migrate
+  transactor = ZTransactor(pool)
+  _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
+  people    <- SqlDataRepo(transactor).getPeople(Some(1), Some(10), None)
+yield people
+```
+
+Characters and films are stored in normalised tables, with `people_films`
+carrying the relation the graph search walks. Paging and sorting run in SQL.
+Sort keys are matched against a column whitelist, so a `sortBy` value that is
+not a known field never reaches the query.
+
+## Modules
+
+| Module | Contents |
+| ------ | -------- |
+| `domain` | Case classes and JSON codecs for characters and films |
+| `data` | In-memory and Postgres backed repositories, migrations and seeding |
+| `http-api` | Endpoint definitions, handlers and OpenAPI generation |
+| `api-client` | Caching HTTP client with retry policies |
+| `search` | Breadth first search over the character graph |
+| `multi-sort` | Runtime multi-field sorting derived from case classes |
+
+`api-client` and `multi-sort` are published to GitHub Packages.
+
+## Building
+
+Requires JDK 25.
+
+```sh
+sbt compile
+sbt test
+sbt scalafmtCheckAll
+```
+
+Regenerate the OpenAPI document into `docs/openapi/openapi.json`:
+
+```sh
+sbt generateOpenAPIDocs
+```

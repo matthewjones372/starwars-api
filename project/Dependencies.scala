@@ -12,10 +12,6 @@ object Dependencies {
   private val zioConfigV  = "4.0.8"
   private val zioPreludeV = "1.0.0-RC48"
 
-  // Kestrel is not on Maven Central yet, so the load-test module resolves it
-  // from `~/.m2` after `./gradlew publishToMavenLocal` in the kestrel repo.
-  // The coordinates carry no Scala suffix: there is one supported Scala
-  // version, and a suffix invented early is one to keep publishing forever.
   private val kestrelV = "0.1.0-SNAPSHOT"
 
   private val magnumV  = "1.3.1"
@@ -56,4 +52,6 @@ object Dependencies {
 
   val kestrelScala   = "io.github.matthewjones372" % "kestrel-scala"    % kestrelV
   val kestrelZioTest = "io.github.matthewjones372" % "kestrel-zio-test" % kestrelV
+  val kestrelHtml    = "io.github.matthewjones372" % "kestrel-report-html"   % kestrelV
+  val kestrelGithub  = "io.github.matthewjones372" % "kestrel-report-github" % kestrelV
 }

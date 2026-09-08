@@ -19,17 +19,6 @@ trait SWHttpServer:
   def start: URIO[Server, Nothing]
 
 object SWHttpServer:
-  /**
-   * Without `Middleware.debug`, which used to be on this route stack.
-   *
-   * It logs a line per request, so it sat on the path every response takes.
-   * Measured, that was three times this API's capacity: the knee moved from
-   * between 2,000 and 4,000 requests a second to between 8,000 and 12,000, and
-   * at 4,000 the same handler answered in 774us without it against 25,559us
-   * with it. See `load-test/FINDINGS.md`.
-   *
-   * `withRequestLogging(true)` puts it back for a human who is reading the log.
-   */
   def default = withRequestLogging(false)
 
   def withRequestLogging(enabled: Boolean) =

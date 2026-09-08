@@ -7,18 +7,6 @@ import zio.http.*
 import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
 
-/**
- * The API under load, in a JVM of its own.
- *
- * Separate from the generator on purpose: a load test that shares a heap with
- * the thing it measures cannot say whether a pause was the target's or its
- * own. The two still share this machine's cores, which is what a laptop run
- * looks like and is said out loud rather than left for a reader to discover.
- *
- * `args`: the port, then `logging` or `quiet`. The logger stack is identical
- * either way, so the only thing that changes between two runs of this is
- * whether `Middleware.debug` is on the path a response takes.
- */
 object LoadTestServer extends ZIOAppDefault:
 
   def run =

@@ -1,12 +1,4 @@
 #!/usr/bin/env bash
-# Test 0: the same rate ladder against the same API, twice — once with
-# `Middleware.debug` on the response path and once without it.
-#
-# Both JVMs are started here rather than from sbt, so the generator and the
-# target never share a heap. They do share this machine's cores, which is what
-# a laptop run looks like and is a caveat on every number below.
-#
-#   sbt "load-test/writeClasspath" && load-test/sweep.sh
 set -euo pipefail
 
 here=$(cd "$(dirname "$0")" && pwd)

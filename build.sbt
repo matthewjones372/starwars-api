@@ -116,10 +116,6 @@ lazy val search = Projects
     domain % oneToOneClassMapping
   )
 
-// Deliberately outside `modules`: the load test resolves Kestrel from the local
-// maven repository, which a clean CI checkout does not have. Root aggregation
-// never reaches it, so `sbt test` is unaffected and `sbt "load-test/run"` is how
-// you ask for it (the project id is `load-test`). See load-test/README.md.
 lazy val loadTest = Projects
   .create("load-test")
   .settings(
@@ -130,18 +126,9 @@ lazy val loadTest = Projects
   )
   .settings(
     publish / skip := true,
-    // The generator and the target must not share a heap, so the sweep starts
-    // the server in a JVM of its own rather than in this one.
-    run / fork := true,
-    // sweep.sh launches both JVMs itself, so it needs the classpath as a file
-    // rather than an sbt session holding one of them.
     TaskKey[Unit]("writeClasspath") := {
-      // sbt 2 hands back virtual file references, so the converter is what
-      // turns a classpath into paths another JVM can be started with.
       val converter = fileConverter.value
       val entries   = (Runtime / fullClasspath).value.map(entry => converter.toPath(entry.data))
-      // Under the module rather than sbt 2's out/ tree, so sweep.sh has a
-      // fixed path to read and does not have to know the scala version.
       val out       = baseDirectory.value / "target" / "load-test-cp.txt"
       IO.createDirectory(out.getParentFile)
       IO.write(out, entries.mkString(java.io.File.pathSeparator))

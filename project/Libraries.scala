@@ -67,7 +67,9 @@ object Libraries {
     resolvers += Resolver.mavenLocal,
     libraryDependencies ++= Seq(
       Dependencies.kestrelScala,
-      Dependencies.kestrelZioTest
+      Dependencies.kestrelZioTest,
+      Dependencies.kestrelHtml,
+      Dependencies.kestrelGithub
     )
   )
 

@@ -1,11 +1,4 @@
 #!/usr/bin/env bash
-# What the server spends its time on at a rate near the knee.
-#
-# A load test finds where the wall is. It does not say what the wall is made
-# of — that needs a profiler on the server's own JVM while the load is on it.
-# This holds one rate and takes a JFR recording across it.
-#
-#   sbt "load-test/writeClasspath" && load-test/profile.sh [rate] [seconds]
 set -euo pipefail
 
 here=$(cd "$(dirname "$0")" && pwd)

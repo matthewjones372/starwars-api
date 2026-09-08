@@ -67,16 +67,16 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       test("migrates, seeds and reads back the bundled data") {
         for
           repo   <- ZIO.service[SWDataRepo]
-          people <- repo.getPeople(None, None, None)
+          people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
         yield assertTrue(people.count == 82, films.count == 6, people.results.length == 82)
       },
       test("pages without gaps or repeats") {
         for
           repo   <- ZIO.service[SWDataRepo]
-          first  <- repo.getPeople(Some(1), Some(10), None)
-          second <- repo.getPeople(Some(2), Some(10), None)
-          rest   <- ZIO.foreach(3 to first.pageCount)(page => repo.getPeople(Some(page), Some(10), None))
+          first  <- repo.getCharacters(Some(1), Some(10), None)
+          second <- repo.getCharacters(Some(2), Some(10), None)
+          rest   <- ZIO.foreach(3 to first.pageCount)(page => repo.getCharacters(Some(page), Some(10), None))
           all     = first.results ++ second.results ++ rest.flatMap(_.results)
         yield assertTrue(
           first.results.length == 10,
@@ -88,29 +88,29 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       test("finds a person and a film by id") {
         for
           repo   <- ZIO.service[SWDataRepo]
-          person <- repo.getPerson(1)
+          person <- repo.getCharacter(1)
           film   <- repo.getFilm(1)
         yield assertTrue(person.url.endsWith("/people/1/"), film.url.endsWith("/films/1/"))
       },
       test("reassembles the url sets belonging to a person") {
         for
           repo   <- ZIO.service[SWDataRepo]
-          person <- repo.getPerson(1)
+          person <- repo.getCharacter(1)
         yield assertTrue(person.films.nonEmpty, person.films.forall(_.contains("/films/")))
       },
-      test("fails with PersonNotFound and FilmNotFound for unknown ids") {
+      test("fails with CharacterNotFound and FilmNotFound for unknown ids") {
         for
           repo     <- ZIO.service[SWDataRepo]
-          noPerson <- repo.getPerson(9999).exit
+          noPerson <- repo.getCharacter(9999).exit
           noFilm   <- repo.getFilm(9999).exit
-        yield assert(noPerson)(Assertion.failsWithA[DataRepoError.PersonNotFound]) &&
+        yield assert(noPerson)(Assertion.failsWithA[DataRepoError.CharacterNotFound]) &&
           assert(noFilm)(Assertion.failsWithA[DataRepoError.FilmNotFound])
       },
       test("sorts by name in both directions") {
         for
           repo       <- ZIO.service[SWDataRepo]
-          ascending  <- repo.getPeople(None, None, ascendingName)
-          descending <- repo.getPeople(None, None, Some(List(SortBy("name", FieldOrdering.DESC))))
+          ascending  <- repo.getCharacters(None, None, ascendingName)
+          descending <- repo.getCharacters(None, None, Some(List(SortBy("name", FieldOrdering.DESC))))
         yield assertTrue(
           ascending.results.map(_.name) == ascending.results.map(_.name).sorted,
           descending.results.map(_.name) == ascending.results.map(_.name).reverse
@@ -119,7 +119,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       test("ignores an unknown sort key rather than failing") {
         for
           repo   <- ZIO.service[SWDataRepo]
-          people <- repo.getPeople(Some(1), Some(5), Some(List(SortBy("not_a_column", FieldOrdering.ASC))))
+          people <- repo.getCharacters(Some(1), Some(5), Some(List(SortBy("not_a_column", FieldOrdering.ASC))))
         yield assertTrue(people.results.length == 5, people.count == 82)
       }
     ).provideShared(seededRepo)

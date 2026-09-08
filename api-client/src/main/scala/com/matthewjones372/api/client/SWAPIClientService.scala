@@ -5,22 +5,22 @@ import zio.*
 import zio.http.*
 
 trait SWAPIClientService:
-  def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]]
-  def getPeople: IO[ClientError, Set[Person]]
-  def getFilmsFromPeople: IO[ClientError, Map[String, Set[String]]]
+  def getFilmsFromCharacter(id: Int): IO[ClientError, Set[String]]
+  def getCharacters: IO[ClientError, Set[Character]]
+  def getFilmsFromCharacters: IO[ClientError, Map[String, Set[String]]]
   def getFilms: IO[ClientError, Set[Film]]
 
 object SWAPIClientService:
   type SWAPIEnv = Client & Scope
 
-  def getFilmsFromPerson(id: Int)(using Trace): ZIO[SWAPIClientService, ClientError, Set[String]] =
-    ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromPerson(id))
+  def getFilmsFromCharacter(id: Int)(using Trace): ZIO[SWAPIClientService, ClientError, Set[String]] =
+    ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromCharacter(id))
 
-  def getPeople(using Trace): ZIO[SWAPIClientService, ClientError, Set[Person]] =
-    ZIO.serviceWithZIO[SWAPIClientService](_.getPeople)
+  def getCharacters(using Trace): ZIO[SWAPIClientService, ClientError, Set[Character]] =
+    ZIO.serviceWithZIO[SWAPIClientService](_.getCharacters)
 
-  def getFilmsFromPeople(using Trace): ZIO[SWAPIClientService, ClientError, Map[String, Set[String]]] =
-    ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromPeople)
+  def getFilmsFromCharacters(using Trace): ZIO[SWAPIClientService, ClientError, Map[String, Set[String]]] =
+    ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromCharacters)
 
   def getFilms(using Trace): ZIO[SWAPIClientService, ClientError, Set[Film]] =
     ZIO.serviceWithZIO[SWAPIClientService](_.getFilms)
@@ -35,19 +35,19 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
   override def getFilms: IO[ClientError, Set[Film]] =
     ApiClient.getFilms.provideEnvironment(ZEnvironment(apiClient))
 
-  override def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]] = {
+  override def getFilmsFromCharacter(id: Int): IO[ClientError, Set[String]] = {
     for
-      people <- ApiClient.getPersonFrom(id)
+      people <- ApiClient.getCharacterFrom(id)
       films  <- ZIO.foreachPar(people.films)(url => decodeUrlString(url).flatMap(ApiClient.getFilmFromUrl))
     yield films.map(_.title)
   }.provideEnvironment(ZEnvironment(apiClient))
 
-  override def getPeople: IO[ClientError, Set[Person]] =
-    ApiClient.getPeople.provideEnvironment(ZEnvironment(apiClient))
+  override def getCharacters: IO[ClientError, Set[Character]] =
+    ApiClient.getCharacters.provideEnvironment(ZEnvironment(apiClient))
 
-  override def getFilmsFromPeople: IO[ClientError, Map[String, Set[String]]] =
+  override def getFilmsFromCharacters: IO[ClientError, Map[String, Set[String]]] =
     (for
-      people <- ApiClient.getPeople
+      people <- ApiClient.getCharacters
       films <-
         ZIO
           .foreachPar(people) { person =>

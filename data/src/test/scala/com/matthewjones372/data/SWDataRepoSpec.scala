@@ -8,7 +8,7 @@ import zio.test.*
 object SWDataRepoSpec extends ZIOSpecDefault:
 
   private def personWithId(id: Int, name: String = "", height: Option[Int] = None) =
-    Person(
+    Character(
       name = if name.isEmpty then s"person-$id" else name,
       height = height,
       mass = None,
@@ -95,18 +95,18 @@ object SWDataRepoSpec extends ZIOSpecDefault:
         )
       }
     ),
-    suite("getPeople")(
+    suite("getCharacters")(
       test("returns the total count alongside a single page of results") {
         for
           repo   <- repo
-          people <- repo.getPeople(Some(1), Some(10), None)
+          people <- repo.getCharacters(Some(1), Some(10), None)
         yield assertTrue(people.count == 30, people.results.length == 10)
       },
       test("pages are stable and ordered by id regardless of map ordering") {
         for
           repo   <- SWDataRepo.fromEntities(scala.util.Random.shuffle(thirtyPeople), thirtyFilms)
-          first  <- repo.getPeople(Some(1), Some(10), None)
-          second <- repo.getPeople(Some(2), Some(10), None)
+          first  <- repo.getCharacters(Some(1), Some(10), None)
+          second <- repo.getCharacters(Some(2), Some(10), None)
         yield assertTrue(
           first.results.map(_.name) == (1 to 10).map(id => s"person-$id").toList,
           second.results.map(_.name) == (11 to 20).map(id => s"person-$id").toList
@@ -115,15 +115,15 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("repeated requests for the same page return the same results") {
         for
           repo  <- repo
-          one   <- repo.getPeople(Some(2), Some(10), None)
-          again <- repo.getPeople(Some(2), Some(10), None)
+          one   <- repo.getCharacters(Some(2), Some(10), None)
+          again <- repo.getCharacters(Some(2), Some(10), None)
         yield assertTrue(one.results == again.results)
       },
       test("pageCount covers every person exactly once") {
         for
           repo   <- repo
-          first  <- repo.getPeople(Some(1), Some(10), None)
-          rest   <- ZIO.foreach(2 to first.pageCount)(page => repo.getPeople(Some(page), Some(10), None))
+          first  <- repo.getCharacters(Some(1), Some(10), None)
+          rest   <- ZIO.foreach(2 to first.pageCount)(page => repo.getCharacters(Some(page), Some(10), None))
           fetched = first.results ++ rest.flatMap(_.results)
         yield assertTrue(fetched.length == 30, fetched.map(_.name).distinct.length == 30)
       },
@@ -131,14 +131,14 @@ object SWDataRepoSpec extends ZIOSpecDefault:
         val people = List(personWithId(1, "Chewbacca"), personWithId(2, "Ackbar"), personWithId(3, "Boba"))
         for
           repo   <- SWDataRepo.fromEntities(people, Nil)
-          sorted <- repo.getPeople(None, None, Some(List(SortBy("name", FieldOrdering.ASC))))
+          sorted <- repo.getCharacters(None, None, Some(List(SortBy("name", FieldOrdering.ASC))))
         yield assertTrue(sorted.results.map(_.name) == List("Ackbar", "Boba", "Chewbacca"))
       },
       test("sorts descending when asked") {
         val people = List(personWithId(1, "Chewbacca"), personWithId(2, "Ackbar"), personWithId(3, "Boba"))
         for
           repo   <- SWDataRepo.fromEntities(people, Nil)
-          sorted <- repo.getPeople(None, None, Some(List(SortBy("name", FieldOrdering.DESC))))
+          sorted <- repo.getCharacters(None, None, Some(List(SortBy("name", FieldOrdering.DESC))))
         yield assertTrue(sorted.results.map(_.name) == List("Chewbacca", "Boba", "Ackbar"))
       }
     ),
@@ -161,15 +161,15 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("finds a person and a film by the id in their url") {
         for
           repo   <- repo
-          person <- repo.getPerson(7)
+          person <- repo.getCharacter(7)
           film   <- repo.getFilm(7)
         yield assertTrue(person.name == "person-7", film.title == "film-7")
       },
-      test("fails with PersonNotFound for an unknown person") {
+      test("fails with CharacterNotFound for an unknown person") {
         for
           repo   <- repo
-          result <- repo.getPerson(999).exit
-        yield assert(result)(Assertion.failsWithA[DataRepoError.PersonNotFound])
+          result <- repo.getCharacter(999).exit
+        yield assert(result)(Assertion.failsWithA[DataRepoError.CharacterNotFound])
       },
       test("fails with FilmNotFound for an unknown film") {
         for
@@ -182,9 +182,9 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("loads the bundled star wars data from the classpath") {
         for
           repo   <- ZIO.service[SWDataRepo]
-          people <- repo.getPeople(None, None, None)
+          people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
-          person <- repo.getPerson(1)
+          person <- repo.getCharacter(1)
           film   <- repo.getFilm(1)
         yield assertTrue(
           people.count == 82,
@@ -196,8 +196,8 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("pages the bundled data without gaps or repeats") {
         for
           repo   <- ZIO.service[SWDataRepo]
-          first  <- repo.getPeople(Some(1), Some(10), None)
-          rest   <- ZIO.foreach(2 to first.pageCount)(page => repo.getPeople(Some(page), Some(10), None))
+          first  <- repo.getCharacters(Some(1), Some(10), None)
+          rest   <- ZIO.foreach(2 to first.pageCount)(page => repo.getCharacters(Some(page), Some(10), None))
           fetched = first.results ++ rest.flatMap(_.results)
         yield assertTrue(fetched.length == 82, fetched.map(_.url).distinct.length == 82)
       }

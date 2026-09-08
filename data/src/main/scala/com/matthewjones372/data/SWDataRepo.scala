@@ -11,8 +11,12 @@ import java.nio.charset.StandardCharsets
 
 trait SWDataRepo:
   def getFilm(id: Int): IO[DataRepoError, Film]
-  def getPerson(id: Int): IO[DataRepoError, Person]
-  def getPeople(from: Option[Int], fetchSize: Option[Int], sortBy: Option[List[SortBy]]): IO[DataRepoError, People]
+  def getCharacter(id: Int): IO[DataRepoError, Character]
+  def getCharacters(
+    from: Option[Int],
+    fetchSize: Option[Int],
+    sortBy: Option[List[SortBy]]
+  ): IO[DataRepoError, Characters]
   def getFilms(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Films]
 
 object SWDataRepo:
@@ -34,7 +38,7 @@ object SWDataRepo:
         val offset = (page.getOrElse(1) - 1) * size
         data.slice(offset, offset + size)
 
-  def fromEntities(people: List[Person], films: List[Film]): IO[DataRepoError, SWDataRepo] =
+  def fromEntities(people: List[Character], films: List[Film]): IO[DataRepoError, SWDataRepo] =
     for
       peopleById <- ZIO.foreach(people)(person => keyOf(person.url).map(_ -> person)).map(_.toMap)
       filmsById  <- ZIO.foreach(films)(film => keyOf(film.url).map(_ -> film)).map(_.toMap)
@@ -45,12 +49,12 @@ object SWDataRepo:
       .fromEither(parseEntityId(url))
       .mapError(message => DataRepoError.UnexpectedError(message, new IllegalArgumentException(message)))
 
-  private[data] def bundledEntities: Task[(List[Person], List[Film])] =
+  private[data] def bundledEntities: Task[(List[Character], List[Film])] =
     for
       _          <- ZIO.logInfo("Reading in Star Wars Data")
       peopleJson <- readResource("people_data.json")
       filmJson   <- readResource("film_data.json")
-      people     <- decode[Person](peopleJson, "people")
+      people     <- decode[Character](peopleJson, "people")
       films      <- decode[Film](filmJson, "films")
       _          <- ZIO.logInfo(s"Parsed ${people.size} people and ${films.size} films")
     yield (people, films)
@@ -80,7 +84,8 @@ object SWDataRepo:
       .tapError(error => ZIO.logError(s"Failed to parse $label data: $error"))
       .mapError(error => new RuntimeException(s"Failed to parse $label data: $error"))
 
-final private case class InMemoryDataRepo(peopleById: Map[Int, Person], filmsById: Map[Int, Film]) extends SWDataRepo:
+final private case class InMemoryDataRepo(peopleById: Map[Int, Character], filmsById: Map[Int, Film])
+    extends SWDataRepo:
 
   private val orderedPeople = peopleById.toList.sortBy(_._1).map(_._2)
   private val orderedFilms  = filmsById.toList.sortBy(_._1).map(_._2)
@@ -88,16 +93,16 @@ final private case class InMemoryDataRepo(peopleById: Map[Int, Person], filmsByI
   override def getFilm(id: Int): IO[DataRepoError, Film] =
     ZIO.fromOption(filmsById.get(id)).orElseFail(DataRepoError.FilmNotFound("Film not found", id))
 
-  override def getPerson(id: Int): IO[DataRepoError, Person] =
-    ZIO.fromOption(peopleById.get(id)).orElseFail(DataRepoError.PersonNotFound("Person not found", id))
+  override def getCharacter(id: Int): IO[DataRepoError, Character] =
+    ZIO.fromOption(peopleById.get(id)).orElseFail(DataRepoError.CharacterNotFound("Character not found", id))
 
   override def getFilms(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Films] =
     ZIO.succeed(Films(orderedFilms.size, SWDataRepo.paginate(orderedFilms, from, fetchSize)))
 
-  override def getPeople(
+  override def getCharacters(
     from: Option[Int],
     fetchSize: Option[Int],
     sortBy: Option[List[SortBy]]
-  ): IO[DataRepoError, People] =
+  ): IO[DataRepoError, Characters] =
     val sorted = sortBy.fold(orderedPeople)(DynamicMultiSorter.sort(orderedPeople, _))
-    ZIO.succeed(People(orderedPeople.size, SWDataRepo.paginate(sorted, from, fetchSize)))
+    ZIO.succeed(Characters(orderedPeople.size, SWDataRepo.paginate(sorted, from, fetchSize)))

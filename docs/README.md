@@ -77,24 +77,14 @@ Unknown field names are ignored rather than rejected.
 The sorter behind this is a standalone module with no dependencies. Derive it
 for any case class and sort by field name at runtime:
 
-```scala
+```scala mdoc
 import com.matthewjones372.sorting.*
 
 case class Crew(name: String, age: Int) derives DynamicMultiSorter
 
 val crew = List(Crew("Boba", 32), Crew("Ackbar", 41), Crew("Boba", 12))
-// crew: List[Crew] = List(
-//   Crew(name = "Boba", age = 32),
-//   Crew(name = "Ackbar", age = 41),
-//   Crew(name = "Boba", age = 12)
-// )
 
 DynamicMultiSorter.sort(crew, List(SortBy("name", FieldOrdering.ASC), SortBy("age", FieldOrdering.DESC)))
-// res0: List[Crew] = List(
-//   Crew(name = "Ackbar", age = 41),
-//   Crew(name = "Boba", age = 32),
-//   Crew(name = "Boba", age = 12)
-// )
 ```
 
 Orderings are summoned at compile time from the case class fields, so a sort
@@ -123,7 +113,7 @@ films connects them.
 
 The same search is available directly:
 
-```scala
+```scala mdoc
 import com.matthewjones372.search.SWGraph
 
 val graph = SWGraph(
@@ -133,10 +123,8 @@ val graph = SWGraph(
     "Boba Fett" -> Set("A New Hope")
   )
 )
-// graph: SWGraph[String] = com.matthewjones372.search.SWGraph@e25b50a
 
 graph.bfs("Lobot", "Boba Fett").map(_.length)
-// res1: Option[Int] = Some(2)
 ```
 
 Its `toString` renders the chain with the film joining each pair, coloured for a
@@ -152,7 +140,7 @@ The graph is built once per server and reused across requests.
 The client wraps the same API with caching, retries and typed errors. Failures
 arrive as `ClientError` values rather than exceptions.
 
-```scala
+```scala mdoc:compile-only
 import com.matthewjones372.api.client.SWAPIClientService
 import zio.*, zio.http.*
 
@@ -181,7 +169,7 @@ Darth Maul and Greedo.
 The repository can be backed by Postgres instead of memory. Flyway applies the
 schema and the bundled data seeds it.
 
-```scala
+```scala mdoc:compile-only
 import com.matthewjones372.data.sql.*
 import zio.*
 

@@ -11,19 +11,19 @@ import zio.schema.codec.BinaryCodec
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
 trait ApiClient:
-  def getPersonFrom(id: Int): IO[ClientError, Person]
+  def getCharacterFrom(id: Int): IO[ClientError, Character]
 
   def getFilmFrom(id: Int): IO[ClientError, Film]
 
   def getFilmFromUrl(url: URL): IO[ClientError, Film]
 
-  def getPeople: IO[ClientError, Set[Person]]
+  def getCharacters: IO[ClientError, Set[Character]]
 
   def getFilms: IO[ClientError, Set[Film]]
 
 object ApiClient:
-  def getPersonFrom(id: Int)(using Trace) =
-    ZIO.serviceWithZIO[ApiClient](_.getPersonFrom(id))
+  def getCharacterFrom(id: Int)(using Trace) =
+    ZIO.serviceWithZIO[ApiClient](_.getCharacterFrom(id))
 
   def getFilmFrom(id: Int)(using Trace) =
     ZIO.serviceWithZIO[ApiClient](_.getFilmFrom(id))
@@ -31,8 +31,8 @@ object ApiClient:
   def getFilmFromUrl(url: URL)(using Trace) =
     ZIO.serviceWithZIO[ApiClient](_.getFilmFromUrl(url))
 
-  def getPeople(using Trace) =
-    ZIO.serviceWithZIO[ApiClient](_.getPeople)
+  def getCharacters(using Trace) =
+    ZIO.serviceWithZIO[ApiClient](_.getCharacters)
 
   def getFilms(using Trace) =
     ZIO.serviceWithZIO[ApiClient](_.getFilms)
@@ -42,12 +42,12 @@ object ApiClient:
     case FilmUrl(url: URL)
     case Films
     case PersonId(id: Int)
-    case People
+    case Characters
 
-  private final case class FilmSet(films: Set[Film])      extends AnyVal
-  private final case class PeopleSet(people: Set[Person]) extends AnyVal
+  private final case class FilmSet(films: Set[Film])            extends AnyVal
+  private final case class CharacterSet(people: Set[Character]) extends AnyVal
 
-  private type CacheEntities = Film | Person | FilmSet | PeopleSet
+  private type CacheEntities = Film | Character | FilmSet | CharacterSet
 
   private final class CachingApiClient(
     cache: Cache[CacheKey, ClientError, CacheEntities]
@@ -61,11 +61,11 @@ object ApiClient:
     override def getFilmFrom(id: Int): IO[ClientError, Film] =
       getAs(CacheKey.FilmId(id)) { case film: Film => film }
 
-    override def getPersonFrom(id: Int): IO[ClientError, Person] =
-      getAs(CacheKey.PersonId(id)) { case person: Person => person }
+    override def getCharacterFrom(id: Int): IO[ClientError, Character] =
+      getAs(CacheKey.PersonId(id)) { case person: Character => person }
 
-    override def getPeople: IO[ClientError, Set[Person]] =
-      getAs(CacheKey.People) { case PeopleSet(people) => people }
+    override def getCharacters: IO[ClientError, Set[Character]] =
+      getAs(CacheKey.Characters) { case CharacterSet(people) => people }
 
     override def getFilms: IO[ClientError, Set[Film]] =
       getAs(CacheKey.Films) { case FilmSet(films) => films }
@@ -87,11 +87,11 @@ object ApiClient:
                     case CacheKey.FilmId(id) =>
                       apiClient.getFilmFrom(id)
                     case CacheKey.PersonId(id) =>
-                      apiClient.getPersonFrom(id)
+                      apiClient.getCharacterFrom(id)
                     case CacheKey.FilmUrl(url) =>
                       apiClient.getFilmFromUrl(url)
-                    case CacheKey.People =>
-                      apiClient.getPeople.map(PeopleSet.apply)
+                    case CacheKey.Characters =>
+                      apiClient.getCharacters.map(CharacterSet.apply)
                     case CacheKey.Films =>
                       apiClient.getFilms.map(FilmSet.apply)
                 }
@@ -107,12 +107,12 @@ object ApiClient:
   ) extends ApiClient:
     private val env = ZEnvironment(client, scope)
 
-    override def getPersonFrom(id: Int): IO[ClientError, Person] =
-      get[Person]((httpConfig.baseUrl / "people" / id.toString).addQueryParam("format", "json"))
+    override def getCharacterFrom(id: Int): IO[ClientError, Character] =
+      get[Character]((httpConfig.baseUrl / "people" / id.toString).addQueryParam("format", "json"))
         .provideEnvironment(env)
 
-    override def getPeople: IO[ClientError, Set[Person]] =
-      getPagedResponse[People, Person]("people").provideEnvironment(env)
+    override def getCharacters: IO[ClientError, Set[Character]] =
+      getPagedResponse[Characters, Character]("people").provideEnvironment(env)
 
     override def getFilmFrom(id: Int): IO[ClientError, Film] =
       get[Film]((httpConfig.baseUrl / "films" / id.toString).addQueryParam("format", "json"))

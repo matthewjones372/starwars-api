@@ -75,7 +75,8 @@ lazy val `http-api` = Projects
   )
   .dependsOn(
     domain % oneToOneClassMapping,
-    data   % oneToOneClassMapping
+    data   % oneToOneClassMapping,
+    search % oneToOneClassMapping
   )
 
 lazy val dynamicSorting = Projects
@@ -110,5 +111,17 @@ lazy val search = Projects
   .dependsOn(
     domain % oneToOneClassMapping
   )
+
+lazy val docs = project
+  .in(file("mdoc-docs"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    publish / skip := true,
+    mdocIn         := file("docs/README.md"),
+    mdocOut        := file("README.md"),
+    // mdoc wraps each snippet in generated code that trips the unused-value warnings
+    scalacOptions ~= (_.filterNot(Set("-Werror", "-Xfatal-warnings")))
+  )
+  .dependsOn(domain, search, dynamicSorting, client, data)
 
 lazy val modules: Seq[ProjectReference] = Seq(domain, client, data, `http-api`, search, dynamicSorting)

@@ -17,7 +17,7 @@ object ClientExample extends ZIOAppDefault:
   def run =
     (for
       swapi                 <- ZIO.service[SWAPIClientService]
-      (time, people)        <- swapi.getFilmsFromPeople.timed
+      (time, people)        <- swapi.getFilmsFromCharacters.timed
       _                     <- Console.printLine(s"There are ${people.size} people and it took ${time.toMillis} ms")
       (time2, films)        <- swapi.getFilms.timed
       _                     <- Console.printLine(s"There are ${films.size} films and it took ${time2.toMillis} ms")

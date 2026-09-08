@@ -5,6 +5,68 @@
     "version" : "1.0"
   },
   "paths" : {
+    "/people/{characterId}" : {
+      "get" : {
+        "parameters" : [
+          
+            {
+            "name" : "characterId",
+            "in" : "path",
+            "required" : true,
+            "schema" : 
+              {
+              "type" : 
+                "integer",
+              "format" : "int32"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "$ref" : "#/components/schemas/Character"
+                }
+              }
+            }
+          },
+          "500" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/UnexpectedError"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/ServerError"
+                    }
+                  ],
+                  "description" : ""
+                }
+              }
+            }
+          },
+          "404" : 
+            {
+            "content" : {
+              "application/json" : {
+                "schema" : 
+                  {
+                  "$ref" : "#/components/schemas/CharacterNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/films" : {
       "get" : {
         "parameters" : [
@@ -167,7 +229,7 @@
               "application/json" : {
                 "schema" : 
                   {
-                  "$ref" : "#/components/schemas/People"
+                  "$ref" : "#/components/schemas/Characters"
                 }
               }
             }
@@ -194,12 +256,27 @@
         }
       }
     },
-    "/people/{personId}" : {
+    "/people/{characterId}/path-to/{targetId}" : {
+      "description" : "The shortest chain of shared films connecting two characters\n\n",
       "get" : {
+        "description" : "The shortest chain of shared films connecting two characters\n\n",
         "parameters" : [
           
             {
-            "name" : "personId",
+            "name" : "characterId",
+            "in" : "path",
+            "required" : true,
+            "schema" : 
+              {
+              "type" : 
+                "integer",
+              "format" : "int32"
+            },
+            "style" : "simple"
+          },
+          
+            {
+            "name" : "targetId",
             "in" : "path",
             "required" : true,
             "schema" : 
@@ -218,7 +295,7 @@
               "application/json" : {
                 "schema" : 
                   {
-                  "$ref" : "#/components/schemas/Person"
+                  "$ref" : "#/components/schemas/ShortestPath"
                 }
               }
             }
@@ -248,7 +325,15 @@
               "application/json" : {
                 "schema" : 
                   {
-                  "$ref" : "#/components/schemas/PersonNotFound"
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/CharacterNotFound"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/PathNotFound"
+                    }
+                  ],
+                  "description" : ""
                 }
               }
             }
@@ -259,6 +344,20 @@
   },
   "components" : {
     "schemas" : {
+      "PathNotFound" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "message" : {
+            "type" : 
+              "string"
+          }
+        },
+        "required" : [
+          "message"
+        ]
+      },
       "Films" : 
         {
         "type" : 
@@ -282,190 +381,26 @@
           "results"
         ]
       },
-      "People" : 
+      "PathStep" : 
         {
         "type" : 
           "object",
         "properties" : {
-          "count" : {
-            "type" : 
-              "integer",
-            "format" : "int32"
-          },
-          "results" : {
-            "type" : 
-              "array",
-            "items" : {
-              "$ref" : "#/components/schemas/Person"
-            }
-          }
-        },
-        "required" : [
-          "count",
-          "results"
-        ]
-      },
-      "Film" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {
-          "species" : {
-            "type" : 
-              "array",
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "url" : {
+          "person" : {
             "type" : 
               "string"
           },
-          "episode_id" : {
-            "type" : 
-              "integer",
-            "format" : "int32"
-          },
-          "characters" : {
-            "type" : 
-              "array",
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "opening_crawl" : {
-            "type" : 
-              "string"
-          },
-          "release_date" : {
-            "type" : 
-              "string"
-          },
-          "edited" : {
-            "type" : 
-              "string"
-          },
-          "title" : {
-            "type" : 
-              "string"
-          },
-          "planets" : {
-            "type" : 
-              "array",
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "vehicles" : {
-            "type" : 
-              "array",
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "director" : {
-            "type" : 
-              "string"
-          },
-          "starships" : {
-            "type" : 
-              "array",
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "producer" : {
-            "type" : 
-              "string"
-          },
-          "created" : {
+          "film" : {
             "type" : 
               "string"
           }
         },
         "required" : [
-          "title",
-          "episode_id",
-          "opening_crawl",
-          "director",
-          "producer",
-          "release_date",
-          "characters",
-          "planets",
-          "starships",
-          "vehicles",
-          "species",
-          "created",
-          "edited",
-          "url"
+          "person",
+          "film"
         ]
       },
-      "PersonNotFound" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {
-          "message" : {
-            "type" : 
-              "string"
-          },
-          "personId" : {
-            "type" : 
-              "integer",
-            "format" : "int32"
-          }
-        },
-        "required" : [
-          "message",
-          "personId"
-        ]
-      },
-      "FilmNotFound" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {
-          "message" : {
-            "type" : 
-              "string"
-          },
-          "filmId" : {
-            "type" : 
-              "integer",
-            "format" : "int32"
-          }
-        },
-        "required" : [
-          "message",
-          "filmId"
-        ]
-      },
-      "UnexpectedError" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {
-          "message" : {
-            "type" : 
-              "string"
-          }
-        },
-        "required" : [
-          "message"
-        ]
-      },
-      "ServerError" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {}
-      },
-      "Person" : 
+      "Character" : 
         {
         "type" : 
           "object",
@@ -580,6 +515,222 @@
           "starships",
           "url"
         ]
+      },
+      "FilmNotFound" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "message" : {
+            "type" : 
+              "string"
+          },
+          "filmId" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [
+          "message",
+          "filmId"
+        ]
+      },
+      "UnexpectedError" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "message" : {
+            "type" : 
+              "string"
+          }
+        },
+        "required" : [
+          "message"
+        ]
+      },
+      "CharacterNotFound" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "message" : {
+            "type" : 
+              "string"
+          },
+          "characterId" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [
+          "message",
+          "characterId"
+        ]
+      },
+      "Film" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "species" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "url" : {
+            "type" : 
+              "string"
+          },
+          "episode_id" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          },
+          "characters" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "opening_crawl" : {
+            "type" : 
+              "string"
+          },
+          "release_date" : {
+            "type" : 
+              "string"
+          },
+          "edited" : {
+            "type" : 
+              "string"
+          },
+          "title" : {
+            "type" : 
+              "string"
+          },
+          "planets" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "vehicles" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "director" : {
+            "type" : 
+              "string"
+          },
+          "starships" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "producer" : {
+            "type" : 
+              "string"
+          },
+          "created" : {
+            "type" : 
+              "string"
+          }
+        },
+        "required" : [
+          "title",
+          "episode_id",
+          "opening_crawl",
+          "director",
+          "producer",
+          "release_date",
+          "characters",
+          "planets",
+          "starships",
+          "vehicles",
+          "species",
+          "created",
+          "edited",
+          "url"
+        ]
+      },
+      "Characters" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "count" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          },
+          "results" : {
+            "type" : 
+              "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Character"
+            }
+          }
+        },
+        "required" : [
+          "count",
+          "results"
+        ]
+      },
+      "ShortestPath" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "start" : {
+            "type" : 
+              "string"
+          },
+          "end" : {
+            "type" : 
+              "string"
+          },
+          "films" : {
+            "type" : 
+              "integer",
+            "format" : "int32"
+          },
+          "steps" : {
+            "type" : 
+              "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PathStep"
+            }
+          }
+        },
+        "required" : [
+          "start",
+          "end",
+          "films",
+          "steps"
+        ]
+      },
+      "ServerError" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {}
       }
     }
   }

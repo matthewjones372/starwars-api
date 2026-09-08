@@ -53,6 +53,15 @@ object Libraries {
     )
   )
 
+  lazy val sql = Seq(
+    libraryDependencies ++= Seq(
+      Dependencies.magnum,
+      Dependencies.postgres,
+      Dependencies.hikari,
+      Dependencies.testContainersPostgres
+    )
+  )
+
   lazy val resilience = Seq(
     libraryDependencies ++= Seq(
       Dependencies.resilience

@@ -11,6 +11,11 @@ object Dependencies {
   private val slf4jApiV   = "2.0.19"
   private val zioConfigV  = "4.0.8"
 
+  private val magnumV         = "1.3.1"
+  private val postgresV       = "42.7.13"
+  private val hikariV         = "7.1.0"
+  private val testcontainersV = "2.0.5"
+
   val zio = "dev.zio" %% "zio" % zioV
 
   val zioConfig         = "dev.zio" %% "zio-config"          % zioConfigV
@@ -35,4 +40,10 @@ object Dependencies {
   val zioTestMagnolia = "dev.zio" %% "zio-test-magnolia" % zioV % Test
 
   val stubby = "io.github.kitlangton" %% "stubby" % stubbyV % Test
+
+  val magnum   = "com.augustnagro" %% "magnum"     % magnumV
+  val postgres = "org.postgresql"   % "postgresql" % postgresV
+  val hikari   = "com.zaxxer"       % "HikariCP"   % hikariV
+
+  val testContainersPostgres = "org.testcontainers" % "testcontainers-postgresql" % testcontainersV % Test
 }

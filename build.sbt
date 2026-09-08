@@ -55,7 +55,8 @@ lazy val data = Projects
     Libraries.zioConfig,
     Libraries.zioLogging,
     Libraries.zioHttp,
-    Libraries.zioTest
+    Libraries.zioTest,
+    Libraries.sql
   )
   .dependsOn(
     domain % oneToOneClassMapping

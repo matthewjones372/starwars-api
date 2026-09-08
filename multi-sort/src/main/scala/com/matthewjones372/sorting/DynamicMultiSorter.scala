@@ -1,5 +1,6 @@
 package com.matthewjones372.sorting
 
+import scala.annotation.nowarn
 import scala.compiletime.*
 import scala.deriving.*
 
@@ -20,6 +21,8 @@ object DynamicMultiSorter:
     import scala.math.Ordering.Implicits.seqOrdering
 
     // Sets have no intrinsic order, so compare their sorted contents rather than iteration order.
+    // Only used once this method is inlined, which the unused-definition check cannot see.
+    @nowarn("msg=unused local definition")
     given setOrdering[B: Ordering]: Ordering[Set[B]] = Ordering.by(_.toSeq.sorted)
 
     val orders         = summonAll[Tuple.Map[A.MirroredElemTypes, Ordering]]

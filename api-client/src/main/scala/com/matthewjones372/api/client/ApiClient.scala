@@ -82,17 +82,18 @@ object ApiClient:
             cache <-
               Cache.makeWith(
                 httpConfig.cacheSize,
-                Lookup {
-                  case CacheKey.FilmId(id) =>
-                    apiClient.getFilmFrom(id)
-                  case CacheKey.PersonId(id) =>
-                    apiClient.getPersonFrom(id)
-                  case CacheKey.FilmUrl(url) =>
-                    apiClient.getFilmFromUrl(url)
-                  case CacheKey.People =>
-                    apiClient.getPeople.map(PeopleSet.apply)
-                  case CacheKey.Films =>
-                    apiClient.getFilms.map(FilmSet.apply)
+                Lookup { (key: CacheKey) =>
+                  key match
+                    case CacheKey.FilmId(id) =>
+                      apiClient.getFilmFrom(id)
+                    case CacheKey.PersonId(id) =>
+                      apiClient.getPersonFrom(id)
+                    case CacheKey.FilmUrl(url) =>
+                      apiClient.getFilmFromUrl(url)
+                    case CacheKey.People =>
+                      apiClient.getPeople.map(PeopleSet.apply)
+                    case CacheKey.Films =>
+                      apiClient.getFilms.map(FilmSet.apply)
                 }
               )(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
           yield CachingApiClient(cache)
@@ -151,5 +152,8 @@ object ApiClient:
           case err: ClientError =>
             ZIO.logWarning(err.getMessage) *>
               ZIO.fail(err)
+          case err =>
+            ZIO.logError(s"Unexpected error requesting $url: ${err.getMessage}") *>
+              ZIO.fail(ClientError.UnexpectedClientError(err.getMessage))
         }
       }

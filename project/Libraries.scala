@@ -4,8 +4,7 @@ import Keys._
 object Libraries {
   lazy val zio = Seq(
     libraryDependencies ++= Seq(
-      Dependencies.zio,
-      Dependencies.zioConcurrent
+      Dependencies.zio
     )
   )
 

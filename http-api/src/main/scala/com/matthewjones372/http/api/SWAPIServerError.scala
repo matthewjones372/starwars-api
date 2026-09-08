@@ -2,7 +2,7 @@ package com.matthewjones372.http.api
 
 import zio.schema.*
 
-abstract class SWAPIServerError(message: String)
+abstract class SWAPIServerError(message: String) extends RuntimeException(message)
 
 object SWAPIServerError:
   final case class PersonNotFound(message: String, personId: Int) extends SWAPIServerError(message) derives Schema

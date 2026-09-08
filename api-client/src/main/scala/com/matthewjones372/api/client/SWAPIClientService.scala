@@ -1,5 +1,6 @@
 package com.matthewjones372.api.client
 
+import com.matthewjones372.api.client.config.HttpClientConfig
 import com.matthewjones372.domain.*
 import zio.*
 import zio.http.*
@@ -25,12 +26,17 @@ object SWAPIClientService:
   def getFilms(using Trace): ZIO[SWAPIClientService, ClientError, Set[Film]] =
     ZIO.serviceWithZIO[SWAPIClientService](_.getFilms)
 
-  private val layer =
-    ZLayer.fromFunction(SWAPIServiceLive.apply)
+  private val layer: RLayer[ApiClient, SWAPIClientService] =
+    ZLayer.fromZIO {
+      for
+        apiClient  <- ZIO.service[ApiClient]
+        httpConfig <- ZIO.config(HttpClientConfig.config)
+      yield SWAPIServiceLive(apiClient, httpConfig.maxConcurrency)
+    }
 
   val default: RLayer[SWAPIEnv, SWAPIClientService] = ApiClient.live >>> SWAPIClientService.layer
 
-final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPIClientService:
+final private case class SWAPIServiceLive(apiClient: ApiClient, maxConcurrency: Int) extends SWAPIClientService:
 
   override def getFilms: IO[ClientError, Set[Film]] =
     ApiClient.getFilms.provideEnvironment(ZEnvironment(apiClient))
@@ -38,7 +44,9 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
   override def getFilmsFromCharacter(id: Int): IO[ClientError, Set[String]] = {
     for
       people <- ApiClient.getCharacterFrom(id)
-      films  <- ZIO.foreachPar(people.films)(url => decodeUrlString(url).flatMap(ApiClient.getFilmFromUrl))
+      films <- ZIO
+                 .foreachPar(people.films)(url => decodeUrlString(url).flatMap(ApiClient.getFilmFromUrl))
+                 .withParallelism(maxConcurrency)
     yield films.map(_.title)
   }.provideEnvironment(ZEnvironment(apiClient))
 
@@ -55,6 +63,8 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
               .foreachPar(person.films) { url =>
                 decodeUrlString(url).flatMap(ApiClient.getFilmFromUrl).map(_.title)
               }
+              .withParallelism(maxConcurrency)
               .map(films => (person.name, films))
           }
+          .withParallelism(maxConcurrency)
     yield films).map(_.toMap).provideEnvironment(ZEnvironment(apiClient))

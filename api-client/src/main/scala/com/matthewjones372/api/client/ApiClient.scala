@@ -134,6 +134,7 @@ object ApiClient:
                 .addQueryParam("page", page.toString)
             )
           )
+          .withParallelism(httpConfig.maxConcurrency)
           .map { entity =>
             (entity.flatMap(_.results.toSet) ++ firstPage.results).toSet
           }

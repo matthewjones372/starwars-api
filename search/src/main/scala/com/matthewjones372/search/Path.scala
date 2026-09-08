@@ -3,7 +3,7 @@ package com.matthewjones372.search
 import zio.*
 
 final case class Path[A](start: A, end: A, path: Option[Chunk[(A, A)]]):
-  def length: Int = path.map(_.length - 1).getOrElse(0)
+  def length: Int = path.map(entries => math.max(entries.length - 1, 0)).getOrElse(0)
 
   private def render =
     val lastIndex = path.map(_.length - 1).getOrElse(0)

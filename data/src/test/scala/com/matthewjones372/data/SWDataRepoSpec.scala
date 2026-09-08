@@ -8,7 +8,7 @@ import zio.test.*
 object SWDataRepoSpec extends ZIOSpecDefault:
 
   private def personWithId(id: Int, name: String = "", height: Option[Int] = None) =
-    People(
+    Person(
       name = if name.isEmpty then s"person-$id" else name,
       height = height,
       mass = None,

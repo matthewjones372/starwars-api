@@ -6,7 +6,7 @@ import zio.http.*
 
 trait SWAPIClientService:
   def getFilmsFromPerson(id: Int): IO[ClientError, Set[String]]
-  def getPeople: IO[ClientError, Set[People]]
+  def getPeople: IO[ClientError, Set[Person]]
   def getFilmsFromPeople: IO[ClientError, Map[String, Set[String]]]
   def getFilms: IO[ClientError, Set[Film]]
 
@@ -16,7 +16,7 @@ object SWAPIClientService:
   def getFilmsFromPerson(id: Int)(using Trace): ZIO[SWAPIClientService, ClientError, Set[String]] =
     ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromPerson(id))
 
-  def getPeople(using Trace): ZIO[SWAPIClientService, ClientError, Set[People]] =
+  def getPeople(using Trace): ZIO[SWAPIClientService, ClientError, Set[Person]] =
     ZIO.serviceWithZIO[SWAPIClientService](_.getPeople)
 
   def getFilmsFromPeople(using Trace): ZIO[SWAPIClientService, ClientError, Map[String, Set[String]]] =
@@ -42,7 +42,7 @@ final private case class SWAPIServiceLive(apiClient: ApiClient) extends SWAPICli
     yield films.map(_.title)
   }.provideEnvironment(ZEnvironment(apiClient))
 
-  override def getPeople: IO[ClientError, Set[People]] =
+  override def getPeople: IO[ClientError, Set[Person]] =
     ApiClient.getPeople.provideEnvironment(ZEnvironment(apiClient))
 
   override def getFilmsFromPeople: IO[ClientError, Map[String, Set[String]]] =

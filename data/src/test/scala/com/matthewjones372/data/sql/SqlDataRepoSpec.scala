@@ -122,5 +122,8 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
           people <- repo.getPeople(Some(1), Some(5), Some(List(SortBy("not_a_column", FieldOrdering.ASC))))
         yield assertTrue(people.results.length == 5, people.count == 82)
       }
-    ).provideShared(seededRepo) @@ TestAspect.sequential @@ TestAspect.withLiveClock
+    ).provideShared(seededRepo)
+      @@ TestAspect.sequential
+      @@ TestAspect.withLiveClock
+      @@ TestAspect.tag("postgres")
   ) @@ TestAspect.timeout(5.minutes)

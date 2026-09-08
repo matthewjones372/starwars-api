@@ -9,7 +9,7 @@ object SwSeed:
   def fromBundledData: RIO[ZTransactor, Unit] =
     SWDataRepo.bundledEntities.flatMap(seed)
 
-  def seed(entities: (List[People], List[Film])): RIO[ZTransactor, Unit] =
+  def seed(entities: (List[Person], List[Film])): RIO[ZTransactor, Unit] =
     val (people, films) = entities
     for
       transactor <- ZIO.service[ZTransactor]
@@ -25,7 +25,7 @@ object SwSeed:
   private def idOf(url: String): Task[Int] =
     ZIO.fromEither(SWDataRepo.parseEntityId(url)).mapError(new IllegalArgumentException(_))
 
-  private def insertPerson(entry: (Int, People))(using DbCon): Unit =
+  private def insertPerson(entry: (Int, Person))(using DbCon): Unit =
     val (id, person) = entry
     val _ =
       sql"""insert into people (id, name, height, mass, hair_color, skin_color, eye_color, birth_year, gender, homeworld, url)

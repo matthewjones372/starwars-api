@@ -7,7 +7,7 @@ import zio.schema.annotation.fieldName
 import scala.math.Ordering.ordered
 import scala.math.Ordered.orderingToOrdered
 
-final case class People(
+final case class Person(
   name: String,
   height: Option[Int],
   mass: Option[Int],
@@ -24,8 +24,11 @@ final case class People(
   url: String
 ) derives DynamicMultiSorter
 
-object People:
-  given Schema[Option[Int]] = primitive[String].transform(_.toIntOption, _.map(_.toString).getOrElse(""))
-  given Schema[People]      = DeriveSchema.gen
+object Person:
+  // Numbers arrive from swapi as strings, and unmeasured ones as "unknown", which is absent rather than empty.
+  given Schema[Option[Int]] =
+    Schema.option[String].transform(_.flatMap(_.toIntOption), _.map(_.toString))
 
-final case class Peoples(count: Int, results: List[People]) extends Paged[People] derives Schema
+  given Schema[Person] = DeriveSchema.gen
+
+final case class People(count: Int, results: List[Person]) extends Paged[Person] derives Schema

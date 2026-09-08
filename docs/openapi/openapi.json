@@ -119,7 +119,9 @@
       }
     },
     "/people" : {
+      "description" : "Get a list of  all people response is paged\n\n",
       "get" : {
+        "description" : "Get a list of  all people response is paged\n\n",
         "parameters" : [
           
             {
@@ -133,6 +135,29 @@
             },
             "allowReserved" : false,
             "style" : "form"
+          },
+          
+            {
+            "name" : "sortBy",
+            "in" : "query",
+            "description" : "Fields: name,height,mass,hairColor,skinColor,eyeColor,birthYear,gender,homeworld,films,species,vehicles,starships,url\n\n",
+            "schema" : 
+              {
+              "type" : 
+                "string"
+            },
+            "examples" : {
+              "example1" : 
+                {
+                "value" : "Chunk(name:ASC)"
+              },
+              "example2" : 
+                {
+                "value" : "Chunk(name:ASC,height:DESC)"
+              }
+            },
+            "allowReserved" : false,
+            "style" : "form"
           }
         ],
         "responses" : {
@@ -142,7 +167,7 @@
               "application/json" : {
                 "schema" : 
                   {
-                  "$ref" : "#/components/schemas/Peoples"
+                  "$ref" : "#/components/schemas/People"
                 }
               }
             }
@@ -193,7 +218,7 @@
               "application/json" : {
                 "schema" : 
                   {
-                  "$ref" : "#/components/schemas/People"
+                  "$ref" : "#/components/schemas/Person"
                 }
               }
             }
@@ -262,109 +287,22 @@
         "type" : 
           "object",
         "properties" : {
-          "eye_color" : {
+          "count" : {
             "type" : 
-              "string"
+              "integer",
+            "format" : "int32"
           },
-          "url" : {
-            "type" : 
-              "string"
-          },
-          "homeworld" : {
-            "type" : 
-              [
-              "string",
-              "null"
-            ]
-          },
-          "films" : {
+          "results" : {
             "type" : 
               "array",
             "items" : {
-              "type" : 
-                "string"
+              "$ref" : "#/components/schemas/Person"
             }
-          },
-          "starships" : {
-            "type" : 
-              [
-              "array",
-              "null"
-            ],
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "skin_color" : {
-            "type" : 
-              "string"
-          },
-          "species" : {
-            "type" : 
-              [
-              "array",
-              "null"
-            ],
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "mass" : {
-            "type" : 
-              "string"
-          },
-          "hair_color" : {
-            "type" : 
-              "string"
-          },
-          "name" : {
-            "type" : 
-              "string"
-          },
-          "height" : {
-            "type" : 
-              "string"
-          },
-          "vehicles" : {
-            "type" : 
-              [
-              "array",
-              "null"
-            ],
-            "items" : {
-              "type" : 
-                "string"
-            }
-          },
-          "birth_year" : {
-            "type" : 
-              "string"
-          },
-          "gender" : {
-            "type" : 
-              [
-              "string",
-              "null"
-            ]
           }
         },
         "required" : [
-          "name",
-          "height",
-          "mass",
-          "hair_color",
-          "skin_color",
-          "eye_color",
-          "birth_year",
-          "gender",
-          "homeworld",
-          "films",
-          "species",
-          "vehicles",
-          "starships",
-          "url"
+          "count",
+          "results"
         ]
       },
       "Film" : 
@@ -467,35 +405,6 @@
           "url"
         ]
       },
-      "Peoples" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {
-          "count" : {
-            "type" : 
-              "integer",
-            "format" : "int32"
-          },
-          "results" : {
-            "type" : 
-              "array",
-            "items" : {
-              "$ref" : "#/components/schemas/People"
-            }
-          }
-        },
-        "required" : [
-          "count",
-          "results"
-        ]
-      },
-      "ServerError" : 
-        {
-        "type" : 
-          "object",
-        "properties" : {}
-      },
       "PersonNotFound" : 
         {
         "type" : 
@@ -548,6 +457,128 @@
         },
         "required" : [
           "message"
+        ]
+      },
+      "ServerError" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {}
+      },
+      "Person" : 
+        {
+        "type" : 
+          "object",
+        "properties" : {
+          "eye_color" : {
+            "type" : 
+              "string"
+          },
+          "url" : {
+            "type" : 
+              "string"
+          },
+          "homeworld" : {
+            "type" : 
+              [
+              "string",
+              "null"
+            ]
+          },
+          "films" : {
+            "type" : 
+              "array",
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "starships" : {
+            "type" : 
+              [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "skin_color" : {
+            "type" : 
+              "string"
+          },
+          "species" : {
+            "type" : 
+              [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "mass" : {
+            "type" : 
+              [
+              "string",
+              "null"
+            ]
+          },
+          "hair_color" : {
+            "type" : 
+              "string"
+          },
+          "name" : {
+            "type" : 
+              "string"
+          },
+          "height" : {
+            "type" : 
+              [
+              "string",
+              "null"
+            ]
+          },
+          "vehicles" : {
+            "type" : 
+              [
+              "array",
+              "null"
+            ],
+            "items" : {
+              "type" : 
+                "string"
+            }
+          },
+          "birth_year" : {
+            "type" : 
+              "string"
+          },
+          "gender" : {
+            "type" : 
+              [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required" : [
+          "name",
+          "height",
+          "mass",
+          "hair_color",
+          "skin_color",
+          "eye_color",
+          "birth_year",
+          "gender",
+          "homeworld",
+          "films",
+          "species",
+          "vehicles",
+          "starships",
+          "url"
         ]
       }
     }

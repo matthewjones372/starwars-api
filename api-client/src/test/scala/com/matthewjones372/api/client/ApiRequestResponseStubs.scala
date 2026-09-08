@@ -42,7 +42,7 @@ object ApiRequestResponseStubs:
   val filmPagedRequest   = Request.get(URL.decode(filmPagedUrl).addJsonQueryParam.unsafeGet)
 
   val person =
-    People(
+    Person(
       "C-3PO",
       Some(167),
       Some(75),
@@ -59,7 +59,7 @@ object ApiRequestResponseStubs:
       ""
     )
 
-  def personWithDiff(name: Int): People =
+  def personWithDiff(name: Int): Person =
     person.copy(name = name.toString, films = Set(s"http://localhost/$name"))
 
   def filmWithDiff(title: String): Film =
@@ -89,7 +89,7 @@ object ApiRequestResponseStubs:
   )
 
   val pagedPersonJson =
-    Peoples(
+    People(
       11,
       results = List(
         personWithDiff(1),
@@ -109,7 +109,7 @@ object ApiRequestResponseStubs:
 
   lazy val pagedPersonResponse = Response(
     status = Status.Ok,
-    body = Body.from[Peoples](pagedPersonJson)
+    body = Body.from[People](pagedPersonJson)
   )
 
   lazy val personResponse = Response(

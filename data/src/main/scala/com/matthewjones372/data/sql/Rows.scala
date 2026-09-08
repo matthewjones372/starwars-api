@@ -1,7 +1,7 @@
 package com.matthewjones372.data.sql
 
 import com.augustnagro.magnum.DbCodec
-import com.matthewjones372.domain.{Film, People}
+import com.matthewjones372.domain.{Film, Person}
 
 private[sql] final case class PersonRow(
   id: Int,
@@ -16,13 +16,13 @@ private[sql] final case class PersonRow(
   homeworld: Option[String],
   url: String
 ) derives DbCodec:
-  def toPeople(
+  def toPerson(
     films: Set[String],
     species: Set[String],
     vehicles: Set[String],
     starships: Set[String]
-  ): People =
-    People(
+  ): Person =
+    Person(
       name = name,
       height = height,
       mass = mass,
@@ -40,7 +40,7 @@ private[sql] final case class PersonRow(
     )
 
 private[sql] object PersonRow:
-  def from(id: Int, person: People): PersonRow =
+  def from(id: Int, person: Person): PersonRow =
     PersonRow(
       id = id,
       name = person.name,

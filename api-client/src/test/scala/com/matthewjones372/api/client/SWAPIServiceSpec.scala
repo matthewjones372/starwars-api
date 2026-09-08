@@ -1,7 +1,7 @@
 package com.matthewjones372.api.client
 
 import com.matthewjones372.api.client.ApiRequestResponseStubs.*
-import com.matthewjones372.domain.People
+import com.matthewjones372.domain.Person
 import com.matthewjones372.http.api.SWHttpServer
 import zio.*
 import zio.http.*

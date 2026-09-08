@@ -70,7 +70,7 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
         .mapValues(_.toSet)
         .toMap
 
-  private def peopleFrom(rows: Seq[PersonRow])(using DbCon): List[People] =
+  private def peopleFrom(rows: Seq[PersonRow])(using DbCon): List[Person] =
     val ids       = rows.map(_.id)
     val films     = urlsFor("people_films", "person_id", "film_url", ids)
     val species   = urlsFor("people_species", "person_id", "species_url", ids)
@@ -78,7 +78,7 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
     val starships = urlsFor("people_starships", "person_id", "starship_url", ids)
 
     rows.map { row =>
-      row.toPeople(
+      row.toPerson(
         films = films.getOrElse(row.id, Set.empty),
         species = species.getOrElse(row.id, Set.empty),
         vehicles = vehicles.getOrElse(row.id, Set.empty),
@@ -109,7 +109,7 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
       .connect(query)
       .mapError(error => DataRepoError.UnexpectedError(s"$label failed", new RuntimeException(error)))
 
-  override def getPerson(id: Int): IO[DataRepoError, People] =
+  override def getPerson(id: Int): IO[DataRepoError, Person] =
     run(s"Looking up person $id") {
       Frag(s"select $personColumns from people where id = $id").query[PersonRow].run()
     }.flatMap { rows =>
@@ -131,12 +131,12 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
     from: Option[Int],
     fetchSize: Option[Int],
     sortBy: Option[List[SortBy]]
-  ): IO[DataRepoError, Peoples] =
+  ): IO[DataRepoError, People] =
     val limits = offsetFor(from, fetchSize).fold("")((offset, size) => s" limit $size offset $offset")
     run("Listing people") {
       val count = Frag("select count(*) from people").query[Int].run().head
       val rows  = Frag(s"select $personColumns from people ${orderByClause(sortBy)}$limits").query[PersonRow].run()
-      Peoples(count, peopleFrom(rows))
+      People(count, peopleFrom(rows))
     }
 
   override def getFilms(from: Option[Int], fetchSize: Option[Int]): IO[DataRepoError, Films] =

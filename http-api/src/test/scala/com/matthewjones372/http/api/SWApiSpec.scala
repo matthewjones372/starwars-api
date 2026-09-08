@@ -1,7 +1,7 @@
 package com.matthewjones372.http.api
 
 import com.matthewjones372.data.{DataRepoError, SWDataRepo}
-import com.matthewjones372.domain.{Film, Films, People, Peoples}
+import com.matthewjones372.domain.{Film, Films, Person, People}
 import stubby.*
 import zio.*
 import zio.http.*
@@ -55,7 +55,7 @@ object SWApiSpec extends ZIOSpecDefault:
       test("returns a set of people") {
         (for
           _ <- stub[SWDataRepo](_.getPeople) {
-                 ZIO.attempt(Peoples(1, List(person))).orElseFail(DataRepoError.FilmsNotFound)
+                 ZIO.attempt(People(1, List(person))).orElseFail(DataRepoError.FilmsNotFound)
                }
           client      <- ZIO.service[Client]
           swServer    <- ZIO.service[SWHttpServer]
@@ -164,7 +164,7 @@ object SWApiSpec extends ZIOSpecDefault:
     )
 
   val person =
-    People(
+    Person(
       name = "C-3PO",
       height = Some(167),
       mass = Some(75),

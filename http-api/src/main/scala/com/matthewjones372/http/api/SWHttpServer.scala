@@ -34,7 +34,7 @@ object SWHttpServer:
 
   val getPersonEndpoint =
     Endpoint(Method.GET / "people" / PathCodec.int("personId"))
-      .out[People]
+      .out[Person]
       .outErrors[SWAPIServerError](
         HttpCodec.error[PersonNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
@@ -49,10 +49,10 @@ object SWHttpServer:
           .query("sortBy")
           .optional
           .examples(List(("example1", Some("name:ASC")), ("example2", Some("name:ASC,height:DESC")))) ?? fieldDocString[
-          People
+          Person
         ]
       )
-      .out[Peoples]
+      .out[People]
       .outErrors[SWAPIServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)

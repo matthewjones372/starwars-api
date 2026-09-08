@@ -23,6 +23,12 @@ ThisBuild / publish / skip    := true
 ThisBuild / publishMavenStyle := true
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
+// sbt 2 can restore a compile from its cache without running it, but scoverage writes its
+// data directory as an undeclared side effect of that compile, so a restored compile leaves
+// the instrumented classes with nowhere to write. Holding the cache in memory keeps it
+// within a session, where target and the cache cannot disagree.
+Global / cacheStores := Seq(new sbt.util.InMemoryActionCacheStore)
+
 lazy val oneToOneClassMapping = "test->test;compile->compile"
 
 lazy val root = (project in file("."))
@@ -40,6 +46,7 @@ lazy val root = (project in file("."))
 lazy val domain = Projects
   .create("domain")
   .settings(
+    Libraries.zio,
     Libraries.zioSchema,
     Libraries.zioTest
   )

@@ -30,6 +30,10 @@ jobs:
 
       - name: Set up sbt
         uses: sbt/setup-sbt@v1
+        with:
+          # The build holds sbt's action cache in memory, so nothing is written here
+          # to restore. See the cacheStores comment in build.sbt.
+          disk-cache: false
 
       - name: Check scalafmt
         run: sbt scalafmtCheckAll

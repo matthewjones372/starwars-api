@@ -5,6 +5,7 @@ here=$(cd "$(dirname "$0")" && pwd)
 rate=${1:-6000}
 seconds=${2:-60}
 port=8090
+(cd "$here/.." && sbt -batch "load-test/writeClasspath" > /dev/null)
 classpath=$(cat "$here/target/load-test-cp.txt")
 java=${JAVA_HOME:+$JAVA_HOME/bin/java}
 java=${java:-java}

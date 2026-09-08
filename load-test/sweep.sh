@@ -3,7 +3,7 @@ set -euo pipefail
 
 here=$(cd "$(dirname "$0")" && pwd)
 cp_file="$here/target/load-test-cp.txt"
-[ -f "$cp_file" ] || { echo "run: sbt \"load-test/writeClasspath\"" >&2; exit 1; }
+(cd "$here/.." && sbt -batch "load-test/writeClasspath" > /dev/null)
 classpath=$(cat "$cp_file")
 java=${JAVA_HOME:+$JAVA_HOME/bin/java}
 java=${java:-java}

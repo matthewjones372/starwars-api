@@ -30,7 +30,9 @@ lazy val oneToOneClassMapping = "test->test;compile->compile"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "swapi"
+    name := "swapi",
+    // Entry points and the scraping script are executables rather than library code.
+    coverageExcludedPackages := "<empty>;scripts\\..*"
   )
   .enablePlugins(GenerateOpenApiTask)
   .dependsOn(

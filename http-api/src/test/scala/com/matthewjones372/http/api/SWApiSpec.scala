@@ -129,6 +129,58 @@ object SWApiSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[SWHttpServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
+        yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
+          Scope.default,
+          TestServer.layer,
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
+        )
+      }
+    ),
+    suite("getPerson")(
+      test("returns a person when given a valid id") {
+        (for
+          _           <- stub[SWDataRepo](_.getPerson)(ZIO.succeed(person))
+          client      <- ZIO.service[Client]
+          swServer    <- ZIO.service[SWHttpServer]
+          _           <- swServer.start.fork
+          testRequest <- requestToCorrectPort
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
+          body        <- response.body.asString
+        yield assertTrue(response.status == Status.Ok, body.contains("C-3PO"))).provideSome[Client & Driver](
+          Scope.default,
+          TestServer.layer,
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
+        )
+      },
+      test("returns a 404 when the person is not found") {
+        (for
+          _ <- stub[SWDataRepo](_.getPerson) {
+                 ZIO.fail(DataRepoError.PersonNotFound("Person not found", 99))
+               }
+          client      <- ZIO.service[Client]
+          swServer    <- ZIO.service[SWHttpServer]
+          _           <- swServer.start.fork
+          testRequest <- requestToCorrectPort
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "99")))
+        yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](
+          Scope.default,
+          TestServer.layer,
+          stubbed[SWDataRepo],
+          SWHttpServer.layer
+        )
+      },
+      test("returns a server error when the repo fails for another reason") {
+        (for
+          _ <- stub[SWDataRepo](_.getPerson) {
+                 ZIO.fail(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
+               }
+          client      <- ZIO.service[Client]
+          swServer    <- ZIO.service[SWHttpServer]
+          _           <- swServer.start.fork
+          testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
         yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
           Scope.default,

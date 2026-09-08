@@ -76,6 +76,17 @@ object SWHttpServer:
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
+  private[api] def parseSortByList(sortByParam: String): List[SortBy] =
+    sortByParam.split(",").toList.flatMap(parseSortBy)
+
+  private[api] def parseSortBy(sortByString: String): Option[SortBy] =
+    val parts = sortByString.split(":")
+    if parts.length == 2 then
+      val key         = parts(0).trim
+      val orderingStr = parts(1).trim.toUpperCase
+      FieldOrdering.values.find(_.toString == orderingStr).map(ordering => SortBy(key, ordering))
+    else None
+
   private val endPoints =
     Chunk(getPersonEndpoint, getPeopleEndpoint, getFilmsEndpoint, getFilmEndpoint)
 
@@ -101,7 +112,7 @@ private final case class SWHttpServerImpl(private val dataRepo: SWDataRepo) exte
 
   private val getPeopleHandler = SWHttpServer.getPeopleEndpoint.implement { (page, sortByParams) =>
     dataRepo
-      .getPeople(page, Some(10), sortByParams.map(parseSortByList))
+      .getPeople(page, Some(10), sortByParams.map(SWHttpServer.parseSortByList))
       .catchAll(err => ZIO.fail(UnexpectedError(err.getMessage)))
   }.sandbox
 
@@ -119,19 +130,6 @@ private final case class SWHttpServerImpl(private val dataRepo: SWDataRepo) exte
       ZIO.fail(UnexpectedError(err.getMessage))
     }
   }.sandbox
-
-  private def parseSortByList(sortByParam: String): List[SortBy] =
-    sortByParam.split(",").toList.flatMap(parseSortBy)
-
-  private def parseSortBy(sortByString: String): Option[SortBy] = {
-    val parts = sortByString.split(":")
-    if parts.length == 2 then
-      val key         = parts(0).trim
-      val orderingStr = parts(1).trim.toUpperCase
-      val orderingOpt = FieldOrdering.values.find(_.toString == orderingStr)
-      orderingOpt.map(ordering => SortBy(key, ordering))
-    else None
-  }
 
   private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", SWHttpServer.openAPI)
 

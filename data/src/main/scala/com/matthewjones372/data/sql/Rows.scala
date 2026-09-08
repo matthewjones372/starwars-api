@@ -39,22 +39,6 @@ private[sql] final case class PersonRow(
       url = url
     )
 
-private[sql] object PersonRow:
-  def from(id: Int, person: Person): PersonRow =
-    PersonRow(
-      id = id,
-      name = person.name,
-      height = person.height,
-      mass = person.mass,
-      hairColor = person.hairColor,
-      skinColor = person.skinColor,
-      eyeColor = person.eyeColor,
-      birthYear = person.birthYear,
-      gender = person.gender,
-      homeworld = person.homeworld,
-      url = person.url
-    )
-
 private[sql] final case class FilmRow(
   id: Int,
   title: String,
@@ -89,19 +73,4 @@ private[sql] final case class FilmRow(
       created = created,
       edited = edited,
       url = url
-    )
-
-private[sql] object FilmRow:
-  def from(id: Int, film: Film): FilmRow =
-    FilmRow(
-      id = id,
-      title = film.title,
-      episodeId = film.episodeId,
-      openingCrawl = film.openingCrawl,
-      director = film.director,
-      producer = film.producer,
-      releaseDate = film.releaseDate,
-      created = film.created,
-      edited = film.edited,
-      url = film.url
     )

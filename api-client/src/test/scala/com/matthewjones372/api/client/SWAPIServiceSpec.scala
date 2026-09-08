@@ -21,6 +21,27 @@ object SWAPIServiceSpec extends ZIOSpecDefault:
           res <- f1.join
         yield assertTrue(res == Set("A New Hope", "The Empire Strikes Back"))
       },
+      test("maps every person to the films they appear in") {
+        for
+          _ <- TestClient.addRequestResponse(personPagedRequest, response = pagedPersonResponse)
+          _ <- ZIO.foreachDiscard(1 to 2) { page =>
+                 TestClient.addRequestResponse(personPagedUrlWith(page), response = pagedPersonResponse)
+               }
+          // each person in the paged fixture points at their own film url
+          _ <- ZIO.foreachDiscard(1 to 12) { person =>
+                 TestClient.addRequestResponse(
+                   Request.get(URL.decode(s"http://localhost/$person").unsafeGet),
+                   response = film1Response
+                 )
+               }
+          f1  <- SWAPIClientService.getFilmsFromPeople.fork
+          _   <- TestClock.adjust(5.seconds)
+          res <- f1.join
+        yield assertTrue(
+          res.size == 12,
+          res.values.forall(_ == Set("The Empire Strikes Back"))
+        )
+      },
       test("can resolve all people from a paged response") {
         for
           _ <- TestClient.addRequestResponse(personPagedRequest, response = pagedPersonResponse)

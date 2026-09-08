@@ -1,4 +1,4 @@
-import sbt._
+import sbt.*
 
 object Dependencies {
   private val zioV        = "2.1.26"

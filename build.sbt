@@ -1,8 +1,7 @@
 import sbtdynver.DynVerPlugin.autoImport.*
 
 ThisBuild / organization         := "com.matthewjones372"
-ThisBuild / name                 := "starwars-api"
-ThisBuild / organizationHomepage := Some(url("https://github.com/matthewjones372"))
+ThisBuild / organizationHomepage := Some(uri("https://github.com/matthewjones372"))
 ThisBuild / scalaVersion         := "3.8.4"
 
 ThisBuild / publishTo := {
@@ -15,8 +14,6 @@ ThisBuild / credentials += Credentials(
   sys.env.getOrElse("GITHUB_ACTOR", ""),
   sys.env.getOrElse("GITHUB_TOKEN", "")
 )
-
-publishMavenStyle := true
 
 dynverVTagPrefix                    := false // No v-prefix in the version tags
 ThisBuild / dynverSonatypeSnapshots := true
@@ -36,9 +33,9 @@ lazy val root = (project in file("."))
   )
   .enablePlugins(GenerateOpenApiTask)
   .dependsOn(
-    modules.map(_ % oneToOneClassMapping): _*
+    modules.map(_ % oneToOneClassMapping) *
   )
-  .aggregate(modules: _*)
+  .aggregate(modules *)
 
 lazy val domain = Projects
   .create("domain")

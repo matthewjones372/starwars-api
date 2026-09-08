@@ -11,6 +11,6 @@ object GenerateOpenApiTask extends AutoPlugin {
   import autoImport.*
 
   override lazy val projectSettings: Seq[Setting[?]] = Seq(
-    generateOpenAPIDocs := (Compile / runMain).toTask(" GenerateOpenApiDocs").value
+    generateOpenAPIDocs := Def.uncached((Compile / runMain).toTask(" GenerateOpenApiDocs").value)
   )
 }

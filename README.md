@@ -133,8 +133,9 @@ val graph = SWGraph(
     "Boba Fett" -> Set("A New Hope")
   )
 )
-// graph: SWGraph[String] = com.matthewjones372.search.SWGraph@2eb9d0
+```
 
+```scala
 graph.bfs("Lobot", "Boba Fett").map(_.length)
 // res1: Option[Int] = Some(2)
 ```

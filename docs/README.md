@@ -113,7 +113,7 @@ films connects them.
 
 The same search is available directly:
 
-```scala mdoc
+```scala mdoc:silent
 import com.matthewjones372.search.SWGraph
 
 val graph = SWGraph(
@@ -123,7 +123,9 @@ val graph = SWGraph(
     "Boba Fett" -> Set("A New Hope")
   )
 )
+```
 
+```scala mdoc
 graph.bfs("Lobot", "Boba Fett").map(_.length)
 ```
 

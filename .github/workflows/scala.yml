@@ -8,7 +8,8 @@ on:
     tags: [v*]
 
 permissions:
-  contents: read
+  # Needed to push the generated OpenAPI docs to the gh-pages branch.
+  contents: write
   packages: write
   pull-requests: write
 

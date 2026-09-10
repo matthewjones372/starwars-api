@@ -5,6 +5,7 @@ import com.matthewjones372.domain.*
 import com.matthewjones372.http.api.SWAPIServerError.*
 import com.matthewjones372.search.{Path, SWGraph}
 import com.matthewjones372.sorting.{FieldOrdering, SortBy}
+import nl.vroste.rezilience.Bulkhead
 import zio.*
 import zio.http.*
 import zio.http.codec.*
@@ -141,6 +142,79 @@ object SWHttpServer:
     val bytes = characters.results.map(person => encoded.charactersByUrl.get(person.url))
     if bytes.forall(_.isDefined) then jsonResponse(Status.Ok, charactersPage(characters.count, bytes.flatten))
     else jsonResponse(Status.Ok, charactersCodec.encode(characters))
+
+  /**
+   * How much work the server will have in hand at once, and how much it will
+   * hold waiting.
+   *
+   * These bound memory rather than police callers. Every answer this API gives
+   * is already in memory, so a request is quick and a queue this size drains in
+   * well under a second; what the pair prevents is an arrival rate the instance
+   * cannot keep up with turning into an unbounded backlog of requests it is
+   * holding on behalf of clients that have long since gone. On the 512MB
+   * instance this is deployed to, that backlog is what kills it.
+   */
+  private[api] val maxInFlight = 64
+  private[api] val maxQueued   = 128
+
+  /**
+   * The answer when both of those are full.
+   *
+   * A refusal that arrives promptly is worth more than an answer that arrives
+   * after the caller has given up, and it tells an honest client to come back
+   * rather than leaving it to guess.
+   */
+  private[api] val tooBusy: Response =
+    Response(
+      status = Status.ServiceUnavailable,
+      headers = Headers(Header.ContentType(MediaType.application.json)),
+      body = Body.fromString("""{"error":"Server busy, retry shortly"}""")
+    ).addHeader(Header.RetryAfter.ByDuration(2.seconds))
+
+  /**
+   * Runs each request through the bulkhead, which rejects rather than queues
+   * once [maxQueued] are already waiting.
+   *
+   * rezilience's `RateLimiter` is the other tool to hand and is the wrong one
+   * here: it queues what it cannot admit, without bound, so a flood would be
+   * absorbed into memory instead of being turned away.
+   */
+  private[api] def shedding(bulkhead: Bulkhead)(
+    handler: Handler[Any, Response, Request, Response]
+  ): Handler[Any, Response, Request, Response] =
+    Handler.fromFunctionZIO[Request] { request =>
+      // Applying a handler asks for a scope, for bodies that are read as they
+      // arrive. Every body here is a chunk already in memory, so the scope has
+      // nothing left to hold once the response is built and closing it around
+      // the call is safe -- the same reasoning, and the same shape, as the
+      // pre-encoded characters route below.
+      ZIO.scoped(bulkhead(handler(request))).catchAll {
+        case Bulkhead.WrappedError(response) => ZIO.fail(response)
+        case Bulkhead.BulkheadRejection      => ZIO.succeed(tooBusy)
+      }
+    }
+
+  /**
+   * Lets a cache answer for this API.
+   *
+   * The data is read from a resource at startup and never changes, so a repeat
+   * of a request is a repeat of an answer. Saying so lets the CDN in front of
+   * the deployment serve the second caller without waking this process at all,
+   * which is the only mitigation available here that acts before the traffic
+   * reaches the instance. The window is short enough that a deploy carrying new
+   * data is not shadowed for long.
+   *
+   * Only successful responses: an error is a fact about one request, and a
+   * cached 400 would outlive the mistake that caused it.
+   */
+  private[api] val cacheable =
+    HandlerAspect.updateResponse { response =>
+      if response.status.isSuccess then
+        response.addHeader(
+          Header.CacheControl.Multiple(NonEmptyChunk(Header.CacheControl.Public, Header.CacheControl.MaxAge(300)))
+        )
+      else response
+    }
 
   private[api] def jsonResponse(status: Status, body: Chunk[Byte]): Response =
     Response(
@@ -408,6 +482,14 @@ private final case class SWHttpServerImpl(
       )
     else Chunk(getCharacterHandler, getCharactersHandler, getFilmsHandler, getFilmHandler, getShortestPathHandler)
 
-  private val routes = Routes(handlers) ++ swaggerRoutes ++ uiRoutes
+  // The API is cacheable and the page is not: the page is how a reader picks up
+  // a new deploy, so it revalidates while the data it fetches need not.
+  private val routes = (Routes(handlers) @@ SWHttpServer.cacheable) ++ swaggerRoutes ++ uiRoutes
 
-  override def start: URIO[Server, Nothing] = Server.serve(routes)
+  override def start: URIO[Server, Nothing] =
+    ZIO.scoped {
+      for
+        bulkhead <- Bulkhead.make(SWHttpServer.maxInFlight, SWHttpServer.maxQueued)
+        served   <- Server.serve(routes.transform(SWHttpServer.shedding(bulkhead)))
+      yield served
+    }

@@ -116,6 +116,25 @@ lazy val search = Projects
     domain % oneToOneClassMapping
   )
 
+lazy val loadTest = Projects
+  .create("load-test")
+  .settings(
+    Libraries.zio,
+    Libraries.zioHttp,
+    Libraries.zioLogging,
+    Libraries.zioTest,
+    Libraries.proofload
+  )
+  .settings(
+    publish / skip := true,
+    // Forked tests default to the module directory; the reports path and the
+    // load-test workflow both name paths from the repository root.
+    Test / baseDirectory := (ThisBuild / baseDirectory).value
+  )
+  .dependsOn(
+    `http-api` % oneToOneClassMapping
+  )
+
 lazy val docs = project
   .in(file("mdoc-docs"))
   .enablePlugins(MdocPlugin)

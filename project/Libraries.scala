@@ -63,6 +63,15 @@ object Libraries {
     )
   )
 
+  lazy val proofload = Seq(
+    libraryDependencies ++= Seq(
+      Dependencies.proofloadScala,
+      Dependencies.proofloadZioTest,
+      Dependencies.proofloadHtml,
+      Dependencies.proofloadGithub
+    )
+  )
+
   lazy val resilience = Seq(
     libraryDependencies ++= Seq(
       Dependencies.resilience

@@ -12,6 +12,8 @@ object Dependencies {
   private val zioConfigV  = "4.0.8"
   private val zioPreludeV = "1.0.0-RC48"
 
+  private val proofloadV = "0.1.0-rc4"
+
   private val magnumV  = "1.3.1"
   private val sqliteV  = "3.53.4.0"
   private val flywayV  = "13.5.0"
@@ -47,4 +49,9 @@ object Dependencies {
 
   val flyway       = "org.flywaydb" % "flyway-core"                % flywayV
   val flywaySqlite = "org.flywaydb" % "flyway-database-nc-sqlite"  % flywayV
+
+  val proofloadScala   = "io.github.matthewjones372" % "proofload-scala"          % proofloadV
+  val proofloadZioTest = "io.github.matthewjones372" % "proofload-zio-test"       % proofloadV
+  val proofloadHtml    = "io.github.matthewjones372" % "proofload-report-html"    % proofloadV
+  val proofloadGithub  = "io.github.matthewjones372" % "proofload-report-github"  % proofloadV
 }

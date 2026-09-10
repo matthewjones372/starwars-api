@@ -20,7 +20,9 @@ trait SWDataRepo:
   def getFilms(from: Option[PageNumber], fetchSize: Option[PageSize]): IO[DataRepoError, Films]
 
 object SWDataRepo:
-  private[data] def parseEntityId(url: String): Either[String, EntityId] =
+  // Public because an entity's id is only in its url, and `http-api` needs it to
+  // key a response by the id the path carries.
+  def parseEntityId(url: String): Either[String, EntityId] =
     URL
       .decode(url)
       .toOption

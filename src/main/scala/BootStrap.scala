@@ -36,11 +36,32 @@ object ClientExample extends ZIOAppDefault:
 
 object ServerExample extends ZIOAppDefault:
 
+  /**
+   * The port the platform assigns, and limits on what one connection may hold.
+   *
+   * A connection that opens and then says nothing costs a socket and holds it
+   * for as long as it likes: with no idle timeout, which is the zio-http
+   * default, a few hundred of those exhaust the server without ever sending a
+   * request. The timeout is far longer than any honest client here needs, since
+   * every response is served from memory.
+   *
+   * The header limits are lower than the defaults because this API reads no
+   * cookies and no authorization, so nothing it serves needs headers that size.
+   * None of this stops a flood; it stops a single connection being cheap to
+   * hold open and expensive to hold.
+   */
   private val serverConfig =
     ZLayer.fromZIO(
       System
         .envOrElse("PORT", "8080")
-        .map(port => Server.Config.default.port(port.toIntOption.getOrElse(8080)))
+        .map(port =>
+          Server.Config.default
+            .port(port.toIntOption.getOrElse(8080))
+            .idleTimeout(30.seconds)
+            .maxHeaderSize(4096)
+            .maxInitialLineLength(2048)
+            .gracefulShutdownTimeout(5.seconds)
+        )
     )
 
   def run = (for

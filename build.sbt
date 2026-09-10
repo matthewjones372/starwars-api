@@ -76,7 +76,10 @@ lazy val `http-api` = Projects
     Libraries.zioHttp,
     Libraries.zioLogging,
     Libraries.zioConfig,
-    Libraries.zioTest
+    Libraries.zioTest,
+    // The server sheds load with a rezilience Bulkhead, which the client
+    // module already depended on for its retry policy.
+    Libraries.resilience
   )
   .dependsOn(
     domain % oneToOneClassMapping,

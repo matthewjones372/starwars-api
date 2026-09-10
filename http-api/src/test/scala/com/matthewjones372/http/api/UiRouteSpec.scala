@@ -60,6 +60,22 @@ object UiRouteSpec extends ZIOSpecDefault:
           control <- cacheControl(port, "/")
         yield assertTrue(control.contains(Header.CacheControl.NoCache))
     ,
+    test("is not cached even though the api it serves is"):
+      // The page is how a reader picks up a new deploy, so it must revalidate;
+      // the data behind it never changes within one, so it need not.
+      ZIO.scoped:
+        for
+          port <- serving
+          page <- cacheControl(port, "/")
+          data <- cacheControl(port, "/people/1")
+        yield assertTrue(
+          page.contains(Header.CacheControl.NoCache),
+          data.exists {
+            case Header.CacheControl.Multiple(values) => values.exists(_.isInstanceOf[Header.CacheControl.MaxAge])
+            case other                                => other.isInstanceOf[Header.CacheControl.MaxAge]
+          }
+        )
+    ,
     test("does not shadow the api it is served alongside"):
       ZIO.scoped:
         for

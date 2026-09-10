@@ -332,6 +332,37 @@ the endpoint that does the most work, not the rate that is closest to the knee.
   spec names `ComparisonKt.against`, which is the last Kotlin file class left in
   this repository.
 
+### Both are fixed upstream, and waiting on a release
+
+Proofload spec 0141 adds the clock and the two front doors. It is merged into
+`proofload` but not published: this module resolves from Maven Central, where
+the newest version is `0.1.0-rc4`. When a release carrying 0141 lands, three
+lines change here and nothing else:
+
+1. `proofloadV` in `project/Dependencies.scala`.
+2. `import io.github.matthewjones372.proofload.ComparisonKt` becomes
+   `io.github.matthewjones372.proofload.scala.against`, and the last Kotlin file
+   class leaves this repository.
+3. `ComparisonKt.against(fast, slow, 99.0)` in `LoadSpec` becomes
+   `fast.against(slow, percentile = 50.0, of = Clock.ServiceTime)`.
+
+That was run here against a locally published build before being reverted, and
+it is worth writing down what it changed, because it is the argument for the
+spec. The same twelve rungs of `GET /people/{id}`, one clock against the other:
+
+| read on | better | not distinguishable | worse |
+|---|---:|---:|---:|
+| p99 of response time | 4 | 7 | 1 |
+| p50 of service time | 9 | 1 | 2 |
+
+Nine clear readings where there were four. Not unanimous, and it should not be:
+the effect on this endpoint is about 13%, the two rungs that read worse are
+252us against 264us and 305us against 313us, and a machine shared with its own
+generator moves by more than that between runs. What the clock buys is that the
+question is now being asked of the target rather than of the queue in front of
+it. The note under the table says `Compared at p50 of service time`, so a reader
+cannot mistake which one they are looking at.
+
 ## Next
 
 Payload size is the lever underneath all of this. A person carries `homeworld`

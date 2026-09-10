@@ -10,20 +10,22 @@ test run they did not ask for.
 ## Running it
 
 ```sh
-sbt "load-test/run compare"          # the rate ladder, twice
-sbt "load-test/run profile 6000 60"  # JFR on the server at one rate
-sbt "load-test/run jvm"              # the same ladder under four JVM configurations
+sbt "load-test/test"
 ```
 
-The server runs in a JVM of its own, forked with this process's own classpath
-and held open by a `Scope`. There is no classpath file to go stale and no shell
-script in the path.
+It is a `ZIOSpecDefault`. The server runs in this JVM, started by
+`SWHttpServer.withRequestLogging` and held by the test's `Scope`, so there is no
+second process, no classpath file and no shell script.
 
-Into `load-test/target/` each writes a self-contained HTML report per rung and
-one markdown file, and prints that same markdown. On GitHub Actions each rung's
-table is also appended to the job summary; off Actions that call writes nothing.
-The numbers are Proofload's own rendering of the run, not a second copy computed
-here.
+Into `load-test/target/` each run writes a self-contained HTML report per rung
+and one markdown file, and prints that same markdown. On GitHub Actions each
+rung's table is also appended to the job summary; off Actions that call writes
+nothing. The numbers are Proofload's own rendering of the run, not a second copy
+computed here.
+
+Generator and target share this JVM's heap and this machine's cores. Both knees
+in FINDINGS.md were measured with the target in a JVM of its own, which is the
+truer arrangement and is why those numbers are the ones recorded.
 
 ## Test 0 — where the wall is, and whose it is
 

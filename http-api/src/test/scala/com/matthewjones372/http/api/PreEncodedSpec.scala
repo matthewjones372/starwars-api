@@ -4,20 +4,8 @@ import zio.*
 import zio.http.*
 import zio.test.*
 
-/**
- * The pre-encoded route must answer exactly as the codec did, byte for byte: it
- * is an optimisation, and an optimisation that changes a response is a
- * behaviour change wearing a performance argument.
- *
- * Two real servers over the bundled data rather than a unit test of the map,
- * because what a caller receives is the status, the headers and the body
- * together.
- */
 object PreEncodedSpec extends ZIOSpecDefault:
 
-  // Each server's own `Server` layer, built into this scope rather than provided
-  // around the effect that starts it: `provideSome` releases the layer when that
-  // effect finishes, which takes the server down before a request arrives.
   private def serving(preEncoded: Boolean): ZIO[Scope, Throwable, Int] =
     for
       env    <- Server.defaultWithPort(0).build
@@ -38,10 +26,6 @@ object PreEncodedSpec extends ZIOSpecDefault:
       response <- client(Request.get(URL.decode(s"http://localhost:$port$path").toOption.get))
       body     <- response.body.asString
     yield (response.status, response.header(Header.ContentType), body)
-
-  // The expected status is named rather than inferred, so a miss that quietly
-  // became a hit still fails: two servers agreeing on the wrong answer is the
-  // one way this test could pass and mean nothing.
   private def sameBothWays(path: String, expected: Status) =
     test(s"$path is the same response with the encoding done once as with it done per request"):
       ZIO.scoped:
@@ -56,5 +40,16 @@ object PreEncodedSpec extends ZIOSpecDefault:
     sameBothWays("/people/1", Status.Ok),
     sameBothWays("/people/9999", Status.NotFound),
     sameBothWays("/films/1", Status.Ok),
-    sameBothWays("/films/9999", Status.NotFound)
+    sameBothWays("/films/9999", Status.NotFound),
+    sameBothWays("/people", Status.Ok),
+    sameBothWays("/people?page=2", Status.Ok),
+    sameBothWays("/people?page=9", Status.Ok),
+    sameBothWays("/people?page=99", Status.Ok),
+    sameBothWays("/people?sortBy=name:ASC", Status.Ok),
+    sameBothWays("/people?sortBy=height:DESC,name:ASC", Status.Ok),
+    sameBothWays("/people?sortBy=garbage", Status.Ok),
+    sameBothWays("/people?page=2&sortBy=name:ASC", Status.Ok),
+    sameBothWays("/people?page=0", Status.BadRequest),
+    sameBothWays("/people?page=abc", Status.BadRequest),
+    sameBothWays("/people?page=1&page=2", Status.BadRequest)
   ).provide(Client.default) @@ TestAspect.withLiveClock

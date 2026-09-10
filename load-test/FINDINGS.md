@@ -274,10 +274,68 @@ request needs it. It applies to the bundled data only. `SWHttpServer.layer`
 takes whatever repo it is handed, which has made no promise to be immutable, so
 that one still asks per request.
 
+# Test 2 — the list endpoint, where the profile was right
+
+`GET /people` encodes ten characters a request rather than one. The repo still
+chooses and orders the page, which is a sort and a slice over values already in
+memory; what the page skips now is the encoding, because the bytes of each
+character are already in the map and a page is those bytes joined.
+
+Both endpoints, same arrangement, three passes each. These are Proofload's own
+comparison, which is p99 of **response time**: the clock that carries the
+injector's backlog as well as the target's work.
+
+| rate | `GET /people` was | now | | `GET /people/{id}` was | now |
+|-----:|------------------:|----:|:--|----------------------:|----:|
+| 2,000/s | 864us | 774us | better | 745us | 836us | worse |
+| 4,000/s | 1.85ms | 618us | better | 664us | 606us | not distinguishable |
+| 6,000/s | 4.36ms | 1.43ms | better | 2.00ms | 1.38ms | better |
+| 8,000/s | 5.64ms | 5.73ms | not distinguishable | 2.98ms | 2.67ms | not distinguishable |
+| 2,000/s | 1.05ms | 713us | better | 696us | 672us | not distinguishable |
+| 4,000/s | 1.31ms | 664us | better | 672us | 623us | not distinguishable |
+| 6,000/s | 4.33ms | 2.05ms | better | 1.47ms | 995us | better |
+| 8,000/s | 12.7ms | 3.29ms | better | 5.51ms | 3.08ms | better |
+| 2,000/s | 983us | 729us | better | 725us | 696us | not distinguishable |
+| 4,000/s | 1.76ms | 655us | better | 623us | 602us | not distinguishable |
+| 6,000/s | 4.82ms | 1.27ms | better | 1.37ms | 774us | better |
+| 8,000/s | 8.45ms | 3.41ms | better | 2.54ms | 2.18ms | not distinguishable |
+
+## Reading it
+
+**The list endpoint is eleven better out of twelve, and by two to four times at
+4,000/s and above.** The single-character endpoint over the same twelve rungs is
+four better, seven not distinguishable and one worse. Ten encodes a request
+against one is the whole difference between those two columns, and it is the
+profile's three quarters finally showing up where there is enough of it to see.
+
+**The clock is why the two tables disagree with Test 1.** Test 1 read service
+time p50 and found a steady 13% on the single-character endpoint. This one reads
+p99 response time, where the generator's own lateness is a large part of the
+number, so the same 13% is inside the noise and reads "not distinguishable".
+Neither is wrong: they are answers to different questions, and the response-time
+one is what a client would feel.
+
+**Ten times the work is what made it visible.** That is the useful general
+lesson from both tests: a change that removes CPU per request shows up where
+there is enough CPU per request for it to matter, and the way to find that is
+the endpoint that does the most work, not the rate that is closest to the knee.
+
+## Two things Proofload could not do here
+
+- **`against` compares response time and nothing else.** There is no clock
+  parameter, so the comparison above cannot be asked for service time, which is
+  the honest clock when the generator is behind — and Proofload's own warning
+  two lines above each table says it is behind. Test 1's table had to be read
+  off the runs by hand for that reason.
+- **The Scala surface renders a `Comparison` but cannot build one.**
+  `writeHtmlReport` and `markdown` both take one; nothing makes one, so this
+  spec names `ComparisonKt.against`, which is the last Kotlin file class left in
+  this repository.
+
 ## Next
 
-The list endpoint is untouched and is the more expensive one: `GET /people`
-encodes ten characters a request. The same bytes are already in the map, so a
-page is a concatenation of slices rather than an encode, and the sort orders
-this API offers are few enough to hold. That is the next change, and the one the
-payload-size lever sits under.
+Payload size is the lever underneath all of this. A person carries `homeworld`
+and four collections of urls, every one a string on every response, and this
+clone serves none of the resources they point at. That is a smaller payload
+rather than a faster encoder, and it is the change with the next largest
+ceiling.

@@ -94,12 +94,14 @@ asserts the status, the content type and the body are identical, because an
 optimisation that changes a response is a behaviour change wearing a
 performance argument.
 
-It is ahead in twelve rungs out of twelve, by a median of 13%, and that is all
-it is: a profile says where the CPU goes when the CPU is the constraint, and at
-the rates this arrangement can offer the server is not CPU-bound. Whether the
-knee moved is unanswered, because above 4,000/s the generator loses ground for
-both variants and the ladder is measuring the injector. FINDINGS.md has the
-table.
+On `GET /people/{id}` it is worth a steady 13% of service time and no more: a
+profile says where the CPU goes when the CPU is the constraint, and one encode a
+request is not enough of it. On `GET /people`, which encodes ten characters a
+request, the same change is two to four times at 4,000/s and above. The lesson
+is in the gap between those two, and FINDINGS.md has both tables.
+
+The comparison is Proofload's own, at p99 of response time, which is the only
+clock `against` offers.
 
 ## What these numbers are not
 

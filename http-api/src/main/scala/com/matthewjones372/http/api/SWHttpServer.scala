@@ -14,6 +14,8 @@ import zio.http.endpoint.openapi.*
 import zio.schema.codec.BinaryCodec
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
+import java.nio.charset.StandardCharsets
+
 import scala.compiletime.constValueTuple
 import scala.deriving.Mirror
 
@@ -73,10 +75,30 @@ object SWHttpServer:
         films     <- dataRepo.getFilms(None, None)
         byId      <- keyedBytes(people.results)(_.url)(characterCodec.encode)
         filmsById <- keyedBytes(films.results)(_.url)(filmCodec.encode)
-      yield Encoded(byId, filmsById)
+        byUrl      = people.results.map(person => person.url -> characterCodec.encode(person)).toMap
+      yield Encoded(byId, filmsById, byUrl)
     }
 
-  private[api] final case class Encoded(characters: Map[EntityId, Chunk[Byte]], films: Map[EntityId, Chunk[Byte]])
+  private[api] final case class Encoded(
+    characters: Map[EntityId, Chunk[Byte]],
+    films: Map[EntityId, Chunk[Byte]],
+    charactersByUrl: Map[String, Chunk[Byte]]
+  )
+
+  /**
+   * A page as the bytes of the characters on it, joined.
+   *
+   * The repo still chooses and orders the page, which is a sort and a slice
+   * over values already in memory. What this skips is the encoding, which the
+   * profile put at three quarters of the on-CPU samples and which this endpoint
+   * repeats ten times a request.
+   */
+  private[api] def charactersPage(count: Int, results: List[Chunk[Byte]]): Chunk[Byte] =
+    val comma  = Chunk.fromArray(",".getBytes(StandardCharsets.UTF_8))
+    val joined = results.reduceOption((one, next) => one ++ comma ++ next).getOrElse(Chunk.empty)
+    Chunk.fromArray(s"""{"count":$count,"results":[""".getBytes(StandardCharsets.UTF_8)) ++
+      joined ++
+      Chunk.fromArray("]}".getBytes(StandardCharsets.UTF_8))
 
   private def keyedBytes[A](entities: List[A])(url: A => String)(
     encode: A => Chunk[Byte]
@@ -96,6 +118,7 @@ object SWHttpServer:
   // from the map are the bytes the codec would have produced. `PreEncodedSpec`
   // asserts that against a server with the knob off rather than trusting it.
   private val characterCodec: BinaryCodec[Character]                 = schemaBasedBinaryCodec[Character]
+  private val charactersCodec: BinaryCodec[Characters]               = schemaBasedBinaryCodec[Characters]
   private val filmCodec: BinaryCodec[Film]                           = schemaBasedBinaryCodec[Film]
   private val characterNotFoundCodec: BinaryCodec[CharacterNotFound] = schemaBasedBinaryCodec[CharacterNotFound]
   private val filmNotFoundCodec: BinaryCodec[FilmNotFound]           = schemaBasedBinaryCodec[FilmNotFound]
@@ -105,6 +128,19 @@ object SWHttpServer:
 
   private[api] def notFoundFilm(id: EntityId): Response =
     jsonResponse(Status.NotFound, filmNotFoundCodec.encode(FilmNotFound("Film not found", id)))
+
+  /**
+   * The page, from the bytes already in hand where every character on it is
+   * there, and from the codec where one is not.
+   *
+   * A miss cannot happen for the bundled data, and the fallback is here rather
+   * than an assertion because a page served differently is worse than a page
+   * served slowly.
+   */
+  private[api] def charactersResponse(encoded: Encoded, characters: Characters): Response =
+    val bytes = characters.results.map(person => encoded.charactersByUrl.get(person.url))
+    if bytes.forall(_.isDefined) then jsonResponse(Status.Ok, charactersPage(characters.count, bytes.flatten))
+    else jsonResponse(Status.Ok, charactersCodec.encode(characters))
 
   private[api] def jsonResponse(status: Status, body: Chunk[Byte]): Response =
     Response(
@@ -310,11 +346,35 @@ private final case class SWHttpServerImpl(
         )
     }
 
+  // Only the query shapes the endpoint accepts without complaint. Anything else
+  // goes to the endpoint itself, which owns the 400 it produces for `page=0` and
+  // for a page that is not a number; replicating either here would be two
+  // spellings of one error, free to drift apart.
+  private def cleanPage(request: Request): Option[Option[PageNumber]] =
+    request.url.queryParams.getAll("page") match
+      case Chunk()     => Some(None)
+      case Chunk(only) => only.toIntOption.flatMap(PageNumber.from(_).toOption).map(Some(_))
+      case _           => None
+
+  private val preEncodedCharactersRoute =
+    SWHttpServer.getCharactersEndpoint.route -> handler { (request: Request) =>
+      cleanPage(request) match
+        case None       => ZIO.scoped(getCharactersHandler.toHandler.apply(request))
+        case Some(page) =>
+          val sortBy = request.url.queryParams.queryParam("sortBy").map(SWHttpServer.parseSortByList)
+          encoded
+            .zip(dataRepo.getCharacters(page, Some(PageSize.default), sortBy))
+            .fold(
+              error => Response.internalServerError(error.getMessage),
+              (bytes, characters) => SWHttpServer.charactersResponse(bytes, characters)
+            )
+    }
+
   private val handlers =
     if preEncoded then
       Chunk(
         preEncodedCharacterRoute,
-        getCharactersHandler,
+        preEncodedCharactersRoute,
         getFilmsHandler,
         preEncodedFilmRoute,
         getShortestPathHandler

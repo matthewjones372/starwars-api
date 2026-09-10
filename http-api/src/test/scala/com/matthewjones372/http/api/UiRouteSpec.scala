@@ -36,7 +36,7 @@ object UiRouteSpec extends ZIOSpecDefault:
     test("is served as html at the root"):
       ZIO.scoped:
         for
-          port                    <- serving
+          port                        <- serving
           (status, contentType, body) <- get(port, "/")
         yield assertTrue(
           status == Status.Ok,

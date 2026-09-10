@@ -35,9 +35,10 @@ lazy val root = (project in file("."))
   .settings(
     name := "swapi",
     // Entry points and the scraping script are executables rather than library code.
-    coverageExcludedPackages := "<empty>;scripts\\..*"
+    coverageExcludedPackages := "<empty>;scripts\\..*",
+    Compile / mainClass       := Some("ServerExample")
   )
-  .enablePlugins(GenerateOpenApiTask)
+  .enablePlugins(GenerateOpenApiTask, JavaAppPackaging)
   .dependsOn(
     modules.map(_ % oneToOneClassMapping) *
   )

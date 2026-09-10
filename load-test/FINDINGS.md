@@ -248,6 +248,19 @@ the ladder cannot say whether the API's own ceiling moved. That needs the
 generator on another machine, and it is the measurement that would decide
 whether this change is worth more than the 13%.
 
+## Repeated
+
+The same comparison on `0.1.0-rc4`, three fresh passes: ahead in twelve rungs
+out of twelve again, ratios between 1.08 and 1.18. Two independent runs of
+twelve rungs each, twenty-four for twenty-four, is what makes this a result
+rather than a reading.
+
+One pass of the three had the 6,000/s rung held pre-encoded and not held with
+the encoding, which is the first hint that the knee might move after all. One
+pass in three is not a claim, and the arrangement cannot make it one: the
+generator is what loses ground there. It is the reason to want the measurement
+with the generator off-box rather than the reason to stop.
+
 ## What was checked, and what it cost
 
 `PreEncodedSpec` runs both servers and asserts the status, the content type and

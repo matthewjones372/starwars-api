@@ -12,7 +12,7 @@ object Dependencies {
   private val zioConfigV  = "4.0.8"
   private val zioPreludeV = "1.0.0-RC48"
 
-  private val proofloadV = "0.1.0-rc1"
+  private val proofloadV = "0.1.0-rc4"
 
   private val magnumV  = "1.3.1"
   private val sqliteV  = "3.53.4.0"

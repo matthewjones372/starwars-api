@@ -13,20 +13,26 @@ test run they did not ask for.
 sbt "load-test/test"
 ```
 
-It is a `ZIOSpecDefault`. The server runs in this JVM, started by
-`SWHttpServer.measuring` and held by the test's `Scope`, so there is no second
-process, no classpath file and no shell script. The comparison below runs two
-servers at once, each with a `Server` layer of its own: one layer between them
-would be one port answering for both, which is an A/B against itself.
+It is a `ProofloadSpec`, which is a `ZIOSpecDefault` that already carries what a
+load spec needs. Extending it brings `TestAspect.sequential` and
+`TestAspect.withLiveClock`; the second is the one to know about, because
+zio-test hands a spec a `TestClock` and the readiness retry below would never
+advance under one. The timeout is the spec's own, since the right one is the
+length of what is being run.
 
-Into `load-test/target/reports/` each run writes a self-contained HTML report
-per rung and an `index.html` linking them, and appends each rung's table to the
-GitHub Actions job summary. Off Actions the summary call writes nothing rather
-than throwing, so the same run works on a laptop.
+The server runs in this JVM, started by `SWHttpServer.measuring` and held by the
+test's `Scope`, so there is no second process, no classpath file and no shell
+script. The comparison below runs two servers at once, each with a `Server`
+layer of its own: one layer between them would be one port answering for both,
+which is an A/B against itself.
 
-The index is generated from the directory rather than from a list kept here, so
-a report that stops being written stops being linked. Every number is
-Proofload's own rendering of the run.
+`measured(name)(simulation)` runs a rung, writes its page under `reportsTo` and
+appends its table to the GitHub Actions job summary; off Actions that call
+writes nothing rather than throwing, so the same run works on a laptop. The
+index over the directory is written once, after the last test, and is generated
+from what is on disk rather than from a list kept here, so a report that stops
+being written stops being linked. Every number is Proofload's own rendering of
+the run.
 
 `.github/workflows/load-test.yml` runs it weekly and on demand, and uploads the
 directory.

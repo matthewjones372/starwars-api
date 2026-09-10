@@ -15,7 +15,7 @@ services to start.
 
 ## Live
 
-**[starwars-api-qjcm.onrender.com](https://starwars-api-qjcm.onrender.com/)**
+**[starwars-api-eu.onrender.com](https://starwars-api-eu.onrender.com/)**
 
 The deployed instance serves a browser UI at `/` and the API alongside it on
 the same origin: search across every character and film, the character graph
@@ -24,12 +24,15 @@ traced by clicking one and then another.
 
 | | |
 | --- | --- |
-| UI | https://starwars-api-qjcm.onrender.com/ |
-| API docs | https://starwars-api-qjcm.onrender.com/docs/openapi |
-| Example | https://starwars-api-qjcm.onrender.com/people/1 |
+| UI | https://starwars-api-eu.onrender.com/ |
+| API docs | https://starwars-api-eu.onrender.com/docs/openapi |
+| Example | https://starwars-api-eu.onrender.com/people/1 |
 
-It runs on a free instance, which sleeps when idle, so the first request after
-a quiet spell takes a few seconds to wake it.
+It runs on a free instance in Frankfurt, which sleeps when idle, so the first
+request after a quiet spell takes a few seconds to wake it. The region is
+chosen for where the readers are rather than where the data is: the same image
+served from Oregon answered in about 190ms against Frankfurt's 60ms, and
+almost all of that difference was the round trip rather than the work.
 
 ## Quick start
 

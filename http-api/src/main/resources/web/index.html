@@ -501,9 +501,18 @@
       selected = d;
       showDetail(d);
       if (d.kind === "person") {
-        if (!slots[0] || (slots[0] && slots[1])) { slots[0] = d; slots[1] = null; }
-        else if (d.id !== slots[0].id) { slots[1] = d; }
+        if (!slots[0] || (slots[0] && slots[1])) {
+          // Starting a fresh pair, so the path drawn for the last one goes.
+          slots[0] = d;
+          slots[1] = null;
+          pathNodes = new Set();
+          pathLinks = new Set();
+          $("#pathresult").textContent = "";
+        } else if (d.id !== slots[0].id) {
+          slots[1] = d;
+        }
         updateSlots();
+        if (slots[0] && slots[1]) tracePath();
       }
       applyClasses();
     });
@@ -516,8 +525,9 @@
 
     // -- shortest path: this one really does go to the API, because the BFS
     // -- over shared films is the server's answer and not ours to recompute.
-    $("#findpath").addEventListener("click", async () => {
+    async function tracePath() {
       const [a, b] = slots;
+      if (!a || !b) return;
       const result = $("#pathresult");
       result.textContent = "Tracing…";
       try {
@@ -556,7 +566,11 @@
       } catch (err) {
         result.textContent = "Failed: " + err.message;
       }
-    });
+    }
+
+    // The button stays for retracing the same pair after a clear, but picking
+    // the second character is itself the request, so it does not wait for one.
+    $("#findpath").addEventListener("click", tracePath);
 
     $("#clearpath").addEventListener("click", () => {
       slots[0] = slots[1] = null;

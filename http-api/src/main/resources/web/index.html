@@ -26,10 +26,14 @@
     color: var(--text);
     font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
   }
 
   #stage { position: fixed; inset: 0; }
-  #stage svg { width: 100%; height: 100%; display: block; cursor: grab; }
+  /* The browser must not claim the touch gestures, or a pinch scrolls the page
+     instead of zooming the graph and a drag never reaches d3. */
+  #stage svg { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
   #stage svg:active { cursor: grabbing; }
 
   header {
@@ -67,6 +71,14 @@
     backdrop-filter: blur(10px);
   }
   #detail { top: 64px; left: 18px; width: 268px; }
+  #detail .close {
+    position: absolute; top: 8px; right: 8px;
+    width: 28px; height: 28px; padding: 0; margin: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 6px;
+    font-size: 17px; line-height: 1; font-weight: 400;
+  }
   #pathfinder { bottom: 18px; left: 18px; width: 268px; }
   #legend { bottom: 18px; right: 18px; }
 
@@ -141,6 +153,39 @@
     background: var(--bg); color: var(--muted);
   }
   #loading.done { display: none; }
+
+  /* A phone has room for the graph or for the panels, not both at once, so the
+     panels become sheets pinned under the header and above the bottom edge and
+     the graph keeps the space between them. */
+  @media (max-width: 720px) {
+    header { padding: 10px; gap: 8px; }
+    h1 { font-size: 11px; letter-spacing: 0.04em; }
+    /* 16px is the threshold below which iOS Safari zooms the page on focus. */
+    #search { flex: 1 1 auto; min-width: 0; font-size: 16px; padding: 10px 12px; }
+    #status { display: none; }
+    #recenter { padding: 10px 12px; }
+    #legend { display: none; }
+
+    .panel { padding: 12px 14px; border-radius: 10px; }
+    #detail {
+      top: 62px; left: 8px; right: 8px; width: auto;
+      max-height: 38vh; overflow-y: auto;
+    }
+    #pathfinder { left: 8px; right: 8px; bottom: 8px; width: auto; }
+    #pathresult { max-height: 20vh; overflow-y: auto; }
+    .slot { min-height: 40px; }
+    button { padding: 11px; }
+  }
+
+  @media (max-width: 520px) {
+    h1 { display: none; }
+  }
+
+  /* Nothing hovers on a touch screen, so the label a pointer would have
+     revealed has to come from selecting, searching or tracing instead. */
+  @media (hover: none) {
+    .node.person:hover text { opacity: inherit; }
+  }
 </style>
 </head>
 <body>
@@ -155,6 +200,7 @@
 </header>
 
 <div class="panel" id="detail" hidden>
+  <button class="close" id="detailclose" type="button" aria-label="Close">&times;</button>
   <h2>Character</h2>
   <div class="name"></div>
   <dl></dl>
@@ -261,6 +307,10 @@
     let width = stage.clientWidth || 1200;
     let height = stage.clientHeight || 800;
 
+    // Asked each time rather than captured, so rotating a phone or dragging a
+    // window across the breakpoint is answered with the layout now in force.
+    const isNarrow = () => window.matchMedia("(max-width: 720px)").matches;
+
     const forceX = d3.forceX(width / 2).strength(0.02);
     const forceY = d3.forceY(height / 2).strength(0.02);
 
@@ -300,11 +350,12 @@
 
     // The layout never stops drifting, so a character-sized dot is a small
     // moving target. This invisible disc widens what counts as a hit without
-    // changing what you see.
+    // changing what you see, and a fingertip needs more of it than a cursor.
+    const touch = window.matchMedia("(pointer: coarse)").matches;
     node
       .append("circle")
       .attr("class", "hit")
-      .attr("r", (d) => d.r + 10)
+      .attr("r", (d) => d.r + (touch ? 16 : 10))
       .attr("fill", "transparent");
 
     node
@@ -326,11 +377,49 @@
         })
     );
 
+    // How far apart the layout has pushed things, which is what the framing
+    // below follows.
+    function span() {
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (const n of nodes) {
+        if (n.x == null) return 0;
+        if (n.x < minX) minX = n.x;
+        if (n.x > maxX) maxX = n.x;
+        if (n.y < minY) minY = n.y;
+        if (n.y > maxY) maxY = n.y;
+      }
+      return Math.max(maxX - minX, maxY - minY);
+    }
+
+    // The layout keeps spreading for an unpredictable while — how long depends
+    // on the machine — so framing it at some fixed moment after load is a
+    // guess, and a wrong guess leaves the page zoomed into a corner of a graph
+    // that has since grown. Instead it is reframed whenever it has grown
+    // materially, until it stops growing or the reader takes over.
+    const started = performance.now();
+    let autoFit = true;
+    let fittedSpan = 0;
+    let lastFitAt = 0;
+
     sim.on("tick", () => {
       link
         .attr("x1", (d) => d.source.x).attr("y1", (d) => d.source.y)
         .attr("x2", (d) => d.target.x).attr("y2", (d) => d.target.y);
       node.attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+      if (!autoFit) return;
+      // Throttled by the clock rather than by a count of ticks: a backgrounded
+      // or slow tab ticks at a fraction of the rate, and counting frames there
+      // would push the reframing past the deadline below and never fit at all.
+      const now = performance.now();
+      if (now - started > 15000) { autoFit = false; return; }
+      if (now - lastFitAt < 150) return;
+      lastFitAt = now;
+      const grown = span();
+      if (grown > fittedSpan * 1.05) {
+        fittedSpan = grown;
+        fitView(250, 100, 1.2);
+      }
     });
 
     // Character labels are noise at 82 nodes zoomed out, so they appear once
@@ -338,19 +427,28 @@
     // every zoom because they are what orients you.
     // Chosen to sit just below the scale `fitView` settles on, so the default
     // framing is labelled and names drop away only when you pull further out.
-    const LABEL_ZOOM = 0.8;
+    // A phone gets the opposite default: 82 names over a few hundred pixels is
+    // unreadable, so there the graph opens as shapes and a name is something
+    // you select, search or trace your way to.
+    const LABEL_ZOOM = isNarrow() ? 1.6 : 0.8;
     const zoom = d3
       .zoom()
       .scaleExtent([0.25, 4])
       .on("zoom", (event) => {
         root.attr("transform", event.transform);
         nodeLayer.classed("far", event.transform.k < LABEL_ZOOM);
+        // A zoom the reader performed themselves ends the automatic framing;
+        // one this code performed (no source event) does not.
+        if (event.sourceEvent) autoFit = false;
       });
     svg.call(zoom);
 
     // Frames the whole graph rather than assuming a scale, which also means a
     // late resize (see the observer below) recovers on its own.
-    function fitView(duration = 600, padding = 100) {
+    // `maxScale` is below the zoom ceiling for the automatic fits: early on the
+    // layout is still compact, and fitting that tightly would open the page
+    // zoomed into a handful of nodes. Panning by hand still reaches 4x.
+    function fitView(duration = 600, padding = 100, maxScale = 4) {
       if (!width || !height || !nodes.length || nodes.some((n) => n.x == null)) return;
       const xs = nodes.map((n) => n.x);
       const ys = nodes.map((n) => n.y);
@@ -358,14 +456,23 @@
       const minY = Math.min(...ys), maxY = Math.max(...ys);
       const spanX = Math.max(maxX - minX, 1);
       const spanY = Math.max(maxY - minY, 1);
+      // A fixed margin is most of a phone screen, so it gives way to a share
+      // of the viewport whenever that is the smaller of the two.
+      const pad = Math.min(padding, width * 0.12, height * 0.12);
+      // Where the panels are sheets rather than side panels they cover the
+      // canvas, so the graph is fitted to the band left between them instead
+      // of to the viewport it would otherwise share with them.
+      const header = isNarrow() ? 56 : 0;
+      const sheet = isNarrow() ? $("#pathfinder").offsetHeight + 16 : 0;
+      const usableH = Math.max(height - header - sheet, 120);
       const k = Math.max(
         0.25,
-        Math.min(4, (width - padding * 2) / spanX, (height - padding * 2) / spanY)
+        Math.min(maxScale, (width - pad * 2) / spanX, (usableH - pad * 2) / spanY)
       );
       const cx = (minX + maxX) / 2;
       const cy = (minY + maxY) / 2;
       const target = d3.zoomIdentity
-        .translate(width / 2, height / 2)
+        .translate(width / 2, header + usableH / 2)
         .scale(k)
         .translate(-cx, -cy);
       if (duration > 0) svg.transition().duration(duration).call(zoom.transform, target);
@@ -384,7 +491,7 @@
       sim.alpha(0.6).restart();
       // A first real size means the layout so far was built against a guess,
       // so let it re-settle before framing it.
-      fitView(firstRealSize ? 0 : 400);
+      fitView(firstRealSize ? 0 : 400, 100, 1.2);
     });
     observer.observe(stage);
 
@@ -408,9 +515,9 @@
     const people = graph.people;
     setStatus(`${people.length} characters · ${graph.films.length} films`);
 
-    // Frame the graph once the first burst of layout has worked itself out.
-    setTimeout(() => view.fitView(700), 1500);
-    $("#recenter").addEventListener("click", () => view.fitView(500));
+    // Framing is driven by the layout itself (see the tick handler), so there
+    // is nothing to schedule here; Recenter is how you ask for it again.
+    $("#recenter").addEventListener("click", () => view.fitView(500, 100, 1.2));
 
     // -- search: filters the rendered graph rather than the API, because the
     // -- whole data set is already here and a keystroke should cost nothing.
@@ -501,23 +608,42 @@
       selected = d;
       showDetail(d);
       if (d.kind === "person") {
-        if (!slots[0] || (slots[0] && slots[1])) { slots[0] = d; slots[1] = null; }
-        else if (d.id !== slots[0].id) { slots[1] = d; }
+        if (!slots[0] || (slots[0] && slots[1])) {
+          // Starting a fresh pair, so the path drawn for the last one goes.
+          slots[0] = d;
+          slots[1] = null;
+          pathNodes = new Set();
+          pathLinks = new Set();
+          $("#pathresult").textContent = "";
+        } else if (d.id !== slots[0].id) {
+          slots[1] = d;
+        }
         updateSlots();
+        if (slots[0] && slots[1]) tracePath();
       }
       applyClasses();
     });
 
-    view.svg.on("click", () => {
+    function closeDetail() {
       selected = null;
       $("#detail").hidden = true;
       applyClasses();
+    }
+
+    view.svg.on("click", closeDetail);
+
+    // On a phone the sheet covers most of the canvas, so there is not much
+    // empty graph left to tap to dismiss it.
+    $("#detailclose").addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeDetail();
     });
 
     // -- shortest path: this one really does go to the API, because the BFS
     // -- over shared films is the server's answer and not ours to recompute.
-    $("#findpath").addEventListener("click", async () => {
+    async function tracePath() {
       const [a, b] = slots;
+      if (!a || !b) return;
       const result = $("#pathresult");
       result.textContent = "Tracing…";
       try {
@@ -530,19 +656,23 @@
         const byName = new Map(graph.nodes.map((n) => [n.label, n]));
         pathNodes = new Set();
         pathLinks = new Set();
-        for (const step of path.steps) {
+        // A step names a character and the film that carries the chain on to
+        // the next one, so each step is two edges through the graph and not
+        // one: the character into the film, and the following character back
+        // out of it. The character on the far side of the last film is
+        // `path.end`, which is why it closes the walk here rather than in a
+        // case of its own.
+        path.steps.forEach((step, i) => {
           const person = byName.get(step.person);
           const film = byName.get(step.film);
+          const next = byName.get(path.steps[i + 1]?.person ?? path.end);
           if (person) pathNodes.add(person.id);
           if (film) pathNodes.add(film.id);
+          if (next) pathNodes.add(next.id);
+          // Every link runs character -> film, so both edges key that way.
           if (person && film) pathLinks.add(person.id + "|" + film.id);
-        }
-        const endNode = byName.get(path.end);
-        if (endNode) {
-          pathNodes.add(endNode.id);
-          const lastFilm = byName.get(path.steps[path.steps.length - 1]?.film);
-          if (lastFilm) pathLinks.add(endNode.id + "|" + lastFilm.id);
-        }
+          if (next && film) pathLinks.add(next.id + "|" + film.id);
+        });
 
         result.innerHTML =
           `<div><b>${path.films}</b> film${path.films === 1 ? "" : "s"} apart</div>` +
@@ -556,7 +686,11 @@
       } catch (err) {
         result.textContent = "Failed: " + err.message;
       }
-    });
+    }
+
+    // The button stays for retracing the same pair after a clear, but picking
+    // the second character is itself the request, so it does not wait for one.
+    $("#findpath").addEventListener("click", tracePath);
 
     $("#clearpath").addEventListener("click", () => {
       slots[0] = slots[1] = null;

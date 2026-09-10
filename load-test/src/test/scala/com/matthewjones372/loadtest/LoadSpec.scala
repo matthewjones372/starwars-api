@@ -6,6 +6,7 @@ import io.github.matthewjones372.proofload.java.Goals
 import io.github.matthewjones372.proofload.java.Simulations
 import io.github.matthewjones372.proofload.report.HtmlReportKt
 import io.github.matthewjones372.proofload.report.MarkdownKt
+import io.github.matthewjones372.proofload.report.PagesKt
 import io.github.matthewjones372.proofload.report.StepSummaryKt
 import io.github.matthewjones372.proofload.scala.exec
 import io.github.matthewjones372.proofload.scala.perSecond
@@ -18,7 +19,6 @@ import kotlin.jvm.functions.Function1
 import zio.*
 import zio.http.Server
 import zio.test.*
-import java.nio.file.Files
 import java.nio.file.Path
 
 object LoadSpec extends ZIOSpecDefault:
@@ -67,12 +67,10 @@ object LoadSpec extends ZIOSpecDefault:
 
   private def written(label: String, runs: List[(Int, RunResult)]) =
     ZIO.attemptBlocking {
-      Files.createDirectories(reports)
+      val environment: Function1[String, String] = name => java.lang.System.getenv(name)
       runs.foreach: (rate, result) =>
         HtmlReportKt.writeHtmlReport(result, reports.resolve(s"$label-$rate.html"), null, null, java.util.List.of())
-      val environment: Function1[String, String] = name => java.lang.System.getenv(name)
-      runs.foreach((_, result) => StepSummaryKt.appendToStepSummary(result, null, null, environment))
-      val markdown = runs.map((rate, result) => s"### $rate/s\n\n" + MarkdownKt.markdown(result, null, null))
-      Files.writeString(reports.resolve(s"$label.md"), markdown.mkString("\n"))
-      markdown
+        StepSummaryKt.appendToStepSummary(result, null, null, environment)
+      PagesKt.writePagesIndex(reports)
+      runs.map((rate, result) => s"### $rate/s\n\n" + MarkdownKt.markdown(result, null, null))
     }.flatMap(markdown => Console.printLine(markdown.mkString("\n")))

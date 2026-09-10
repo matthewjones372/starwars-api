@@ -17,11 +17,17 @@ It is a `ZIOSpecDefault`. The server runs in this JVM, started by
 `SWHttpServer.withRequestLogging` and held by the test's `Scope`, so there is no
 second process, no classpath file and no shell script.
 
-Into `load-test/target/` each run writes a self-contained HTML report per rung
-and one markdown file, and prints that same markdown. On GitHub Actions each
-rung's table is also appended to the job summary; off Actions that call writes
-nothing. The numbers are Proofload's own rendering of the run, not a second copy
-computed here.
+Into `load-test/target/reports/` each run writes a self-contained HTML report
+per rung and an `index.html` linking them, and appends each rung's table to the
+GitHub Actions job summary. Off Actions the summary call writes nothing rather
+than throwing, so the same run works on a laptop.
+
+The index is generated from the directory rather than from a list kept here, so
+a report that stops being written stops being linked. Every number is
+Proofload's own rendering of the run.
+
+`.github/workflows/load-test.yml` runs it weekly and on demand, and uploads the
+directory.
 
 Generator and target share this JVM's heap and this machine's cores. Both knees
 in FINDINGS.md were measured with the target in a JVM of its own, which is the

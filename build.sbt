@@ -125,7 +125,12 @@ lazy val loadTest = Projects
     Libraries.zioTest,
     Libraries.proofload
   )
-  .settings(publish / skip := true)
+  .settings(
+    publish / skip := true,
+    // Forked tests default to the module directory; the reports path and the
+    // load-test workflow both name paths from the repository root.
+    Test / baseDirectory := (ThisBuild / baseDirectory).value
+  )
   .dependsOn(
     `http-api` % oneToOneClassMapping
   )

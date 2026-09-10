@@ -4,6 +4,10 @@ Run on 4 cores / 15 GB, JDK 25, generator and target in separate JVMs on the
 same machine. 60s warm-up discarded, 20s a rung. `GET /people/{id}`, which is a
 lookup in a `Map` held in memory.
 
+A record of what was measured and when, so the commands below are named as they
+were run: `sweep.sh`, `profile.sh` and `jvm-sweep.sh` were shell scripts that
+`LoadSpec` has since replaced, and they are not in the tree any more.
+
 ## The headline
 
 **`Middleware.debug` costs this API between three and four times its capacity.**

@@ -35,7 +35,7 @@ truer arrangement and is why those numbers are the ones recorded.
 
 ## Test 0 — where the wall is, and whose it is
 
-`RateSweep` walks a ladder of rates against `GET /people/{id}`, the cheapest
+`LoadSpec` walks a ladder of rates against `GET /people/{id}`, the cheapest
 handler the API has: a lookup in a `Map` held in memory. The latency of a map
 lookup is not the point. The point is the three questions any capacity number
 is worthless without.
@@ -61,8 +61,8 @@ the queue the generator itself was holding, counted in requests.
 
 ### The variable
 
-`sweep.sh` runs the same ladder twice against the same code, changing one thing:
-whether `Middleware.debug` is on the route stack. It logs a line per request, so
+The spec's two tests run the same ladder against the same code, changing one
+thing: whether `Middleware.debug` is on the route stack. It logs a line per request, so
 it sits on the path every response takes — which is what it is for while a human
 is reading the log, and a cost a measurement has to be able to subtract. The
 delta between the two tables is what that middleware costs.
@@ -73,9 +73,11 @@ and is what the noisy half of the sweep runs.
 
 ## What these numbers are not
 
-- **Not a number about your production hardware.** The generator and the server
-  run in separate JVMs — they must not share a heap — but they share this
-  machine's cores. Proofload's own [ceiling
+- **Not a number about your production hardware.** Here the generator and the
+  server share this JVM and this machine's cores; the numbers in FINDINGS.md
+  were taken with the server in a JVM of its own, which is the truer
+  arrangement. Either way they compete for the same cores. Proofload's own
+  [ceiling
   page](https://github.com/matthewjones372/proofload/blob/main/docs/what-it-costs.md)
   puts its HTTP step at *at least* 2,500 requests a second on four shared cores,
   and this API answers from memory. Expect to find the generator before the

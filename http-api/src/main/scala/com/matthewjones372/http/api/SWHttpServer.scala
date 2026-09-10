@@ -317,6 +317,17 @@ private final case class SWHttpServerImpl(
 
   private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", SWHttpServer.openAPI)
 
+  /**
+   * The browser UI, which is a single page read from the classpath.
+   *
+   * Serving it from the API rather than from somewhere else is what keeps the
+   * two on one origin: the page calls `/people` and `/films` as relative paths,
+   * so there is no cross-origin rule to relax and no second thing to deploy or
+   * to keep in step with this one.
+   */
+  private val uiRoutes =
+    Routes(Method.GET / Root -> Handler.fromResource("web/index.html").sandbox)
+
   // The bytes for one entity, served from the map, or the same 404 the endpoint
   // would have produced. A miss here is a miss in the repo the map was built
   // from, so there is one answer rather than a fallback that could differ.
@@ -381,6 +392,6 @@ private final case class SWHttpServerImpl(
       )
     else Chunk(getCharacterHandler, getCharactersHandler, getFilmsHandler, getFilmHandler, getShortestPathHandler)
 
-  private val routes = Routes(handlers) ++ swaggerRoutes
+  private val routes = Routes(handlers) ++ swaggerRoutes ++ uiRoutes
 
   override def start: URIO[Server, Nothing] = Server.serve(routes)

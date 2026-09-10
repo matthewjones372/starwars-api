@@ -16,9 +16,11 @@ load-test/profile.sh 6000   # JFR on the server at one rate
 
 Both scripts refresh the classpath themselves before running.
 
-Into `load-test/target/` each writes the comparison table, a self-contained HTML
-report per rung, and one markdown file. On GitHub Actions each rung's table is
-also appended to the job summary; off Actions that call writes nothing.
+Into `load-test/target/` each writes a self-contained HTML report per rung and
+one markdown file, and prints that same markdown. On GitHub Actions each rung's
+table is also appended to the job summary; off Actions that call writes nothing.
+The numbers are Proofload's own rendering of the run, not a second copy computed
+here.
 
 ## Test 0 — where the wall is, and whose it is
 

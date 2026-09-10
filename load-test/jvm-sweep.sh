@@ -26,7 +26,7 @@ variant() {
     sleep 1
   done
   [ -n "$ready" ] || { echo "server did not start: $label" >&2; exit 1; }
-  "$java" -Dfile.encoding=UTF-8 -cp "$classpath" com.matthewjones372.loadtest.RateSweep \
+  "$java" -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -cp "$classpath" com.matthewjones372.loadtest.RateSweep \
     "http://localhost:$port" "jvm-$label" "$ladder" "$rung" "$here/target/reports" \
     | tee "$here/target/jvm-$label.md"
   kill "$server" 2>/dev/null || true

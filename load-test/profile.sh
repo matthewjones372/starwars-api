@@ -28,7 +28,7 @@ for _ in $(seq 1 90); do
   sleep 1
 done
 
-"$java" -Dfile.encoding=UTF-8 -cp "$classpath" com.matthewjones372.loadtest.RateSweep \
+"$java" -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -cp "$classpath" com.matthewjones372.loadtest.RateSweep \
   "http://localhost:$port" "profile-${rate}" "$rate" "$seconds"
 
 "$jcmd" "$server" JFR.dump name=swapi filename="$recording"

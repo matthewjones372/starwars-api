@@ -23,7 +23,7 @@ sweep() {
   done
   [ -n "$ready" ] || { echo "server did not come up; see target/server-$label.log" >&2; exit 1; }
 
-  "$java" -Dfile.encoding=UTF-8 -cp "$classpath" com.matthewjones372.loadtest.RateSweep \
+  "$java" -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -cp "$classpath" com.matthewjones372.loadtest.RateSweep \
     "http://localhost:$port" "$label" | tee "$here/target/sweep-$label.md"
 
   kill "$server" 2>/dev/null || true

@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: starwars-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /films/1
+    envVars:
+      - key: PORT
+        value: 8080

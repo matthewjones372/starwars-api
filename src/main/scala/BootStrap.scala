@@ -36,11 +36,19 @@ object ClientExample extends ZIOAppDefault:
 
 object ServerExample extends ZIOAppDefault:
 
+  private val serverConfig =
+    ZLayer.fromZIO(
+      System
+        .envOrElse("PORT", "8080")
+        .map(port => Server.Config.default.port(port.toIntOption.getOrElse(8080)))
+    )
+
   def run = (for
     server <- SWHttpServer.default
     _      <- server.start
   yield ()).provide(
-    Server.default,
+    serverConfig,
+    Server.live,
     SLF4J.slf4j(LogFormat.colored),
     removeDefaultLoggers
   )

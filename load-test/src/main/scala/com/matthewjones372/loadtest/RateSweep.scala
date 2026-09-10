@@ -26,7 +26,7 @@ object RateSweep extends ZIOAppDefault:
 
   private val person = step("GET /people/{id}")
 
-  private val defaultLadder = List(1000, 2000, 4000, 6000, 8000, 12000, 16000)
+  val defaultLadder = List(1000, 2000, 4000, 6000, 8000, 12000, 16000)
 
   private val defaultRung = 20
 
@@ -40,12 +40,18 @@ object RateSweep extends ZIOAppDefault:
                  .map(_.split(",").toList.flatMap(_.trim.toIntOption))
                  .filter(_.nonEmpty)
                  .getOrElse(defaultLadder)
-      perRung = FiniteDuration(args.lift(3).flatMap(_.toIntOption).getOrElse(defaultRung), TimeUnit.SECONDS)
+      seconds = args.lift(3).flatMap(_.toIntOption).getOrElse(defaultRung)
       into    = Path.of(args.lift(4).getOrElse("load-test/target/reports"))
-      _      <- Console.printLine(s"# $label - $baseUrl, ${perRung.toSeconds}s a rung")
-      _      <- warmUp(baseUrl)
-      runs   <- ZIO.foreach(ladder)(rate => measure(baseUrl, rate, perRung).map(rate -> _))
-      _      <- reports(label, into, runs)
+      _      <- sweep(baseUrl, label, ladder, seconds, into)
+    yield ()
+
+  def sweep(baseUrl: String, label: String, ladder: List[Int], seconds: Int, into: Path) =
+    val perRung = FiniteDuration(seconds, TimeUnit.SECONDS)
+    for
+      _    <- Console.printLine(s"# $label - $baseUrl, ${perRung.toSeconds}s a rung")
+      _    <- warmUp(baseUrl)
+      runs <- ZIO.foreach(ladder)(rate => measure(baseUrl, rate, perRung).map(rate -> _))
+      _    <- reports(label, into, runs)
     yield ()
 
   private def reports(label: String, into: Path, runs: List[(Int, RunResult)]) =

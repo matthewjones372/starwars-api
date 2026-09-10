@@ -124,17 +124,7 @@ lazy val loadTest = Projects
     Libraries.zioLogging,
     Libraries.proofload
   )
-  .settings(
-    publish / skip := true,
-    TaskKey[Unit]("writeClasspath") := {
-      val converter = fileConverter.value
-      val entries   = (Runtime / fullClasspath).value.map(entry => converter.toPath(entry.data))
-      val out       = baseDirectory.value / "target" / "load-test-cp.txt"
-      IO.createDirectory(out.getParentFile)
-      IO.write(out, entries.mkString(java.io.File.pathSeparator))
-      streams.value.log.info(s"wrote $out")
-    }
-  )
+  .settings(publish / skip := true)
   .dependsOn(
     `http-api` % oneToOneClassMapping
   )

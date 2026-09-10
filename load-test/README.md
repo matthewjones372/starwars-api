@@ -10,11 +10,14 @@ test run they did not ask for.
 ## Running it
 
 ```sh
-load-test/sweep.sh          # the rate ladder, twice
-load-test/profile.sh 6000   # JFR on the server at one rate
+sbt "load-test/run compare"          # the rate ladder, twice
+sbt "load-test/run profile 6000 60"  # JFR on the server at one rate
+sbt "load-test/run jvm"              # the same ladder under four JVM configurations
 ```
 
-Both scripts refresh the classpath themselves before running.
+The server runs in a JVM of its own, forked with this process's own classpath
+and held open by a `Scope`. There is no classpath file to go stale and no shell
+script in the path.
 
 Into `load-test/target/` each writes a self-contained HTML report per rung and
 one markdown file, and prints that same markdown. On GitHub Actions each rung's

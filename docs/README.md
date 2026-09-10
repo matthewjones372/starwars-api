@@ -13,6 +13,24 @@ search over the character graph, and runtime-configurable multi-field sorting.
 Data covers 82 characters and 6 films, served from memory with no external
 services to start.
 
+## Live
+
+**[starwars-api-qjcm.onrender.com](https://starwars-api-qjcm.onrender.com/)**
+
+The deployed instance serves a browser UI at `/` and the API alongside it on
+the same origin: search across every character and film, the character graph
+drawn as a force layout, and the shortest chain between any two characters
+traced by clicking one and then another.
+
+| | |
+| --- | --- |
+| UI | https://starwars-api-qjcm.onrender.com/ |
+| API docs | https://starwars-api-qjcm.onrender.com/docs/openapi |
+| Example | https://starwars-api-qjcm.onrender.com/people/1 |
+
+It runs on a free instance, which sleeps when idle, so the first request after
+a quiet spell takes a few seconds to wake it.
+
 ## Quick start
 
 ```sh
@@ -38,6 +56,7 @@ curl 'http://localhost:8080/people?page=2&sortBy=height:DESC,name:ASC'
 | GET | `/films/{filmId}` | | One film |
 | GET | `/people/{characterId}/path-to/{targetId}` | | Shortest chain of shared films between two characters |
 | GET | `/docs/openapi` | | Swagger UI |
+| GET | `/` | | Browser UI: search and the character graph |
 
 Paged responses carry the total alongside the current page:
 

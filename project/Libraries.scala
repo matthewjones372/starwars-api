@@ -63,13 +63,12 @@ object Libraries {
     )
   )
 
-  lazy val kestrel = Seq(
-    resolvers += Resolver.mavenLocal,
+  lazy val proofload = Seq(
     libraryDependencies ++= Seq(
-      Dependencies.kestrelScala,
-      Dependencies.kestrelZioTest,
-      Dependencies.kestrelHtml,
-      Dependencies.kestrelGithub
+      Dependencies.proofloadScala,
+      Dependencies.proofloadZioTest,
+      Dependencies.proofloadHtml,
+      Dependencies.proofloadGithub
     )
   )
 

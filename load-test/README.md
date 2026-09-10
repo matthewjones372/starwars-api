@@ -1,20 +1,15 @@
 # Load test
 
-A load test for this API, written with [Kestrel](https://github.com/matthewjones372/kestrel).
+A load test for this API, written with
+[Proofload](https://github.com/matthewjones372/proofload).
 
 This module is deliberately **outside** the root aggregate, so `sbt test` and CI
-never reach it. Kestrel is not on Maven Central yet, and this module resolves it
-from the local maven repository; a clean checkout would fail to resolve, which
-is not a failure anybody wants in a test run they did not ask for.
+never reach it: generating load takes minutes and nobody wants that in a unit
+test run they did not ask for.
 
 ## Running it
 
 ```sh
-# once, in a checkout of the kestrel repo
-./gradlew :kestrel-scala:publishToMavenLocal :kestrel-zio-test:publishToMavenLocal \
-  :kestrel-report-html:publishToMavenLocal :kestrel-report-github:publishToMavenLocal
-
-# here
 load-test/sweep.sh          # the rate ladder, twice
 load-test/profile.sh 6000   # JFR on the server at one rate
 ```
@@ -35,7 +30,7 @@ is worthless without.
 **Did the load actually leave?** `left` against `asked`, plus `behind` and
 `lost`. A generator that falls behind queues requests internally and reports the
 wait as the server's latency — coordinated omission, the default bug in a load
-generator. Kestrel times every request from when it was *meant* to depart and
+generator. Proofload times every request from when it was *meant* to depart and
 says on every run whether it kept its own schedule. A rung marked `behind: yes`
 found **this tool's** ceiling on this machine, not the API's, and must not be
 quoted as an API capacity.
@@ -47,7 +42,7 @@ of the server even on a rung where the generator fell behind — of the server a
 real one.
 
 **Where was the queue?** Little's law — `L = λW` — is arithmetic, not a model.
-Kestrel measures all three sides independently, so `L obs` against `L pred` is
+Proofload measures all three sides independently, so `L obs` against `L pred` is
 a free consistency check, and `backlog` is the gap between the two predictions:
 the queue the generator itself was holding, counted in requests.
 
@@ -67,8 +62,8 @@ and is what the noisy half of the sweep runs.
 
 - **Not a number about your production hardware.** The generator and the server
   run in separate JVMs — they must not share a heap — but they share this
-  machine's cores. Kestrel's own [ceiling
-  page](https://github.com/matthewjones372/kestrel/blob/main/docs/what-it-costs.md)
+  machine's cores. Proofload's own [ceiling
+  page](https://github.com/matthewjones372/proofload/blob/main/docs/what-it-costs.md)
   puts its HTTP step at *at least* 2,500 requests a second on four shared cores,
   and this API answers from memory. Expect to find the generator before the
   server, and read the `behind` column before quoting anything.
@@ -78,4 +73,4 @@ and is what the noisy half of the sweep runs.
 - **Not a regression gate.** Comparing a run against a stored baseline needs
   `Difference.notWorseThan`, which takes a `Share` and so carries a value-class
   hash in its JVM name — no Scala caller can name it. That waits on a
-  Java-facing baselines facade in Kestrel.
+  Java-facing baselines facade in Proofload.

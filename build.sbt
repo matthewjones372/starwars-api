@@ -122,7 +122,7 @@ lazy val loadTest = Projects
     Libraries.zio,
     Libraries.zioHttp,
     Libraries.zioLogging,
-    Libraries.kestrel
+    Libraries.proofload
   )
   .settings(
     publish / skip := true,

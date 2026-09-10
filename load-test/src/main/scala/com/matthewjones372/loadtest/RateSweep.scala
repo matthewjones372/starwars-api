@@ -1,23 +1,23 @@
 package com.matthewjones372.loadtest
 
-import io.github.matthewjones372.kestrel.Concurrency
-import io.github.matthewjones372.kestrel.ConcurrencyKt
-import io.github.matthewjones372.kestrel.OfferedKt
-import io.github.matthewjones372.kestrel.RunResult
-import io.github.matthewjones372.kestrel.RunResultKt
-import io.github.matthewjones372.kestrel.java.Simulations
-import io.github.matthewjones372.kestrel.report.HtmlReportKt
-import io.github.matthewjones372.kestrel.report.MarkdownKt
-import io.github.matthewjones372.kestrel.report.StepSummaryKt
+import io.github.matthewjones372.proofload.Concurrency
+import io.github.matthewjones372.proofload.ConcurrencyKt
+import io.github.matthewjones372.proofload.OfferedKt
+import io.github.matthewjones372.proofload.RunResult
+import io.github.matthewjones372.proofload.RunResultKt
+import io.github.matthewjones372.proofload.java.Simulations
+import io.github.matthewjones372.proofload.report.HtmlReportKt
+import io.github.matthewjones372.proofload.report.MarkdownKt
+import io.github.matthewjones372.proofload.report.StepSummaryKt
 import kotlin.jvm.functions.Function1
-import io.github.matthewjones372.kestrel.scala.apply
-import io.github.matthewjones372.kestrel.scala.exec
-import io.github.matthewjones372.kestrel.scala.given
-import io.github.matthewjones372.kestrel.scala.http
-import io.github.matthewjones372.kestrel.scala.perSecond
-import io.github.matthewjones372.kestrel.scala.scenario
-import io.github.matthewjones372.kestrel.scala.step
-import io.github.matthewjones372.kestrel.ziotest.kestrel
+import io.github.matthewjones372.proofload.scala.apply
+import io.github.matthewjones372.proofload.scala.exec
+import io.github.matthewjones372.proofload.scala.given
+import io.github.matthewjones372.proofload.scala.http
+import io.github.matthewjones372.proofload.scala.perSecond
+import io.github.matthewjones372.proofload.scala.scenario
+import io.github.matthewjones372.proofload.scala.step
+import io.github.matthewjones372.proofload.ziotest.proofload
 import zio.Console
 import zio.ZIOAppDefault
 import zio.ZIO
@@ -66,7 +66,7 @@ object RateSweep extends ZIOAppDefault:
 
   private def warmUp(baseUrl: String) =
     Console.printLine("warming up 60s (discarded)") *>
-      kestrel.run(Simulations.at(lookups(baseUrl), 1000.perSecond, FiniteDuration(60, TimeUnit.SECONDS))).unit
+      proofload.run(Simulations.at(lookups(baseUrl), 1000.perSecond, FiniteDuration(60, TimeUnit.SECONDS))).unit
 
   private def lookups(baseUrl: String) =
     val api = http.baseUrl(baseUrl)
@@ -75,7 +75,7 @@ object RateSweep extends ZIOAppDefault:
   private def measure(baseUrl: String, rate: Int, perRung: FiniteDuration) =
     for
       _      <- Console.printLine(s"  rung $rate/s ...")
-      result <- kestrel.run(Simulations.at(lookups(baseUrl), rate.perSecond, perRung))
+      result <- proofload.run(Simulations.at(lookups(baseUrl), rate.perSecond, perRung))
     yield result
 
   private def table(rows: List[Rung]) =

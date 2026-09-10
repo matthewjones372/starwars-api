@@ -62,10 +62,10 @@ delivered what was asked and the latency is the target's. Above 12,000 both
 variants cap near 15,238/s, which is the generator's own ceiling on this box,
 and those rungs say nothing about the API.
 
-**`behind: yes` on the healthy rungs is not a warning.** Kestrel asks whether
+**`behind: yes` on the healthy rungs is not a warning.** Proofload asks whether
 the generator's p99 lateness is larger than the precision it quotes the target's
 p99 to — 0.78% of it. At sub-millisecond latencies that trips almost always;
-Kestrel's own ceiling page reports `yes` at every rate but one for the same
+Proofload's own ceiling page reports `yes` at every rate but one for the same
 reason. `lostGround` and `left` are the columns that carry the attribution.
 
 ## What this does not say
@@ -74,7 +74,7 @@ reason. `lostGround` and `left` are the columns that carry the attribution.
   server for the same four cores, so both knees would move on a machine where
   the API had them to itself.
 - **Not an attribution for the failures above 6,000/s.** Server overload and
-  ephemeral-port exhaustion look identical in this table. Kestrel records the
+  ephemeral-port exhaustion look identical in this table. Proofload records the
   cause and this sweep does not read it yet.
 - **Not a claim about the sorted or graph endpoints.** This is the cheapest
   handler in the API. `sortBy` and `path-to` do real work per request and get

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Star Wars Character Graph</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+  :root {
+    --bg: #07090f;
+    --panel: rgba(18, 22, 34, 0.86);
+    --border: #232a3d;
+    --text: #dfe4f0;
+    --muted: #8b95ad;
+    --accent: #ffd45e;
+    --film: #4ea1ff;
+    --char: #9aa7c2;
+    --path: #ff7a45;
+    --match: #5ce8a8;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+  }
+
+  #stage { position: fixed; inset: 0; }
+  #stage svg { width: 100%; height: 100%; display: block; cursor: grab; }
+  #stage svg:active { cursor: grabbing; }
+
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 5;
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 18px;
+    background: linear-gradient(to bottom, rgba(7,9,15,0.95), rgba(7,9,15,0));
+    pointer-events: none;
+  }
+  header > * { pointer-events: auto; }
+  h1 {
+    margin: 0; font-size: 15px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent); white-space: nowrap;
+  }
+  #search {
+    flex: 0 1 320px;
+    padding: 9px 12px;
+    background: rgba(12,16,26,0.9);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+  }
+  #search:focus { border-color: var(--accent); }
+  #search::placeholder { color: var(--muted); }
+  #status { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+  .panel {
+    position: fixed; z-index: 5;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    backdrop-filter: blur(10px);
+  }
+  #detail { top: 64px; left: 18px; width: 268px; }
+  #pathfinder { bottom: 18px; left: 18px; width: 268px; }
+  #legend { bottom: 18px; right: 18px; }
+
+  .panel h2 {
+    margin: 0 0 10px; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  #detail .name { font-size: 17px; font-weight: 600; margin-bottom: 10px; color: var(--accent); }
+  #detail dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: 13px; }
+  #detail dt { color: var(--muted); }
+  #detail dd { margin: 0; text-align: right; }
+  #detail .films { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 12px; }
+  #detail .films span { color: var(--film); display: block; }
+
+  .slot {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; margin-bottom: 7px;
+    border: 1px dashed var(--border); border-radius: 7px;
+    font-size: 13px; min-height: 34px;
+  }
+  .slot.filled { border-style: solid; border-color: var(--path); }
+  .slot .idx { color: var(--muted); font-size: 11px; letter-spacing: 0.08em; }
+  .slot .val { flex: 1; }
+  .slot .val.empty { color: var(--muted); }
+  button {
+    width: 100%; padding: 8px; margin-top: 3px;
+    background: var(--path); color: #1a0d06;
+    border: 0; border-radius: 7px;
+    font: inherit; font-weight: 600; cursor: pointer;
+  }
+  button:disabled { background: #2a3145; color: var(--muted); cursor: default; }
+  button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); font-weight: 400; }
+  #recenter { width: auto; margin-top: 0; padding: 8px 14px; white-space: nowrap; }
+  #pathresult { margin-top: 10px; font-size: 12px; color: var(--muted); }
+  #pathresult .step { color: var(--text); }
+  #pathresult .via { color: var(--film); }
+
+  #legend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); }
+  #legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+
+  .node circle { cursor: pointer; }
+  .node text {
+    font-size: 10px; fill: var(--muted); pointer-events: none;
+    text-anchor: middle; paint-order: stroke;
+    stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round;
+  }
+  .node.film text { font-size: 12px; fill: var(--film); font-weight: 600; }
+
+  /* Zoomed out, only the film hubs stay labelled; a character earns its label
+     by being searched for, selected, on a traced path, or hovered. */
+  .node.person text { transition: opacity 0.18s ease; }
+  g.far .node.person text { opacity: 0; }
+  g.far .node.person.match text,
+  g.far .node.person.selected text,
+  g.far .node.person.onpath text { opacity: 1; }
+  .node.person:hover text { opacity: 1; }
+
+  .node.dimmed { opacity: 0.12; }
+  .node.match circle { stroke: var(--match); stroke-width: 2.5px; }
+  .node.match text { fill: var(--match); }
+  .node.onpath circle { stroke: var(--path); stroke-width: 3px; }
+  .node.onpath text { fill: var(--path); }
+  .node.selected circle { stroke: var(--accent); stroke-width: 3px; }
+
+  line.link { stroke: #2b3348; stroke-width: 1px; }
+  line.link.dimmed { opacity: 0.08; }
+  line.link.onpath { stroke: var(--path); stroke-width: 2.5px; }
+
+  #loading {
+    position: fixed; inset: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg); color: var(--muted);
+  }
+  #loading.done { display: none; }
+</style>
+</head>
+<body>
+
+<div id="stage"></div>
+
+<header>
+  <h1>Star Wars Character Graph</h1>
+  <input id="search" type="search" placeholder="Search characters or films…" autocomplete="off" spellcheck="false"/>
+  <span id="status"></span>
+  <button id="recenter" class="ghost">Recenter</button>
+</header>
+
+<div class="panel" id="detail" hidden>
+  <h2>Character</h2>
+  <div class="name"></div>
+  <dl></dl>
+  <div class="films"></div>
+</div>
+
+<div class="panel" id="pathfinder">
+  <h2>Shortest path</h2>
+  <div class="slot" data-slot="0"><span class="idx">FROM</span><span class="val empty">click a character</span></div>
+  <div class="slot" data-slot="1"><span class="idx">TO</span><span class="val empty">click another</span></div>
+  <button id="findpath" disabled>Trace path</button>
+  <button id="clearpath" class="ghost">Clear</button>
+  <div id="pathresult"></div>
+</div>
+
+<div class="panel" id="legend">
+  <span><i style="background:var(--film)"></i>Film</span>
+  <span><i style="background:var(--char)"></i>Character</span>
+</div>
+
+<div id="loading">Loading the galaxy…</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const PAGE_SIZE = 10;
+  const idFromUrl = (url) => {
+    const m = /\/(?:people|films)\/(\d+)\/?$/.exec(url || "");
+    return m ? m[1] : null;
+  };
+
+  const $ = (sel) => document.querySelector(sel);
+  const statusEl = $("#status");
+  const setStatus = (t) => { statusEl.textContent = t; };
+
+  // ---------------------------------------------------------------- data
+
+  // The API pages at a fixed size and reports the total in `count`, so the
+  // first page tells us how many more there are and the rest go out at once.
+  async function fetchAllPeople() {
+    const first = await fetch("people?page=1").then((r) => r.json());
+    const pages = Math.ceil(first.count / PAGE_SIZE);
+    const rest = await Promise.all(
+      Array.from({ length: pages - 1 }, (_, i) =>
+        fetch(`people?page=${i + 2}`).then((r) => r.json())
+      )
+    );
+    return [first, ...rest].flatMap((p) => p.results);
+  }
+
+  async function load() {
+    const [people, films] = await Promise.all([
+      fetchAllPeople(),
+      fetch("films?page=1").then((r) => r.json()).then((f) => f.results),
+    ]);
+
+    const filmByUrl = new Map(films.map((f) => [f.url, f]));
+
+    const nodes = [
+      ...films.map((f) => ({
+        id: "film:" + f.url,
+        kind: "film",
+        label: f.title,
+        episode: f.episode_id,
+        r: 22,
+      })),
+      ...people.map((p) => ({
+        id: "person:" + p.url,
+        kind: "person",
+        label: p.name,
+        entityId: idFromUrl(p.url),
+        data: p,
+        // A character in more films sits on more edges, so give it more mass.
+        r: 4 + Math.min(p.films.length, 6) * 1.2,
+      })),
+    ];
+
+    const links = [];
+    for (const p of people) {
+      for (const filmUrl of p.films) {
+        if (filmByUrl.has(filmUrl)) {
+          links.push({ source: "person:" + p.url, target: "film:" + filmUrl });
+        }
+      }
+    }
+
+    return { nodes, links, people, films };
+  }
+
+  // ---------------------------------------------------------------- render
+
+  function render({ nodes, links, people }) {
+    const svg = d3.select("#stage").append("svg");
+    const root = svg.append("g");
+    const linkLayer = root.append("g");
+    const nodeLayer = root.append("g");
+
+    // The stage can still be laid out at zero size when this runs (an embedded
+    // or hidden frame does exactly that), and a zero width would centre every
+    // force on the origin. So dimensions are read live and corrected by the
+    // ResizeObserver below rather than snapshotted once here.
+    const stage = document.getElementById("stage");
+    let width = stage.clientWidth || 1200;
+    let height = stage.clientHeight || 800;
+
+    const forceX = d3.forceX(width / 2).strength(0.02);
+    const forceY = d3.forceY(height / 2).strength(0.02);
+
+    const sim = d3
+      .forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id((d) => d.id).distance((l) => (l.target.kind === "film" ? 130 : 90)).strength(0.28))
+      .force("charge", d3.forceManyBody().strength((d) => (d.kind === "film" ? -1800 : -260)).distanceMax(900))
+      .force("collide", d3.forceCollide().radius((d) => d.r + 14))
+      .force("x", forceX)
+      .force("y", forceY)
+      // Alpha decays as usual towards a non-zero target rather than towards
+      // zero, so the layout settles and then keeps breathing instead of
+      // freezing into a still picture. Decay itself must stay non-zero:
+      // d3 moves alpha by `(alphaTarget - alpha) * alphaDecay` per tick, so a
+      // zero decay would pin alpha at its initial 1.0 forever.
+      // Low enough that the drift reads as the graph breathing rather than as
+      // the layout still deciding, and slow enough to click a node mid-motion.
+      .alphaTarget(0.008)
+      .velocityDecay(0.65);
+
+    const link = linkLayer
+      .selectAll("line")
+      .data(links)
+      .join("line")
+      .attr("class", "link");
+
+    const node = nodeLayer
+      .selectAll("g")
+      .data(nodes)
+      .join("g")
+      .attr("class", (d) => "node " + d.kind);
+
+    node
+      .append("circle")
+      .attr("r", (d) => d.r)
+      .attr("fill", (d) => (d.kind === "film" ? "var(--film)" : "var(--char)"));
+
+    // The layout never stops drifting, so a character-sized dot is a small
+    // moving target. This invisible disc widens what counts as a hit without
+    // changing what you see.
+    node
+      .append("circle")
+      .attr("class", "hit")
+      .attr("r", (d) => d.r + 10)
+      .attr("fill", "transparent");
+
+    node
+      .append("text")
+      .attr("dy", (d) => d.r + 12)
+      .text((d) => d.label);
+
+    node.call(
+      d3
+        .drag()
+        .on("start", (event, d) => {
+          if (!event.active) sim.alphaTarget(0.3).restart();
+          d.fx = d.x; d.fy = d.y;
+        })
+        .on("drag", (event, d) => { d.fx = event.x; d.fy = event.y; })
+        .on("end", (event, d) => {
+          if (!event.active) sim.alphaTarget(0.008);
+          d.fx = null; d.fy = null;
+        })
+    );
+
+    sim.on("tick", () => {
+      link
+        .attr("x1", (d) => d.source.x).attr("y1", (d) => d.source.y)
+        .attr("x2", (d) => d.target.x).attr("y2", (d) => d.target.y);
+      node.attr("transform", (d) => `translate(${d.x},${d.y})`);
+    });
+
+    // Character labels are noise at 82 nodes zoomed out, so they appear once
+    // the view is close enough to read them; the film hubs stay labelled at
+    // every zoom because they are what orients you.
+    // Chosen to sit just below the scale `fitView` settles on, so the default
+    // framing is labelled and names drop away only when you pull further out.
+    const LABEL_ZOOM = 0.8;
+    const zoom = d3
+      .zoom()
+      .scaleExtent([0.25, 4])
+      .on("zoom", (event) => {
+        root.attr("transform", event.transform);
+        nodeLayer.classed("far", event.transform.k < LABEL_ZOOM);
+      });
+    svg.call(zoom);
+
+    // Frames the whole graph rather than assuming a scale, which also means a
+    // late resize (see the observer below) recovers on its own.
+    function fitView(duration = 600, padding = 100) {
+      if (!width || !height || !nodes.length || nodes.some((n) => n.x == null)) return;
+      const xs = nodes.map((n) => n.x);
+      const ys = nodes.map((n) => n.y);
+      const minX = Math.min(...xs), maxX = Math.max(...xs);
+      const minY = Math.min(...ys), maxY = Math.max(...ys);
+      const spanX = Math.max(maxX - minX, 1);
+      const spanY = Math.max(maxY - minY, 1);
+      const k = Math.max(
+        0.25,
+        Math.min(4, (width - padding * 2) / spanX, (height - padding * 2) / spanY)
+      );
+      const cx = (minX + maxX) / 2;
+      const cy = (minY + maxY) / 2;
+      const target = d3.zoomIdentity
+        .translate(width / 2, height / 2)
+        .scale(k)
+        .translate(-cx, -cy);
+      if (duration > 0) svg.transition().duration(duration).call(zoom.transform, target);
+      else svg.call(zoom.transform, target);
+    }
+
+    const observer = new ResizeObserver(() => {
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      if (!w || !h || (w === width && h === height)) return;
+      const firstRealSize = width === 1200 && height === 800;
+      width = w;
+      height = h;
+      forceX.x(width / 2);
+      forceY.y(height / 2);
+      sim.alpha(0.6).restart();
+      // A first real size means the layout so far was built against a guess,
+      // so let it re-settle before framing it.
+      fitView(firstRealSize ? 0 : 400);
+    });
+    observer.observe(stage);
+
+    return { svg, zoom, root, node, link, sim, nodes, links, fitView };
+  }
+
+  // ---------------------------------------------------------------- app
+
+  (async () => {
+    let graph;
+    try {
+      graph = await load();
+    } catch (err) {
+      $("#loading").textContent = "Could not reach the API: " + err.message;
+      return;
+    }
+
+    const view = render(graph);
+    $("#loading").classList.add("done");
+
+    const people = graph.people;
+    setStatus(`${people.length} characters · ${graph.films.length} films`);
+
+    // Frame the graph once the first burst of layout has worked itself out.
+    setTimeout(() => view.fitView(700), 1500);
+    $("#recenter").addEventListener("click", () => view.fitView(500));
+
+    // -- search: filters the rendered graph rather than the API, because the
+    // -- whole data set is already here and a keystroke should cost nothing.
+    let matches = new Set();
+    $("#search").addEventListener("input", (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      matches = new Set();
+      if (q) {
+        for (const n of graph.nodes) {
+          if (n.label.toLowerCase().includes(q)) matches.add(n.id);
+        }
+      }
+      applyClasses();
+      setStatus(
+        q
+          ? `${matches.size} match${matches.size === 1 ? "" : "es"}`
+          : `${people.length} characters · ${graph.films.length} films`
+      );
+      view.sim.alpha(0.3);
+    });
+
+    // -- selection + detail panel
+    let selected = null;
+    let pathNodes = new Set();
+    let pathLinks = new Set();
+    const slots = [null, null];
+
+    function applyClasses() {
+      const filtering = matches.size > 0;
+      // A traced path outranks the search filter: it was asked for explicitly,
+      // so it stays lit even when the current query does not name its nodes.
+      view.node
+        .classed("dimmed", (d) => filtering && !matches.has(d.id) && !pathNodes.has(d.id))
+        .classed("match", (d) => matches.has(d.id))
+        .classed("selected", (d) => selected && d.id === selected.id)
+        .classed("onpath", (d) => pathNodes.has(d.id));
+      view.link
+        .classed("dimmed", (d) => {
+          const key = d.source.id + "|" + d.target.id;
+          if (pathLinks.has(key)) return false;
+          return filtering && !matches.has(d.source.id) && !matches.has(d.target.id);
+        })
+        .classed("onpath", (d) => pathLinks.has(d.source.id + "|" + d.target.id));
+    }
+
+    function showDetail(d) {
+      const panel = $("#detail");
+      if (d.kind !== "person") { panel.hidden = true; return; }
+      const p = d.data;
+      panel.hidden = false;
+      panel.querySelector(".name").textContent = p.name;
+      const rows = [
+        ["Birth year", p.birth_year],
+        ["Gender", p.gender],
+        ["Height", p.height ? p.height + " cm" : null],
+        ["Mass", p.mass ? p.mass + " kg" : null],
+        ["Eyes", p.eye_color],
+        ["Hair", p.hair_color],
+      ].filter(([, v]) => v && v !== "n/a");
+      panel.querySelector("dl").innerHTML = rows
+        .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
+        .join("");
+      const titles = graph.nodes.filter(
+        (n) => n.kind === "film" && p.films.includes(n.id.slice(5))
+      );
+      panel.querySelector(".films").innerHTML =
+        `<h2>Appears in</h2>` + titles.map((f) => `<span>${f.label}</span>`).join("");
+    }
+
+    function updateSlots() {
+      document.querySelectorAll(".slot").forEach((el, i) => {
+        const val = el.querySelector(".val");
+        if (slots[i]) {
+          el.classList.add("filled");
+          val.classList.remove("empty");
+          val.textContent = slots[i].label;
+        } else {
+          el.classList.remove("filled");
+          val.classList.add("empty");
+          val.textContent = i === 0 ? "click a character" : "click another";
+        }
+      });
+      $("#findpath").disabled = !(slots[0] && slots[1]);
+    }
+
+    view.node.on("click", (event, d) => {
+      event.stopPropagation();
+      selected = d;
+      showDetail(d);
+      if (d.kind === "person") {
+        if (!slots[0] || (slots[0] && slots[1])) { slots[0] = d; slots[1] = null; }
+        else if (d.id !== slots[0].id) { slots[1] = d; }
+        updateSlots();
+      }
+      applyClasses();
+    });
+
+    view.svg.on("click", () => {
+      selected = null;
+      $("#detail").hidden = true;
+      applyClasses();
+    });
+
+    // -- shortest path: this one really does go to the API, because the BFS
+    // -- over shared films is the server's answer and not ours to recompute.
+    $("#findpath").addEventListener("click", async () => {
+      const [a, b] = slots;
+      const result = $("#pathresult");
+      result.textContent = "Tracing…";
+      try {
+        const res = await fetch(`people/${a.entityId}/path-to/${b.entityId}`);
+        if (!res.ok) { result.textContent = `No path (${res.status})`; return; }
+        const path = await res.json();
+
+        // The response names characters and the film joining each hop; the
+        // rendered graph keys on urls, so names map back through the nodes.
+        const byName = new Map(graph.nodes.map((n) => [n.label, n]));
+        pathNodes = new Set();
+        pathLinks = new Set();
+        for (const step of path.steps) {
+          const person = byName.get(step.person);
+          const film = byName.get(step.film);
+          if (person) pathNodes.add(person.id);
+          if (film) pathNodes.add(film.id);
+          if (person && film) pathLinks.add(person.id + "|" + film.id);
+        }
+        const endNode = byName.get(path.end);
+        if (endNode) {
+          pathNodes.add(endNode.id);
+          const lastFilm = byName.get(path.steps[path.steps.length - 1]?.film);
+          if (lastFilm) pathLinks.add(endNode.id + "|" + lastFilm.id);
+        }
+
+        result.innerHTML =
+          `<div><b>${path.films}</b> film${path.films === 1 ? "" : "s"} apart</div>` +
+          path.steps
+            .map((s) => `<div><span class="step">${s.person}</span> <span class="via">via ${s.film}</span></div>`)
+            .join("") +
+          `<div><span class="step">${path.end}</span></div>`;
+
+        applyClasses();
+        view.sim.alpha(0.4);
+      } catch (err) {
+        result.textContent = "Failed: " + err.message;
+      }
+    });
+
+    $("#clearpath").addEventListener("click", () => {
+      slots[0] = slots[1] = null;
+      pathNodes = new Set();
+      pathLinks = new Set();
+      $("#pathresult").textContent = "";
+      updateSlots();
+      applyClasses();
+    });
+
+    updateSlots();
+  })();
+})();
+</script>
+</body>
+</html>

@@ -325,8 +325,24 @@ private final case class SWHttpServerImpl(
    * so there is no cross-origin rule to relax and no second thing to deploy or
    * to keep in step with this one.
    */
+  /**
+   * The page must be revalidated rather than cached on the reader's word alone.
+   *
+   * Resources inside the staged jar carry the zip epoch as their last-modified
+   * date, and a response with a validator but no `Cache-Control` is left to the
+   * browser's heuristic: roughly a tenth of the age of that date, which for a
+   * timestamp in 2010 is over a year. The page would then survive every deploy
+   * behind it, so a reader who had opened it once would keep the version they
+   * first saw. `no-cache` still allows the 304 the etag would have earned; what
+   * it forbids is serving it without asking.
+   */
   private val uiRoutes =
-    Routes(Method.GET / Root -> Handler.fromResource("web/index.html").sandbox)
+    Routes(
+      Method.GET / Root -> Handler
+        .fromResource("web/index.html")
+        .map(_.addHeader(Header.CacheControl.NoCache))
+        .sandbox
+    )
 
   // The bytes for one entity, served from the map, or the same 404 the endpoint
   // would have produced. A miss here is a miss in the repo the map was built

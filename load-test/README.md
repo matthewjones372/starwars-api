@@ -14,8 +14,10 @@ sbt "load-test/test"
 ```
 
 It is a `ZIOSpecDefault`. The server runs in this JVM, started by
-`SWHttpServer.withRequestLogging` and held by the test's `Scope`, so there is no
-second process, no classpath file and no shell script.
+`SWHttpServer.measuring` and held by the test's `Scope`, so there is no second
+process, no classpath file and no shell script. The comparison below runs two
+servers at once, each with a `Server` layer of its own: one layer between them
+would be one port answering for both, which is an A/B against itself.
 
 Into `load-test/target/reports/` each run writes a self-contained HTML report
 per rung and an `index.html` linking them, and appends each rung's table to the
@@ -59,17 +61,39 @@ Proofload measures all three sides independently, so `L obs` against `L pred` is
 a free consistency check, and `backlog` is the gap between the two predictions:
 the queue the generator itself was holding, counted in requests.
 
-### The variable
+### What the ladder found, and what came of it
 
-The spec's two tests run the same ladder against the same code, changing one
-thing: whether `Middleware.debug` is on the route stack. It logs a line per request, so
-it sits on the path every response takes — which is what it is for while a human
-is reading the log, and a cost a measurement has to be able to subtract. The
-delta between the two tables is what that middleware costs.
+`Middleware.debug` logs a line per request, so it sat on the path every response
+took. The first sweep put it at three to four times this API's capacity, and it
+is gone from the route stack now rather than behind a flag: a measurement that
+argues for removing something and then leaves it switchable has not been acted
+on. FINDINGS.md keeps both tables.
 
-`SWHttpServer.default` no longer carries it — that is what this measurement
-changed. `withRequestLogging(true)` puts it back for a human reading the log,
-and is what the noisy half of the sweep runs.
+## Test 1 — pre-encoding the response
+
+A JFR profile of what was left put UTF-8 encoding and zio-schema's case-class
+encoder at roughly three quarters of the on-CPU samples, with no line of this
+repository in the profile at all. The data is read from a resource at startup
+and never changes, so that encoding is work this API does once and then repeats
+on every request.
+
+`SWHttpServer.measuring(preEncoded)` is the seam. The two servers run in one
+JVM and the rounds alternate between them, so a drift in JIT state or in what
+else the machine is doing lands on both. The rate is below the knee and each
+round is repeated: the knee is the one rate where a queue is bistable, and the
+JVM sweep in FINDINGS.md is the negative result that came of comparing there.
+
+`PreEncodedSpec` in `http-api` is the other half. It runs both servers and
+asserts the status, the content type and the body are identical, because an
+optimisation that changes a response is a behaviour change wearing a
+performance argument.
+
+It is ahead in twelve rungs out of twelve, by a median of 13%, and that is all
+it is: a profile says where the CPU goes when the CPU is the constraint, and at
+the rates this arrangement can offer the server is not CPU-bound. Whether the
+knee moved is unanswered, because above 4,000/s the generator loses ground for
+both variants and the ladder is measuring the injector. FINDINGS.md has the
+table.
 
 ## What these numbers are not
 

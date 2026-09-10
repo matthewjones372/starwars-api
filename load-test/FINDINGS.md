@@ -199,3 +199,72 @@ Measure below the knee, five or more repetitions a variant, interleaved rather
 than one variant at a time, comparing distributions rather than points — and
 with the generator on another machine, since it is competing for these four
 cores and is a large part of why the knee is so unstable.
+
+# Test 1 — pre-encoding the response
+
+The profile above said turning a `Character` into bytes was roughly three
+quarters of the on-CPU samples. The data is read from a resource at startup and
+never changes, so `SWHttpServer` now encodes each character and each film once
+and serves those bytes.
+
+Two servers in one JVM, `preEncoded` on one and off the other, rungs alternating
+between them so a drift in JIT state or in what else the machine is doing lands
+on both. 10s a rung, three passes, generator in the same JVM on 4 shared cores.
+
+| pass | rate | pre-encoded | encoding per request | ratio |
+|-----:|-----:|------------:|---------------------:|------:|
+| 1 | 2,000/s | 282us | 317us | 1.12 |
+| 1 | 4,000/s | 194us | 247us | 1.27 |
+| 1 | 6,000/s | 238us | 252us | 1.06 |
+| 1 | 8,000/s | 230us | 266us | 1.16 |
+| 2 | 2,000/s | 274us | 325us | 1.19 |
+| 2 | 4,000/s | 240us | 280us | 1.17 |
+| 2 | 6,000/s | 253us | 258us | 1.02 |
+| 2 | 8,000/s | 231us | 259us | 1.12 |
+| 3 | 2,000/s | 274us | 292us | 1.07 |
+| 3 | 4,000/s | 216us | 248us | 1.15 |
+| 3 | 6,000/s | 232us | 268us | 1.16 |
+| 3 | 8,000/s | 254us | 290us | 1.14 |
+
+## Reading it
+
+**It is real, and it is small.** Pre-encoding is ahead in twelve rungs out of
+twelve, by between 2% and 27%, median about 13%. Unlike the JVM flags, the
+ordering survives every repeat, which is what makes this a result rather than a
+reading. It is nothing like the three-to-four times the profile's three quarters
+might have suggested.
+
+**A profile says where the CPU goes when the CPU is the constraint.** At the
+rates this arrangement can actually offer, the server is not CPU-bound: a
+request spends most of its service time somewhere other than encoding, so
+removing the encoding takes a tenth off rather than three quarters. The profile
+was taken at 6,000/s with the target in a JVM of its own, which is a busier
+server than any rung here.
+
+**Whether it moves the knee is unanswered.** Every rung above 4,000/s is marked
+"not held" for *both* variants, and the reason is the generator: it lost ground
+at 6,000/s either way. Above 4,000/s this arrangement measures the injector, so
+the ladder cannot say whether the API's own ceiling moved. That needs the
+generator on another machine, and it is the measurement that would decide
+whether this change is worth more than the 13%.
+
+## What was checked, and what it cost
+
+`PreEncodedSpec` runs both servers and asserts the status, the content type and
+the body are identical for a character, a film, and a miss of each. An
+optimisation that changes a response is a behaviour change wearing a performance
+argument.
+
+The encoding is built once, on first request, from a suspended and memoized
+effect, as the character graph already was: nothing touches the repo until a
+request needs it. It applies to the bundled data only. `SWHttpServer.layer`
+takes whatever repo it is handed, which has made no promise to be immutable, so
+that one still asks per request.
+
+## Next
+
+The list endpoint is untouched and is the more expensive one: `GET /people`
+encodes ten characters a request. The same bytes are already in the map, so a
+page is a concatenation of slices rather than an encode, and the sort orders
+this API offers are few enough to hold. That is the next change, and the one the
+payload-size lever sits under.

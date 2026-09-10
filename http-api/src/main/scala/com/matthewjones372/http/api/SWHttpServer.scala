@@ -11,6 +11,8 @@ import zio.http.codec.*
 import zio.http.codec.PathCodec.*
 import zio.http.endpoint.*
 import zio.http.endpoint.openapi.*
+import zio.schema.codec.BinaryCodec
+import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 
 import scala.compiletime.constValueTuple
 import scala.deriving.Mirror
@@ -19,20 +21,97 @@ trait SWHttpServer:
   def start: URIO[Server, Nothing]
 
 object SWHttpServer:
-  def default = withRequestLogging(false)
+  def default = measuring(preEncoded = true)
 
-  def withRequestLogging(enabled: Boolean) =
+  /**
+   * The server over the bundled data, which is read from a resource at startup
+   * and never changes: that is what makes encoding each response once sound.
+   *
+   * [preEncoded] is a seam for the load test, so it can measure the same code
+   * with the encoding and without. Not part of the API: what ships is
+   * [default], and nothing outside this build can ask for the slow path.
+   */
+  private[matthewjones372] def measuring(preEncoded: Boolean) =
     (for
       dataRepo <- ZIO.service[SWDataRepo]
       graph    <- characterGraph(dataRepo).memoize
-    yield SWHttpServerImpl(dataRepo, graph, enabled)).provideSomeLayer(SWDataRepo.layer)
+      encoded  <- encodedEntities(dataRepo).memoize
+    yield SWHttpServerImpl(dataRepo, graph, encoded, preEncoded)).provideSomeLayer(SWDataRepo.layer)
 
+  /**
+   * The server over whatever repo it is handed, which is not pre-encoded.
+   *
+   * Encoding a response once is sound because the bundled data is read from a
+   * resource at startup and never changes. A repo passed in here has made no
+   * such promise, so this one asks it per request as it always did.
+   */
   def layer: ZLayer[SWDataRepo, Nothing, SWHttpServer] = ZLayer.fromZIO {
     for
       dataRepo <- ZIO.service[SWDataRepo]
       graph    <- characterGraph(dataRepo).memoize
-    yield SWHttpServerImpl(dataRepo, graph, false)
+      encoded  <- encodedEntities(dataRepo).memoize
+    yield SWHttpServerImpl(dataRepo, graph, encoded, preEncoded = false)
   }
+
+  /**
+   * Every entity turned into response bytes once.
+   *
+   * A JFR profile of this API at 6,000 requests a second put UTF-8 encoding and
+   * zio-schema's case-class encoder at roughly three quarters of the on-CPU
+   * samples, and no line of this repository in the profile at all. The data is
+   * read from a resource at startup and never changes, so the encoding is work
+   * this API does once and then repeats on every request.
+   *
+   * Suspended and memoized, as [characterGraph] is: nothing here touches the
+   * repo until a request needs it, which keeps a stubbed repo in a test doing
+   * what the test said and not what a constructor asked for.
+   */
+  private[api] def encodedEntities(dataRepo: SWDataRepo): IO[DataRepoError, Encoded] =
+    ZIO.suspendSucceed {
+      for
+        people    <- dataRepo.getCharacters(None, None, None)
+        films     <- dataRepo.getFilms(None, None)
+        byId      <- keyedBytes(people.results)(_.url)(characterCodec.encode)
+        filmsById <- keyedBytes(films.results)(_.url)(filmCodec.encode)
+      yield Encoded(byId, filmsById)
+    }
+
+  private[api] final case class Encoded(characters: Map[EntityId, Chunk[Byte]], films: Map[EntityId, Chunk[Byte]])
+
+  private def keyedBytes[A](entities: List[A])(url: A => String)(
+    encode: A => Chunk[Byte]
+  ): IO[DataRepoError, Map[EntityId, Chunk[Byte]]] =
+    ZIO
+      .foreach(entities) { entity =>
+        ZIO
+          .fromEither(SWDataRepo.parseEntityId(url(entity)))
+          .mapBoth(
+            message => DataRepoError.UnexpectedError(message, new IllegalArgumentException(message)),
+            id => id -> encode(entity)
+          )
+      }
+      .map(_.toMap)
+
+  // The same codec the endpoint's own output goes through, so the bytes served
+  // from the map are the bytes the codec would have produced. `PreEncodedSpec`
+  // asserts that against a server with the knob off rather than trusting it.
+  private val characterCodec: BinaryCodec[Character]                 = schemaBasedBinaryCodec[Character]
+  private val filmCodec: BinaryCodec[Film]                           = schemaBasedBinaryCodec[Film]
+  private val characterNotFoundCodec: BinaryCodec[CharacterNotFound] = schemaBasedBinaryCodec[CharacterNotFound]
+  private val filmNotFoundCodec: BinaryCodec[FilmNotFound]           = schemaBasedBinaryCodec[FilmNotFound]
+
+  private[api] def notFoundCharacter(id: EntityId): Response =
+    jsonResponse(Status.NotFound, characterNotFoundCodec.encode(CharacterNotFound("Character not found", id)))
+
+  private[api] def notFoundFilm(id: EntityId): Response =
+    jsonResponse(Status.NotFound, filmNotFoundCodec.encode(FilmNotFound("Film not found", id)))
+
+  private[api] def jsonResponse(status: Status, body: Chunk[Byte]): Response =
+    Response(
+      status = status,
+      headers = Headers(Header.ContentType(MediaType.application.json)),
+      body = Body.fromChunk(body)
+    )
 
   // Characters are joined by the films they share, so film urls resolve to titles for the edge labels.
   private[api] def characterGraph(dataRepo: SWDataRepo): IO[DataRepoError, SWGraph[String]] =
@@ -145,7 +224,8 @@ object SWHttpServer:
 private final case class SWHttpServerImpl(
   private val dataRepo: SWDataRepo,
   private val characterGraph: IO[DataRepoError, SWGraph[String]],
-  private val requestLogging: Boolean
+  private val encoded: IO[DataRepoError, SWHttpServer.Encoded],
+  private val preEncoded: Boolean
 ) extends SWHttpServer:
 
   private def characterOrError(id: EntityId): IO[SWAPIServerError, Character] =
@@ -201,11 +281,46 @@ private final case class SWHttpServerImpl(
 
   private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", SWHttpServer.openAPI)
 
-  private val handlers =
-    Chunk(getCharacterHandler, getCharactersHandler, getFilmsHandler, getFilmHandler, getShortestPathHandler)
+  // The bytes for one entity, served from the map, or the same 404 the endpoint
+  // would have produced. A miss here is a miss in the repo the map was built
+  // from, so there is one answer rather than a fallback that could differ.
+  private val preEncodedCharacterRoute =
+    SWHttpServer.getCharacterEndpoint.route -> handler { (characterId: EntityId, _: Request) =>
+      encoded
+        .map(_.characters.get(characterId))
+        .foldZIO(
+          error => ZIO.succeed(Response.internalServerError(error.getMessage)),
+          {
+            case Some(bytes) => ZIO.succeed(SWHttpServer.jsonResponse(Status.Ok, bytes))
+            case None        => ZIO.succeed(SWHttpServer.notFoundCharacter(characterId))
+          }
+        )
+    }
 
-  private val routes =
-    val served = Routes(handlers) ++ swaggerRoutes
-    if requestLogging then served @@ Middleware.debug else served
+  private val preEncodedFilmRoute =
+    SWHttpServer.getFilmEndpoint.route -> handler { (filmId: EntityId, _: Request) =>
+      encoded
+        .map(_.films.get(filmId))
+        .foldZIO(
+          error => ZIO.succeed(Response.internalServerError(error.getMessage)),
+          {
+            case Some(bytes) => ZIO.succeed(SWHttpServer.jsonResponse(Status.Ok, bytes))
+            case None        => ZIO.succeed(SWHttpServer.notFoundFilm(filmId))
+          }
+        )
+    }
+
+  private val handlers =
+    if preEncoded then
+      Chunk(
+        preEncodedCharacterRoute,
+        getCharactersHandler,
+        getFilmsHandler,
+        preEncodedFilmRoute,
+        getShortestPathHandler
+      )
+    else Chunk(getCharacterHandler, getCharactersHandler, getFilmsHandler, getFilmHandler, getShortestPathHandler)
+
+  private val routes = Routes(handlers) ++ swaggerRoutes
 
   override def start: URIO[Server, Nothing] = Server.serve(routes)

@@ -32,6 +32,12 @@ object UiRouteSpec extends ZIOSpecDefault:
       body     <- response.body.asString
     yield (response.status, response.header(Header.ContentType), body)
 
+  private def cacheControl(port: Int, path: String) =
+    for
+      client   <- ZIO.service[Client]
+      response <- client(Request.get(URL.decode(s"http://localhost:$port$path").toOption.get))
+    yield response.header(Header.CacheControl)
+
   def spec = suite("the browser UI")(
     test("is served as html at the root"):
       ZIO.scoped:
@@ -43,6 +49,16 @@ object UiRouteSpec extends ZIOSpecDefault:
           contentType.exists(_.mediaType == MediaType.text.html),
           body.contains("<title>Star Wars Character Graph</title>")
         )
+    ,
+    test("is revalidated rather than left to the browser's own guess"):
+      // Without this the page carries a last-modified date from inside the jar
+      // and no directive, which browsers read as licence to keep it for months
+      // and so to serve a version every later deploy has replaced.
+      ZIO.scoped:
+        for
+          port    <- serving
+          control <- cacheControl(port, "/")
+        yield assertTrue(control.contains(Header.CacheControl.NoCache))
     ,
     test("does not shadow the api it is served alongside"):
       ZIO.scoped:

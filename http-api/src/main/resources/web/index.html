@@ -129,6 +129,17 @@
   #pathresult { margin-top: 10px; font-size: 12px; color: var(--muted); }
   #pathresult .step { color: var(--text); }
   #pathresult .via { color: var(--film); }
+  #pathresult .routes {
+    display: flex; align-items: center; gap: 8px;
+    margin: 8px 0; padding: 6px 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  #pathresult .which { flex: 1; text-align: center; color: var(--text); font-size: 11.5px; }
+  #pathresult .cycle {
+    flex: 0 0 auto; width: 30px; height: 26px; padding: 0; margin: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; line-height: 1;
+  }
 
   #legend { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--muted); }
   #legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
@@ -229,6 +240,8 @@
     #pathresult { max-height: 20vh; overflow-y: auto; }
     .slot { min-height: 40px; }
     button { padding: 11px; }
+    /* The cycle buttons are a fingertip target here, not a pair of chevrons. */
+    #pathresult .cycle { width: 44px; height: 38px; padding: 0; font-size: 18px; }
   }
 
   @media (max-width: 520px) {
@@ -511,6 +524,7 @@
     // materially, until it stops growing or the reader takes over.
     const started = performance.now();
     let autoFit = true;
+    let chainFollow = 0;
     let fittedSpan = 0;
     let lastFitAt = 0;
 
@@ -561,58 +575,104 @@
     // `maxScale` is below the zoom ceiling for the automatic fits: early on the
     // layout is still compact, and fitting that tightly would open the page
     // zoomed into a handful of nodes. Panning by hand still reaches 4x.
-    // Where the panels are sheets rather than side panels they cover the canvas,
-    // so the graph is framed against the band left between them instead of
-    // against the viewport it would otherwise share with them. Asked each time
-    // rather than captured, so rotating a phone is answered with the layout now
-    // in force.
-    function viewBand() {
-      const header = isNarrow() ? 56 : 0;
-      const sheet = isNarrow() ? $("#pathfinder").offsetHeight + 16 : 0;
-      return { header, usableH: Math.max(height - header - sheet, 120) };
+    // The panels lie over the canvas rather than beside it, so what the graph
+    // is framed into is whatever they leave: a band between the sheets on a
+    // phone, a column between the side panels anywhere else. Measured each time
+    // rather than captured, so rotating a phone, or closing a panel, is
+    // answered with the layout now in force.
+    function viewBox() {
+      if (isNarrow()) {
+        const top = 56;
+        const bottom = $("#pathfinder").offsetHeight + 16;
+        return { x: 0, y: top, w: width, h: Math.max(height - top - bottom, 120) };
+      }
+      const left = 18 + $("#pathfinder").offsetWidth + 18;
+      const right = $("#insights").hidden ? 18 : 18 + $("#insights").offsetWidth + 18;
+      return { x: left, y: 0, w: Math.max(width - left - right, 200), h: height };
     }
 
-    // Brings one node to the middle of that band, for a name picked from a list
+    function frameTo(subject, duration, padding, maxScale) {
+      const placed = subject.filter((n) => n && n.x != null);
+      if (!placed.length || !width || !height) return;
+      const box = viewBox();
+      const xs = placed.map((n) => n.x);
+      const ys = placed.map((n) => n.y);
+      const minX = Math.min(...xs), maxX = Math.max(...xs);
+      const minY = Math.min(...ys), maxY = Math.max(...ys);
+      // A fixed margin is most of a phone screen, so it gives way to a share
+      // of the box whenever that is the smaller of the two.
+      const pad = Math.min(padding, box.w * 0.12, box.h * 0.12);
+      const k = Math.max(
+        0.25,
+        Math.min(
+          maxScale,
+          (box.w - pad * 2) / Math.max(maxX - minX, 1),
+          (box.h - pad * 2) / Math.max(maxY - minY, 1)
+        )
+      );
+      const target = d3.zoomIdentity
+        .translate(box.x + box.w / 2, box.y + box.h / 2)
+        .scale(k)
+        .translate(-(minX + maxX) / 2, -(minY + maxY) / 2);
+      if (duration > 0) svg.transition().duration(duration).call(zoom.transform, target);
+      else svg.call(zoom.transform, target);
+    }
+
+    // Brings one node to the middle of the box, for a name picked from a list
     // rather than found in the graph. It never zooms out: someone who has
     // pushed in close asked for that scale, and this is not a request to leave.
     function focus(node) {
       if (!node || node.x == null || !width || !height) return;
       autoFit = false;
-      const { header, usableH } = viewBand();
+      const box = viewBox();
       const k = Math.max(d3.zoomTransform(svg.node()).k, 1.5);
       svg
         .transition()
         .duration(500)
         .call(
           zoom.transform,
-          d3.zoomIdentity.translate(width / 2, header + usableH / 2).scale(k).translate(-node.x, -node.y)
+          d3.zoomIdentity
+            .translate(box.x + box.w / 2, box.y + box.h / 2)
+            .scale(k)
+            .translate(-node.x, -node.y)
         );
     }
 
+    // Shows a traced chain end to end. A chain already in the clear is left
+    // where it is: the reader chose that view, and a path drawn between two
+    // characters they can both already see is not a reason to move it.
+    function frameChain(subject) {
+      const placed = subject.filter((n) => n && n.x != null);
+      if (!placed.length || !width || !height) return;
+      const inFrame = (margin) => {
+        const box = viewBox();
+        const transform = d3.zoomTransform(svg.node());
+        return placed.every((n) => {
+          const [x, y] = transform.apply([n.x, n.y]);
+          return (
+            x >= box.x + margin && x <= box.x + box.w - margin &&
+            y >= box.y + margin && y <= box.y + box.h - margin
+          );
+        });
+      };
+
+      if (inFrame(40)) return;
+      autoFit = false;
+      frameTo(placed, 600, 110, 2.2);
+
+      // The layout never stops drifting, so the frame is right for where the
+      // chain was when it was computed rather than where it settles. Rather
+      // than track it for a fixed time, this looks once the move is over and
+      // corrects only if an end has since wandered out.
+      clearTimeout(chainFollow);
+      chainFollow = setTimeout(() => {
+        if (!inFrame(0)) frameTo(placed, 400, 110, 2.2);
+      }, 900);
+    }
+
     function fitView(duration = 600, padding = 100, maxScale = 4) {
-      if (!width || !height || !nodes.length || nodes.some((n) => n.x == null)) return;
-      const xs = nodes.map((n) => n.x);
-      const ys = nodes.map((n) => n.y);
-      const minX = Math.min(...xs), maxX = Math.max(...xs);
-      const minY = Math.min(...ys), maxY = Math.max(...ys);
-      const spanX = Math.max(maxX - minX, 1);
-      const spanY = Math.max(maxY - minY, 1);
-      // A fixed margin is most of a phone screen, so it gives way to a share
-      // of the viewport whenever that is the smaller of the two.
-      const pad = Math.min(padding, width * 0.12, height * 0.12);
-      const { header, usableH } = viewBand();
-      const k = Math.max(
-        0.25,
-        Math.min(maxScale, (width - pad * 2) / spanX, (usableH - pad * 2) / spanY)
-      );
-      const cx = (minX + maxX) / 2;
-      const cy = (minY + maxY) / 2;
-      const target = d3.zoomIdentity
-        .translate(width / 2, header + usableH / 2)
-        .scale(k)
-        .translate(-cx, -cy);
-      if (duration > 0) svg.transition().duration(duration).call(zoom.transform, target);
-      else svg.call(zoom.transform, target);
+      if (!nodes.length || nodes.some((n) => n.x == null)) return;
+      frameTo(nodes, duration, padding, maxScale);
     }
 
     const observer = new ResizeObserver(() => {
@@ -631,7 +691,7 @@
     });
     observer.observe(stage);
 
-    return { svg, zoom, root, node, link, sim, nodes, links, fitView, focus };
+    return { svg, zoom, root, node, link, sim, nodes, links, fitView, focus, frameChain };
   }
 
   // ---------------------------------------------------------------- app
@@ -668,6 +728,10 @@
     function showInsights(open) {
       panel.hidden = !open;
       toggle.setAttribute("aria-expanded", String(open));
+      // One sheet at a time on a phone: both are pinned under the header there,
+      // so opening this one behind the detail would look like nothing happened.
+      // The selection itself stands -- only the sheet showing it is stowed.
+      if (open && isNarrow()) $("#detail").hidden = true;
     }
 
     const LISTED = 8;
@@ -767,8 +831,9 @@
       const row = event.target.closest("button[data-name]");
       if (!row) return;
       const node = byName.get(row.dataset.name);
-      select(node);
-      view.focus(node);
+      // A pick that completes a pair is about to be traced, and the trace
+      // frames the whole chain; centring on this one end would fight it.
+      if (!select(node)) view.focus(node);
       if (isNarrow()) showInsights(false);
     });
 
@@ -792,6 +857,11 @@
     let selected = null;
     let pathNodes = new Set();
     let pathLinks = new Set();
+    let chains = [];
+    let chainAt = 0;
+    let chainTotal = 0;
+    let pathEnd = null;
+    let pathFilms = 0;
     const slots = [null, null];
 
     function applyClasses() {
@@ -902,24 +972,27 @@
     }
 
     function select(d) {
-      if (!d) return;
+      if (!d) return false;
       selected = d;
       showDetail(d);
+      let tracing = false;
       if (d.kind === "person") {
         if (!slots[0] || (slots[0] && slots[1])) {
-          // Starting a fresh pair, so the path drawn for the last one goes.
+          // Starting a fresh pair, so the routes drawn for the last one go.
           slots[0] = d;
           slots[1] = null;
-          pathNodes = new Set();
-          pathLinks = new Set();
-          $("#pathresult").textContent = "";
+          clearChains();
         } else if (d.id !== slots[0].id) {
           slots[1] = d;
         }
         updateSlots();
-        if (slots[0] && slots[1]) tracePath();
+        if (slots[0] && slots[1]) {
+          tracePath();
+          tracing = true;
+        }
       }
       applyClasses();
+      return tracing;
     }
 
     view.node.on("click", (event, d) => {
@@ -955,42 +1028,91 @@
         if (!res.ok) { result.textContent = `No path (${res.status})`; return; }
         const path = await res.json();
 
-        // The response names characters and the film joining each hop; the
-        // rendered graph keys on urls, so names map back through the nodes.
-        const byName = new Map(graph.nodes.map((n) => [n.label, n]));
-        pathNodes = new Set();
-        pathLinks = new Set();
-        // A step names a character and the film that carries the chain on to
-        // the next one, so each step is two edges through the graph and not
-        // one: the character into the film, and the following character back
-        // out of it. The character on the far side of the last film is
-        // `path.end`, which is why it closes the walk here rather than in a
-        // case of its own.
-        path.steps.forEach((step, i) => {
-          const person = byName.get(step.person);
-          const film = byName.get(step.film);
-          const next = byName.get(path.steps[i + 1]?.person ?? path.end);
-          if (person) pathNodes.add(person.id);
-          if (film) pathNodes.add(film.id);
-          if (next) pathNodes.add(next.id);
-          // Every link runs character -> film, so both edges key that way.
-          if (person && film) pathLinks.add(person.id + "|" + film.id);
-          if (next && film) pathLinks.add(next.id + "|" + film.id);
-        });
-
-        result.innerHTML =
-          `<div><b>${path.films}</b> film${path.films === 1 ? "" : "s"} apart</div>` +
-          path.steps
-            .map((s) => `<div><span class="step">${s.person}</span> <span class="via">via ${s.film}</span></div>`)
-            .join("") +
-          `<div><span class="step">${path.end}</span></div>`;
-
-        applyClasses();
-        view.sim.alpha(0.4);
+        // The server hands back every chain of the shortest length, not one of
+        // them: at a single hop those are the films the pair share, and beyond
+        // it they are the different characters the chain can run through.
+        chains = [path.steps, ...path.alternatives.map((alternative) => alternative.steps)];
+        chainTotal = path.chains;
+        pathEnd = path.end;
+        pathFilms = path.films;
+        showChain(0);
       } catch (err) {
         result.textContent = "Failed: " + err.message;
       }
     }
+
+    // A step names a character and the film that carries the chain on to the
+    // next one, so each step is two edges through the graph and not one: the
+    // character into the film, and the following character back out of it. The
+    // character on the far side of the last film is the path's end, which is
+    // why it closes the walk here rather than in a case of its own.
+    function showChain(index) {
+      if (!chains.length) return;
+      chainAt = (index + chains.length) % chains.length;
+      const steps = chains[chainAt];
+      const lit = [];
+      pathNodes = new Set();
+      pathLinks = new Set();
+      steps.forEach((step, i) => {
+        const person = byName.get(step.person);
+        const film = byName.get(step.film);
+        const next = byName.get(steps[i + 1]?.person ?? pathEnd);
+        lit.push(person, film, next);
+        if (person) pathNodes.add(person.id);
+        if (film) pathNodes.add(film.id);
+        if (next) pathNodes.add(next.id);
+        // Every link runs character -> film, so both edges key that way.
+        if (person && film) pathLinks.add(person.id + "|" + film.id);
+        if (next && film) pathLinks.add(next.id + "|" + film.id);
+      });
+
+      const capped = chainTotal > chains.length;
+      $("#pathresult").innerHTML =
+        `<div><b>${pathFilms}</b> film${pathFilms === 1 ? "" : "s"} apart</div>` +
+        (chains.length > 1
+          ? `<div class="routes" title="Left and right arrow keys cycle too">` +
+            `<button type="button" class="ghost cycle" data-step="-1" aria-label="Previous route">&lsaquo;</button>` +
+            `<span class="which">Route ${chainAt + 1} of ${chains.length}` +
+            (capped ? ` · ${chainTotal} in all` : "") +
+            `</span>` +
+            `<button type="button" class="ghost cycle" data-step="1" aria-label="Next route">&rsaquo;</button>` +
+            `</div>`
+          : "") +
+        steps
+          .map((s) => `<div><span class="step">${esc(s.person)}</span> <span class="via">via ${esc(s.film)}</span></div>`)
+          .join("") +
+        `<div><span class="step">${esc(pathEnd)}</span></div>`;
+
+      applyClasses();
+      // No alpha kick here. Re-energising the layout spreads the chain apart
+      // while the camera is still travelling to where it used to be, which is
+      // how an end of the path ends up outside the frame. The path lighting up,
+      // and the view coming to meet it, are the acknowledgement.
+      view.frameChain(lit);
+    }
+
+    function clearChains() {
+      chains = [];
+      chainAt = 0;
+      chainTotal = 0;
+      pathNodes = new Set();
+      pathLinks = new Set();
+      $("#pathresult").textContent = "";
+    }
+
+    $("#pathresult").addEventListener("click", (event) => {
+      const cycle = event.target.closest("button[data-step]");
+      if (cycle) showChain(chainAt + Number(cycle.dataset.step));
+    });
+
+    // The arrow keys reach the routes without aiming at a 30px button, so long
+    // as they are not being typed into the search box.
+    document.addEventListener("keydown", (event) => {
+      if (chains.length < 2 || event.target.matches("input, textarea")) return;
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      event.preventDefault();
+      showChain(chainAt + (event.key === "ArrowLeft" ? -1 : 1));
+    });
 
     // The button stays for retracing the same pair after a clear, but picking
     // the second character is itself the request, so it does not wait for one.
@@ -998,9 +1120,7 @@
 
     $("#clearpath").addEventListener("click", () => {
       slots[0] = slots[1] = null;
-      pathNodes = new Set();
-      pathLinks = new Set();
-      $("#pathresult").textContent = "";
+      clearChains();
       updateSlots();
       applyClasses();
     });

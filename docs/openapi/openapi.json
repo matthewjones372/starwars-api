@@ -254,9 +254,9 @@
       }
     },
     "/people/{characterId}/path-to/{targetId}" : {
-      "description" : "The shortest chain of shared films connecting two characters\n\n",
+      "description" : "The shortest chains of shared films connecting two characters, and how many there are\n\n",
       "get" : {
-        "description" : "The shortest chain of shared films connecting two characters\n\n",
+        "description" : "The shortest chains of shared films connecting two characters, and how many there are\n\n",
         "parameters" : [
           {
             "name" : "characterId",
@@ -329,6 +329,20 @@
   },
   "components" : {
     "schemas" : {
+      "Chain" : {
+        "type" : "object",
+        "properties" : {
+          "steps" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PathStep"
+            }
+          }
+        },
+        "required" : [
+          "steps"
+        ]
+      },
       "Character" : {
         "type" : "object",
         "properties" : {
@@ -717,15 +731,25 @@
       "ShortestPath" : {
         "type" : "object",
         "properties" : {
-          "start" : {
-            "type" : "string"
+          "alternatives" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Chain"
+            }
           },
-          "end" : {
+          "start" : {
             "type" : "string"
           },
           "films" : {
             "type" : "integer",
             "format" : "int32"
+          },
+          "chains" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "end" : {
+            "type" : "string"
           },
           "steps" : {
             "type" : "array",
@@ -738,7 +762,9 @@
           "start",
           "end",
           "films",
-          "steps"
+          "steps",
+          "alternatives",
+          "chains"
         ]
       },
       "UnexpectedError" : {

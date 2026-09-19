@@ -113,6 +113,68 @@ class SWGraph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
     )
   }
 
+  /**
+   * Every chain of the shortest length between two characters, not just one of
+   * them: at one hop those are the films the pair share, and beyond it they are
+   * the different people the chain can go through.
+   *
+   * [limit] bounds the answer and the work. The routes between two characters
+   * multiply out at every hop, so each step keeps at most [limit] of the ways
+   * of reaching it, which is enough to hand back [limit] whole ones.
+   */
+  def shortestPaths(start: A, target: A, limit: Int): List[Path[A]] =
+    if (limit <= 0) Nil
+    else if (start == target)
+      if (peopleFilmMap.contains(start)) List(Path(start, target, Some(Chunk.empty))) else Nil
+    else {
+      val hops    = separations(start)
+      val depthOf = hops + (start -> 0)
+
+      def sharedFilms(one: A, other: A): List[A] = films(one).intersect(films(other)).toList.sorted
+
+      def stepsInto(node: A): List[(A, A)] =
+        val closer = depthOf(node) - 1
+        coStars(node).toList.sorted.filter(depthOf.get(_).contains(closer)).flatMap { pred =>
+          sharedFilms(pred, node).map(pred -> _)
+        }
+
+      def routesTo(node: A): List[Chunk[(A, A)]] =
+        if (node == start) List(Chunk.empty)
+        else
+          stepsInto(node)
+            .flatMap((pred, film) => routesTo(pred).map(_ :+ (pred -> film)))
+            .take(limit)
+
+      if (!hops.contains(target)) Nil
+      else
+        routesTo(target).take(limit).map { route =>
+          // The walk closes on the target under the film that carried the last
+          // hop, which is the shape `bfs` returns and `Path` renders.
+          Path(start, target, Some(route :+ (target -> route.last._2)))
+        }
+    }
+
+  /**
+   * How many such chains there are, which is more than [shortestPaths] returns
+   * once a pair has more routes than the caller asked to see.
+   */
+  def countShortestPaths(start: A, target: A): Int =
+    if (start == target) (if (peopleFilmMap.contains(start)) 1 else 0)
+    else {
+      val hops    = separations(start)
+      val depthOf = hops + (start -> 0)
+
+      def count(node: A): Int =
+        if (node == start) 1
+        else
+          val closer = depthOf(node) - 1
+          coStars(node).toList.filter(depthOf.get(_).contains(closer)).foldLeft(0) { (total, pred) =>
+            total + count(pred) * films(pred).intersect(films(node)).size
+          }
+
+      if (!hops.contains(target)) 0 else count(target)
+    }
+
   private def separations(start: A): Map[A, Int] = {
     @tailrec
     def loop(frontier: Queue[(A, Int)], seen: Map[A, Int]): Map[A, Int] =

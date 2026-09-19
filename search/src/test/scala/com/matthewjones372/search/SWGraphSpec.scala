@@ -146,6 +146,134 @@ object SWGraphSpec extends ZIOSpecDefault:
         }
       }
     ),
+    suite("shortestPaths")(
+      test("returns one chain per film a pair share, when they share a film at all") {
+        val twoFilms = Map(
+          "Luke"  -> Set("A New Hope", "Return of the Jedi"),
+          "Vader" -> Set("A New Hope", "Return of the Jedi")
+        )
+        val routes = SWGraph(twoFilms).shortestPaths("Luke", "Vader", 10)
+
+        assertTrue(
+          routes.length == 2,
+          routes.forall(_.length == 1),
+          routes.flatMap(_.path.toList.flatten).map(_._2).distinct.sorted ==
+            List("A New Hope", "Return of the Jedi")
+        )
+      },
+      test("returns every equally short chain through a different character") {
+        // Lobot reaches Boba Fett through Luke or through Leia, both in two hops.
+        val twoMiddles = Map(
+          "Lobot"     -> Set("The Empire Strikes Back"),
+          "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
+          "Leia"      -> Set("The Empire Strikes Back", "A New Hope"),
+          "Boba Fett" -> Set("A New Hope")
+        )
+        val routes = SWGraph(twoMiddles).shortestPaths("Lobot", "Boba Fett", 10)
+
+        assertTrue(
+          routes.length == 2,
+          routes.forall(_.length == 2),
+          routes.flatMap(_.path.toList.flatten).map(_._1).distinct.sorted ==
+            List("Boba Fett", "Leia", "Lobot", "Luke")
+        )
+      },
+      test("never returns a chain longer than the shortest") {
+        val withDetour = Map(
+          "Lobot"     -> Set("The Empire Strikes Back"),
+          "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
+          "Han"       -> Set("The Empire Strikes Back", "Return of the Jedi"),
+          "Leia"      -> Set("Return of the Jedi", "A New Hope"),
+          "Boba Fett" -> Set("A New Hope")
+        )
+        val graph  = SWGraph(withDetour)
+        val routes = graph.shortestPaths("Lobot", "Boba Fett", 10)
+
+        assertTrue(
+          routes.nonEmpty,
+          routes.forall(route => graph.distance("Lobot", "Boba Fett").contains(route.length))
+        )
+      },
+      test("agrees with the single path search on the chains that exist at all") {
+        check(graphGen, Gen.int(0, 6), Gen.int(0, 6)) { (peopleFilms, from, to) =>
+          val graph  = SWGraph(peopleFilms)
+          val people = peopleFilms.keys.toList.sorted
+          val start  = people(from % people.length)
+          val target = people(to % people.length)
+          val routes = graph.shortestPaths(start, target, 10)
+
+          assertTrue(
+            routes.nonEmpty == graph.bfs(start, target).isDefined,
+            routes.forall(route => graph.bfs(start, target).map(_.length).contains(route.length))
+          )
+        }
+      },
+      test("only returns chains whose consecutive people really share the film joining them") {
+        check(graphGen, Gen.int(0, 6), Gen.int(0, 6)) { (peopleFilms, from, to) =>
+          val people = peopleFilms.keys.toList.sorted
+          val start  = people(from % people.length)
+          val target = people(to % people.length)
+
+          val hold = SWGraph(peopleFilms)
+            .shortestPaths(start, target, 10)
+            .flatMap(_.path)
+            .forall(edgesAreReal(peopleFilms, _))
+
+          assertTrue(hold)
+        }
+      },
+      test("returns no more than it was asked for, and none at all for a limit of none") {
+        check(graphGen, Gen.int(0, 6), Gen.int(0, 6)) { (peopleFilms, from, to) =>
+          val graph  = SWGraph(peopleFilms)
+          val people = peopleFilms.keys.toList.sorted
+          val start  = people(from % people.length)
+          val target = people(to % people.length)
+
+          assertTrue(
+            graph.shortestPaths(start, target, 2).length <= 2,
+            graph.shortestPaths(start, target, 0).isEmpty
+          )
+        }
+      },
+      test("never returns the same chain twice") {
+        check(graphGen, Gen.int(0, 6), Gen.int(0, 6)) { (peopleFilms, from, to) =>
+          val people = peopleFilms.keys.toList.sorted
+          val start  = people(from % people.length)
+          val target = people(to % people.length)
+          val routes = SWGraph(peopleFilms).shortestPaths(start, target, 20).map(_.path)
+
+          assertTrue(routes.distinct.length == routes.length)
+        }
+      },
+      test("counts every chain, including the ones past the limit it was shown") {
+        val twoMiddles = Map(
+          "Lobot"     -> Set("The Empire Strikes Back"),
+          "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
+          "Leia"      -> Set("The Empire Strikes Back", "A New Hope"),
+          "Boba Fett" -> Set("A New Hope")
+        )
+        val graph = SWGraph(twoMiddles)
+
+        assertTrue(
+          graph.countShortestPaths("Lobot", "Boba Fett") == 2,
+          graph.shortestPaths("Lobot", "Boba Fett", 1).length == 1,
+          graph.countShortestPaths("Lobot", "Lobot") == 1,
+          SWGraph(disconnected).countShortestPaths("Lobot", "Luke") == 0
+        )
+      },
+      test("counts what it returns whenever the limit is not what held it back") {
+        check(graphGen, Gen.int(0, 6), Gen.int(0, 6)) { (peopleFilms, from, to) =>
+          val graph   = SWGraph(peopleFilms)
+          val people  = peopleFilms.keys.toList.sorted
+          val start   = people(from % people.length)
+          val target  = people(to % people.length)
+          val routes  = graph.shortestPaths(start, target, 50)
+          val counted = graph.countShortestPaths(start, target)
+
+          assertTrue(routes.length >= 50 || routes.length == counted)
+        }
+      }
+    ),
     suite("connectivity")(
       test("ranks characters by how many co-stars they have") {
         val ranked = SWGraph(peopleFilmMap).connectivity.connections

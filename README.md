@@ -20,7 +20,8 @@ services to start.
 The deployed instance serves a browser UI at `/` and the API alongside it on
 the same origin: search across every character and film, the character graph
 drawn as a force layout, and the shortest chain between any two characters
-traced by clicking one and then another. A panel ranks the cast by how many
+traced by clicking one and then another, with the arrow keys cycling between
+the equally short chains that connect them. A panel ranks the cast by how many
 co-stars each character has, so the most and least connected are a click away,
 and the graph sizes and shades every character by the same measure.
 
@@ -59,7 +60,7 @@ curl 'http://localhost:8080/people?page=2&sortBy=height:DESC,name:ASC'
 | GET | `/people/{personId}` | | One character |
 | GET | `/films` | `page` | Paged films |
 | GET | `/films/{filmId}` | | One film |
-| GET | `/people/{characterId}/path-to/{targetId}` | | Shortest chain of shared films between two characters |
+| GET | `/people/{characterId}/path-to/{targetId}` | | Shortest chains of shared films between two characters |
 | GET | `/graph/insights` | | How connected each character is, and the shape of the whole graph |
 | GET | `/docs/openapi` | | Swagger UI |
 | GET | `/` | | Browser UI: search and the character graph |
@@ -169,9 +170,22 @@ curl 'http://localhost:8080/people/1/path-to/4'
   "start": "Luke Skywalker",
   "end": "Darth Vader",
   "films": 1,
-  "steps": [{ "person": "Luke Skywalker", "film": "Return of the Jedi" }]
+  "steps": [{ "person": "Luke Skywalker", "film": "A New Hope" }],
+  "alternatives": [
+    { "steps": [{ "person": "Luke Skywalker", "film": "Return of the Jedi" }] },
+    { "steps": [{ "person": "Luke Skywalker", "film": "Revenge of the Sith" }] },
+    { "steps": [{ "person": "Luke Skywalker", "film": "The Empire Strikes Back" }] }
+  ],
+  "chains": 4
 }
 ```
+
+A chain is rarely the only one of its length. `steps` leads with one of them and
+`alternatives` carries the rest, up to ten; `chains` says how many there are
+altogether, which for two characters two hops apart runs to seventeen on average
+and seventy at the most. At one hop the alternatives are the films the pair
+share, as above; beyond it they are the different characters the chain can run
+through. The browser UI cycles between them in place.
 
 A 404 comes back when either character is unknown, or when no chain of shared
 films connects them.
@@ -196,7 +210,9 @@ graph.distance("Lobot", "Boba Fett")
 ```
 
 `bfs` returns the chain itself rather than its length. Its `toString` renders
-the film joining each pair, coloured for a terminal.
+the film joining each pair, coloured for a terminal. `shortestPaths` returns
+every chain of that length rather than one of them, bounded by a limit that
+also bounds the work, and `countShortestPaths` says how many there are.
 
 Both return `None` when no chain exists, and a zero length path when the start
 and target are the same character.

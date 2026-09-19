@@ -86,7 +86,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
           repo   <- ZIO.service[DataRepo]
           people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
-        yield assertTrue(people.count == 205, films.count == 19, people.results.length == 205)
+        yield assertTrue(people.count == 301, films.count == 19, people.results.length == 301)
       },
       test("sorts on an attribute numerically against the real database") {
         for
@@ -113,8 +113,8 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
         yield assertTrue(
           first.results.length == 10,
           first.results.intersect(second.results).isEmpty,
-          all.length == 205,
-          all.map(_.url).distinct.length == 205
+          all.length == 301,
+          all.map(_.url).distinct.length == 301
         )
       },
       test("finds a person and a film by id") {
@@ -163,7 +163,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
                       Some(PageSize(5)),
                       Some(List(SortBy("not_a_column", FieldOrdering.ASC)))
                     )
-        yield assertTrue(people.results.length == 5, people.count == 205)
+        yield assertTrue(people.results.length == 5, people.count == 301)
       }
     ).provideShared(seededRepo)
       @@ TestAspect.sequential

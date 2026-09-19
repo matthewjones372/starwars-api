@@ -14,7 +14,7 @@ multi-field sorting.
 Every path begins with the dataset it reads, so `/starwars/people/1` is Luke
 Skywalker and `/hp/people/41` is Hermione Granger. Four datasets ship: Star
 Wars, the Marvel Cinematic Universe, The Lord of the Rings and Harry Potter,
-824 characters across 80 titles, served from memory with no external services
+920 characters across 80 titles, served from memory with no external services
 to start. `GET /universes` lists what the running server holds.
 
 Actors sit outside all of it. An actor belongs to no single universe, which
@@ -99,7 +99,7 @@ Paged responses carry the total alongside the current page:
 
 ```json
 {
-  "count": 205,
+  "count": 301,
   "results": [
     {
       "name": "Luke Skywalker",

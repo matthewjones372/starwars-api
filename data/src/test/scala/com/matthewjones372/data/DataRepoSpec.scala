@@ -164,7 +164,7 @@ object DataRepoSpec extends ZIOSpecDefault:
           person <- repo.getCharacter(EntityId(1))
           film   <- repo.getFilm(EntityId(1))
         yield assertTrue(
-          people.count == 205,
+          people.count == 301,
           films.count == 19,
           person.name.nonEmpty,
           film.title.nonEmpty
@@ -201,7 +201,7 @@ object DataRepoSpec extends ZIOSpecDefault:
                     repo.getCharacters(Some(page.asPageNumber), Some(PageSize(10)), None)
                   )
           fetched = first.results ++ rest.flatMap(_.results)
-        yield assertTrue(fetched.length == 205, fetched.map(_.url).distinct.length == 205)
+        yield assertTrue(fetched.length == 301, fetched.map(_.url).distinct.length == 301)
       }
     ).provideShared(DataRepo.layer),
     suite("resolve")(

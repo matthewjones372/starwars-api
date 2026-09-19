@@ -60,6 +60,31 @@ object UniversesSpec extends ZIOSpecDefault:
               }
       yield assertTrue(ok.forall(identity))
     },
+    // The bag must not quietly improve on the source. swapi records "unknown"
+    // for a fact nobody established, and that is what the API served before the
+    // attributes bag existed; only height and mass, which were numbers, left an
+    // unmeasured value out.
+    test("an attribute the source recorded as unknown is served, not dropped") {
+      for
+        repo   <- Universes.repo(UniverseId.StarWars)
+        people <- repo.getCharacters(None, None, None)
+        unknown = people.results.filter(_.attributes.get("birth_year").contains("unknown"))
+      yield assertTrue(
+        unknown.nonEmpty,
+        people.results.forall(_.attributes.contains("birth_year")),
+        people.results.forall(_.attributes.contains("eye_color"))
+      )
+    },
+    test("height and mass are left out when the source did not measure them") {
+      for
+        repo   <- Universes.repo(UniverseId.StarWars)
+        people <- repo.getCharacters(None, None, None)
+      yield assertTrue(
+        people.results.exists(!_.attributes.contains("height")),
+        people.results.forall(person => person.attributes.get("height").forall(_.toIntOption.isDefined)),
+        people.results.forall(person => person.attributes.get("mass").forall(_.toIntOption.isDefined))
+      )
+    },
     test("a character's url names the universe it belongs to") {
       for
         offered <- Universes.available

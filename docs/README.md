@@ -125,8 +125,11 @@ values and in `links` when they are urls. That is what lets one schema, one
 sorter and one set of endpoints serve four datasets — and what lets a new
 universe arrive without a migration.
 
-Attribute values are strings. Anything recorded upstream as `unknown` is absent
-rather than reported as an empty string or a sentinel.
+Attribute values are strings, and they carry whatever the source recorded —
+including `unknown`, which is what swapi reports for a fact nobody has
+established. The two exceptions are `height` and `mass`: those were numbers
+before the bag and an unmeasured one was absent rather than zero, so they are
+still left out rather than carrying a word where a number belongs.
 
 ## Films and series
 

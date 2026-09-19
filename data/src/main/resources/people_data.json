@@ -2761,7 +2761,8 @@
     "homeworld": "http://localhost:8080/planets/94/",
     "films": [
       "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "http://localhost:8080/films/13/",
+      "http://localhost:8080/films/19/"
     ],
     "species": [
       "http://localhost:8080/species/1/"
@@ -2786,7 +2787,8 @@
     "homeworld": "http://localhost:8080/planets/28/",
     "films": [
       "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "http://localhost:8080/films/13/",
+      "http://localhost:8080/films/19/"
     ],
     "species": [
       "http://localhost:8080/species/6/"
@@ -4347,5 +4349,25 @@
     "vehicles": [],
     "starships": [],
     "url": "http://localhost:8080/people/205/"
+  },
+  {
+    "name": "Rotta the Hutt",
+    "height": "",
+    "mass": "",
+    "hair_color": "n/a",
+    "skin_color": "green-tan, brown",
+    "eye_color": "orange",
+    "birth_year": "unknown",
+    "gender": "hermaphrodite",
+    "homeworld": "http://localhost:8080/planets/24/",
+    "films": [
+      "http://localhost:8080/films/19/"
+    ],
+    "species": [
+      "http://localhost:8080/species/5/"
+    ],
+    "vehicles": [],
+    "starships": [],
+    "url": "http://localhost:8080/people/206/"
   }
 ]

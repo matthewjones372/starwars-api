@@ -85,7 +85,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
           repo   <- ZIO.service[SWDataRepo]
           people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
-        yield assertTrue(people.count == 204, films.count == 18, people.results.length == 204)
+        yield assertTrue(people.count == 205, films.count == 19, people.results.length == 205)
       },
       test("pages without gaps or repeats") {
         for
@@ -99,8 +99,8 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
         yield assertTrue(
           first.results.length == 10,
           first.results.intersect(second.results).isEmpty,
-          all.length == 204,
-          all.map(_.url).distinct.length == 204
+          all.length == 205,
+          all.map(_.url).distinct.length == 205
         )
       },
       test("finds a person and a film by id") {
@@ -149,7 +149,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
                       Some(PageSize(5)),
                       Some(List(SortBy("not_a_column", FieldOrdering.ASC)))
                     )
-        yield assertTrue(people.results.length == 5, people.count == 204)
+        yield assertTrue(people.results.length == 5, people.count == 205)
       }
     ).provideShared(seededRepo)
       @@ TestAspect.sequential

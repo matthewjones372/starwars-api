@@ -1170,5 +1170,32 @@
     "edited": "2026-09-19T00:00:00.000000Z",
     "url": "http://localhost:8080/films/18/",
     "media_type": "series"
+  },
+  {
+    "title": "The Mandalorian and Grogu",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Jon Favreau",
+    "producer": "Jon Favreau, Kathleen Kennedy, Dave Filoni",
+    "release_date": "2026-05-22",
+    "characters": [
+      "http://localhost:8080/people/129/",
+      "http://localhost:8080/people/130/",
+      "http://localhost:8080/people/206/"
+    ],
+    "planets": [],
+    "starships": [
+      "http://localhost:8080/starships/87/"
+    ],
+    "vehicles": [],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/5/",
+      "http://localhost:8080/species/6/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/19/",
+    "media_type": "film"
   }
 ]

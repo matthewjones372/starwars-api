@@ -10,7 +10,7 @@
 A Star Wars HTTP API in Scala 3 and ZIO, with a typed client, a shortest-path
 search over the character graph, and runtime-configurable multi-field sorting.
 
-Data covers 204 characters across 11 films and 7 live-action series, served
+Data covers 205 characters across 12 films and 7 live-action series, served
 from memory with no external services to start.
 
 ## Live
@@ -65,7 +65,7 @@ Paged responses carry the total alongside the current page:
 
 ```json
 {
-  "count": 204,
+  "count": 205,
   "results": [
     {
       "name": "Luke Skywalker",

@@ -192,8 +192,8 @@ object SWDataRepoSpec extends ZIOSpecDefault:
           person <- repo.getCharacter(EntityId(1))
           film   <- repo.getFilm(EntityId(1))
         yield assertTrue(
-          people.count == 204,
-          films.count == 18,
+          people.count == 205,
+          films.count == 19,
           person.name.nonEmpty,
           film.title.nonEmpty
         )
@@ -204,7 +204,7 @@ object SWDataRepoSpec extends ZIOSpecDefault:
           films <- repo.getFilms(None, None)
         yield assertTrue(
           films.results.forall(_.mediaType.isDefined),
-          films.results.count(_.mediaType.contains(MediaKind.Film)) == 11,
+          films.results.count(_.mediaType.contains(MediaKind.Film)) == 12,
           films.results.count(_.mediaType.contains(MediaKind.Series)) == 7
         )
       },
@@ -216,7 +216,7 @@ object SWDataRepoSpec extends ZIOSpecDefault:
                     repo.getCharacters(Some(page.asPageNumber), Some(PageSize(10)), None)
                   )
           fetched = first.results ++ rest.flatMap(_.results)
-        yield assertTrue(fetched.length == 204, fetched.map(_.url).distinct.length == 204)
+        yield assertTrue(fetched.length == 205, fetched.map(_.url).distinct.length == 205)
       }
     ).provideShared(SWDataRepo.layer),
     suite("fromEntities")(

@@ -535,9 +535,6 @@
           "edited" : {
             "type" : "string"
           },
-          "title" : {
-            "type" : "string"
-          },
           "planets" : {
             "type" : "array",
             "items" : {
@@ -561,6 +558,15 @@
               "type" : "string"
             },
             "uniqueItems" : true
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "media_type" : {
+            "type" : [
+              "string",
+              "null"
+            ]
           },
           "producer" : {
             "type" : "string"

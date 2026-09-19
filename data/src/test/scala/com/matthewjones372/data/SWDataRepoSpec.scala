@@ -40,7 +40,8 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       species = Set.empty,
       created = "",
       edited = "",
-      url = s"http://localhost:8080/films/$id/"
+      url = s"http://localhost:8080/films/$id/",
+      mediaType = None
     )
 
   private val thirtyPeople = (1 to 30).map(id => personWithId(id)).toList
@@ -191,10 +192,20 @@ object SWDataRepoSpec extends ZIOSpecDefault:
           person <- repo.getCharacter(EntityId(1))
           film   <- repo.getFilm(EntityId(1))
         yield assertTrue(
-          people.count == 82,
-          films.count == 6,
+          people.count == 204,
+          films.count == 18,
           person.name.nonEmpty,
           film.title.nonEmpty
+        )
+      },
+      test("every bundled title carries a media type") {
+        for
+          repo  <- ZIO.service[SWDataRepo]
+          films <- repo.getFilms(None, None)
+        yield assertTrue(
+          films.results.forall(_.mediaType.isDefined),
+          films.results.count(_.mediaType.contains(MediaKind.Film)) == 11,
+          films.results.count(_.mediaType.contains(MediaKind.Series)) == 7
         )
       },
       test("pages the bundled data without gaps or repeats") {
@@ -205,7 +216,7 @@ object SWDataRepoSpec extends ZIOSpecDefault:
                     repo.getCharacters(Some(page.asPageNumber), Some(PageSize(10)), None)
                   )
           fetched = first.results ++ rest.flatMap(_.results)
-        yield assertTrue(fetched.length == 82, fetched.map(_.url).distinct.length == 82)
+        yield assertTrue(fetched.length == 204, fetched.map(_.url).distinct.length == 204)
       }
     ).provideShared(SWDataRepo.layer),
     suite("fromEntities")(

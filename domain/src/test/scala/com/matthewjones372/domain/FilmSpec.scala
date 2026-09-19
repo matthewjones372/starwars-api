@@ -54,9 +54,44 @@ object FilmSpec extends ZIOSpecDefault:
           ),
           created = "2014-12-12T11:26:24.656000Z",
           edited = "2014-12-15T13:07:53.386000Z",
-          url = "https://swapi.dev/api/films/2/"
+          url = "https://swapi.dev/api/films/2/",
+          mediaType = None
         )
 
       assertTrue(film == Right(expectedFilm))
+    },
+    test("a media type decodes when present and is rejected when unrecognised") {
+      val json    = Source.fromResource("film1_json.json").getLines().mkString
+      val series  = json.replace("\"episode_id\":5", "\"episode_id\":0,\"media_type\":\"series\"")
+      val unknown = json.replace("\"episode_id\":5", "\"episode_id\":0,\"media_type\":\"holodrama\"")
+
+      assertTrue(
+        series.to[Film].map(_.mediaType) == Right(Some(MediaKind.Series)),
+        unknown.to[Film].isLeft
+      )
+    },
+    test("a media type survives a round trip") {
+      val film = encodeAs(expectedSeries).to[Film]
+
+      assertTrue(film == Right(expectedSeries), encodeAs(expectedSeries).contains("\"media_type\":\"series\""))
     }
   )
+
+  private val expectedSeries =
+    Film(
+      title = "Andor",
+      episodeId = 0,
+      openingCrawl = "",
+      director = "Toby Haynes",
+      producer = "Tony Gilroy",
+      releaseDate = "2022-09-21",
+      characters = Set.empty,
+      planets = Set.empty,
+      starships = Set.empty,
+      vehicles = Set.empty,
+      species = Set.empty,
+      created = "2026-09-19T00:00:00.000000Z",
+      edited = "2026-09-19T00:00:00.000000Z",
+      url = "http://localhost:8080/films/15/",
+      mediaType = Some(MediaKind.Series)
+    )

@@ -241,12 +241,12 @@
 
   // The API pages at a fixed size and reports the total in `count`, so the
   // first page tells us how many more there are and the rest go out at once.
-  async function fetchAllPeople() {
-    const first = await fetch("people?page=1").then((r) => r.json());
+  async function fetchAll(resource) {
+    const first = await fetch(`${resource}?page=1`).then((r) => r.json());
     const pages = Math.ceil(first.count / PAGE_SIZE);
     const rest = await Promise.all(
       Array.from({ length: pages - 1 }, (_, i) =>
-        fetch(`people?page=${i + 2}`).then((r) => r.json())
+        fetch(`${resource}?page=${i + 2}`).then((r) => r.json())
       )
     );
     return [first, ...rest].flatMap((p) => p.results);
@@ -254,8 +254,8 @@
 
   async function load() {
     const [people, films] = await Promise.all([
-      fetchAllPeople(),
-      fetch("films?page=1").then((r) => r.json()).then((f) => f.results),
+      fetchAll("people"),
+      fetchAll("films"),
     ]);
 
     const filmByUrl = new Map(films.map((f) => [f.url, f]));
@@ -422,12 +422,12 @@
       }
     });
 
-    // Character labels are noise at 82 nodes zoomed out, so they appear once
+    // Character labels are noise at this many nodes zoomed out, so they appear once
     // the view is close enough to read them; the film hubs stay labelled at
     // every zoom because they are what orients you.
     // Chosen to sit just below the scale `fitView` settles on, so the default
     // framing is labelled and names drop away only when you pull further out.
-    // A phone gets the opposite default: 82 names over a few hundred pixels is
+    // A phone gets the opposite default: hundreds of names over a few hundred pixels is
     // unreadable, so there the graph opens as shapes and a name is something
     // you select, search or trace your way to.
     const LABEL_ZOOM = isNarrow() ? 1.6 : 0.8;

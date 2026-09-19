@@ -10,8 +10,8 @@
 A Star Wars HTTP API in Scala 3 and ZIO, with a typed client, a shortest-path
 search over the character graph, and runtime-configurable multi-field sorting.
 
-Data covers 82 characters and 6 films, served from memory with no external
-services to start.
+Data covers 204 characters across 11 films and 7 live-action series, served
+from memory with no external services to start.
 
 ## Live
 
@@ -65,7 +65,7 @@ Paged responses carry the total alongside the current page:
 
 ```json
 {
-  "count": 82,
+  "count": 204,
   "results": [
     {
       "name": "Luke Skywalker",
@@ -83,6 +83,25 @@ Paged responses carry the total alongside the current page:
 `height` and `mass` are carried as strings. Values recorded as `unknown`
 upstream are absent from the response rather than reported as a number or an
 empty string.
+
+## Films and series
+
+`/films` serves both, told apart by `media_type`:
+
+```json
+{
+  "title": "Andor",
+  "episode_id": 0,
+  "media_type": "series",
+  "release_date": "2022-09-21",
+  "url": "http://localhost:8080/films/15/"
+}
+```
+
+`media_type` is `film` or `series`. Only the nine numbered films carry an
+`episode_id`; everything else, series and standalone films alike, reports `0`.
+A series has no opening crawl, so `opening_crawl` is empty, `director` names
+the directors credited across its episodes and `release_date` is its premiere.
 
 ## Refined request parameters
 

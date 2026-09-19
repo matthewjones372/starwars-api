@@ -52,7 +52,7 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWData
     "id, name, height, mass, hair_color, skin_color, eye_color, birth_year, gender, homeworld, url"
 
   private val filmColumns =
-    "id, title, episode_id, opening_crawl, director, producer, release_date, created, edited, url"
+    "id, title, episode_id, opening_crawl, director, producer, release_date, created, edited, url, media_type"
 
   private def urlsFor(table: String, ownerColumn: String, urlColumn: String, ids: Seq[Int])(using
     DbCon

@@ -21,7 +21,8 @@ final case class Film(
   species: Set[String],
   created: String,
   edited: String,
-  url: String
+  url: String,
+  @fieldName("media_type") mediaType: Option[MediaKind]
 ) derives Schema,
       DynamicMultiSorter
 

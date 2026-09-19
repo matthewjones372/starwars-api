@@ -8,7 +8,7 @@ import zio.*
 
 object SqlDataRepo:
   // The url sets live in child tables, so they can be sorted in memory but never named in an order by.
-  private val nonSortableFields = Set("films", "attributes", "links")
+  private val nonSortableFields = Set("films", "portrayedBy", "attributes", "links")
 
   private[sql] def toColumn(field: String): String =
     field.flatMap(character => if character.isUpper then s"_${character.toLower}" else character.toString)
@@ -105,14 +105,16 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends DataRe
         .toMap
 
   private def peopleFrom(rows: Seq[CharacterRow])(using DbCon): List[Character] =
-    val ids        = rows.map(_.id)
-    val films      = urlsFor("people_films", "person_id", "film_url", ids)
-    val attributes = attributesFor("character_attributes", "person_id", ids)
-    val links      = linksFor("character_links", "person_id", ids)
+    val ids         = rows.map(_.id)
+    val films       = urlsFor("people_films", "person_id", "film_url", ids)
+    val portrayedBy = urlsFor("people_actors", "person_id", "actor_url", ids)
+    val attributes  = attributesFor("character_attributes", "person_id", ids)
+    val links       = linksFor("character_links", "person_id", ids)
 
     rows.map { row =>
       row.toCharacter(
         films = films.getOrElse(row.id, Set.empty),
+        portrayedBy = portrayedBy.getOrElse(row.id, Set.empty),
         attributes = attributes.getOrElse(row.id, Map.empty),
         links = links.getOrElse(row.id, Map.empty)
       )
@@ -121,12 +123,14 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends DataRe
   private def filmsFrom(rows: Seq[FilmRow])(using DbCon): List[Film] =
     val ids        = rows.map(_.id)
     val characters = urlsFor("film_characters", "film_id", "character_url", ids)
+    val cast       = urlsFor("film_cast", "film_id", "actor_url", ids)
     val attributes = attributesFor("film_attributes", "film_id", ids)
     val links      = linksFor("film_links", "film_id", ids)
 
     rows.map { row =>
       row.toFilm(
         characters = characters.getOrElse(row.id, Set.empty),
+        cast = cast.getOrElse(row.id, Set.empty),
         attributes = attributes.getOrElse(row.id, Map.empty),
         links = links.getOrElse(row.id, Map.empty)
       )

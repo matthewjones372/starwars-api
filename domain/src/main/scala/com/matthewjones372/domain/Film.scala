@@ -11,6 +11,7 @@ final case class Film(
   producer: String,
   @fieldName("release_date") releaseDate: String,
   characters: Set[String],
+  cast: Set[String],
   attributes: Map[String, String],
   links: Map[String, Set[String]],
   url: String,

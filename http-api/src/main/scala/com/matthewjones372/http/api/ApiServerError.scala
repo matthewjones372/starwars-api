@@ -11,5 +11,6 @@ object ApiServerError:
   final case class FilmNotFound(message: String, filmId: EntityId)     extends ApiServerError(message) derives Schema
   final case class PathNotFound(message: String)                       extends ApiServerError(message) derives Schema
   final case class UnexpectedError(message: String)                    extends ApiServerError(message) derives Schema
+  final case class ActorNotFound(message: String, actorId: EntityId)   extends ApiServerError(message) derives Schema
   final case class UniverseNotFound(message: String, universe: String) extends ApiServerError(message) derives Schema
   final case class ServerError()                                       extends ApiServerError("Internal server error") derives Schema

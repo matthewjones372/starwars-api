@@ -18,6 +18,7 @@ object Fixtures:
     Character(
       name = if name.isEmpty then s"person-$id" else name,
       films = films,
+      portrayedBy = Set.empty,
       attributes = attributes,
       links = Map.empty,
       url = s"$baseUrl/$universe/people/$id/"
@@ -37,6 +38,7 @@ object Fixtures:
       producer = "",
       releaseDate = "",
       characters = characters,
+      cast = Set.empty,
       attributes = Map.empty,
       links = Map.empty,
       url = s"$baseUrl/$universe/films/$id/",

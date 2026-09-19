@@ -2,6 +2,7 @@ package com.matthewjones372.domain
 
 import com.matthewjones372.sorting.DynamicMultiSorter
 import zio.schema.*
+import zio.schema.annotation.fieldName
 
 /**
  * A character in one of the universes this API serves.
@@ -15,6 +16,7 @@ import zio.schema.*
 final case class Character(
   name: String,
   films: Set[String],
+  @fieldName("portrayed_by") portrayedBy: Set[String],
   attributes: Map[String, String],
   links: Map[String, Set[String]],
   url: String
@@ -23,6 +25,6 @@ final case class Character(
 
 object Character:
   def apply(name: String, films: Set[String], url: String): Character =
-    Character(name, films, Map.empty, Map.empty, url)
+    Character(name, films, Set.empty, Map.empty, Map.empty, url)
 
 final case class Characters(count: Int, results: List[Character]) extends Paged[Character] derives Schema

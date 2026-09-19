@@ -44,5 +44,6 @@
       "https://swapi.dev/api/species/7/"
     ]
   },
-  "url": "https://swapi.dev/api/films/2/"
+  "url": "https://swapi.dev/api/films/2/",
+  "cast": []
 }

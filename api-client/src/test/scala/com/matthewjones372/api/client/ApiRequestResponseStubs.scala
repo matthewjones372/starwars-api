@@ -45,6 +45,7 @@ object ApiRequestResponseStubs:
     Character(
       name = "C-3PO",
       films = Set("/starwars/films/1/?format=json", "/starwars/films/2/?format=json"),
+      portrayedBy = Set.empty,
       attributes = Map("height" -> "167", "mass" -> "75", "eye_color" -> "yellow"),
       links = Map.empty,
       url = ""
@@ -115,6 +116,7 @@ object ApiRequestResponseStubs:
     producer = "Gary Kurtz",
     releaseDate = "Rick McCallum",
     characters = Set("John", "marty"),
+    cast = Set.empty,
     attributes = Map("opening_crawl" -> "opening"),
     links = Map("planets" -> Set("Earth")),
     url = "2014-12-15T13:07:53.386000Z",
@@ -133,6 +135,7 @@ object ApiRequestResponseStubs:
     producer = "Gary Kurtz",
     releaseDate = "Rick McCallum",
     characters = Set.empty,
+    cast = Set.empty,
     attributes = Map("opening_crawl" -> "opening"),
     links = Map.empty,
     url = "",

@@ -67,6 +67,7 @@ object DataRepo:
     val at = resolve(baseUrl)
     person.copy(
       films = person.films.map(at),
+      portrayedBy = person.portrayedBy.map(at),
       links = person.links.view.mapValues(_.map(at)).toMap,
       url = at(person.url)
     )
@@ -75,6 +76,7 @@ object DataRepo:
     val at = resolve(baseUrl)
     film.copy(
       characters = film.characters.map(at),
+      cast = film.cast.map(at),
       links = film.links.view.mapValues(_.map(at)).toMap,
       url = at(film.url)
     )
@@ -94,7 +96,7 @@ object DataRepo:
 
   def layer: RLayer[Any, DataRepo] = ZLayer.fromZIO(of(UniverseId.default))
 
-  private def readResource(name: String): Task[String] =
+  private[data] def readResource(name: String): Task[String] =
     ZIO.scoped {
       ZIO
         .fromAutoCloseable(

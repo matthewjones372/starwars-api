@@ -13,12 +13,16 @@ import com.matthewjones372.sorting.{DynamicMultiSorter, FieldOrdering, SortBy}
 object Sorting:
   private val characterFields = DynamicMultiSorter.fieldNames[Character].toSet
   private val filmFields      = DynamicMultiSorter.fieldNames[Film].toSet
+  private val actorFields     = DynamicMultiSorter.fieldNames[Actor].toSet
 
   def characters(data: List[Character], sortBy: List[SortBy]): List[Character] =
     apply(data, sortBy, characterFields, _.attributes)
 
   def films(data: List[Film], sortBy: List[SortBy]): List[Film] =
     apply(data, sortBy, filmFields, _.attributes)
+
+  def actors(data: List[Actor], sortBy: List[SortBy]): List[Actor] =
+    apply(data, sortBy, actorFields, _.attributes)
 
   private def apply[A: DynamicMultiSorter](
     data: List[A],

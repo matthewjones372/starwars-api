@@ -403,6 +403,7 @@ object ApiServerSpec extends ZIOSpecDefault:
       producer = "",
       releaseDate = "",
       characters = Set.empty,
+      cast = Set.empty,
       attributes = Map("opening_crawl" -> "worst film"),
       links = Map.empty,
       url = "",
@@ -413,6 +414,7 @@ object ApiServerSpec extends ZIOSpecDefault:
     Character(
       name = "C-3PO",
       films = Set("/starwars/films/1/", "/starwars/films/2/"),
+      portrayedBy = Set.empty,
       attributes = Map("height" -> "167", "mass" -> "75", "eye_color" -> "yellow"),
       links = Map.empty,
       url = "https://swapi.dev/api/species/2/"

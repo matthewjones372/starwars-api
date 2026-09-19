@@ -5,7 +5,14 @@ import zio.test.*
 
 object SortingSpec extends ZIOSpecDefault:
   private def person(name: String, attributes: (String, String)*) =
-    Character(name = name, films = Set.empty, attributes = attributes.toMap, links = Map.empty, url = s"/p/$name")
+    Character(
+      name = name,
+      films = Set.empty,
+      portrayedBy = Set.empty,
+      attributes = attributes.toMap,
+      links = Map.empty,
+      url = s"/p/$name"
+    )
 
   private val yoda       = person("Yoda", "height" -> "66")
   private val yaraelPoof = person("Yarael Poof", "height" -> "264")

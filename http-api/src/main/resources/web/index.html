@@ -332,6 +332,34 @@
     return key.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
   }
 
+  // Characters carry the actors who played them as urls; the names come from
+  // the actor index the page loads alongside the cast.
+  function playedBy(person) {
+    const names = (person.portrayed_by || [])
+      .map((url) => actorNames.get(url.replace(/^https?:\/\/[^/]+/, "")))
+      .filter(Boolean);
+    return names.length ? names.join(", ") : null;
+  }
+
+  let actorNames = new Map();
+
+  async function loadActorNames() {
+    try {
+      const first = await fetch("actors?page=1").then((r) => r.json());
+      const pages = Math.ceil(first.count / PAGE_SIZE);
+      const rest = await Promise.all(
+        Array.from({ length: pages - 1 }, (_, i) =>
+          fetch(`actors?page=${i + 2}`).then((r) => r.json())
+        )
+      );
+      for (const actor of [first, ...rest].flatMap((p) => p.results)) {
+        actorNames.set(actor.url.replace(/^https?:\/\/[^/]+/, ""), actor.name);
+      }
+    } catch {
+      // The names are a nicety; the graph draws without them.
+    }
+  }
+
   function attributeRows(attributes) {
     return Object.entries(attributes || {}).map(([key, value]) => [
       label(key),
@@ -762,6 +790,7 @@
   (async () => {
     let graph;
     await fillUniversePicker();
+    await loadActorNames();
     try {
       graph = await load();
     } catch (err) {
@@ -1007,7 +1036,8 @@
                 ["Films", measured.films]
               ]
             : [["Films", p.films.length]]),
-          ...attributeRows(p.attributes)
+          ...attributeRows(p.attributes),
+          ["Played by", playedBy(p)]
         ],
         "Appears in",
         titles

@@ -19,6 +19,7 @@ object FilmSpec extends ZIOSpecDefault:
           producer = "Gary Kurtz, Rick McCallum",
           releaseDate = "1980-05-17",
           characters = Set.empty,
+          cast = Set.empty,
           attributes = Map(
             "opening_crawl" -> "opening",
             "created"       -> "2014-12-12T11:26:24.656000Z",
@@ -89,6 +90,7 @@ object FilmSpec extends ZIOSpecDefault:
       producer = "Tony Gilroy",
       releaseDate = "2022-09-21",
       characters = Set.empty,
+      cast = Set.empty,
       attributes = Map.empty,
       links = Map.empty,
       url = "http://localhost:8080/starwars/films/15/",

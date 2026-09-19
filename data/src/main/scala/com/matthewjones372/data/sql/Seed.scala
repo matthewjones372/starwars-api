@@ -33,6 +33,7 @@ object Seed:
             on conflict (id) do nothing""".update.run()
 
     insertUrls("people_films", "person_id", "film_url", id, person.films)
+    insertUrls("people_actors", "person_id", "actor_url", id, person.portrayedBy)
     insertAttributes("character_attributes", "person_id", id, person.attributes)
     insertLinks("character_links", "person_id", id, person.links)
 
@@ -45,6 +46,7 @@ object Seed:
             on conflict (id) do nothing""".update.run()
 
     insertUrls("film_characters", "film_id", "character_url", id, film.characters)
+    insertUrls("film_cast", "film_id", "actor_url", id, film.cast)
     insertAttributes("film_attributes", "film_id", id, film.attributes)
     insertLinks("film_links", "film_id", id, film.links)
 

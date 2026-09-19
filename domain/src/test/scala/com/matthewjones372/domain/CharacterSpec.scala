@@ -14,6 +14,7 @@ object CharacterSpec extends ZIOSpecDefault:
       val expectedPerson = Character(
         name = "C-3PO",
         films = Set("/films/1/?format=json", "/films/2/?format=json"),
+        portrayedBy = Set.empty,
         attributes = Map(
           "height"     -> "167",
           "mass"       -> "75",
@@ -38,6 +39,7 @@ object CharacterSpec extends ZIOSpecDefault:
       val wizard = Character(
         name = "Harry Potter",
         films = Set("/hp/films/1/"),
+        portrayedBy = Set("/actors/1/"),
         attributes = Map("house" -> "Gryffindor", "patronus" -> "Stag"),
         links = Map("wand" -> Set("/hp/wands/1/")),
         url = "/hp/people/1/"
@@ -55,6 +57,7 @@ object CharacterSpec extends ZIOSpecDefault:
       val unmeasured = Character(
         name = "Arvel Crynyd",
         films = Set.empty,
+        portrayedBy = Set.empty,
         attributes = Map("mass" -> "182"),
         links = Map.empty,
         url = "https://swapi.dev/api/people/62/"

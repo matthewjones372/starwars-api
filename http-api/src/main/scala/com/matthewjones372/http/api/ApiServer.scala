@@ -1,6 +1,6 @@
 package com.matthewjones372.http.api
 
-import com.matthewjones372.data.{DataRepo, DataRepoError, Universes}
+import com.matthewjones372.data.{ActorRepo, DataRepo, DataRepoError, Universes}
 import com.matthewjones372.domain.*
 import com.matthewjones372.http.api.ApiServerError.*
 import com.matthewjones372.search.{Connectivity, Path, Graph}
@@ -36,7 +36,11 @@ object ApiServer:
    * [default], and nothing outside this build can ask for the slow path.
    */
   private[matthewjones372] def measuring(preEncoded: Boolean) =
-    ZIO.serviceWithZIO[Universes](build(_, preEncoded)).provideSomeLayer(Universes.layer)
+    ZIO
+      .service[Universes]
+      .zip(ZIO.service[ActorRepo])
+      .flatMap(build(_, _, preEncoded))
+      .provideSomeLayer(Universes.layer ++ ActorRepo.layer)
 
   /**
    * The server over whatever repo it is handed, which is not pre-encoded.
@@ -48,20 +52,21 @@ object ApiServer:
   def layer: ZLayer[DataRepo, Nothing, ApiServer] = ZLayer.fromZIO {
     ZIO
       .service[DataRepo]
-      .flatMap(repo => build(Universes.fromRepos(Map(UniverseId.default -> repo)), preEncoded = false))
+      .flatMap(repo => build(Universes.fromRepos(Map(UniverseId.default -> repo)), ActorRepo.empty, preEncoded = false))
   }
 
-  def universes: ZLayer[Universes, Nothing, ApiServer] = ZLayer.fromZIO {
-    ZIO.serviceWithZIO[Universes](build(_, preEncoded = false))
+  def universes: ZLayer[Universes & ActorRepo, Nothing, ApiServer] = ZLayer.fromZIO {
+    ZIO.service[Universes].zip(ZIO.service[ActorRepo]).flatMap(build(_, _, preEncoded = false))
   }
 
   // The graph and the encoded bytes are built per universe and memoized, as the
   // single pair was: nothing touches a repo until a request needs what it holds.
-  private def build(universes: Universes, preEncoded: Boolean): UIO[ApiServer] =
+  private def build(universes: Universes, actors: ActorRepo, preEncoded: Boolean): UIO[ApiServer] =
     for
-      graphs  <- perUniverse(universes)(characterGraph)
-      encoded <- perUniverse(universes)(encodedEntities)
-    yield ApiServerImpl(universes, graphs, encoded, preEncoded)
+      graphs     <- perUniverse(universes)(characterGraph)
+      encoded    <- perUniverse(universes)(encodedEntities)
+      actorGraph <- ApiServer.actorGraph(actors).memoize
+    yield ApiServerImpl(universes, actors, graphs, encoded, actorGraph, preEncoded)
 
   private def perUniverse[A](universes: Universes)(
     of: DataRepo => IO[DataRepoError, A]
@@ -271,6 +276,16 @@ object ApiServer:
       )
     }
 
+  // Actors joined by the films they appeared in, over every universe at once.
+  // This is the one graph in the API whose edges cross a dataset.
+  private[api] def actorGraph(actors: ActorRepo): IO[DataRepoError, CharacterGraph] =
+    ZIO.suspendSucceed {
+      actors.getActors(None, None, None).map { all =>
+        val titles = all.results.flatMap(_.roles).map(role => role.film -> role.filmTitle).toMap
+        CharacterGraph(Graph(all.results.map(actor => actor.name -> actor.films).toMap), titles)
+      }
+    }
+
   inline private def fieldNames[A <: Product](using A: Mirror.ProductOf[A]): List[String] =
     constValueTuple[A.MirroredElemLabels].toList.asInstanceOf[List[String]]
 
@@ -297,6 +312,79 @@ object ApiServer:
     (Endpoint(Method.GET / "universes") ?? Doc.p("The datasets this API serves, and the slug each answers on"))
       .out[AvailableUniverses]
       .outErrors[ApiServerError](
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
+  private val actorIdPath     = PathCodec.int("actorId").transformOrFailLeft(EntityId.from)(identity)
+  private val targetActorPath = PathCodec.int("targetId").transformOrFailLeft(EntityId.from)(identity)
+
+  val getActorsEndpoint =
+    (Endpoint(Method.GET / "actors") ?? Doc.p("Every actor this API knows, across every universe"))
+      .query(pageQuery)
+      .query(QueryCodec.query[String]("sortBy").optional)
+      .out[Actors]
+      .outErrors[ApiServerError](
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
+  val getActorEndpoint =
+    (Endpoint(Method.GET / "actors" / actorIdPath) ?? Doc.p("One actor, with every role they played"))
+      .out[Actor]
+      .outErrors[ApiServerError](
+        HttpCodec.error[ActorNotFound](Status.NotFound),
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
+  val getActorPathEndpoint =
+    (Endpoint(Method.GET / "actors" / actorIdPath / "path-to" / targetActorPath)
+      ?? Doc.p("The shortest chains of shared films between two actors, which may cross universes"))
+      .out[ShortestPath]
+      .outErrors[ApiServerError](
+        HttpCodec.error[ActorNotFound](Status.NotFound),
+        HttpCodec.error[PathNotFound](Status.NotFound),
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
+  val getActorGraphEndpoint =
+    (Endpoint(Method.GET / "actors" / "graph" / "insights")
+      ?? Doc.p("How connected the cast of every universe is, taken as one graph"))
+      .out[GraphInsights]
+      .outErrors[ApiServerError](
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
+  val getUniverseActorsEndpoint =
+    (Endpoint(Method.GET / universePath / "actors") ?? Doc.p("The actors who appear in one universe"))
+      .query(pageQuery)
+      .out[Actors]
+      .outErrors[ApiServerError](
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
+  val getFilmCastEndpoint =
+    (Endpoint(Method.GET / universePath / "films" / filmIdPath / "cast") ?? Doc.p("Who appeared in a film"))
+      .out[Actors]
+      .outErrors[ApiServerError](
+        HttpCodec.error[FilmNotFound](Status.NotFound),
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
+  val getPortrayalsEndpoint =
+    (Endpoint(Method.GET / universePath / "people" / characterIdPath / "portrayals")
+      ?? Doc.p("Who has played a character"))
+      .out[Actors]
+      .outErrors[ApiServerError](
+        HttpCodec.error[CharacterNotFound](Status.NotFound),
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
@@ -440,6 +528,13 @@ object ApiServer:
   private val endPoints =
     Chunk(
       getUniversesEndpoint,
+      getActorsEndpoint,
+      getActorEndpoint,
+      getActorPathEndpoint,
+      getActorGraphEndpoint,
+      getUniverseActorsEndpoint,
+      getFilmCastEndpoint,
+      getPortrayalsEndpoint,
       getCharacterEndpoint,
       getCharactersEndpoint,
       getFilmsEndpoint,
@@ -457,8 +552,10 @@ object ApiServer:
 
 private final case class ApiServerImpl(
   private val universes: Universes,
+  private val actors: ActorRepo,
   private val graphs: Map[UniverseId, IO[DataRepoError, ApiServer.CharacterGraph]],
   private val encodedByUniverse: Map[UniverseId, IO[DataRepoError, ApiServer.Encoded]],
+  private val actorGraph: IO[DataRepoError, ApiServer.CharacterGraph],
   private val preEncoded: Boolean
 ) extends ApiServer:
 
@@ -516,6 +613,57 @@ private final case class ApiServerImpl(
   private val getUniversesHandler = ApiServer.getUniversesEndpoint.implement { (_: Unit) =>
     val offered = universes.available.map(universe => UniverseSummary(universe.slug, universe.label))
     ZIO.succeed(AvailableUniverses(offered.size, offered))
+  }.sandbox
+
+  private def repoError(error: DataRepoError): ApiServerError = error match
+    case DataRepoError.ActorNotFound(message, actorId) => ActorNotFound(message, actorId)
+    case other                                         => UnexpectedError(other.getMessage)
+
+  private val getActorsHandler = ApiServer.getActorsEndpoint.implement { (page, sortByParams) =>
+    actors
+      .getActors(page, Some(PageSize.default), sortByParams.map(ApiServer.parseSortByList))
+      .mapError(repoError)
+  }.sandbox
+
+  private val getActorHandler = ApiServer.getActorEndpoint.implement { actorId =>
+    actors.getActor(actorId).mapError(repoError)
+  }.sandbox
+
+  private val getActorPathHandler = ApiServer.getActorPathEndpoint.implement { (actorId, targetId) =>
+    for
+      start  <- actors.getActor(actorId).mapError(repoError)
+      target <- actors.getActor(targetId).mapError(repoError)
+      graph  <- actorGraph.mapError(error => UnexpectedError(error.getMessage))
+      paths  <- ZIO
+                 .succeed(graph.graph.shortestPaths(start.name, target.name, ApiServer.maxChains))
+                 .filterOrFail(_.nonEmpty)(PathNotFound(s"No path between ${start.name} and ${target.name}"))
+      chains = graph.graph.countShortestPaths(start.name, target.name)
+    yield ApiServer.toShortestPath(graph, start.name, target.name, paths, chains)
+  }.sandbox
+
+  private val getActorGraphHandler = ApiServer.getActorGraphEndpoint.implement { (_: Unit) =>
+    actorGraph
+      .mapBoth(
+        error => UnexpectedError(error.getMessage),
+        graph => ApiServer.toGraphInsights(graph, graph.graph.connectivity)
+      )
+  }.sandbox
+
+  private val getUniverseActorsHandler = ApiServer.getUniverseActorsEndpoint.implement { (universe, page) =>
+    universeOf(universe).flatMap(id => actors.inUniverse(id, page, Some(PageSize.default)).mapError(repoError))
+  }.sandbox
+
+  private val getFilmCastHandler = ApiServer.getFilmCastEndpoint.implement { (universe, filmId) =>
+    repoOf(universe)
+      .flatMap(_.getFilm(filmId).mapError {
+        case DataRepoError.FilmNotFound(message, _) => FilmNotFound(message, filmId)
+        case other                                  => UnexpectedError(other.getMessage)
+      })
+      .flatMap(film => actors.castOf(film.url).mapError(repoError))
+  }.sandbox
+
+  private val getPortrayalsHandler = ApiServer.getPortrayalsEndpoint.implement { (universe, characterId) =>
+    characterOrError(universe, characterId).flatMap(person => actors.portraying(person.url).mapError(repoError))
   }.sandbox
 
   private val getCharacterHandler = ApiServer.getCharacterEndpoint.implement { (universe, characterId) =>
@@ -639,6 +787,13 @@ private final case class ApiServerImpl(
     if preEncoded then
       Chunk(
         getUniversesHandler,
+        getActorsHandler,
+        getActorHandler,
+        getActorPathHandler,
+        getActorGraphHandler,
+        getUniverseActorsHandler,
+        getFilmCastHandler,
+        getPortrayalsHandler,
         preEncodedCharacterRoute,
         preEncodedCharactersRoute,
         getFilmsHandler,
@@ -649,6 +804,13 @@ private final case class ApiServerImpl(
     else
       Chunk(
         getUniversesHandler,
+        getActorsHandler,
+        getActorHandler,
+        getActorPathHandler,
+        getActorGraphHandler,
+        getUniverseActorsHandler,
+        getFilmCastHandler,
+        getPortrayalsHandler,
         getCharacterHandler,
         getCharactersHandler,
         getFilmsHandler,

@@ -12,9 +12,16 @@ shortest-path search over the character graph, and runtime-configurable
 multi-field sorting.
 
 Every path begins with the dataset it reads, so `/starwars/people/1` is Luke
-Skywalker. Star Wars is the dataset that ships today, covering 205 characters
-across 12 films and 7 live-action series, served from memory with no external
-services to start. `GET /universes` lists what the running server holds.
+Skywalker and `/hp/people/41` is Hermione Granger. Four datasets ship: Star
+Wars, the Marvel Cinematic Universe, The Lord of the Rings and Harry Potter,
+824 characters across 80 titles, served from memory with no external services
+to start. `GET /universes` lists what the running server holds.
+
+Actors sit outside all of it. An actor belongs to no single universe, which
+makes them the one edge in this API that crosses a dataset: Christopher Lee is
+Count Dooku and Saruman, and Andy Serkis is in three of the four. `GET
+/actors/{id}/path-to/{id}` is a Bacon number that does not care which franchise
+either end is in.
 
 ## Live
 
@@ -65,6 +72,13 @@ curl 'http://localhost:8080/starwars/people?page=2&sortBy=height:DESC,name:ASC'
 | Method | Path | Query | Returns |
 | ------ | ---- | ----- | ------- |
 | GET | `/universes` | | The datasets this server holds |
+| GET | `/actors` | `page`, `sortBy` | Every actor, across every universe |
+| GET | `/actors/{actorId}` | | One actor, with every role they played |
+| GET | `/actors/{actorId}/path-to/{targetId}` | | Shortest chains of shared films between two actors |
+| GET | `/actors/graph/insights` | | The whole cast of every universe as one graph |
+| GET | `/{universe}/actors` | `page` | The actors who appear in one universe |
+| GET | `/{universe}/films/{filmId}/cast` | | Who appeared in a film |
+| GET | `/{universe}/people/{characterId}/portrayals` | | Who has played a character |
 | GET | `/{universe}/people` | `page`, `sortBy` | Paged characters |
 | GET | `/{universe}/people/{personId}` | | One character |
 | GET | `/{universe}/films` | `page` | Paged films |
@@ -74,7 +88,8 @@ curl 'http://localhost:8080/starwars/people?page=2&sortBy=height:DESC,name:ASC'
 | GET | `/docs/openapi` | | Swagger UI |
 | GET | `/` | | Browser UI: search and the character graph |
 
-`{universe}` is one of `starwars`, `mcu`, `lotr` or `hp`. A slug the server
+`{universe}` is one of `starwars`, `mcu`, `lotr` or `hp`. The actor paths carry
+no universe, because actors are not in one. A slug the server
 holds no data for answers 404 rather than 400: the name is one this API knows,
 the dataset is what is missing. The paths that predate the prefix — `/people`,
 `/films` and `/graph` — redirect permanently to the Star Wars dataset, so an
@@ -375,6 +390,29 @@ not a known field never reaches the query.
 Foreign keys are off by default in SQLite, so `Database` turns them on for
 every connection it hands out.
 
+## Where the data comes from
+
+Star Wars keeps its swapi data, which records heights, homeworlds and species
+that Wikidata does not. Everything else — the other three universes, and the
+cast of all four — is built from Wikidata by
+`scripts.GenerateUniverseData`, which is run by hand; what ships is the JSON it
+writes.
+
+One query shape serves every franchise, and the pass that finds a film's cast
+finds the character each performer played in the same statement, which is what
+makes an actor graph spanning four universes possible from one source. The
+public SPARQL endpoint throttles, so the script retries with a backoff and each
+franchise is queried on its own: a query joining across all four times out.
+
+Star Wars cast coverage is the thin part. Wikidata's Star Wars film series
+carries ten titles against swapi's nineteen, so 42 of the 205 characters have
+an actor. The other three universes are built from Wikidata throughout and do
+not have that gap.
+
+```sh
+sbt "runMain scripts.GenerateUniverseData"
+```
+
 ## Modules
 
 | Module | Contents |
@@ -383,7 +421,7 @@ every connection it hands out.
 | `data` | In-memory and SQLite backed repositories, migrations and seeding |
 | `http-api` | Endpoint definitions, handlers and OpenAPI generation |
 | `api-client` | Caching HTTP client with retry policies |
-| `search` | Breadth first search over the character graph |
+| `search` | Breadth first search over the character and actor graphs |
 | `multi-sort` | Runtime multi-field sorting derived from case classes |
 
 `api-client` and `multi-sort` are published to GitHub Packages.

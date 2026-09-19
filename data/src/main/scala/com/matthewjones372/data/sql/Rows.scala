@@ -6,10 +6,18 @@ import com.matthewjones372.domain.{Character, Film, MediaKind}
 private[sql] final case class CharacterRow(id: Int, name: String, url: String) derives DbCodec:
   def toCharacter(
     films: Set[String],
+    portrayedBy: Set[String],
     attributes: Map[String, String],
     links: Map[String, Set[String]]
   ): Character =
-    Character(name = name, films = films, attributes = attributes, links = links, url = url)
+    Character(
+      name = name,
+      films = films,
+      portrayedBy = portrayedBy,
+      attributes = attributes,
+      links = links,
+      url = url
+    )
 
 private[sql] final case class FilmRow(
   id: Int,
@@ -23,6 +31,7 @@ private[sql] final case class FilmRow(
 ) derives DbCodec:
   def toFilm(
     characters: Set[String],
+    cast: Set[String],
     attributes: Map[String, String],
     links: Map[String, Set[String]]
   ): Film =
@@ -33,6 +42,7 @@ private[sql] final case class FilmRow(
       producer = producer,
       releaseDate = releaseDate,
       characters = characters,
+      cast = cast,
       attributes = attributes,
       links = links,
       url = url,

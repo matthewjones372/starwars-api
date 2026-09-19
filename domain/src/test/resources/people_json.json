@@ -23,5 +23,6 @@
     "vehicles": [],
     "starships": []
   },
-  "url": "https://swapi.dev/api/people/2/"
+  "url": "https://swapi.dev/api/people/2/",
+  "portrayed_by": []
 }

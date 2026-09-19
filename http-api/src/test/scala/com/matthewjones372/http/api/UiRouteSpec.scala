@@ -96,22 +96,26 @@ object UiRouteSpec extends ZIOSpecDefault:
           body.contains("Luke Skywalker")
         )
     ,
-    test("answers 404 for a universe it does not serve, whether or not it knows the name"):
+    test("answers 404 for a universe it does not serve"):
       ZIO.scoped:
         for
           port                <- serving
           (unknown, _, uBody) <- get(port, "/startrek/people/1")
-          (noData, _, nBody)  <- get(port, "/mcu/people/1")
-          (noDataList, _, _)  <- get(port, "/mcu/people")
-          (noDataGraph, _, _) <- get(port, "/mcu/graph/insights")
+          (list, _, _)        <- get(port, "/startrek/people")
+          (graph, _, _)       <- get(port, "/startrek/graph/insights")
         yield assertTrue(
           unknown == Status.NotFound,
-          noData == Status.NotFound,
-          noDataList == Status.NotFound,
-          noDataGraph == Status.NotFound,
-          uBody.contains("startrek"),
-          nBody.contains("mcu")
+          list == Status.NotFound,
+          graph == Status.NotFound,
+          uBody.contains("startrek")
         )
+    ,
+    test("serves every universe it does hold"):
+      ZIO.scoped:
+        for
+          port  <- serving
+          codes <- ZIO.foreach(List("starwars", "mcu", "lotr", "hp"))(slug => get(port, s"/$slug/films/1").map(_._1))
+        yield assertTrue(codes.forall(_ == Status.Ok))
     ,
     test("sends the paths the api answered on before the universe prefix to the default one"):
       ZIO.scoped:

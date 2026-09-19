@@ -8,7 +8,7 @@ import zio.*
 
 object SqlDataRepo:
   // The url sets live in child tables, so they can be sorted in memory but never named in an order by.
-  private val nonSortableFields = Set("films", "species", "vehicles", "starships")
+  private val nonSortableFields = Set("films", "attributes", "links")
 
   private[sql] def toColumn(field: String): String =
     field.flatMap(character => if character.isUpper then s"_${character.toLower}" else character.toString)
@@ -22,14 +22,26 @@ object SqlDataRepo:
       .map(field => field -> toColumn(field))
       .toMap
 
+  // An attribute key also arrives from the query string and also cannot be bound
+  // as a parameter inside an order by. Anything that is not a plain identifier is
+  // dropped rather than escaped.
+  private val attributeKey = "[a-z][a-z0-9_]{0,39}".r
+
+  private[sql] def attributeOrder(key: String, direction: String): String =
+    val value = s"(select value from character_attributes where person_id = people.id and key = '$key')"
+    // Values are text, so the ones that are numbers are compared as numbers and
+    // everything else falls through to the comparison behind them.
+    s"case when $value glob '[0-9]*' then cast($value as real) end $direction, $value $direction"
+
   private[sql] def orderByClause(sortBy: Option[List[SortBy]]): String =
     val clauses = sortBy.getOrElse(Nil).flatMap { sort =>
-      sortableColumns.get(sort.key).map { column =>
-        val direction = sort.ordering match
-          case FieldOrdering.ASC  => "asc"
-          case FieldOrdering.DESC => "desc"
-        s"$column $direction"
-      }
+      val direction = sort.ordering match
+        case FieldOrdering.ASC  => "asc"
+        case FieldOrdering.DESC => "desc"
+      sortableColumns
+        .get(sort.key)
+        .map(column => s"$column $direction")
+        .orElse(Option.when(attributeKey.matches(sort.key))(attributeOrder(sort.key, direction)))
     }
     (clauses :+ "id asc").mkString("order by ", ", ", "")
 
@@ -48,11 +60,9 @@ object SqlDataRepo:
 final private case class SqlDataRepoLive(transactor: ZTransactor) extends DataRepo:
   import SqlDataRepo.*
 
-  private val personColumns =
-    "id, name, height, mass, hair_color, skin_color, eye_color, birth_year, gender, homeworld, url"
+  private val personColumns = "id, name, url"
 
-  private val filmColumns =
-    "id, title, episode_id, opening_crawl, director, producer, release_date, created, edited, url, media_type"
+  private val filmColumns = "id, title, episode_id, director, producer, release_date, url, media_type"
 
   private def urlsFor(table: String, ownerColumn: String, urlColumn: String, ids: Seq[Int])(using
     DbCon
@@ -68,37 +78,57 @@ final private case class SqlDataRepoLive(transactor: ZTransactor) extends DataRe
         .mapValues(_.toSet)
         .toMap
 
+  private def attributesFor(table: String, ownerColumn: String, ids: Seq[Int])(using
+    DbCon
+  ): Map[Int, Map[String, String]] =
+    if ids.isEmpty then Map.empty
+    else
+      Frag(s"select $ownerColumn, key, value from $table where $ownerColumn in (${ids.mkString(",")})")
+        .query[(Int, String, String)]
+        .run()
+        .groupMap(_._1)(row => row._2 -> row._3)
+        .view
+        .mapValues(_.toMap)
+        .toMap
+
+  private def linksFor(table: String, ownerColumn: String, ids: Seq[Int])(using
+    DbCon
+  ): Map[Int, Map[String, Set[String]]] =
+    if ids.isEmpty then Map.empty
+    else
+      Frag(s"select $ownerColumn, rel, url from $table where $ownerColumn in (${ids.mkString(",")})")
+        .query[(Int, String, String)]
+        .run()
+        .groupMap(_._1)(row => row._2 -> row._3)
+        .view
+        .mapValues(_.groupMap(_._1)(_._2).view.mapValues(_.toSet).toMap)
+        .toMap
+
   private def peopleFrom(rows: Seq[CharacterRow])(using DbCon): List[Character] =
-    val ids       = rows.map(_.id)
-    val films     = urlsFor("people_films", "person_id", "film_url", ids)
-    val species   = urlsFor("people_species", "person_id", "species_url", ids)
-    val vehicles  = urlsFor("people_vehicles", "person_id", "vehicle_url", ids)
-    val starships = urlsFor("people_starships", "person_id", "starship_url", ids)
+    val ids        = rows.map(_.id)
+    val films      = urlsFor("people_films", "person_id", "film_url", ids)
+    val attributes = attributesFor("character_attributes", "person_id", ids)
+    val links      = linksFor("character_links", "person_id", ids)
 
     rows.map { row =>
       row.toCharacter(
         films = films.getOrElse(row.id, Set.empty),
-        species = species.getOrElse(row.id, Set.empty),
-        vehicles = vehicles.getOrElse(row.id, Set.empty),
-        starships = starships.getOrElse(row.id, Set.empty)
+        attributes = attributes.getOrElse(row.id, Map.empty),
+        links = links.getOrElse(row.id, Map.empty)
       )
     }.toList
 
   private def filmsFrom(rows: Seq[FilmRow])(using DbCon): List[Film] =
     val ids        = rows.map(_.id)
     val characters = urlsFor("film_characters", "film_id", "character_url", ids)
-    val planets    = urlsFor("film_planets", "film_id", "planet_url", ids)
-    val starships  = urlsFor("film_starships", "film_id", "starship_url", ids)
-    val vehicles   = urlsFor("film_vehicles", "film_id", "vehicle_url", ids)
-    val species    = urlsFor("film_species", "film_id", "species_url", ids)
+    val attributes = attributesFor("film_attributes", "film_id", ids)
+    val links      = linksFor("film_links", "film_id", ids)
 
     rows.map { row =>
       row.toFilm(
         characters = characters.getOrElse(row.id, Set.empty),
-        planets = planets.getOrElse(row.id, Set.empty),
-        starships = starships.getOrElse(row.id, Set.empty),
-        vehicles = vehicles.getOrElse(row.id, Set.empty),
-        species = species.getOrElse(row.id, Set.empty)
+        attributes = attributes.getOrElse(row.id, Map.empty),
+        links = links.getOrElse(row.id, Map.empty)
       )
     }.toList
 

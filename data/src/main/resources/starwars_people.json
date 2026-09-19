@@ -1,4373 +1,5289 @@
 [
   {
     "name": "Tarfful",
-    "height": "234",
-    "mass": "136",
-    "hair_color": "brown",
-    "skin_color": "brown",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/14/",
     "films": [
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/3/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "234",
+      "mass": "136",
+      "hair_color": "brown",
+      "skin_color": "brown",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/14/"
+      ],
+      "species": [
+        "/starwars/species/3/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/80/"
   },
   {
     "name": "Wedge Antilles",
-    "height": "170",
-    "mass": "77",
-    "hair_color": "brown",
-    "skin_color": "fair",
-    "eye_color": "hazel",
-    "birth_year": "21BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/22/",
     "films": [
       "/starwars/films/1/",
       "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/9/"
     ],
-    "species": [],
-    "vehicles": [
-      "/starwars/vehicles/14/"
-    ],
-    "starships": [
-      "/starwars/starships/12/"
-    ],
+    "attributes": {
+      "height": "170",
+      "mass": "77",
+      "hair_color": "brown",
+      "skin_color": "fair",
+      "eye_color": "hazel",
+      "birth_year": "21BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/22/"
+      ],
+      "species": [],
+      "vehicles": [
+        "/starwars/vehicles/14/"
+      ],
+      "starships": [
+        "/starwars/starships/12/"
+      ]
+    },
     "url": "/starwars/people/18/"
   },
   {
     "name": "Ki-Adi-Mundi",
-    "height": "198",
-    "mass": "82",
-    "hair_color": "white",
-    "skin_color": "pale",
-    "eye_color": "yellow",
-    "birth_year": "92BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/43/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/20/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "198",
+      "mass": "82",
+      "hair_color": "white",
+      "skin_color": "pale",
+      "eye_color": "yellow",
+      "birth_year": "92BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/43/"
+      ],
+      "species": [
+        "/starwars/species/20/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/52/"
   },
   {
     "name": "Mon Mothma",
-    "height": "150",
-    "mass": "",
-    "hair_color": "auburn",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "48BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/32/",
     "films": [
-      "/starwars/films/3/",
       "/starwars/films/10/",
-      "/starwars/films/15/"
+      "/starwars/films/15/",
+      "/starwars/films/3/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "150",
+      "hair_color": "auburn",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "birth_year": "48BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/32/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/28/"
   },
   {
     "name": "Bib Fortuna",
-    "height": "180",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "pale",
-    "eye_color": "pink",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/37/",
     "films": [
-      "/starwars/films/3/",
       "/starwars/films/12/",
-      "/starwars/films/13/"
+      "/starwars/films/13/",
+      "/starwars/films/3/"
     ],
-    "species": [
-      "/starwars/species/15/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "none",
+      "skin_color": "pale",
+      "eye_color": "pink",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/37/"
+      ],
+      "species": [
+        "/starwars/species/15/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/45/"
   },
   {
     "name": "Finis Valorum",
-    "height": "170",
-    "mass": "",
-    "hair_color": "blond",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "91BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/9/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "blond",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "birth_year": "91BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/9/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/34/"
   },
   {
     "name": "Dooku",
-    "height": "193",
-    "mass": "80",
-    "hair_color": "white",
-    "skin_color": "fair",
-    "eye_color": "brown",
-    "birth_year": "102BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/52/",
     "films": [
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/55/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "193",
+      "mass": "80",
+      "hair_color": "white",
+      "skin_color": "fair",
+      "eye_color": "brown",
+      "birth_year": "102BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/52/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/55/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/67/"
   },
   {
     "name": "Wilhuff Tarkin",
-    "height": "180",
-    "mass": "",
-    "hair_color": "auburn, grey",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "64BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/21/",
     "films": [
       "/starwars/films/1/",
-      "/starwars/films/6/",
-      "/starwars/films/10/"
+      "/starwars/films/10/",
+      "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "auburn, grey",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "birth_year": "64BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/21/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/12/"
   },
   {
     "name": "Dormé",
-    "height": "165",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/66/"
   },
   {
     "name": "Mace Windu",
-    "height": "188",
-    "mass": "84",
-    "hair_color": "none",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "72BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/42/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "188",
+      "mass": "84",
+      "hair_color": "none",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "birth_year": "72BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/42/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/51/"
   },
   {
     "name": "R5-D4",
-    "height": "97",
-    "mass": "32",
-    "hair_color": "n/a",
-    "skin_color": "white, red",
-    "eye_color": "red",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/1/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "97",
+      "mass": "32",
+      "hair_color": "n/a",
+      "skin_color": "white, red",
+      "eye_color": "red",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/8/"
   },
   {
     "name": "Taun We",
-    "height": "213",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/10/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/32/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "213",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "black",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/10/"
+      ],
+      "species": [
+        "/starwars/species/32/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/73/"
   },
   {
     "name": "Shaak Ti",
-    "height": "178",
-    "mass": "57",
-    "hair_color": "none",
-    "skin_color": "red, blue, white",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/58/",
     "films": [
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/35/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "mass": "57",
+      "hair_color": "none",
+      "skin_color": "red, blue, white",
+      "eye_color": "black",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/58/"
+      ],
+      "species": [
+        "/starwars/species/35/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/78/"
   },
   {
     "name": "Jek Tono Porkins",
-    "height": "180",
-    "mass": "110",
-    "hair_color": "brown",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/26/",
     "films": [
       "/starwars/films/1/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/12/"
-    ],
+    "attributes": {
+      "height": "180",
+      "mass": "110",
+      "hair_color": "brown",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/26/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/12/"
+      ]
+    },
     "url": "/starwars/people/19/"
   },
   {
     "name": "IG-88",
-    "height": "200",
-    "mass": "140",
-    "hair_color": "none",
-    "skin_color": "metal",
-    "eye_color": "red",
-    "birth_year": "15BBY",
-    "gender": "none",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/2/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "200",
+      "mass": "140",
+      "hair_color": "none",
+      "skin_color": "metal",
+      "eye_color": "red",
+      "birth_year": "15BBY",
+      "gender": "none"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/23/"
   },
   {
     "name": "Cliegg Lars",
-    "height": "183",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "82BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "183",
+      "hair_color": "brown",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "birth_year": "82BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/62/"
   },
   {
     "name": "Darth Vader",
-    "height": "202",
-    "mass": "136",
-    "hair_color": "none",
-    "skin_color": "white",
-    "eye_color": "yellow",
-    "birth_year": "41.9BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/1/",
+      "/starwars/films/10/",
+      "/starwars/films/14/",
       "/starwars/films/2/",
       "/starwars/films/3/",
-      "/starwars/films/6/",
-      "/starwars/films/10/",
-      "/starwars/films/14/"
+      "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/13/"
-    ],
+    "attributes": {
+      "height": "202",
+      "mass": "136",
+      "hair_color": "none",
+      "skin_color": "white",
+      "eye_color": "yellow",
+      "birth_year": "41.9BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/13/"
+      ]
+    },
     "url": "/starwars/people/4/"
   },
   {
     "name": "San Hill",
-    "height": "191",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "gold",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/57/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/34/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "191",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "gold",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/57/"
+      ],
+      "species": [
+        "/starwars/species/34/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/77/"
   },
   {
     "name": "Watto",
-    "height": "137",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "blue, grey",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/34/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/13/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "137",
+      "hair_color": "black",
+      "skin_color": "blue, grey",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/34/"
+      ],
+      "species": [
+        "/starwars/species/13/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/40/"
   },
   {
     "name": "Greedo",
-    "height": "173",
-    "mass": "74",
-    "hair_color": "n/a",
-    "skin_color": "green",
-    "eye_color": "black",
-    "birth_year": "44BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/23/",
     "films": [
       "/starwars/films/1/"
     ],
-    "species": [
-      "/starwars/species/4/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "173",
+      "mass": "74",
+      "hair_color": "n/a",
+      "skin_color": "green",
+      "eye_color": "black",
+      "birth_year": "44BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/23/"
+      ],
+      "species": [
+        "/starwars/species/4/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/15/"
   },
   {
     "name": "Anakin Skywalker",
-    "height": "188",
-    "mass": "84",
-    "hair_color": "blond",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "41.9BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/1/",
     "films": [
+      "/starwars/films/14/",
       "/starwars/films/4/",
       "/starwars/films/5/",
-      "/starwars/films/6/",
-      "/starwars/films/14/"
+      "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [
-      "/starwars/vehicles/44/",
-      "/starwars/vehicles/46/"
-    ],
-    "starships": [
-      "/starwars/starships/39/",
-      "/starwars/starships/59/",
-      "/starwars/starships/65/"
-    ],
+    "attributes": {
+      "height": "188",
+      "mass": "84",
+      "hair_color": "blond",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "birth_year": "41.9BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [],
+      "vehicles": [
+        "/starwars/vehicles/44/",
+        "/starwars/vehicles/46/"
+      ],
+      "starships": [
+        "/starwars/starships/39/",
+        "/starwars/starships/59/",
+        "/starwars/starships/65/"
+      ]
+    },
     "url": "/starwars/people/11/"
   },
   {
     "name": "Biggs Darklighter",
-    "height": "183",
-    "mass": "84",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "24BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/1/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/12/"
-    ],
+    "attributes": {
+      "height": "183",
+      "mass": "84",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "birth_year": "24BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/12/"
+      ]
+    },
     "url": "/starwars/people/9/"
   },
   {
     "name": "Darth Maul",
-    "height": "175",
-    "mass": "80",
-    "hair_color": "none",
-    "skin_color": "red",
-    "eye_color": "yellow",
-    "birth_year": "54BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/36/",
     "films": [
-      "/starwars/films/4/",
-      "/starwars/films/11/"
+      "/starwars/films/11/",
+      "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/22/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/42/"
-    ],
-    "starships": [
-      "/starwars/starships/41/"
-    ],
+    "attributes": {
+      "height": "175",
+      "mass": "80",
+      "hair_color": "none",
+      "skin_color": "red",
+      "eye_color": "yellow",
+      "birth_year": "54BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/36/"
+      ],
+      "species": [
+        "/starwars/species/22/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/42/"
+      ],
+      "starships": [
+        "/starwars/starships/41/"
+      ]
+    },
     "url": "/starwars/people/44/"
   },
   {
     "name": "Nute Gunray",
-    "height": "191",
-    "mass": "90",
-    "hair_color": "none",
-    "skin_color": "mottled green",
-    "eye_color": "red",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/18/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/11/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "191",
+      "mass": "90",
+      "hair_color": "none",
+      "skin_color": "mottled green",
+      "eye_color": "red",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/18/"
+      ],
+      "species": [
+        "/starwars/species/11/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/33/"
   },
   {
     "name": "Boba Fett",
-    "height": "183",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "fair",
-    "eye_color": "brown",
-    "birth_year": "31.5BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/10/",
     "films": [
+      "/starwars/films/12/",
+      "/starwars/films/13/",
       "/starwars/films/2/",
       "/starwars/films/3/",
-      "/starwars/films/5/",
-      "/starwars/films/12/",
-      "/starwars/films/13/"
+      "/starwars/films/5/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/21/"
-    ],
+    "attributes": {
+      "height": "183",
+      "hair_color": "black",
+      "skin_color": "fair",
+      "eye_color": "brown",
+      "birth_year": "31.5BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/10/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/21/"
+      ]
+    },
     "url": "/starwars/people/22/"
   },
   {
     "name": "Saesee Tiin",
-    "height": "188",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "pale",
-    "eye_color": "orange",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/47/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/24/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "188",
+      "hair_color": "none",
+      "skin_color": "pale",
+      "eye_color": "orange",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/47/"
+      ],
+      "species": [
+        "/starwars/species/24/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/56/"
   },
   {
     "name": "Adi Gallia",
-    "height": "184",
-    "mass": "50",
-    "hair_color": "none",
-    "skin_color": "dark",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/9/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/23/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "184",
+      "mass": "50",
+      "hair_color": "none",
+      "skin_color": "dark",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/9/"
+      ],
+      "species": [
+        "/starwars/species/23/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/55/"
   },
   {
     "name": "Lobot",
-    "height": "175",
-    "mass": "79",
-    "hair_color": "none",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "37BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/6/",
     "films": [
       "/starwars/films/2/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "175",
+      "mass": "79",
+      "hair_color": "none",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "birth_year": "37BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/6/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/26/"
   },
   {
     "name": "Ben Quadinaros",
-    "height": "163",
-    "mass": "65",
-    "hair_color": "none",
-    "skin_color": "grey, green, yellow",
-    "eye_color": "orange",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/41/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/19/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "163",
+      "mass": "65",
+      "hair_color": "none",
+      "skin_color": "grey, green, yellow",
+      "eye_color": "orange",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/41/"
+      ],
+      "species": [
+        "/starwars/species/19/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/50/"
   },
   {
     "name": "Roos Tarpals",
-    "height": "224",
-    "mass": "82",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "orange",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/12/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "224",
+      "mass": "82",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "orange",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [
+        "/starwars/species/12/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/37/"
   },
   {
     "name": "Bail Prestor Organa",
-    "height": "191",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "tan",
-    "eye_color": "brown",
-    "birth_year": "67BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/2/",
     "films": [
-      "/starwars/films/5/",
-      "/starwars/films/6/",
       "/starwars/films/10/",
-      "/starwars/films/14/"
+      "/starwars/films/14/",
+      "/starwars/films/5/",
+      "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "191",
+      "hair_color": "black",
+      "skin_color": "tan",
+      "eye_color": "brown",
+      "birth_year": "67BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/2/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/68/"
   },
   {
     "name": "Cordé",
-    "height": "157",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "157",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/61/"
   },
   {
     "name": "Chewbacca",
-    "height": "228",
-    "mass": "112",
-    "hair_color": "brown",
-    "skin_color": "unknown",
-    "eye_color": "blue",
-    "birth_year": "200BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/14/",
     "films": [
       "/starwars/films/1/",
+      "/starwars/films/11/",
       "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/6/",
       "/starwars/films/7/",
       "/starwars/films/8/",
-      "/starwars/films/9/",
-      "/starwars/films/11/"
+      "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/3/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/19/"
-    ],
-    "starships": [
-      "/starwars/starships/10/",
-      "/starwars/starships/22/"
-    ],
+    "attributes": {
+      "height": "228",
+      "mass": "112",
+      "hair_color": "brown",
+      "eye_color": "blue",
+      "birth_year": "200BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/14/"
+      ],
+      "species": [
+        "/starwars/species/3/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/19/"
+      ],
+      "starships": [
+        "/starwars/starships/10/",
+        "/starwars/starships/22/"
+      ]
+    },
     "url": "/starwars/people/13/"
   },
   {
     "name": "Ayla Secura",
-    "height": "178",
-    "mass": "55",
-    "hair_color": "none",
-    "skin_color": "blue",
-    "eye_color": "hazel",
-    "birth_year": "48BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/37/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/15/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "mass": "55",
+      "hair_color": "none",
+      "skin_color": "blue",
+      "eye_color": "hazel",
+      "birth_year": "48BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/37/"
+      ],
+      "species": [
+        "/starwars/species/15/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/46/"
   },
   {
     "name": "Bossk",
-    "height": "190",
-    "mass": "113",
-    "hair_color": "none",
-    "skin_color": "green",
-    "eye_color": "red",
-    "birth_year": "53BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/29/",
     "films": [
       "/starwars/films/2/"
     ],
-    "species": [
-      "/starwars/species/7/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "190",
+      "mass": "113",
+      "hair_color": "none",
+      "skin_color": "green",
+      "eye_color": "red",
+      "birth_year": "53BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/29/"
+      ],
+      "species": [
+        "/starwars/species/7/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/24/"
   },
   {
     "name": "Tion Medon",
-    "height": "206",
-    "mass": "80",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/12/",
     "films": [
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/37/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "206",
+      "mass": "80",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/12/"
+      ],
+      "species": [
+        "/starwars/species/37/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/83/"
   },
   {
     "name": "Padmé Amidala",
-    "height": "185",
-    "mass": "45",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "46BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/39/",
-      "/starwars/starships/49/",
-      "/starwars/starships/64/"
-    ],
+    "attributes": {
+      "height": "185",
+      "mass": "45",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "birth_year": "46BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/39/",
+        "/starwars/starships/49/",
+        "/starwars/starships/64/"
+      ]
+    },
     "url": "/starwars/people/35/"
   },
   {
     "name": "Jabba Desilijic Tiure",
-    "height": "175",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "green-tan, brown",
-    "eye_color": "orange",
-    "birth_year": "600BBY",
-    "gender": "hermaphrodite",
-    "homeworld": "/starwars/planets/24/",
     "films": [
       "/starwars/films/1/",
+      "/starwars/films/13/",
       "/starwars/films/3/",
-      "/starwars/films/4/",
-      "/starwars/films/13/"
+      "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/5/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "175",
+      "hair_color": "n/a",
+      "skin_color": "green-tan, brown",
+      "eye_color": "orange",
+      "birth_year": "600BBY",
+      "gender": "hermaphrodite"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/24/"
+      ],
+      "species": [
+        "/starwars/species/5/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/16/"
   },
   {
     "name": "Grievous",
-    "height": "216",
-    "mass": "159",
-    "hair_color": "none",
-    "skin_color": "brown, white",
-    "eye_color": "green, yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/59/",
     "films": [
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/36/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/60/"
-    ],
-    "starships": [
-      "/starwars/starships/74/"
-    ],
+    "attributes": {
+      "height": "216",
+      "mass": "159",
+      "hair_color": "none",
+      "skin_color": "brown, white",
+      "eye_color": "green, yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/59/"
+      ],
+      "species": [
+        "/starwars/species/36/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/60/"
+      ],
+      "starships": [
+        "/starwars/starships/74/"
+      ]
+    },
     "url": "/starwars/people/79/"
   },
   {
     "name": "Leia Organa",
-    "height": "150",
-    "mass": "49",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "19BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/2/",
     "films": [
       "/starwars/films/1/",
+      "/starwars/films/10/",
+      "/starwars/films/14/",
       "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/6/",
       "/starwars/films/7/",
       "/starwars/films/8/",
-      "/starwars/films/9/",
-      "/starwars/films/10/",
-      "/starwars/films/14/"
+      "/starwars/films/9/"
     ],
-    "species": [],
-    "vehicles": [
-      "/starwars/vehicles/30/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "150",
+      "mass": "49",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "birth_year": "19BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/2/"
+      ],
+      "species": [],
+      "vehicles": [
+        "/starwars/vehicles/30/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/5/"
   },
   {
     "name": "Lama Su",
-    "height": "229",
-    "mass": "88",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/10/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/32/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "229",
+      "mass": "88",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/10/"
+      ],
+      "species": [
+        "/starwars/species/32/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/72/"
   },
   {
     "name": "Obi-Wan Kenobi",
-    "height": "182",
-    "mass": "77",
-    "hair_color": "auburn, white",
-    "skin_color": "fair",
-    "eye_color": "blue-gray",
-    "birth_year": "57BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/20/",
     "films": [
+      "/starwars/films/1/",
+      "/starwars/films/14/",
+      "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/4/",
-      "/starwars/films/1/",
       "/starwars/films/5/",
-      "/starwars/films/6/",
-      "/starwars/films/2/",
-      "/starwars/films/14/"
+      "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [
-      "/starwars/vehicles/38/"
-    ],
-    "starships": [
-      "/starwars/starships/64/",
-      "/starwars/starships/59/",
-      "/starwars/starships/48/",
-      "/starwars/starships/65/",
-      "/starwars/starships/74/"
-    ],
+    "attributes": {
+      "height": "182",
+      "mass": "77",
+      "hair_color": "auburn, white",
+      "skin_color": "fair",
+      "eye_color": "blue-gray",
+      "birth_year": "57BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/20/"
+      ],
+      "species": [],
+      "vehicles": [
+        "/starwars/vehicles/38/"
+      ],
+      "starships": [
+        "/starwars/starships/48/",
+        "/starwars/starships/59/",
+        "/starwars/starships/64/",
+        "/starwars/starships/65/",
+        "/starwars/starships/74/"
+      ]
+    },
     "url": "/starwars/people/10/"
   },
   {
     "name": "Mas Amedda",
-    "height": "196",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "blue",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/50/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/27/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "196",
+      "hair_color": "none",
+      "skin_color": "blue",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/50/"
+      ],
+      "species": [
+        "/starwars/species/27/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/59/"
   },
   {
     "name": "Dud Bolt",
-    "height": "94",
-    "mass": "45",
-    "hair_color": "none",
-    "skin_color": "blue, grey",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/39/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/17/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "94",
+      "mass": "45",
+      "hair_color": "none",
+      "skin_color": "blue, grey",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/39/"
+      ],
+      "species": [
+        "/starwars/species/17/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/48/"
   },
   {
     "name": "Palpatine",
-    "height": "170",
-    "mass": "75",
-    "hair_color": "grey",
-    "skin_color": "pale",
-    "eye_color": "yellow",
-    "birth_year": "82BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/8/",
     "films": [
-      "/starwars/films/5/",
+      "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/4/",
+      "/starwars/films/5/",
       "/starwars/films/6/",
-      "/starwars/films/2/",
       "/starwars/films/9/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "mass": "75",
+      "hair_color": "grey",
+      "skin_color": "pale",
+      "eye_color": "yellow",
+      "birth_year": "82BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/21/"
   },
   {
     "name": "Wat Tambor",
-    "height": "193",
-    "mass": "48",
-    "hair_color": "none",
-    "skin_color": "green, grey",
-    "eye_color": "unknown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/56/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/33/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "193",
+      "mass": "48",
+      "hair_color": "none",
+      "skin_color": "green, grey",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/56/"
+      ],
+      "species": [
+        "/starwars/species/33/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/76/"
   },
   {
     "name": "Eeth Koth",
-    "height": "171",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "brown",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/45/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/22/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "171",
+      "hair_color": "black",
+      "skin_color": "brown",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/45/"
+      ],
+      "species": [
+        "/starwars/species/22/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/54/"
   },
   {
     "name": "Shmi Skywalker",
-    "height": "163",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "fair",
-    "eye_color": "brown",
-    "birth_year": "72BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "163",
+      "hair_color": "black",
+      "skin_color": "fair",
+      "eye_color": "brown",
+      "birth_year": "72BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/43/"
   },
   {
     "name": "Barriss Offee",
-    "height": "166",
-    "mass": "50",
-    "hair_color": "black",
-    "skin_color": "yellow",
-    "eye_color": "blue",
-    "birth_year": "40BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/51/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/29/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "166",
+      "mass": "50",
+      "hair_color": "black",
+      "skin_color": "yellow",
+      "eye_color": "blue",
+      "birth_year": "40BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/51/"
+      ],
+      "species": [
+        "/starwars/species/29/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/65/"
   },
   {
     "name": "Dexter Jettster",
-    "height": "198",
-    "mass": "102",
-    "hair_color": "none",
-    "skin_color": "brown",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/55/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/31/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "198",
+      "mass": "102",
+      "hair_color": "none",
+      "skin_color": "brown",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/55/"
+      ],
+      "species": [
+        "/starwars/species/31/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/71/"
   },
   {
     "name": "Yarael Poof",
-    "height": "264",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "white",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/48/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/25/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "264",
+      "hair_color": "none",
+      "skin_color": "white",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/48/"
+      ],
+      "species": [
+        "/starwars/species/25/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/57/"
   },
   {
     "name": "Qui-Gon Jinn",
-    "height": "193",
-    "mass": "89",
-    "hair_color": "brown",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "92BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
-      "/starwars/films/4/",
-      "/starwars/films/14/"
+      "/starwars/films/14/",
+      "/starwars/films/4/"
     ],
-    "species": [],
-    "vehicles": [
-      "/starwars/vehicles/38/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "193",
+      "mass": "89",
+      "hair_color": "brown",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "birth_year": "92BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [],
+      "vehicles": [
+        "/starwars/vehicles/38/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/32/"
   },
   {
     "name": "Owen Lars",
-    "height": "178",
-    "mass": "120",
-    "hair_color": "brown, grey",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "52BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/1/",
+      "/starwars/films/14/",
       "/starwars/films/5/",
-      "/starwars/films/6/",
-      "/starwars/films/14/"
+      "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "mass": "120",
+      "hair_color": "brown, grey",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "birth_year": "52BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/6/"
   },
   {
     "name": "Jar Jar Binks",
-    "height": "196",
-    "mass": "66",
-    "hair_color": "none",
-    "skin_color": "orange",
-    "eye_color": "orange",
-    "birth_year": "52BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/12/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "196",
+      "mass": "66",
+      "hair_color": "none",
+      "skin_color": "orange",
+      "eye_color": "orange",
+      "birth_year": "52BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [
+        "/starwars/species/12/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/36/"
   },
   {
     "name": "Luke Skywalker",
-    "height": "172",
-    "mass": "77",
-    "hair_color": "blond",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "19BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/1/",
+      "/starwars/films/12/",
+      "/starwars/films/13/",
       "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/6/",
       "/starwars/films/7/",
       "/starwars/films/8/",
-      "/starwars/films/9/",
-      "/starwars/films/12/",
-      "/starwars/films/13/"
+      "/starwars/films/9/"
     ],
-    "species": [],
-    "vehicles": [
-      "/starwars/vehicles/14/",
-      "/starwars/vehicles/30/"
-    ],
-    "starships": [
-      "/starwars/starships/12/",
-      "/starwars/starships/22/"
-    ],
+    "attributes": {
+      "height": "172",
+      "mass": "77",
+      "hair_color": "blond",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "birth_year": "19BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [],
+      "vehicles": [
+        "/starwars/vehicles/14/",
+        "/starwars/vehicles/30/"
+      ],
+      "starships": [
+        "/starwars/starships/12/",
+        "/starwars/starships/22/"
+      ]
+    },
     "url": "/starwars/people/1/"
   },
   {
     "name": "Ric Olié",
-    "height": "183",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/40/"
-    ],
+    "attributes": {
+      "height": "183",
+      "hair_color": "brown",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/40/"
+      ]
+    },
     "url": "/starwars/people/39/"
   },
   {
     "name": "Sly Moore",
-    "height": "178",
-    "mass": "48",
-    "hair_color": "none",
-    "skin_color": "pale",
-    "eye_color": "white",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/60/",
     "films": [
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "mass": "48",
+      "hair_color": "none",
+      "skin_color": "pale",
+      "eye_color": "white",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/60/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/82/"
   },
   {
     "name": "Gasgano",
-    "height": "122",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "white, blue",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/40/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/18/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "122",
+      "hair_color": "none",
+      "skin_color": "white, blue",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/40/"
+      ],
+      "species": [
+        "/starwars/species/18/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/49/"
   },
   {
     "name": "Lando Calrissian",
-    "height": "177",
-    "mass": "79",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "31BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/30/",
     "films": [
+      "/starwars/films/11/",
       "/starwars/films/2/",
       "/starwars/films/3/",
-      "/starwars/films/9/",
-      "/starwars/films/11/"
+      "/starwars/films/9/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/10/"
-    ],
+    "attributes": {
+      "height": "177",
+      "mass": "79",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "birth_year": "31BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/30/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/"
+      ]
+    },
     "url": "/starwars/people/25/"
   },
   {
     "name": "Gregar Typho",
-    "height": "185",
-    "mass": "85",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/39/"
-    ],
+    "attributes": {
+      "height": "185",
+      "mass": "85",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/39/"
+      ]
+    },
     "url": "/starwars/people/60/"
   },
   {
     "name": "Han Solo",
-    "height": "180",
-    "mass": "80",
-    "hair_color": "brown",
-    "skin_color": "fair",
-    "eye_color": "brown",
-    "birth_year": "29BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/22/",
     "films": [
       "/starwars/films/1/",
+      "/starwars/films/11/",
       "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/7/",
-      "/starwars/films/9/",
-      "/starwars/films/11/"
+      "/starwars/films/9/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/10/",
-      "/starwars/starships/22/"
-    ],
+    "attributes": {
+      "height": "180",
+      "mass": "80",
+      "hair_color": "brown",
+      "skin_color": "fair",
+      "eye_color": "brown",
+      "birth_year": "29BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/22/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/",
+        "/starwars/starships/22/"
+      ]
+    },
     "url": "/starwars/people/14/"
   },
   {
     "name": "Ratts Tyerel",
-    "height": "79",
-    "mass": "15",
-    "hair_color": "none",
-    "skin_color": "grey, blue",
-    "eye_color": "unknown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/38/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/16/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "79",
+      "mass": "15",
+      "hair_color": "none",
+      "skin_color": "grey, blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/38/"
+      ],
+      "species": [
+        "/starwars/species/16/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/47/"
   },
   {
     "name": "Nien Nunb",
-    "height": "160",
-    "mass": "68",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/33/",
     "films": [
       "/starwars/films/3/",
       "/starwars/films/7/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/10/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/10/"
-    ],
+    "attributes": {
+      "height": "160",
+      "mass": "68",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/33/"
+      ],
+      "species": [
+        "/starwars/species/10/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/"
+      ]
+    },
     "url": "/starwars/people/31/"
   },
   {
     "name": "Jango Fett",
-    "height": "183",
-    "mass": "79",
-    "hair_color": "black",
-    "skin_color": "tan",
-    "eye_color": "brown",
-    "birth_year": "66BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/53/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "183",
+      "mass": "79",
+      "hair_color": "black",
+      "skin_color": "tan",
+      "eye_color": "brown",
+      "birth_year": "66BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/53/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/69/"
   },
   {
     "name": "Plo Koon",
-    "height": "188",
-    "mass": "80",
-    "hair_color": "none",
-    "skin_color": "orange",
-    "eye_color": "black",
-    "birth_year": "22BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/49/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/26/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/48/"
-    ],
+    "attributes": {
+      "height": "188",
+      "mass": "80",
+      "hair_color": "none",
+      "skin_color": "orange",
+      "eye_color": "black",
+      "birth_year": "22BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/49/"
+      ],
+      "species": [
+        "/starwars/species/26/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/48/"
+      ]
+    },
     "url": "/starwars/people/58/"
   },
   {
     "name": "Luminara Unduli",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "yellow",
-    "eye_color": "blue",
-    "birth_year": "58BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/51/",
     "films": [
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/29/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "yellow",
+      "eye_color": "blue",
+      "birth_year": "58BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/51/"
+      ],
+      "species": [
+        "/starwars/species/29/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/64/"
   },
   {
     "name": "Kit Fisto",
-    "height": "196",
-    "mass": "87",
-    "hair_color": "none",
-    "skin_color": "green",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/44/",
     "films": [
       "/starwars/films/4/",
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/21/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "196",
+      "mass": "87",
+      "hair_color": "none",
+      "skin_color": "green",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/44/"
+      ],
+      "species": [
+        "/starwars/species/21/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/53/"
   },
   {
     "name": "Quarsh Panaka",
-    "height": "183",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "62BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "183",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "birth_year": "62BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/42/"
   },
   {
     "name": "R4-P17",
-    "height": "96",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "silver, red",
-    "eye_color": "red, blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "96",
+      "hair_color": "none",
+      "skin_color": "silver, red",
+      "eye_color": "red, blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/75/"
   },
   {
     "name": "Yoda",
-    "height": "66",
-    "mass": "17",
-    "hair_color": "white",
-    "skin_color": "green",
-    "eye_color": "brown",
-    "birth_year": "896BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
-      "/starwars/films/5/",
+      "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/4/",
+      "/starwars/films/5/",
       "/starwars/films/6/",
-      "/starwars/films/2/",
       "/starwars/films/8/"
     ],
-    "species": [
-      "/starwars/species/6/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "66",
+      "mass": "17",
+      "hair_color": "white",
+      "skin_color": "green",
+      "eye_color": "brown",
+      "birth_year": "896BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/6/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/20/"
   },
   {
     "name": "Ackbar",
-    "height": "180",
-    "mass": "83",
-    "hair_color": "none",
-    "skin_color": "brown mottle",
-    "eye_color": "orange",
-    "birth_year": "41BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/31/",
     "films": [
       "/starwars/films/3/",
       "/starwars/films/7/",
       "/starwars/films/8/"
     ],
-    "species": [
-      "/starwars/species/8/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "mass": "83",
+      "hair_color": "none",
+      "skin_color": "brown mottle",
+      "eye_color": "orange",
+      "birth_year": "41BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/31/"
+      ],
+      "species": [
+        "/starwars/species/8/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/27/"
   },
   {
     "name": "Zam Wesell",
-    "height": "168",
-    "mass": "55",
-    "hair_color": "blonde",
-    "skin_color": "fair, green, yellow",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/54/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/30/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/45/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "168",
+      "mass": "55",
+      "hair_color": "blonde",
+      "skin_color": "fair, green, yellow",
+      "eye_color": "yellow",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/54/"
+      ],
+      "species": [
+        "/starwars/species/30/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/45/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/70/"
   },
   {
     "name": "C-3PO",
-    "height": "167",
-    "mass": "75",
-    "hair_color": "n/a",
-    "skin_color": "gold",
-    "eye_color": "yellow",
-    "birth_year": "112BBY",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/1/",
     "films": [
+      "/starwars/films/1/",
+      "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/4/",
-      "/starwars/films/1/",
       "/starwars/films/5/",
       "/starwars/films/6/",
-      "/starwars/films/2/",
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "167",
+      "mass": "75",
+      "hair_color": "n/a",
+      "skin_color": "gold",
+      "eye_color": "yellow",
+      "birth_year": "112BBY",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/2/"
   },
   {
     "name": "Rugor Nass",
-    "height": "206",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "green",
-    "eye_color": "orange",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/8/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/12/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "206",
+      "hair_color": "none",
+      "skin_color": "green",
+      "eye_color": "orange",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [
+        "/starwars/species/12/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/38/"
   },
   {
     "name": "Raymus Antilles",
-    "height": "188",
-    "mass": "79",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/2/",
     "films": [
       "/starwars/films/1/",
       "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "188",
+      "mass": "79",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/2/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/81/"
   },
   {
     "name": "Wicket Systri Warrick",
-    "height": "88",
-    "mass": "20",
-    "hair_color": "brown",
-    "skin_color": "brown",
-    "eye_color": "brown",
-    "birth_year": "8BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/7/",
     "films": [
       "/starwars/films/3/"
     ],
-    "species": [
-      "/starwars/species/9/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "88",
+      "mass": "20",
+      "hair_color": "brown",
+      "skin_color": "brown",
+      "eye_color": "brown",
+      "birth_year": "8BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/7/"
+      ],
+      "species": [
+        "/starwars/species/9/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/30/"
   },
   {
     "name": "Beru Whitesun lars",
-    "height": "165",
-    "mass": "75",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "47BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/1/",
+      "/starwars/films/14/",
       "/starwars/films/5/",
-      "/starwars/films/6/",
-      "/starwars/films/14/"
+      "/starwars/films/6/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "mass": "75",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "birth_year": "47BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/7/"
   },
   {
     "name": "Arvel Crynyd",
-    "height": "",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "fair",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/3/"
     ],
-    "species": [],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/28/"
-    ],
+    "attributes": {
+      "hair_color": "brown",
+      "skin_color": "fair",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/28/"
+      ]
+    },
     "url": "/starwars/people/29/"
   },
   {
     "name": "Sebulba",
-    "height": "112",
-    "mass": "40",
-    "hair_color": "none",
-    "skin_color": "grey, red",
-    "eye_color": "orange",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/35/",
     "films": [
       "/starwars/films/4/"
     ],
-    "species": [
-      "/starwars/species/14/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "112",
+      "mass": "40",
+      "hair_color": "none",
+      "skin_color": "grey, red",
+      "eye_color": "orange",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/35/"
+      ],
+      "species": [
+        "/starwars/species/14/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/41/"
   },
   {
     "name": "Poggle the Lesser",
-    "height": "183",
-    "mass": "80",
-    "hair_color": "none",
-    "skin_color": "green",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/11/",
     "films": [
       "/starwars/films/5/",
       "/starwars/films/6/"
     ],
-    "species": [
-      "/starwars/species/28/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "183",
+      "mass": "80",
+      "hair_color": "none",
+      "skin_color": "green",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/11/"
+      ],
+      "species": [
+        "/starwars/species/28/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/63/"
   },
   {
     "name": "R2-D2",
-    "height": "96",
-    "mass": "32",
-    "hair_color": "n/a",
-    "skin_color": "white, blue",
-    "eye_color": "red",
-    "birth_year": "33BBY",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/8/",
     "films": [
+      "/starwars/films/1/",
+      "/starwars/films/12/",
+      "/starwars/films/13/",
+      "/starwars/films/2/",
       "/starwars/films/3/",
       "/starwars/films/4/",
-      "/starwars/films/1/",
       "/starwars/films/5/",
       "/starwars/films/6/",
-      "/starwars/films/2/",
       "/starwars/films/7/",
       "/starwars/films/8/",
-      "/starwars/films/9/",
-      "/starwars/films/12/",
-      "/starwars/films/13/"
+      "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "96",
+      "mass": "32",
+      "hair_color": "n/a",
+      "skin_color": "white, blue",
+      "eye_color": "red",
+      "birth_year": "33BBY",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/8/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/3/"
   },
   {
     "name": "Jocasta Nu",
-    "height": "167",
-    "mass": "",
-    "hair_color": "white",
-    "skin_color": "fair",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/9/",
     "films": [
       "/starwars/films/5/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "167",
+      "hair_color": "white",
+      "skin_color": "fair",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/9/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/74/"
   },
   {
     "name": "Rey",
-    "height": "170",
-    "mass": "54",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "hazel",
-    "birth_year": "15ABY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/61/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/10/"
-    ],
+    "attributes": {
+      "height": "170",
+      "mass": "54",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "hazel",
+      "birth_year": "15ABY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/61/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/"
+      ]
+    },
     "url": "/starwars/people/84/"
   },
   {
     "name": "Finn",
-    "height": "178",
-    "mass": "73",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "11ABY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/10/"
-    ],
+    "attributes": {
+      "height": "178",
+      "mass": "73",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "birth_year": "11ABY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/"
+      ]
+    },
     "url": "/starwars/people/85/"
   },
   {
     "name": "Poe Dameron",
-    "height": "172",
-    "mass": "80",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "2ABY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/3/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/76/",
-      "/starwars/starships/10/"
-    ],
+    "attributes": {
+      "height": "172",
+      "mass": "80",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "birth_year": "2ABY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/3/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/",
+        "/starwars/starships/76/"
+      ]
+    },
     "url": "/starwars/people/86/"
   },
   {
     "name": "Kylo Ren",
-    "height": "189",
-    "mass": "89",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "5ABY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/32/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/82/",
-      "/starwars/starships/78/"
-    ],
+    "attributes": {
+      "height": "189",
+      "mass": "89",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "birth_year": "5ABY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/32/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/78/",
+        "/starwars/starships/82/"
+      ]
+    },
     "url": "/starwars/people/87/"
   },
   {
     "name": "BB-8",
-    "height": "67",
-    "mass": "18",
-    "hair_color": "n/a",
-    "skin_color": "white, orange",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "67",
+      "mass": "18",
+      "hair_color": "n/a",
+      "skin_color": "white, orange",
+      "eye_color": "black",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/88/"
   },
   {
     "name": "Armitage Hux",
-    "height": "185",
-    "mass": "",
-    "hair_color": "red",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/72/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/79/"
-    ],
+    "attributes": {
+      "height": "185",
+      "hair_color": "red",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/72/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/79/"
+      ]
+    },
     "url": "/starwars/people/89/"
   },
   {
     "name": "Captain Phasma",
-    "height": "200",
-    "mass": "",
-    "hair_color": "unknown",
-    "skin_color": "unknown",
-    "eye_color": "unknown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/73/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "200",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/73/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/90/"
   },
   {
     "name": "Snoke",
-    "height": "218",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "grey, gold",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/68/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/"
     ],
-    "species": [
-      "/starwars/species/50/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/81/"
-    ],
+    "attributes": {
+      "height": "218",
+      "hair_color": "none",
+      "skin_color": "grey, gold",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/68/"
+      ],
+      "species": [
+        "/starwars/species/50/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/81/"
+      ]
+    },
     "url": "/starwars/people/91/"
   },
   {
     "name": "Maz Kanata",
-    "height": "124",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "orange",
-    "eye_color": "brown",
-    "birth_year": "973BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/62/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/51/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "124",
+      "hair_color": "none",
+      "skin_color": "orange",
+      "eye_color": "brown",
+      "birth_year": "973BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/62/"
+      ],
+      "species": [
+        "/starwars/species/51/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/92/"
   },
   {
     "name": "Lor San Tekka",
-    "height": "178",
-    "mass": "",
-    "hair_color": "white",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/61/",
     "films": [
       "/starwars/films/7/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "hair_color": "white",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/61/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/93/"
   },
   {
     "name": "Unkar Plutt",
-    "height": "178",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "brown mottle",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/61/",
     "films": [
       "/starwars/films/7/"
     ],
-    "species": [
-      "/starwars/species/38/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "hair_color": "none",
+      "skin_color": "brown mottle",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/61/"
+      ],
+      "species": [
+        "/starwars/species/38/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/94/"
   },
   {
     "name": "Rose Tico",
-    "height": "155",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/74/",
     "films": [
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/78/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "155",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/74/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/78/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/95/"
   },
   {
     "name": "Amilyn Holdo",
-    "height": "175",
-    "mass": "",
-    "hair_color": "purple",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/75/",
     "films": [
       "/starwars/films/8/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/80/"
-    ],
+    "attributes": {
+      "height": "175",
+      "hair_color": "purple",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/75/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/80/"
+      ]
+    },
     "url": "/starwars/people/96/"
   },
   {
     "name": "DJ",
-    "height": "185",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/8/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "185",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/97/"
   },
   {
     "name": "Paige Tico",
-    "height": "163",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/74/",
     "films": [
       "/starwars/films/8/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "163",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/74/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/98/"
   },
   {
     "name": "Zorii Bliss",
-    "height": "170",
-    "mass": "",
-    "hair_color": "unknown",
-    "skin_color": "unknown",
-    "eye_color": "unknown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/70/",
     "films": [
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/70/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/99/"
   },
   {
     "name": "Jannah",
-    "height": "173",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/71/",
     "films": [
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/79/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "173",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/71/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/79/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/100/"
   },
   {
     "name": "Babu Frik",
-    "height": "22",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/70/",
     "films": [
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/39/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "22",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/70/"
+      ],
+      "species": [
+        "/starwars/species/39/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/101/"
   },
   {
     "name": "D-O",
-    "height": "47",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "white, orange",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "47",
+      "hair_color": "n/a",
+      "skin_color": "white, orange",
+      "eye_color": "black",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/102/"
   },
   {
     "name": "Enric Pryde",
-    "height": "188",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/83/"
-    ],
+    "attributes": {
+      "height": "188",
+      "hair_color": "grey",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/83/"
+      ]
+    },
     "url": "/starwars/people/103/"
   },
   {
     "name": "Beaumont Kin",
-    "height": "180",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/104/"
   },
   {
     "name": "Klaud",
-    "height": "130",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "green, yellow",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/40/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "130",
+      "hair_color": "none",
+      "skin_color": "green, yellow",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/40/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/105/"
   },
   {
     "name": "Kaydel Ko Connix",
-    "height": "165",
-    "mass": "",
-    "hair_color": "blond",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "blond",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/106/"
   },
   {
     "name": "Temmin Wexley",
-    "height": "183",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "5ABY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/76/",
     "films": [
       "/starwars/films/7/",
       "/starwars/films/8/",
       "/starwars/films/9/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/76/"
-    ],
+    "attributes": {
+      "height": "183",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "birth_year": "5ABY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/76/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/76/"
+      ]
+    },
     "url": "/starwars/people/107/"
   },
   {
     "name": "Jyn Erso",
-    "height": "160",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "21BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/81/",
     "films": [
       "/starwars/films/10/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/96/"
-    ],
+    "attributes": {
+      "height": "160",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "birth_year": "21BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/81/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/96/"
+      ]
+    },
     "url": "/starwars/people/108/"
   },
   {
     "name": "Cassian Andor",
-    "height": "178",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "26BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/82/",
     "films": [
       "/starwars/films/10/",
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/96/"
-    ],
+    "attributes": {
+      "height": "178",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "birth_year": "26BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/82/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/96/"
+      ]
+    },
     "url": "/starwars/people/109/"
   },
   {
     "name": "K-2SO",
-    "height": "216",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "black",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/10/",
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/96/"
-    ],
+    "attributes": {
+      "height": "216",
+      "hair_color": "n/a",
+      "skin_color": "black",
+      "eye_color": "yellow",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/96/"
+      ]
+    },
     "url": "/starwars/people/110/"
   },
   {
     "name": "Chirrut Îmwe",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "white",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/78/",
     "films": [
       "/starwars/films/10/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "white",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/78/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/111/"
   },
   {
     "name": "Baze Malbus",
-    "height": "180",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/78/",
     "films": [
       "/starwars/films/10/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/78/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/112/"
   },
   {
     "name": "Bodhi Rook",
-    "height": "175",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/78/",
     "films": [
       "/starwars/films/10/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/85/"
-    ],
+    "attributes": {
+      "height": "175",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/78/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/85/"
+      ]
+    },
     "url": "/starwars/people/113/"
   },
   {
     "name": "Galen Erso",
-    "height": "183",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/10/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "183",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/114/"
   },
   {
     "name": "Orson Krennic",
-    "height": "180",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/84/",
     "films": [
       "/starwars/films/10/",
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/85/"
-    ],
+    "attributes": {
+      "height": "180",
+      "hair_color": "grey",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/84/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/85/"
+      ]
+    },
     "url": "/starwars/people/115/"
   },
   {
     "name": "Saw Gerrera",
-    "height": "180",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/83/",
     "films": [
       "/starwars/films/10/",
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "none",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/83/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/116/"
   },
   {
     "name": "Lyra Erso",
-    "height": "165",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/10/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/117/"
   },
   {
     "name": "Davits Draven",
-    "height": "180",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/10/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "grey",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/118/"
   },
   {
     "name": "Raddus",
-    "height": "180",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "salmon",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/31/",
     "films": [
       "/starwars/films/10/"
     ],
-    "species": [
-      "/starwars/species/8/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/84/"
-    ],
+    "attributes": {
+      "height": "180",
+      "hair_color": "none",
+      "skin_color": "salmon",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/31/"
+      ],
+      "species": [
+        "/starwars/species/8/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/84/"
+      ]
+    },
     "url": "/starwars/people/119/"
   },
   {
     "name": "Qi'ra",
-    "height": "168",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/22/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "168",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/22/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/120/"
   },
   {
     "name": "Tobias Beckett",
-    "height": "180",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/10/"
-    ],
+    "attributes": {
+      "height": "180",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/"
+      ]
+    },
     "url": "/starwars/people/121/"
   },
   {
     "name": "Val",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/122/"
   },
   {
     "name": "Rio Durant",
-    "height": "137",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "brown",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/47/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/10/"
-    ],
+    "attributes": {
+      "height": "137",
+      "hair_color": "brown",
+      "skin_color": "brown",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/47/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/"
+      ]
+    },
     "url": "/starwars/people/123/"
   },
   {
     "name": "L3-37",
-    "height": "180",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "silver",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/10/"
-    ],
+    "attributes": {
+      "height": "180",
+      "hair_color": "n/a",
+      "skin_color": "silver",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/10/"
+      ]
+    },
     "url": "/starwars/people/124/"
   },
   {
     "name": "Enfys Nest",
-    "height": "165",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/91/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/91/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/125/"
   },
   {
     "name": "Dryden Vos",
-    "height": "191",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "pale",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "191",
+      "hair_color": "brown",
+      "skin_color": "pale",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/126/"
   },
   {
     "name": "Lady Proxima",
-    "height": "",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/22/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/48/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "black",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/22/"
+      ],
+      "species": [
+        "/starwars/species/48/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/127/"
   },
   {
     "name": "Moloch",
-    "height": "216",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/22/",
     "films": [
       "/starwars/films/11/"
     ],
-    "species": [
-      "/starwars/species/48/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "216",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/22/"
+      ],
+      "species": [
+        "/starwars/species/48/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/128/"
   },
   {
     "name": "Din Djarin",
-    "height": "185",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/94/",
     "films": [
       "/starwars/films/12/",
       "/starwars/films/13/",
       "/starwars/films/19/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/87/"
-    ],
-    "starships": [
-      "/starwars/starships/87/"
-    ],
+    "attributes": {
+      "height": "185",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/94/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/87/"
+      ],
+      "starships": [
+        "/starwars/starships/87/"
+      ]
+    },
     "url": "/starwars/people/129/"
   },
   {
     "name": "Grogu",
-    "height": "34",
-    "mass": "",
-    "hair_color": "white",
-    "skin_color": "green",
-    "eye_color": "black",
-    "birth_year": "41BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/12/",
       "/starwars/films/13/",
       "/starwars/films/19/"
     ],
-    "species": [
-      "/starwars/species/6/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "34",
+      "hair_color": "white",
+      "skin_color": "green",
+      "eye_color": "black",
+      "birth_year": "41BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/6/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/130/"
   },
   {
     "name": "Greef Karga",
-    "height": "180",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/89/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "grey",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/89/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/131/"
   },
   {
     "name": "Cara Dune",
-    "height": "175",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/2/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "175",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/2/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/132/"
   },
   {
     "name": "IG-11",
-    "height": "199",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "silver",
-    "eye_color": "red",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "199",
+      "hair_color": "n/a",
+      "skin_color": "silver",
+      "eye_color": "red",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/133/"
   },
   {
     "name": "Kuiil",
-    "height": "130",
-    "mass": "",
-    "hair_color": "white",
-    "skin_color": "pink",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/41/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/86/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "130",
+      "hair_color": "white",
+      "skin_color": "pink",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/41/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/86/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/134/"
   },
   {
     "name": "Moff Gideon",
-    "height": "180",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/22/"
-    ],
+    "attributes": {
+      "height": "180",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/22/"
+      ]
+    },
     "url": "/starwars/people/135/"
   },
   {
     "name": "The Armorer",
-    "height": "170",
-    "mass": "",
-    "hair_color": "unknown",
-    "skin_color": "unknown",
-    "eye_color": "unknown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/92/",
     "films": [
       "/starwars/films/12/",
       "/starwars/films/13/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/92/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/136/"
   },
   {
     "name": "Fennec Shand",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/12/",
       "/starwars/films/13/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/87/"
-    ],
-    "starships": [
-      "/starwars/starships/21/"
-    ],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/87/"
+      ],
+      "starships": [
+        "/starwars/starships/21/"
+      ]
+    },
     "url": "/starwars/people/137/"
   },
   {
     "name": "Bo-Katan Kryze",
-    "height": "175",
-    "mass": "",
-    "hair_color": "auburn",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/92/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "175",
+      "hair_color": "auburn",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/92/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/138/"
   },
   {
     "name": "Ahsoka Tano",
-    "height": "170",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "orange, white",
-    "eye_color": "blue",
-    "birth_year": "36BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/58/",
     "films": [
       "/starwars/films/12/",
       "/starwars/films/13/",
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/35/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/89/"
-    ],
+    "attributes": {
+      "height": "170",
+      "hair_color": "none",
+      "skin_color": "orange, white",
+      "eye_color": "blue",
+      "birth_year": "36BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/58/"
+      ],
+      "species": [
+        "/starwars/species/35/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/89/"
+      ]
+    },
     "url": "/starwars/people/139/"
   },
   {
     "name": "Migs Mayfeld",
-    "height": "180",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/140/"
   },
   {
     "name": "Peli Motto",
-    "height": "160",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/12/",
       "/starwars/films/13/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "160",
+      "hair_color": "grey",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/141/"
   },
   {
     "name": "Cobb Vanth",
-    "height": "185",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/12/",
       "/starwars/films/13/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [
-      "/starwars/vehicles/87/"
-    ],
-    "starships": [],
+    "attributes": {
+      "height": "185",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [
+        "/starwars/vehicles/87/"
+      ],
+      "starships": []
+    },
     "url": "/starwars/people/142/"
   },
   {
     "name": "Carson Teva",
-    "height": "180",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/12/"
-    ],
+    "attributes": {
+      "height": "180",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/12/"
+      ]
+    },
     "url": "/starwars/people/143/"
   },
   {
     "name": "Penn Pershing",
-    "height": "175",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/12/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "175",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/144/"
   },
   {
     "name": "Morgan Elsbeth",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/36/",
     "films": [
       "/starwars/films/12/",
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/90/"
-    ],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/36/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/90/"
+      ]
+    },
     "url": "/starwars/people/145/"
   },
   {
     "name": "Black Krrsantan",
-    "height": "231",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "black",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/14/",
     "films": [
       "/starwars/films/13/"
     ],
-    "species": [
-      "/starwars/species/3/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "231",
+      "hair_color": "black",
+      "skin_color": "black",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/14/"
+      ],
+      "species": [
+        "/starwars/species/3/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/146/"
   },
   {
     "name": "Drash",
-    "height": "165",
-    "mass": "",
-    "hair_color": "blue",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/1/",
     "films": [
       "/starwars/films/13/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "blue",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/1/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/147/"
   },
   {
     "name": "Mok Shaiz",
-    "height": "195",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "brown",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/13/"
     ],
-    "species": [
-      "/starwars/species/42/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "195",
+      "hair_color": "none",
+      "skin_color": "brown",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/42/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/148/"
   },
   {
     "name": "Reva Sevander",
-    "height": "173",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "173",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/149/"
   },
   {
     "name": "The Grand Inquisitor",
-    "height": "198",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "white",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/12/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/37/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "198",
+      "hair_color": "none",
+      "skin_color": "white",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/12/"
+      ],
+      "species": [
+        "/starwars/species/37/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/150/"
   },
   {
     "name": "Fifth Brother",
-    "height": "193",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "light",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "193",
+      "hair_color": "none",
+      "skin_color": "light",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/151/"
   },
   {
     "name": "Fourth Sister",
-    "height": "170",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "dark",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "none",
+      "skin_color": "dark",
+      "eye_color": "yellow",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/152/"
   },
   {
     "name": "Tala Durith",
-    "height": "170",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/153/"
   },
   {
     "name": "Haja Estree",
-    "height": "180",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/154/"
   },
   {
     "name": "Roken",
-    "height": "185",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "185",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/155/"
   },
   {
     "name": "NED-B",
-    "height": "213",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "black, orange",
-    "eye_color": "white",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "213",
+      "hair_color": "n/a",
+      "skin_color": "black, orange",
+      "eye_color": "white",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/156/"
   },
   {
     "name": "Vect Nokru",
-    "height": "183",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/95/",
     "films": [
       "/starwars/films/14/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "183",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/95/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/157/"
   },
   {
     "name": "Maarva Andor",
-    "height": "160",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/99/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "160",
+      "hair_color": "grey",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/99/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/158/"
   },
   {
     "name": "Luthen Rael",
-    "height": "185",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/94/"
-    ],
+    "attributes": {
+      "height": "185",
+      "hair_color": "grey",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/94/"
+      ]
+    },
     "url": "/starwars/people/159/"
   },
   {
     "name": "Bix Caleen",
-    "height": "168",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/99/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/93/"
-    ],
+    "attributes": {
+      "height": "168",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/99/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/93/"
+      ]
+    },
     "url": "/starwars/people/160/"
   },
   {
     "name": "Dedra Meero",
-    "height": "170",
-    "mass": "",
-    "hair_color": "blonde",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "blonde",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/161/"
   },
   {
     "name": "Syril Karn",
-    "height": "178",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/9/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/9/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/162/"
   },
   {
     "name": "Kleya Marki",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/163/"
   },
   {
     "name": "Vel Sartha",
-    "height": "165",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/32/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/32/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/164/"
   },
   {
     "name": "Cinta Kaz",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/165/"
   },
   {
     "name": "Kino Loy",
-    "height": "180",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "none",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/166/"
   },
   {
     "name": "Brasso",
-    "height": "190",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/99/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "190",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/99/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/167/"
   },
   {
     "name": "B2EMO",
-    "height": "100",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "grey, orange",
-    "eye_color": "white",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/99/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "100",
+      "hair_color": "n/a",
+      "skin_color": "grey, orange",
+      "eye_color": "white",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/99/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/168/"
   },
   {
     "name": "Eedy Karn",
-    "height": "165",
-    "mass": "",
-    "hair_color": "blonde",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/9/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "blonde",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/9/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/169/"
   },
   {
     "name": "Major Partagaz",
-    "height": "180",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "grey",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/170/"
   },
   {
     "name": "Wilmon Paak",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/99/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/99/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/171/"
   },
   {
     "name": "Perrin Fertha",
-    "height": "180",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/32/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/32/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/172/"
   },
   {
     "name": "Leida Mothma",
-    "height": "163",
-    "mass": "",
-    "hair_color": "auburn",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/32/",
     "films": [
       "/starwars/films/15/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "163",
+      "hair_color": "auburn",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/32/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/173/"
   },
   {
     "name": "Sabine Wren",
-    "height": "170",
-    "mass": "",
-    "hair_color": "orange, blue",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/106/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/91/"
-    ],
+    "attributes": {
+      "height": "170",
+      "hair_color": "orange, blue",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/106/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/91/"
+      ]
+    },
     "url": "/starwars/people/174/"
   },
   {
     "name": "Hera Syndulla",
-    "height": "175",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "green",
-    "eye_color": "green",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/37/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/15/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/91/"
-    ],
+    "attributes": {
+      "height": "175",
+      "hair_color": "none",
+      "skin_color": "green",
+      "eye_color": "green",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/37/"
+      ],
+      "species": [
+        "/starwars/species/15/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/91/"
+      ]
+    },
     "url": "/starwars/people/175/"
   },
   {
     "name": "Ezra Bridger",
-    "height": "178",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "19BBY",
-    "gender": "male",
-    "homeworld": "/starwars/planets/103/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "birth_year": "19BBY",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/103/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/176/"
   },
   {
     "name": "Thrawn",
-    "height": "191",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "blue",
-    "eye_color": "red",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/107/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/43/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/97/"
-    ],
+    "attributes": {
+      "height": "191",
+      "hair_color": "black",
+      "skin_color": "blue",
+      "eye_color": "red",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/107/"
+      ],
+      "species": [
+        "/starwars/species/43/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/97/"
+      ]
+    },
     "url": "/starwars/people/177/"
   },
   {
     "name": "Baylan Skoll",
-    "height": "193",
-    "mass": "",
-    "hair_color": "grey",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/90/"
-    ],
+    "attributes": {
+      "height": "193",
+      "hair_color": "grey",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/90/"
+      ]
+    },
     "url": "/starwars/people/178/"
   },
   {
     "name": "Shin Hati",
-    "height": "170",
-    "mass": "",
-    "hair_color": "blonde",
-    "skin_color": "light",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/90/"
-    ],
+    "attributes": {
+      "height": "170",
+      "hair_color": "blonde",
+      "skin_color": "light",
+      "eye_color": "blue",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/90/"
+      ]
+    },
     "url": "/starwars/people/179/"
   },
   {
     "name": "Huyang",
-    "height": "180",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "bronze",
-    "eye_color": "blue",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/89/"
-    ],
+    "attributes": {
+      "height": "180",
+      "hair_color": "n/a",
+      "skin_color": "bronze",
+      "eye_color": "blue",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/89/"
+      ]
+    },
     "url": "/starwars/people/180/"
   },
   {
     "name": "Chopper",
-    "height": "99",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "orange, white",
-    "eye_color": "white",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/103/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/91/"
-    ],
+    "attributes": {
+      "height": "99",
+      "hair_color": "n/a",
+      "skin_color": "orange, white",
+      "eye_color": "white",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/103/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/91/"
+      ]
+    },
     "url": "/starwars/people/181/"
   },
   {
     "name": "Jacen Syndulla",
-    "height": "130",
-    "mass": "",
-    "hair_color": "green",
-    "skin_color": "green",
-    "eye_color": "green",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/103/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/15/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "130",
+      "hair_color": "green",
+      "skin_color": "green",
+      "eye_color": "green",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/103/"
+      ],
+      "species": [
+        "/starwars/species/15/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/182/"
   },
   {
     "name": "Marrok",
-    "height": "190",
-    "mass": "",
-    "hair_color": "unknown",
-    "skin_color": "unknown",
-    "eye_color": "unknown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "190",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/183/"
   },
   {
     "name": "Captain Enoch",
-    "height": "190",
-    "mass": "",
-    "hair_color": "unknown",
-    "skin_color": "unknown",
-    "eye_color": "unknown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/105/",
     "films": [
       "/starwars/films/16/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "190",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/105/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/184/"
   },
   {
     "name": "Osha Aniseya",
-    "height": "165",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "148BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/108/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "birth_year": "148BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/108/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/185/"
   },
   {
     "name": "Mae Aniseya",
-    "height": "165",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "148BBY",
-    "gender": "female",
-    "homeworld": "/starwars/planets/108/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "birth_year": "148BBY",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/108/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/186/"
   },
   {
     "name": "Sol",
-    "height": "180",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/187/"
   },
   {
     "name": "Vernestra Rwoh",
-    "height": "170",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "green",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/51/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/29/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "170",
+      "hair_color": "black",
+      "skin_color": "green",
+      "eye_color": "yellow",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/51/"
+      ],
+      "species": [
+        "/starwars/species/29/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/188/"
   },
   {
     "name": "Qimir",
-    "height": "178",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "178",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/189/"
   },
   {
     "name": "Jecki Lon",
-    "height": "160",
-    "mass": "",
-    "hair_color": "pink",
-    "skin_color": "purple",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/44/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "160",
+      "hair_color": "pink",
+      "skin_color": "purple",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/44/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/190/"
   },
   {
     "name": "Yord Fandar",
-    "height": "185",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "185",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/191/"
   },
   {
     "name": "Indara",
-    "height": "175",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "175",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/192/"
   },
   {
     "name": "Aniseya",
-    "height": "175",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/108/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "175",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/108/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/193/"
   },
   {
     "name": "Kelnacca",
-    "height": "230",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "brown",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/14/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/3/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "230",
+      "hair_color": "brown",
+      "skin_color": "brown",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/14/"
+      ],
+      "species": [
+        "/starwars/species/3/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/194/"
   },
   {
     "name": "Bazil",
-    "height": "100",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "brown",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/45/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "100",
+      "hair_color": "brown",
+      "skin_color": "brown",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/45/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/195/"
   },
   {
     "name": "Darth Plagueis",
-    "height": "213",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/57/",
     "films": [
       "/starwars/films/17/"
     ],
-    "species": [
-      "/starwars/species/34/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "213",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/57/"
+      ],
+      "species": [
+        "/starwars/species/34/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/196/"
   },
   {
     "name": "Wim",
-    "height": "140",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/111/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/95/"
-    ],
+    "attributes": {
+      "height": "140",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/111/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/95/"
+      ]
+    },
     "url": "/starwars/people/197/"
   },
   {
     "name": "Fern",
-    "height": "145",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/111/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/95/"
-    ],
+    "attributes": {
+      "height": "145",
+      "hair_color": "black",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/111/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/95/"
+      ]
+    },
     "url": "/starwars/people/198/"
   },
   {
     "name": "KB",
-    "height": "145",
-    "mass": "",
-    "hair_color": "black",
-    "skin_color": "dark",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/111/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/95/"
-    ],
+    "attributes": {
+      "height": "145",
+      "hair_color": "black",
+      "skin_color": "dark",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/111/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/95/"
+      ]
+    },
     "url": "/starwars/people/199/"
   },
   {
     "name": "Neel",
-    "height": "150",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "blue",
-    "eye_color": "black",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/111/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/46/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/95/"
-    ],
+    "attributes": {
+      "height": "150",
+      "hair_color": "none",
+      "skin_color": "blue",
+      "eye_color": "black",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/111/"
+      ],
+      "species": [
+        "/starwars/species/46/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/95/"
+      ]
+    },
     "url": "/starwars/people/200/"
   },
   {
     "name": "Jod Na Nawood",
-    "height": "183",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/95/"
-    ],
+    "attributes": {
+      "height": "183",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/95/"
+      ]
+    },
     "url": "/starwars/people/201/"
   },
   {
     "name": "SM-33",
-    "height": "190",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "rust",
-    "eye_color": "red",
-    "birth_year": "unknown",
-    "gender": "n/a",
-    "homeworld": "/starwars/planets/28/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/2/"
-    ],
-    "vehicles": [],
-    "starships": [
-      "/starwars/starships/95/"
-    ],
+    "attributes": {
+      "height": "190",
+      "hair_color": "n/a",
+      "skin_color": "rust",
+      "eye_color": "red",
+      "gender": "n/a"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/28/"
+      ],
+      "species": [
+        "/starwars/species/2/"
+      ],
+      "vehicles": [],
+      "starships": [
+        "/starwars/starships/95/"
+      ]
+    },
     "url": "/starwars/people/202/"
   },
   {
     "name": "Wendle",
-    "height": "180",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/111/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "180",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/111/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/203/"
   },
   {
     "name": "Brutus",
-    "height": "200",
-    "mass": "",
-    "hair_color": "none",
-    "skin_color": "grey",
-    "eye_color": "yellow",
-    "birth_year": "unknown",
-    "gender": "male",
-    "homeworld": "/starwars/planets/112/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/52/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "200",
+      "hair_color": "none",
+      "skin_color": "grey",
+      "eye_color": "yellow",
+      "gender": "male"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/112/"
+      ],
+      "species": [
+        "/starwars/species/52/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/204/"
   },
   {
     "name": "Fara",
-    "height": "165",
-    "mass": "",
-    "hair_color": "brown",
-    "skin_color": "light",
-    "eye_color": "brown",
-    "birth_year": "unknown",
-    "gender": "female",
-    "homeworld": "/starwars/planets/111/",
     "films": [
       "/starwars/films/18/"
     ],
-    "species": [
-      "/starwars/species/1/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "height": "165",
+      "hair_color": "brown",
+      "skin_color": "light",
+      "eye_color": "brown",
+      "gender": "female"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/111/"
+      ],
+      "species": [
+        "/starwars/species/1/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/205/"
   },
   {
     "name": "Rotta the Hutt",
-    "height": "",
-    "mass": "",
-    "hair_color": "n/a",
-    "skin_color": "green-tan, brown",
-    "eye_color": "orange",
-    "birth_year": "unknown",
-    "gender": "hermaphrodite",
-    "homeworld": "/starwars/planets/24/",
     "films": [
       "/starwars/films/19/"
     ],
-    "species": [
-      "/starwars/species/5/"
-    ],
-    "vehicles": [],
-    "starships": [],
+    "attributes": {
+      "hair_color": "n/a",
+      "skin_color": "green-tan, brown",
+      "eye_color": "orange",
+      "gender": "hermaphrodite"
+    },
+    "links": {
+      "homeworld": [
+        "/starwars/planets/24/"
+      ],
+      "species": [
+        "/starwars/species/5/"
+      ],
+      "vehicles": [],
+      "starships": []
+    },
     "url": "/starwars/people/206/"
   }
 ]

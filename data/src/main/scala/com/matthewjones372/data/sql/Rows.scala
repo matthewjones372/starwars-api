@@ -3,76 +3,38 @@ package com.matthewjones372.data.sql
 import com.augustnagro.magnum.DbCodec
 import com.matthewjones372.domain.{Character, Film, MediaKind}
 
-private[sql] final case class CharacterRow(
-  id: Int,
-  name: String,
-  height: Option[Int],
-  mass: Option[Int],
-  hairColor: String,
-  skinColor: String,
-  eyeColor: String,
-  birthYear: String,
-  gender: Option[String],
-  homeworld: Option[String],
-  url: String
-) derives DbCodec:
+private[sql] final case class CharacterRow(id: Int, name: String, url: String) derives DbCodec:
   def toCharacter(
     films: Set[String],
-    species: Set[String],
-    vehicles: Set[String],
-    starships: Set[String]
+    attributes: Map[String, String],
+    links: Map[String, Set[String]]
   ): Character =
-    Character(
-      name = name,
-      height = height,
-      mass = mass,
-      hairColor = hairColor,
-      skinColor = skinColor,
-      eyeColor = eyeColor,
-      birthYear = birthYear,
-      gender = gender,
-      homeworld = homeworld,
-      films = films,
-      species = Some(species),
-      vehicles = Some(vehicles),
-      starships = Some(starships),
-      url = url
-    )
+    Character(name = name, films = films, attributes = attributes, links = links, url = url)
 
 private[sql] final case class FilmRow(
   id: Int,
   title: String,
   episodeId: Int,
-  openingCrawl: String,
   director: String,
   producer: String,
   releaseDate: String,
-  created: String,
-  edited: String,
   url: String,
   mediaType: Option[String]
 ) derives DbCodec:
   def toFilm(
     characters: Set[String],
-    planets: Set[String],
-    starships: Set[String],
-    vehicles: Set[String],
-    species: Set[String]
+    attributes: Map[String, String],
+    links: Map[String, Set[String]]
   ): Film =
     Film(
       title = title,
       episodeId = episodeId,
-      openingCrawl = openingCrawl,
       director = director,
       producer = producer,
       releaseDate = releaseDate,
       characters = characters,
-      planets = planets,
-      starships = starships,
-      vehicles = vehicles,
-      species = species,
-      created = created,
-      edited = edited,
+      attributes = attributes,
+      links = links,
       url = url,
       mediaType = mediaType.flatMap(MediaKind.from(_).toOption)
     )

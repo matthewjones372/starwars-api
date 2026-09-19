@@ -37,8 +37,13 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
         assertTrue(
           SqlDataRepo.orderByClause(ascendingName) == "order by name asc, id asc",
           SqlDataRepo.orderByClause(Some(List(SortBy("height", FieldOrdering.DESC)))) ==
-            "order by height desc, id asc"
+            s"order by ${SqlDataRepo.attributeOrder("height", "desc")}, id asc"
         )
+      },
+      test("orders an attribute numerically, so 9 does not come after 172") {
+        val clause = SqlDataRepo.attributeOrder("height", "desc")
+
+        assertTrue(clause.contains("cast("), clause.contains("as real"), clause.contains("key = 'height'"))
       },
       test("every derived sort column exists in the people table") {
         val ddl         = scala.io.Source.fromResource("db/migration/V1__initial_schema.sql").mkString
@@ -50,32 +55,28 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
           SqlDataRepo.sortableColumns.values.forall(columns.contains)
         )
       },
-      test("derives its keys from the character fields, leaving out the url sets") {
+      test("derives its column keys from the character fields, leaving out the bags") {
         assertTrue(
-          SqlDataRepo.sortableColumns.keySet ==
-            Set(
-              "name",
-              "height",
-              "mass",
-              "hairColor",
-              "skinColor",
-              "eyeColor",
-              "birthYear",
-              "gender",
-              "homeworld",
-              "url"
-            ),
+          SqlDataRepo.sortableColumns.keySet == Set("name", "url"),
           SqlDataRepo.toColumn("hairColor") == "hair_color",
           SqlDataRepo.toColumn("name") == "name"
         )
       },
-      test("drops sort keys that are not columns, including injection attempts") {
+      test("drops sort keys that could not be an attribute name, including injection attempts") {
         val injection = Some(List(SortBy("name; drop table people --", FieldOrdering.ASC)))
+        val quoted    = Some(List(SortBy("height' or '1'='1", FieldOrdering.ASC)))
 
         assertTrue(
           SqlDataRepo.orderByClause(injection) == "order by id asc",
-          SqlDataRepo.orderByClause(Some(List(SortBy("nonsense", FieldOrdering.ASC)))) == "order by id asc",
+          SqlDataRepo.orderByClause(quoted) == "order by id asc",
           SqlDataRepo.orderByClause(None) == "order by id asc"
+        )
+      },
+      // An unknown key is a plausible attribute name, so it reaches the subquery
+      // rather than being dropped. It finds nothing, which is a no-op order by.
+      test("treats an unrecognised but well formed key as an attribute") {
+        assertTrue(
+          SqlDataRepo.orderByClause(Some(List(SortBy("patronus", FieldOrdering.ASC)))).contains("key = 'patronus'")
         )
       }
     ),
@@ -86,6 +87,19 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
           people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
         yield assertTrue(people.count == 205, films.count == 19, people.results.length == 205)
+      },
+      test("sorts on an attribute numerically against the real database") {
+        for
+          repo    <- ZIO.service[DataRepo]
+          tallest <- repo.getCharacters(
+                       Some(PageNumber.first),
+                       Some(PageSize(3)),
+                       Some(List(SortBy("height", FieldOrdering.DESC)))
+                     )
+        yield assertTrue(
+          tallest.results.head.name == "Yarael Poof",
+          tallest.results.head.attributes.get("height").contains("264")
+        )
       },
       test("pages without gaps or repeats") {
         for

@@ -8,41 +8,13 @@ import zio.test.*
 object DataRepoSpec extends ZIOSpecDefault:
 
   private def personWithId(id: Int, name: String = "", height: Option[Int] = None) =
-    Character(
-      name = if name.isEmpty then s"person-$id" else name,
-      height = height,
-      mass = None,
-      hairColor = "none",
-      skinColor = "none",
-      eyeColor = "none",
-      birthYear = "unknown",
-      gender = None,
-      homeworld = None,
-      films = Set.empty,
-      species = None,
-      vehicles = None,
-      starships = None,
-      url = s"http://localhost:8080/people/$id/"
+    Fixtures.characterWithId(
+      id,
+      name,
+      attributes = height.fold(Map.empty[String, String])(value => Map("height" -> value.toString))
     )
 
-  private def filmWithId(id: Int) =
-    Film(
-      title = s"film-$id",
-      episodeId = id,
-      openingCrawl = "",
-      director = "",
-      producer = "",
-      releaseDate = "",
-      characters = Set.empty,
-      planets = Set.empty,
-      starships = Set.empty,
-      vehicles = Set.empty,
-      species = Set.empty,
-      created = "",
-      edited = "",
-      url = s"http://localhost:8080/films/$id/",
-      mediaType = None
-    )
+  private def filmWithId(id: Int) = Fixtures.filmWithId(id)
 
   private val thirtyPeople = (1 to 30).map(id => personWithId(id)).toList
   private val thirtyFilms  = (1 to 30).map(filmWithId).toList
@@ -206,7 +178,7 @@ object DataRepoSpec extends ZIOSpecDefault:
         yield assertTrue(
           person.url == s"${DataRepo.defaultPublicUrl}/starwars/people/1/",
           person.films.forall(_.startsWith(DataRepo.defaultPublicUrl)),
-          person.homeworld.exists(_.startsWith(DataRepo.defaultPublicUrl)),
+          person.links("homeworld").forall(_.startsWith(DataRepo.defaultPublicUrl)),
           film.url == s"${DataRepo.defaultPublicUrl}/starwars/films/1/",
           film.characters.forall(_.startsWith(DataRepo.defaultPublicUrl))
         )

@@ -54,9 +54,10 @@ and the host is applied once at startup, so a deployment sets `PUBLIC_BASE_URL`
 to the origin its callers reach it on; it defaults to `http://localhost:8080`.
 
 ```sh
-curl 'http://localhost:8080/people/1'
-curl 'http://localhost:8080/films?page=1'
-curl 'http://localhost:8080/people?page=2&sortBy=height:DESC,name:ASC'
+curl 'http://localhost:8080/universes'
+curl 'http://localhost:8080/starwars/people/1'
+curl 'http://localhost:8080/starwars/films?page=1'
+curl 'http://localhost:8080/starwars/people?page=2&sortBy=height:DESC,name:ASC'
 ```
 
 ## Endpoints
@@ -87,20 +88,30 @@ Paged responses carry the total alongside the current page:
   "results": [
     {
       "name": "Luke Skywalker",
-      "height": "172",
-      "mass": "77",
-      "hair_color": "blond",
-      "birth_year": "19BBY",
-      "films": ["http://localhost:8080/films/1/"],
-      "url": "http://localhost:8080/people/1/"
+      "films": ["http://localhost:8080/starwars/films/1/"],
+      "attributes": {
+        "height": "172",
+        "mass": "77",
+        "hair_color": "blond",
+        "birth_year": "19BBY"
+      },
+      "links": {
+        "homeworld": ["http://localhost:8080/starwars/planets/1/"]
+      },
+      "url": "http://localhost:8080/starwars/people/1/"
     }
   ]
 }
 ```
 
-`height` and `mass` are carried as strings. Values recorded as `unknown`
-upstream are absent from the response rather than reported as a number or an
-empty string.
+Only what every universe has is a field. A homeworld, a house and a realm are
+each recorded by one universe, so they ride in `attributes` when they are
+values and in `links` when they are urls. That is what lets one schema, one
+sorter and one set of endpoints serve four datasets — and what lets a new
+universe arrive without a migration.
+
+Attribute values are strings. Anything recorded upstream as `unknown` is absent
+rather than reported as an empty string or a sentinel.
 
 ## Films and series
 
@@ -151,15 +162,19 @@ one is expected, and need no unwrapping to reach SQL or JSON.
 
 ## Sorting
 
-`sortBy` takes a comma separated list of `field:direction` pairs, applied left
-to right. Directions are `ASC` and `DESC`. Field names are the Scala field
-names, so `eyeColor` rather than `eye_color`.
+`sortBy` takes a comma separated list of `key:direction` pairs, applied left to
+right. Directions are `ASC` and `DESC`. A key is either a field of the entity
+(`name`, `url`) or an attribute key (`height`, `house`, `race`).
 
 ```sh
-curl 'http://localhost:8080/people?sortBy=eyeColor:ASC,height:DESC'
+curl 'http://localhost:8080/starwars/people?sortBy=height:DESC,name:ASC'
 ```
 
-Unknown field names are ignored rather than rejected.
+Attribute values are strings, so the ones that are numbers are compared as
+numbers: `height:DESC` puts Yarael Poof at 264 above Luke at 172, not "9" above
+"172". Numbers sort before text and characters with no value for the key sort
+last, whichever direction is asked for. Keys nothing carries are ignored rather
+than rejected.
 
 The sorter behind this is a standalone module with no dependencies. Derive it
 for any case class and sort by field name at runtime:

@@ -1,7 +1,7 @@
 package com.matthewjones372.data
 
 import com.matthewjones372.domain.*
-import com.matthewjones372.sorting.{DynamicMultiSorter, SortBy}
+import com.matthewjones372.sorting.SortBy
 import zio.*
 import zio.http.*
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
@@ -61,14 +61,13 @@ object DataRepo:
   private[data] def resolve(baseUrl: String)(path: String): String =
     if path.startsWith("/") then baseUrl + path else path
 
+  // Every relation a universe records lives in `links`, so a new one resolves
+  // here without a line of its own.
   private[data] def resolved(baseUrl: String)(person: Character): Character =
     val at = resolve(baseUrl)
     person.copy(
-      homeworld = person.homeworld.map(at),
       films = person.films.map(at),
-      species = person.species.map(_.map(at)),
-      vehicles = person.vehicles.map(_.map(at)),
-      starships = person.starships.map(_.map(at)),
+      links = person.links.view.mapValues(_.map(at)).toMap,
       url = at(person.url)
     )
 
@@ -76,10 +75,7 @@ object DataRepo:
     val at = resolve(baseUrl)
     film.copy(
       characters = film.characters.map(at),
-      planets = film.planets.map(at),
-      starships = film.starships.map(at),
-      vehicles = film.vehicles.map(at),
-      species = film.species.map(at),
+      links = film.links.view.mapValues(_.map(at)).toMap,
       url = at(film.url)
     )
 
@@ -139,5 +135,5 @@ final private case class InMemoryDataRepo(peopleById: Map[EntityId, Character], 
     fetchSize: Option[PageSize],
     sortBy: Option[List[SortBy]]
   ): IO[DataRepoError, Characters] =
-    val sorted = sortBy.fold(orderedPeople)(DynamicMultiSorter.sort(orderedPeople, _))
+    val sorted = sortBy.fold(orderedPeople)(Sorting.characters(orderedPeople, _))
     ZIO.succeed(Characters(orderedPeople.size, DataRepo.paginate(sorted, from, fetchSize)))

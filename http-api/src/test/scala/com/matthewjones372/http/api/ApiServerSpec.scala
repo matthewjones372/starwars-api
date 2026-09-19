@@ -397,38 +397,24 @@ object ApiServerSpec extends ZIOSpecDefault:
 
   val film =
     Film(
-      "The Phantom Menace",
-      1,
-      "worst film",
-      "George Lucas",
-      "",
-      "",
-      Set.empty,
-      Set.empty,
-      Set.empty,
-      Set.empty,
-      Set.empty,
-      "",
-      "",
-      "",
-      None
+      title = "The Phantom Menace",
+      episodeId = 1,
+      director = "George Lucas",
+      producer = "",
+      releaseDate = "",
+      characters = Set.empty,
+      attributes = Map("opening_crawl" -> "worst film"),
+      links = Map.empty,
+      url = "",
+      mediaType = None
     )
 
   val person =
     Character(
       name = "C-3PO",
-      height = Some(167),
-      mass = Some(75),
-      hairColor = "n/a",
-      skinColor = "gold",
-      eyeColor = "yellow",
-      birthYear = "112BBY",
-      gender = None,
-      homeworld = None,
-      films = Set("/films/1/?format=json", "/films/2/?format=json"),
-      species = None,
-      vehicles = None,
-      starships = None,
+      films = Set("/starwars/films/1/", "/starwars/films/2/"),
+      attributes = Map("height" -> "167", "mass" -> "75", "eye_color" -> "yellow"),
+      links = Map.empty,
       url = "https://swapi.dev/api/species/2/"
     )
 

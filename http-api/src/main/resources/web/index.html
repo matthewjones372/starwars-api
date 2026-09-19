@@ -324,6 +324,21 @@
 
   // ---------------------------------------------------------------- data
 
+  // Characters carry whatever their own universe records, so the detail panel
+  // renders the bag it is given rather than a fixed list of Star Wars fields.
+  const UNITS = { height: " cm", mass: " kg" };
+
+  function label(key) {
+    return key.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
+  }
+
+  function attributeRows(attributes) {
+    return Object.entries(attributes || {}).map(([key, value]) => [
+      label(key),
+      value + (UNITS[key] || ""),
+    ]);
+  }
+
   // The dataset is the first path segment, so every call is relative to it and
   // switching is a reload of the same page against a different prefix.
   const UNIVERSES = [
@@ -992,12 +1007,7 @@
                 ["Films", measured.films]
               ]
             : [["Films", p.films.length]]),
-          ["Birth year", p.birth_year],
-          ["Gender", p.gender],
-          ["Height", p.height ? p.height + " cm" : null],
-          ["Mass", p.mass ? p.mass + " kg" : null],
-          ["Eyes", p.eye_color],
-          ["Hair", p.hair_color]
+          ...attributeRows(p.attributes)
         ],
         "Appears in",
         titles

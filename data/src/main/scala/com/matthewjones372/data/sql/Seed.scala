@@ -28,30 +28,55 @@ object Seed:
   private def insertPerson(entry: (Int, Character))(using DbCon): Unit =
     val (id, person) = entry
     val _            =
-      sql"""insert into people (id, name, height, mass, hair_color, skin_color, eye_color, birth_year, gender, homeworld, url)
-            values ($id, ${person.name}, ${person.height}, ${person.mass}, ${person.hairColor}, ${person.skinColor},
-                    ${person.eyeColor}, ${person.birthYear}, ${person.gender}, ${person.homeworld}, ${person.url})
+      sql"""insert into people (id, name, url)
+            values ($id, ${person.name}, ${person.url})
             on conflict (id) do nothing""".update.run()
 
     insertUrls("people_films", "person_id", "film_url", id, person.films)
-    insertUrls("people_species", "person_id", "species_url", id, person.species.getOrElse(Set.empty))
-    insertUrls("people_vehicles", "person_id", "vehicle_url", id, person.vehicles.getOrElse(Set.empty))
-    insertUrls("people_starships", "person_id", "starship_url", id, person.starships.getOrElse(Set.empty))
+    insertAttributes("character_attributes", "person_id", id, person.attributes)
+    insertLinks("character_links", "person_id", id, person.links)
 
   private def insertFilm(entry: (Int, Film))(using DbCon): Unit =
     val (id, film) = entry
     val _          =
-      sql"""insert into films (id, title, episode_id, opening_crawl, director, producer, release_date, created, edited, url, media_type)
-            values ($id, ${film.title}, ${film.episodeId}, ${film.openingCrawl}, ${film.director}, ${film.producer},
-                    ${film.releaseDate}, ${film.created}, ${film.edited}, ${film.url},
-                    ${film.mediaType.map(MediaKind.name)})
+      sql"""insert into films (id, title, episode_id, director, producer, release_date, url, media_type)
+            values ($id, ${film.title}, ${film.episodeId}, ${film.director}, ${film.producer},
+                    ${film.releaseDate}, ${film.url}, ${film.mediaType.map(MediaKind.name)})
             on conflict (id) do nothing""".update.run()
 
     insertUrls("film_characters", "film_id", "character_url", id, film.characters)
-    insertUrls("film_planets", "film_id", "planet_url", id, film.planets)
-    insertUrls("film_starships", "film_id", "starship_url", id, film.starships)
-    insertUrls("film_vehicles", "film_id", "vehicle_url", id, film.vehicles)
-    insertUrls("film_species", "film_id", "species_url", id, film.species)
+    insertAttributes("film_attributes", "film_id", id, film.attributes)
+    insertLinks("film_links", "film_id", id, film.links)
+
+  private def insertAttributes(table: String, ownerColumn: String, ownerId: Int, attributes: Map[String, String])(using
+    DbCon
+  ): Unit =
+    attributes.foreach { (key, value) =>
+      val _ = Frag(
+        s"insert into $table ($ownerColumn, key, value) values ($ownerId, ?, ?) on conflict do nothing",
+        Seq(key, value),
+        (statement, index) =>
+          statement.setString(index, key)
+          statement.setString(index + 1, value)
+          index + 2
+      ).update.run()
+    }
+
+  private def insertLinks(table: String, ownerColumn: String, ownerId: Int, links: Map[String, Set[String]])(using
+    DbCon
+  ): Unit =
+    links.foreach { (rel, urls) =>
+      urls.foreach { url =>
+        val _ = Frag(
+          s"insert into $table ($ownerColumn, rel, url) values ($ownerId, ?, ?) on conflict do nothing",
+          Seq(rel, url),
+          (statement, index) =>
+            statement.setString(index, rel)
+            statement.setString(index + 1, url)
+            index + 2
+        ).update.run()
+      }
+    }
 
   private def insertUrls(table: String, ownerColumn: String, urlColumn: String, ownerId: Int, urls: Set[String])(using
     DbCon

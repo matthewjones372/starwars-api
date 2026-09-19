@@ -43,20 +43,11 @@ object ApiRequestResponseStubs:
 
   val person =
     Character(
-      "C-3PO",
-      Some(167),
-      Some(75),
-      "n/a",
-      "gold",
-      "yellow",
-      "112BBY",
-      None,
-      None,
-      Set("/starwars/films/1/?format=json", "/starwars/films/2/?format=json"),
-      None,
-      None,
-      None,
-      ""
+      name = "C-3PO",
+      films = Set("/starwars/films/1/?format=json", "/starwars/films/2/?format=json"),
+      attributes = Map("height" -> "167", "mass" -> "75", "eye_color" -> "yellow"),
+      links = Map.empty,
+      url = ""
     )
 
   def personWithDiff(name: Int): Character =
@@ -120,39 +111,12 @@ object ApiRequestResponseStubs:
   lazy val film1 = Film(
     title = "The Empire Strikes Back",
     episodeId = 5,
-    openingCrawl = "opening",
     director = "Irvin Kershner",
     producer = "Gary Kurtz",
     releaseDate = "Rick McCallum",
     characters = Set("John", "marty"),
-    planets = Set("Earth"),
-    starships = Set(
-      "https://swapi.dev/api/planets/4/",
-      "https://swapi.dev/api/planets/5/",
-      "https://swapi.dev/api/planets/6/",
-      "https://swapi.dev/api/planets/27/"
-    ),
-    vehicles = Set(
-      "https://swapi.dev/api/starships/11/",
-      "https://swapi.dev/api/starships/22/",
-      "https://swapi.dev/api/starships/15/",
-      "https://swapi.dev/api/starships/10/",
-      "https://swapi.dev/api/starships/3/",
-      "https://swapi.dev/api/starships/23/",
-      "https://swapi.dev/api/starships/12/",
-      "https://swapi.dev/api/starships/21/",
-      "https://swapi.dev/api/starships/17/"
-    ),
-    species = Set(
-      "https://swapi.dev/api/vehicles/16/",
-      "https://swapi.dev/api/vehicles/14/",
-      "https://swapi.dev/api/vehicles/19/",
-      "https://swapi.dev/api/vehicles/18/",
-      "https://swapi.dev/api/vehicles/20/",
-      "https://swapi.dev/api/vehicles/8/"
-    ),
-    created = "",
-    edited = "2014-12-12T11:26:24.656000Z",
+    attributes = Map("opening_crawl" -> "opening"),
+    links = Map("planets" -> Set("Earth")),
     url = "2014-12-15T13:07:53.386000Z",
     mediaType = None
   )
@@ -163,43 +127,16 @@ object ApiRequestResponseStubs:
   )
 
   lazy val film2 = Film(
-    "A New Hope",
-    5,
-    "opening",
-    "Irvin Kershner",
-    "Gary Kurtz",
-    "Rick McCallum",
-    Set(),
-    Set(),
-    Set(
-      "https://swapi.dev/api/planets/4/",
-      "https://swapi.dev/api/planets/5/",
-      "https://swapi.dev/api/planets/6/",
-      "https://swapi.dev/api/planets/27/"
-    ),
-    Set(
-      "https://swapi.dev/api/starships/11/",
-      "https://swapi.dev/api/starships/22/",
-      "https://swapi.dev/api/starships/15/",
-      "https://swapi.dev/api/starships/10/",
-      "https://swapi.dev/api/starships/3/",
-      "https://swapi.dev/api/starships/23/",
-      "https://swapi.dev/api/starships/12/",
-      "https://swapi.dev/api/starships/21/",
-      "https://swapi.dev/api/starships/17/"
-    ),
-    Set(
-      "https://swapi.dev/api/vehicles/16/",
-      "https://swapi.dev/api/vehicles/14/",
-      "https://swapi.dev/api/vehicles/19/",
-      "https://swapi.dev/api/vehicles/18/",
-      "https://swapi.dev/api/vehicles/20/",
-      "https://swapi.dev/api/vehicles/8/"
-    ),
-    "",
-    "2014-12-12T11:26:24.656000Z",
-    "2014-12-15T13:07:53.386000Z",
-    None
+    title = "A New Hope",
+    episodeId = 5,
+    director = "Irvin Kershner",
+    producer = "Gary Kurtz",
+    releaseDate = "Rick McCallum",
+    characters = Set.empty,
+    attributes = Map("opening_crawl" -> "opening"),
+    links = Map.empty,
+    url = "",
+    mediaType = None
   )
 
   lazy val film2Response = Response(status = Status.Ok, body = Body.from(film2))

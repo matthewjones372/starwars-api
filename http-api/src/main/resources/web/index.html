@@ -710,7 +710,11 @@
 
     const people = graph.people;
     const insights = graph.insights;
-    const byName = new Map(graph.nodes.map((n) => [n.label, n]));
+    // A character and a film can carry the same name -- Obi-Wan Kenobi is both --
+    // so the two are looked up apart. Keyed together, the film node loses to the
+    // character and a chain running through that film cannot draw its last hop.
+    const byName = new Map(graph.nodes.filter((n) => n.kind === "person").map((n) => [n.label, n]));
+    const filmByTitle = new Map(graph.nodes.filter((n) => n.kind === "film").map((n) => [n.label, n]));
     const idle = () =>
       `${people.length} characters · ${graph.films.length} films` +
       (insights ? ` · ${insights.averageSeparation} hops apart on average` : "");
@@ -1055,7 +1059,7 @@
       pathLinks = new Set();
       steps.forEach((step, i) => {
         const person = byName.get(step.person);
-        const film = byName.get(step.film);
+        const film = filmByTitle.get(step.film);
         const next = byName.get(steps[i + 1]?.person ?? pathEnd);
         lit.push(person, film, next);
         if (person) pathNodes.add(person.id);

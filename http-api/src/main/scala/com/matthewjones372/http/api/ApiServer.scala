@@ -91,11 +91,14 @@ object ApiServer:
   private[api] def encodedEntities(dataRepo: DataRepo): IO[DataRepoError, Encoded] =
     ZIO.suspendSucceed {
       for
-        people    <- dataRepo.getCharacters(None, None, None)
-        films     <- dataRepo.getFilms(None, None)
-        byId      <- keyedBytes(people.results)(_.url)(characterCodec.encode)
-        filmsById <- keyedBytes(films.results)(_.url)(filmCodec.encode)
+        people <- dataRepo.getCharacters(None, None, None)
+        films  <- dataRepo.getFilms(None, None)
+        // Encoded once and shared by both maps. Encoding per map held two
+        // independent copies of every character's bytes, which is the larger
+        // half of what this holds and now multiplies by the universe count.
         byUrl      = people.results.map(person => person.url -> characterCodec.encode(person)).toMap
+        byId      <- keyedBytes(people.results)(_.url)(person => byUrl(person.url))
+        filmsById <- keyedBytes(films.results)(_.url)(filmCodec.encode)
       yield Encoded(byId, filmsById, byUrl)
     }
 

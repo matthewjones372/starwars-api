@@ -5,38 +5,38 @@ import com.matthewjones372.domain.*
 import zio.*
 import zio.http.*
 
-trait SWAPIClientService:
+trait UniverseClient:
   def getFilmsFromCharacter(id: Int): IO[ClientError, Set[String]]
   def getCharacters: IO[ClientError, Set[Character]]
   def getFilmsFromCharacters: IO[ClientError, Map[String, Set[String]]]
   def getFilms: IO[ClientError, Set[Film]]
 
-object SWAPIClientService:
-  type SWAPIEnv = Client & Scope
+object UniverseClient:
+  type ClientEnv = Client & Scope
 
-  def getFilmsFromCharacter(id: Int)(using Trace): ZIO[SWAPIClientService, ClientError, Set[String]] =
-    ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromCharacter(id))
+  def getFilmsFromCharacter(id: Int)(using Trace): ZIO[UniverseClient, ClientError, Set[String]] =
+    ZIO.serviceWithZIO[UniverseClient](_.getFilmsFromCharacter(id))
 
-  def getCharacters(using Trace): ZIO[SWAPIClientService, ClientError, Set[Character]] =
-    ZIO.serviceWithZIO[SWAPIClientService](_.getCharacters)
+  def getCharacters(using Trace): ZIO[UniverseClient, ClientError, Set[Character]] =
+    ZIO.serviceWithZIO[UniverseClient](_.getCharacters)
 
-  def getFilmsFromCharacters(using Trace): ZIO[SWAPIClientService, ClientError, Map[String, Set[String]]] =
-    ZIO.serviceWithZIO[SWAPIClientService](_.getFilmsFromCharacters)
+  def getFilmsFromCharacters(using Trace): ZIO[UniverseClient, ClientError, Map[String, Set[String]]] =
+    ZIO.serviceWithZIO[UniverseClient](_.getFilmsFromCharacters)
 
-  def getFilms(using Trace): ZIO[SWAPIClientService, ClientError, Set[Film]] =
-    ZIO.serviceWithZIO[SWAPIClientService](_.getFilms)
+  def getFilms(using Trace): ZIO[UniverseClient, ClientError, Set[Film]] =
+    ZIO.serviceWithZIO[UniverseClient](_.getFilms)
 
-  private val layer: RLayer[ApiClient, SWAPIClientService] =
+  private val layer: RLayer[ApiClient, UniverseClient] =
     ZLayer.fromZIO {
       for
         apiClient  <- ZIO.service[ApiClient]
         httpConfig <- ZIO.config(HttpClientConfig.config)
-      yield SWAPIServiceLive(apiClient, httpConfig.maxConcurrency)
+      yield UniverseClientLive(apiClient, httpConfig.maxConcurrency)
     }
 
-  val default: RLayer[SWAPIEnv, SWAPIClientService] = ApiClient.live >>> SWAPIClientService.layer
+  val default: RLayer[ClientEnv, UniverseClient] = ApiClient.live >>> UniverseClient.layer
 
-final private case class SWAPIServiceLive(apiClient: ApiClient, maxConcurrency: Int) extends SWAPIClientService:
+final private case class UniverseClientLive(apiClient: ApiClient, maxConcurrency: Int) extends UniverseClient:
 
   override def getFilms: IO[ClientError, Set[Film]] =
     ApiClient.getFilms.provideEnvironment(ZEnvironment(apiClient))

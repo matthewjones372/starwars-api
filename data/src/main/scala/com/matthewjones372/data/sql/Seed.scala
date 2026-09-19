@@ -1,13 +1,13 @@
 package com.matthewjones372.data.sql
 
 import com.augustnagro.magnum.*
-import com.matthewjones372.data.SWDataRepo
+import com.matthewjones372.data.DataRepo
 import com.matthewjones372.domain.*
 import zio.*
 
-object SwSeed:
+object Seed:
   def fromBundledData: RIO[ZTransactor, Unit] =
-    SWDataRepo.bundledEntities.flatMap(seed)
+    DataRepo.bundledEntities.flatMap(seed)
 
   def seed(entities: (List[Character], List[Film])): RIO[ZTransactor, Unit] =
     val (people, films) = entities
@@ -23,7 +23,7 @@ object SwSeed:
     yield ()
 
   private def idOf(url: String): Task[Int] =
-    ZIO.fromEither(SWDataRepo.parseEntityId(url)).mapError(new IllegalArgumentException(_))
+    ZIO.fromEither(DataRepo.parseEntityId(url)).mapError(new IllegalArgumentException(_))
 
   private def insertPerson(entry: (Int, Character))(using DbCon): Unit =
     val (id, person) = entry

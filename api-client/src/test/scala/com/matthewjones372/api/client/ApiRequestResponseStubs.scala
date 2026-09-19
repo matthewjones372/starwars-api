@@ -1,7 +1,7 @@
 package com.matthewjones372.api.client
 
 import com.matthewjones372.domain.*
-import com.matthewjones372.http.api.SWHttpServer
+import com.matthewjones372.http.api.ApiServer
 import zio.*
 import zio.http.*
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
@@ -204,12 +204,12 @@ object ApiRequestResponseStubs:
 
   lazy val film2Response = Response(status = Status.Ok, body = Body.from(film2))
 
-  def getFilmSuccess = SWHttpServer.getFilmEndpoint.implement { _ =>
+  def getFilmSuccess = ApiServer.getFilmEndpoint.implement { _ =>
     ZIO.succeed(film1)
   }
 
   def addCallWithClientError(state: Ref[Int]) =
-    TestClient.addRoute(SWHttpServer.getCharacterEndpoint.route -> handler {
+    TestClient.addRoute(ApiServer.getCharacterEndpoint.route -> handler {
       state.getAndUpdate(_ + 1).as {
         Response.status(Status.Unauthorized)
       }

@@ -1,8 +1,8 @@
 package com.matthewjones372.http.api
 
-import com.matthewjones372.data.{DataRepoError, SWDataRepo}
+import com.matthewjones372.data.{DataRepoError, DataRepo}
 import com.matthewjones372.domain.*
-import com.matthewjones372.search.SWGraph
+import com.matthewjones372.search.Graph
 import com.matthewjones372.sorting.SortBy
 import stubby.*
 import zio.*
@@ -11,17 +11,17 @@ import zio.http.netty.NettyConfig
 import zio.http.netty.server.NettyDriver
 import zio.test.*
 
-object SWApiSpec extends ZIOSpecDefault:
-  def spec = suite("SWApiSpec")(
+object ApiServerSpec extends ZIOSpecDefault:
+  def spec = suite("ApiServerSpec")(
     suite("getFilms")(
       test("returns a set of films") {
         {
           for
             client <- ZIO.service[Client]
-            _      <- stub[SWDataRepo](_.getFilms) {
+            _      <- stub[DataRepo](_.getFilms) {
                    ZIO.attempt(Films(1, List(film))).orElseFail(DataRepoError.FilmsNotFound)
                  }
-            swServer    <- ZIO.service[SWHttpServer]
+            swServer    <- ZIO.service[ApiServer]
             _           <- swServer.start.fork
             testRequest <- requestToCorrectPort
             response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "films")))
@@ -29,18 +29,18 @@ object SWApiSpec extends ZIOSpecDefault:
         }.provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo],
-          SWHttpServer.layer
+          stubbed[DataRepo],
+          ApiServer.layer
         )
       },
       test("returns a server error when there is a issue with the data repo") {
         {
           for
-            _ <- stub[SWDataRepo](_.getFilms) {
+            _ <- stub[DataRepo](_.getFilms) {
                    ZIO.fail(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
                  }
             client      <- ZIO.service[Client]
-            swServer    <- ZIO.service[SWHttpServer]
+            swServer    <- ZIO.service[ApiServer]
             _           <- swServer.start.fork
             testRequest <- requestToCorrectPort
             response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "films")))
@@ -48,19 +48,19 @@ object SWApiSpec extends ZIOSpecDefault:
         }.provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo],
-          SWHttpServer.layer
+          stubbed[DataRepo],
+          ApiServer.layer
         )
       }
     ),
     suite("getCharacters")(
       test("returns a set of people") {
         (for
-          _ <- stub[SWDataRepo](_.getCharacters) {
+          _ <- stub[DataRepo](_.getCharacters) {
                  ZIO.attempt(Characters(1, List(person))).orElseFail(DataRepoError.FilmsNotFound)
                }
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
@@ -69,34 +69,34 @@ object SWApiSpec extends ZIOSpecDefault:
         )).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo],
-          SWHttpServer.layer
+          stubbed[DataRepo],
+          ApiServer.layer
         )
       },
       test("returns a server error when there is a issue with the data repo") {
         (for
-          _ <- stub[SWDataRepo](_.getCharacters) {
+          _ <- stub[DataRepo](_.getCharacters) {
                  ZIO.fail(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
                }
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
         yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo],
-          SWHttpServer.layer
+          stubbed[DataRepo],
+          ApiServer.layer
         )
       }
     ),
     suite("getCharacter")(
       test("returns a person when given a valid id") {
         (for
-          _           <- stub[SWDataRepo](_.getCharacter)(ZIO.succeed(person))
+          _           <- stub[DataRepo](_.getCharacter)(ZIO.succeed(person))
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
@@ -104,42 +104,42 @@ object SWApiSpec extends ZIOSpecDefault:
         yield assertTrue(response.status == Status.Ok, body.contains("C-3PO"))).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo],
-          SWHttpServer.layer
+          stubbed[DataRepo],
+          ApiServer.layer
         )
       },
       test("returns a 404 when the person is not found") {
         (for
-          _ <- stub[SWDataRepo](_.getCharacter) {
+          _ <- stub[DataRepo](_.getCharacter) {
                  ZIO.fail(DataRepoError.CharacterNotFound("Character not found", EntityId(99)))
                }
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "99")))
         yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo],
-          SWHttpServer.layer
+          stubbed[DataRepo],
+          ApiServer.layer
         )
       },
       test("returns a server error when the repo fails for another reason") {
         (for
-          _ <- stub[SWDataRepo](_.getCharacter) {
+          _ <- stub[DataRepo](_.getCharacter) {
                  ZIO.fail(DataRepoError.UnexpectedError("Server error", new RuntimeException("BOOM!")))
                }
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
         yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
-          stubbed[SWDataRepo],
-          SWHttpServer.layer
+          stubbed[DataRepo],
+          ApiServer.layer
         )
       }
     ),
@@ -147,7 +147,7 @@ object SWApiSpec extends ZIOSpecDefault:
       test("returns the chain of films connecting two characters") {
         (for
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(
@@ -165,14 +165,14 @@ object SWApiSpec extends ZIOSpecDefault:
           Scope.default,
           TestServer.layer,
           ZLayer.succeed(repoWith(List(lobot, luke, bobaFett), List(empireStrikesBack, aNewHope))),
-          SWHttpServer.layer
+          ApiServer.layer
         )
       },
       test("carries every equally short chain, not only the one it leads with") {
         val leia = person.copy(name = "Leia", films = Set("/films/5/", "/films/4/"))
         (for
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(
@@ -189,13 +189,13 @@ object SWApiSpec extends ZIOSpecDefault:
           Scope.default,
           TestServer.layer,
           ZLayer.succeed(repoWith(List(lobot, luke, leia, bobaFett), List(empireStrikesBack, aNewHope))),
-          SWHttpServer.layer
+          ApiServer.layer
         )
       },
       test("returns a 404 when no chain of films connects the two characters") {
         (for
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(
@@ -205,13 +205,13 @@ object SWApiSpec extends ZIOSpecDefault:
           Scope.default,
           TestServer.layer,
           ZLayer.succeed(repoWith(List(lobot, bobaFett), List(empireStrikesBack, aNewHope))),
-          SWHttpServer.layer
+          ApiServer.layer
         )
       },
       test("returns a 404 when either character is unknown") {
         (for
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(
@@ -221,7 +221,7 @@ object SWApiSpec extends ZIOSpecDefault:
           Scope.default,
           TestServer.layer,
           ZLayer.succeed(repoWith(List(lobot, luke, bobaFett), List(empireStrikesBack, aNewHope))),
-          SWHttpServer.layer
+          ApiServer.layer
         )
       }
     ),
@@ -229,7 +229,7 @@ object SWApiSpec extends ZIOSpecDefault:
       test("ranks the cast by how many co-stars each character has") {
         (for
           client      <- ZIO.service[Client]
-          swServer    <- ZIO.service[SWHttpServer]
+          swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
           response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "graph" / "insights")))
@@ -248,14 +248,14 @@ object SWApiSpec extends ZIOSpecDefault:
           Scope.default,
           TestServer.layer,
           ZLayer.succeed(repoWith(List(lobot, luke, bobaFett), List(empireStrikesBack, aNewHope))),
-          SWHttpServer.layer
+          ApiServer.layer
         )
       }
     ),
     suite("insight assembly")(
       test("ranks the most connected character first and the least connected last") {
-        val insights = SWHttpServer.toGraphInsights(
-          SWGraph(
+        val insights = ApiServer.toGraphInsights(
+          Graph(
             Map(
               "Lobot"     -> Set("The Empire Strikes Back"),
               "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
@@ -271,8 +271,8 @@ object SWApiSpec extends ZIOSpecDefault:
         )
       },
       test("rounds the separations, which carry more digits than they mean") {
-        val insights = SWHttpServer.toGraphInsights(
-          SWGraph(
+        val insights = ApiServer.toGraphInsights(
+          Graph(
             Map(
               "Lobot"     -> Set("The Empire Strikes Back"),
               "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
@@ -294,7 +294,7 @@ object SWApiSpec extends ZIOSpecDefault:
         val path = com.matthewjones372.search
           .Path("Lobot", "Boba Fett", Some(Chunk(("Lobot", "ESB"), ("Luke", "ANH"), ("Boba Fett", "ANH"))))
 
-        val assembled = SWHttpServer.toShortestPath("Lobot", "Boba Fett", List(path), 1)
+        val assembled = ApiServer.toShortestPath("Lobot", "Boba Fett", List(path), 1)
 
         assertTrue(
           assembled.films == 2,
@@ -307,7 +307,7 @@ object SWApiSpec extends ZIOSpecDefault:
       },
       test("reports no steps when the start and target are the same character") {
         val path      = com.matthewjones372.search.Path("Luke", "Luke", Some(Chunk.empty))
-        val assembled = SWHttpServer.toShortestPath("Luke", "Luke", List(path), 1)
+        val assembled = ApiServer.toShortestPath("Luke", "Luke", List(path), 1)
 
         assertTrue(assembled.films == 0, assembled.steps.isEmpty)
       },
@@ -317,7 +317,7 @@ object SWApiSpec extends ZIOSpecDefault:
         val throughLeia = com.matthewjones372.search
           .Path("Lobot", "Boba Fett", Some(Chunk(("Lobot", "ESB"), ("Leia", "ANH"), ("Boba Fett", "ANH"))))
 
-        val assembled = SWHttpServer.toShortestPath("Lobot", "Boba Fett", List(throughLuke, throughLeia), 2)
+        val assembled = ApiServer.toShortestPath("Lobot", "Boba Fett", List(throughLuke, throughLeia), 2)
 
         assertTrue(
           assembled.steps == List(PathStep("Lobot", "ESB"), PathStep("Luke", "ANH")),
@@ -329,7 +329,7 @@ object SWApiSpec extends ZIOSpecDefault:
         val path = com.matthewjones372.search
           .Path("Lobot", "Boba Fett", Some(Chunk(("Lobot", "ESB"), ("Luke", "ANH"), ("Boba Fett", "ANH"))))
 
-        val assembled = SWHttpServer.toShortestPath("Lobot", "Boba Fett", List(path), 24)
+        val assembled = ApiServer.toShortestPath("Lobot", "Boba Fett", List(path), 24)
 
         assertTrue(assembled.alternatives.isEmpty, assembled.chains == 24)
       }
@@ -355,7 +355,7 @@ object SWApiSpec extends ZIOSpecDefault:
       Scope.default,
       TestServer.layer,
       ZLayer.succeed(repoWith(List(lobot), List(empireStrikesBack))),
-      SWHttpServer.layer
+      ApiServer.layer
     ) @@ TestAspect.sequential
   ).provide(
     ZLayer.succeed(Server.Config.default.onAnyOpenPort),
@@ -402,8 +402,8 @@ object SWApiSpec extends ZIOSpecDefault:
     )
 
   // stubby matches on the method rather than its arguments, so ids need a real double here
-  def repoWith(characters: List[Character], films: List[Film]): SWDataRepo =
-    new SWDataRepo:
+  def repoWith(characters: List[Character], films: List[Film]): DataRepo =
+    new DataRepo:
       def getFilm(id: EntityId) =
         ZIO.fromOption(films.lift(id - 1)).orElseFail(DataRepoError.FilmNotFound("Film not found", id))
 
@@ -427,7 +427,7 @@ object SWApiSpec extends ZIOSpecDefault:
   def statusOf(target: String) =
     for
       client   <- ZIO.service[Client]
-      swServer <- ZIO.service[SWHttpServer]
+      swServer <- ZIO.service[ApiServer]
       _        <- swServer.start.fork
       request  <- requestToCorrectPort
       url      <- ZIO.fromEither(URL.decode(target))

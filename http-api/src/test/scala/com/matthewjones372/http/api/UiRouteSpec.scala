@@ -14,7 +14,7 @@ object UiRouteSpec extends ZIOSpecDefault:
   private def serving: ZIO[Scope, Throwable, Int] =
     for
       env    <- Server.defaultWithPort(0).build
-      server <- SWHttpServer.default
+      server <- ApiServer.default
       _      <- server.start.provideEnvironment(env).forkScoped
       port   <- env.get[Server].port
       _      <- awaitBound(port)

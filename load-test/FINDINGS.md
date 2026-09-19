@@ -204,7 +204,7 @@ cores and is a large part of why the knee is so unstable.
 
 The profile above said turning a `Character` into bytes was roughly three
 quarters of the on-CPU samples. The data is read from a resource at startup and
-never changes, so `SWHttpServer` now encodes each character and each film once
+never changes, so `ApiServer` now encodes each character and each film once
 and serves those bytes.
 
 Two servers in one JVM, `preEncoded` on one and off the other, rungs alternating
@@ -270,7 +270,7 @@ argument.
 
 The encoding is built once, on first request, from a suspended and memoized
 effect, as the character graph already was: nothing touches the repo until a
-request needs it. It applies to the bundled data only. `SWHttpServer.layer`
+request needs it. It applies to the bundled data only. `ApiServer.layer`
 takes whatever repo it is handed, which has made no promise to be immutable, so
 that one still asks per request.
 

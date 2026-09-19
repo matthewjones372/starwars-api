@@ -5,7 +5,7 @@ import org.sqlite.{SQLiteConfig, SQLiteDataSource}
 import java.nio.file.Path
 import javax.sql.DataSource
 
-object SwDatabase:
+object Database:
   // Foreign keys are off by default in SQLite, so the cascades in the schema need asking for.
   private def configured(url: String): DataSource =
     val config = SQLiteConfig()

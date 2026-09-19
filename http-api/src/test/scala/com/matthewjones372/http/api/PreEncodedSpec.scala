@@ -9,7 +9,7 @@ object PreEncodedSpec extends ZIOSpecDefault:
   private def serving(preEncoded: Boolean): ZIO[Scope, Throwable, Int] =
     for
       env    <- Server.defaultWithPort(0).build
-      server <- SWHttpServer.measuring(preEncoded)
+      server <- ApiServer.measuring(preEncoded)
       _      <- server.start.provideEnvironment(env).forkScoped
       port   <- env.get[Server].port
       _      <- awaitBound(port)

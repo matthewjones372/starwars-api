@@ -20,7 +20,7 @@ zio-test hands a spec a `TestClock` and the readiness retry below would never
 advance under one. The timeout is the spec's own, since the right one is the
 length of what is being run.
 
-The server runs in this JVM, started by `SWHttpServer.measuring` and held by the
+The server runs in this JVM, started by `ApiServer.measuring` and held by the
 test's `Scope`, so there is no second process, no classpath file and no shell
 script. The comparison below runs two servers at once, each with a `Server`
 layer of its own: one layer between them would be one port answering for both,
@@ -83,7 +83,7 @@ repository in the profile at all. The data is read from a resource at startup
 and never changes, so that encoding is work this API does once and then repeats
 on every request.
 
-`SWHttpServer.measuring(preEncoded)` is the seam. The two servers run in one
+`ApiServer.measuring(preEncoded)` is the seam. The two servers run in one
 JVM and the rounds alternate between them, so a drift in JIT state or in what
 else the machine is doing lands on both. The rate is below the knee and each
 round is repeated: the knee is the one rate where a queue is bistable, and the

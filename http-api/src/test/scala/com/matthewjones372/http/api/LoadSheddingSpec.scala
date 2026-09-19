@@ -23,7 +23,7 @@ object LoadSheddingSpec extends ZIOSpecDefault:
           bulkhead <- Bulkhead.make(maxInFlightCalls = 1, maxQueueing = 1)
           release  <- Promise.make[Nothing, Unit]
           blocked   = Handler.fromFunctionZIO[Request](_ => release.await.as(Response.ok))
-          shed      = SWHttpServer.shedding(bulkhead)(blocked)
+          shed      = ApiServer.shedding(bulkhead)(blocked)
           calls    <- ZIO.foreachPar(Chunk.fill(6)(()))(_ => shed(request)).fork
           // Nothing completes until the handler is let go, so whatever came
           // back before that was turned away rather than served.
@@ -39,8 +39,8 @@ object LoadSheddingSpec extends ZIOSpecDefault:
     test("is invisible while there is room"):
       ZIO.scoped:
         for
-          bulkhead <- Bulkhead.make(SWHttpServer.maxInFlight, SWHttpServer.maxQueued)
-          shed      = SWHttpServer.shedding(bulkhead)(Handler.ok)
+          bulkhead <- Bulkhead.make(ApiServer.maxInFlight, ApiServer.maxQueued)
+          shed      = ApiServer.shedding(bulkhead)(Handler.ok)
           answers  <- ZIO.foreachPar(Chunk.fill(32)(()))(_ => shed(request))
         yield assertTrue(answers.forall(_.status == Status.Ok))
     ,
@@ -51,7 +51,7 @@ object LoadSheddingSpec extends ZIOSpecDefault:
         for
           bulkhead <- Bulkhead.make(maxInFlightCalls = 1, maxQueueing = 1)
           failing   = Handler.fromFunctionZIO[Request](_ => ZIO.fail(Response.notFound))
-          shed      = SWHttpServer.shedding(bulkhead)(failing)
+          shed      = ApiServer.shedding(bulkhead)(failing)
           outcome  <- shed(request).either
         yield assertTrue(outcome.left.toOption.map(_.status).contains(Status.NotFound))
   ) @@ TestAspect.withLiveClock

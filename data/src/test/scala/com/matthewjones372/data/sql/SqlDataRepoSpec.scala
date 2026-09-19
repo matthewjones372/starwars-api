@@ -1,6 +1,6 @@
 package com.matthewjones372.data.sql
 
-import com.matthewjones372.data.{DataRepoError, SWDataRepo}
+import com.matthewjones372.data.{DataRepoError, DataRepo}
 import com.matthewjones372.domain.*
 import com.matthewjones372.sorting.{FieldOrdering, SortBy}
 import zio.*
@@ -17,15 +17,15 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       .acquireRelease(ZIO.attemptBlocking(Files.createTempFile("swapi-test", ".db")))(path =>
         ZIO.attemptBlocking(Files.deleteIfExists(path)).orDie
       )
-      .map(SwDatabase.file)
+      .map(Database.file)
 
-  private val seededRepo: ZLayer[Any, Throwable, SWDataRepo] =
+  private val seededRepo: ZLayer[Any, Throwable, DataRepo] =
     ZLayer.scoped {
       for
         source    <- dataSource
-        _         <- SwMigrations.migrate.provideEnvironment(ZEnvironment(source))
+        _         <- Migrations.migrate.provideEnvironment(ZEnvironment(source))
         transactor = ZTransactor(source)
-        _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
+        _         <- Seed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
       yield SqlDataRepo(transactor)
     }
 
@@ -82,14 +82,14 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
     suite("against sqlite")(
       test("migrates, seeds and reads back the bundled data") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
         yield assertTrue(people.count == 205, films.count == 19, people.results.length == 205)
       },
       test("pages without gaps or repeats") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           first  <- repo.getCharacters(Some(PageNumber(1)), Some(PageSize(10)), None)
           second <- repo.getCharacters(Some(PageNumber(2)), Some(PageSize(10)), None)
           rest   <- ZIO.foreach(3 to first.pageCount)(page =>
@@ -105,27 +105,27 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       },
       test("finds a person and a film by id") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           person <- repo.getCharacter(EntityId(1))
           film   <- repo.getFilm(EntityId(1))
         yield assertTrue(person.url.endsWith("/people/1/"), film.url.endsWith("/films/1/"))
       },
       test("a media type survives the round trip through the database") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           film   <- repo.getFilm(EntityId(1))
           series <- repo.getFilm(EntityId(15))
         yield assertTrue(film.mediaType.contains(MediaKind.Film), series.mediaType.contains(MediaKind.Series))
       },
       test("reassembles the url sets belonging to a person") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           person <- repo.getCharacter(EntityId(1))
         yield assertTrue(person.films.nonEmpty, person.films.forall(_.contains("/films/")))
       },
       test("fails with CharacterNotFound and FilmNotFound for unknown ids") {
         for
-          repo     <- ZIO.service[SWDataRepo]
+          repo     <- ZIO.service[DataRepo]
           noPerson <- repo.getCharacter(EntityId(9999)).exit
           noFilm   <- repo.getFilm(EntityId(9999)).exit
         yield assert(noPerson)(Assertion.failsWithA[DataRepoError.CharacterNotFound]) &&
@@ -133,7 +133,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       },
       test("sorts by name in both directions") {
         for
-          repo       <- ZIO.service[SWDataRepo]
+          repo       <- ZIO.service[DataRepo]
           ascending  <- repo.getCharacters(None, None, ascendingName)
           descending <- repo.getCharacters(None, None, Some(List(SortBy("name", FieldOrdering.DESC))))
         yield assertTrue(
@@ -143,7 +143,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       },
       test("ignores an unknown sort key rather than failing") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           people <- repo.getCharacters(
                       Some(PageNumber(1)),
                       Some(PageSize(5)),

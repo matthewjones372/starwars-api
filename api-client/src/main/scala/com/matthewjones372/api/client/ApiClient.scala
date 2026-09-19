@@ -1,7 +1,7 @@
 package com.matthewjones372.api.client
 
 import com.matthewjones372.api.client.ClientError.*
-import com.matthewjones372.api.client.SWAPIClientService.SWAPIEnv
+import com.matthewjones372.api.client.UniverseClient.ClientEnv
 import com.matthewjones372.api.client.config.HttpClientConfig
 import com.matthewjones372.domain.*
 import zio.*
@@ -64,7 +64,7 @@ object ApiClient:
   private def cacheOf[K, V](capacity: Int)(lookup: K => IO[ClientError, V]) =
     Cache.makeWith(capacity, Lookup(lookup))(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
 
-  def live: RLayer[SWAPIEnv, ApiClient] =
+  def live: RLayer[ClientEnv, ApiClient] =
     ZLayer.fromZIO {
       for
         client     <- ZIO.service[Client]

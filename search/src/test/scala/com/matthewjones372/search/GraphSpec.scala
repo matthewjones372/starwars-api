@@ -5,7 +5,7 @@ import zio.*
 
 import scala.collection.immutable.Queue
 
-object SWGraphSpec extends ZIOSpecDefault:
+object GraphSpec extends ZIOSpecDefault:
 
   private val peopleFilmMap = Map(
     "Lobot"     -> Set("The Empire Strikes Back"),
@@ -57,7 +57,7 @@ object SWGraphSpec extends ZIOSpecDefault:
       case _ => true
     }
 
-  def spec = suite("SWGraphSpec")(
+  def spec = suite("GraphSpec")(
     suite("bfs")(
       test("can find the shortest path between two characters") {
         val expectedPath =
@@ -69,10 +69,10 @@ object SWGraphSpec extends ZIOSpecDefault:
             )
           )
 
-        assertTrue(SWGraph(peopleFilmMap).bfs("Lobot", "Boba Fett").contains(expectedPath))
+        assertTrue(Graph(peopleFilmMap).bfs("Lobot", "Boba Fett").contains(expectedPath))
       },
       test("returns None when no path exists") {
-        assertTrue(SWGraph(disconnected).bfs("Lobot", "Luke").isEmpty)
+        assertTrue(Graph(disconnected).bfs("Lobot", "Luke").isEmpty)
       },
       test("returns None between genuinely disconnected components") {
         val twoComponents = Map(
@@ -81,7 +81,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           "Luke"      -> Set("A New Hope"),
           "Boba Fett" -> Set("A New Hope")
         )
-        val graph = SWGraph(twoComponents)
+        val graph = Graph(twoComponents)
 
         assertTrue(
           graph.bfs("Lobot", "Luke").isEmpty,
@@ -89,22 +89,22 @@ object SWGraphSpec extends ZIOSpecDefault:
         )
       },
       test("returns a zero length path when the start and end are the same") {
-        val result = SWGraph(peopleFilmMap).bfs("Lobot", "Lobot")
+        val result = Graph(peopleFilmMap).bfs("Lobot", "Lobot")
 
         assertTrue(result.exists(_.length == 0), result.exists(_.path.contains(Chunk.empty)))
       },
       test("distance reports the hops the path would take") {
-        val graph = SWGraph(peopleFilmMap)
+        val graph = Graph(peopleFilmMap)
 
         assertTrue(
           graph.distance("Lobot", "Boba Fett") == graph.bfs("Lobot", "Boba Fett").map(_.length),
           graph.distance("Lobot", "Boba Fett").contains(2),
           graph.distance("Lobot", "Lobot").contains(0),
-          SWGraph(disconnected).distance("Lobot", "Luke").isEmpty
+          Graph(disconnected).distance("Lobot", "Luke").isEmpty
         )
       },
       test("Returns a None when either character doesn't exist") {
-        val graph = SWGraph(disconnected)
+        val graph = Graph(disconnected)
 
         assertTrue(
           graph.bfs("Lobot", "Darth Vader").isEmpty,
@@ -117,7 +117,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           val start  = people(from % people.length)
           val target = people(to % people.length)
 
-          assertTrue(SWGraph(peopleFilms).bfs(start, target).map(_.length) == shortestHops(peopleFilms, start, target))
+          assertTrue(Graph(peopleFilms).bfs(start, target).map(_.length) == shortestHops(peopleFilms, start, target))
         }
       },
       test("only returns paths whose consecutive people really share the film joining them") {
@@ -126,7 +126,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           val start  = people(from % people.length)
           val target = people(to % people.length)
 
-          val edgesHold = SWGraph(peopleFilms)
+          val edgesHold = Graph(peopleFilms)
             .bfs(start, target)
             .flatMap(_.path)
             .forall(edgesAreReal(peopleFilms, _))
@@ -141,7 +141,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           val target = people(to % people.length)
 
           assertTrue(
-            SWGraph(peopleFilms).bfs(start, target).isDefined == shortestHops(peopleFilms, start, target).isDefined
+            Graph(peopleFilms).bfs(start, target).isDefined == shortestHops(peopleFilms, start, target).isDefined
           )
         }
       }
@@ -152,7 +152,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           "Luke"  -> Set("A New Hope", "Return of the Jedi"),
           "Vader" -> Set("A New Hope", "Return of the Jedi")
         )
-        val routes = SWGraph(twoFilms).shortestPaths("Luke", "Vader", 10)
+        val routes = Graph(twoFilms).shortestPaths("Luke", "Vader", 10)
 
         assertTrue(
           routes.length == 2,
@@ -169,7 +169,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           "Leia"      -> Set("The Empire Strikes Back", "A New Hope"),
           "Boba Fett" -> Set("A New Hope")
         )
-        val routes = SWGraph(twoMiddles).shortestPaths("Lobot", "Boba Fett", 10)
+        val routes = Graph(twoMiddles).shortestPaths("Lobot", "Boba Fett", 10)
 
         assertTrue(
           routes.length == 2,
@@ -186,7 +186,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           "Leia"      -> Set("Return of the Jedi", "A New Hope"),
           "Boba Fett" -> Set("A New Hope")
         )
-        val graph  = SWGraph(withDetour)
+        val graph  = Graph(withDetour)
         val routes = graph.shortestPaths("Lobot", "Boba Fett", 10)
 
         assertTrue(
@@ -196,7 +196,7 @@ object SWGraphSpec extends ZIOSpecDefault:
       },
       test("agrees with the single path search on the chains that exist at all") {
         check(graphGen, Gen.int(0, 6), Gen.int(0, 6)) { (peopleFilms, from, to) =>
-          val graph  = SWGraph(peopleFilms)
+          val graph  = Graph(peopleFilms)
           val people = peopleFilms.keys.toList.sorted
           val start  = people(from % people.length)
           val target = people(to % people.length)
@@ -214,7 +214,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           val start  = people(from % people.length)
           val target = people(to % people.length)
 
-          val hold = SWGraph(peopleFilms)
+          val hold = Graph(peopleFilms)
             .shortestPaths(start, target, 10)
             .flatMap(_.path)
             .forall(edgesAreReal(peopleFilms, _))
@@ -224,7 +224,7 @@ object SWGraphSpec extends ZIOSpecDefault:
       },
       test("returns no more than it was asked for, and none at all for a limit of none") {
         check(graphGen, Gen.int(0, 6), Gen.int(0, 6)) { (peopleFilms, from, to) =>
-          val graph  = SWGraph(peopleFilms)
+          val graph  = Graph(peopleFilms)
           val people = peopleFilms.keys.toList.sorted
           val start  = people(from % people.length)
           val target = people(to % people.length)
@@ -240,7 +240,7 @@ object SWGraphSpec extends ZIOSpecDefault:
           val people = peopleFilms.keys.toList.sorted
           val start  = people(from % people.length)
           val target = people(to % people.length)
-          val routes = SWGraph(peopleFilms).shortestPaths(start, target, 20).map(_.path)
+          val routes = Graph(peopleFilms).shortestPaths(start, target, 20).map(_.path)
 
           assertTrue(routes.distinct.length == routes.length)
         }
@@ -252,18 +252,18 @@ object SWGraphSpec extends ZIOSpecDefault:
           "Leia"      -> Set("The Empire Strikes Back", "A New Hope"),
           "Boba Fett" -> Set("A New Hope")
         )
-        val graph = SWGraph(twoMiddles)
+        val graph = Graph(twoMiddles)
 
         assertTrue(
           graph.countShortestPaths("Lobot", "Boba Fett") == 2,
           graph.shortestPaths("Lobot", "Boba Fett", 1).length == 1,
           graph.countShortestPaths("Lobot", "Lobot") == 1,
-          SWGraph(disconnected).countShortestPaths("Lobot", "Luke") == 0
+          Graph(disconnected).countShortestPaths("Lobot", "Luke") == 0
         )
       },
       test("counts what it returns whenever the limit is not what held it back") {
         check(graphGen, Gen.int(0, 6), Gen.int(0, 6)) { (peopleFilms, from, to) =>
-          val graph   = SWGraph(peopleFilms)
+          val graph   = Graph(peopleFilms)
           val people  = peopleFilms.keys.toList.sorted
           val start   = people(from % people.length)
           val target  = people(to % people.length)
@@ -276,7 +276,7 @@ object SWGraphSpec extends ZIOSpecDefault:
     ),
     suite("connectivity")(
       test("ranks characters by how many co-stars they have") {
-        val ranked = SWGraph(peopleFilmMap).connectivity.connections
+        val ranked = Graph(peopleFilmMap).connectivity.connections
 
         assertTrue(
           ranked.map(_.node) == List("Luke", "Boba Fett", "Lobot"),
@@ -285,7 +285,7 @@ object SWGraphSpec extends ZIOSpecDefault:
         )
       },
       test("counts the films a character is in, who they share them with, and who they can reach") {
-        val byName = SWGraph(peopleFilmMap).connectivity.connections.map(c => c.node -> c).toMap
+        val byName = Graph(peopleFilmMap).connectivity.connections.map(c => c.node -> c).toMap
 
         assertTrue(
           byName("Luke").films == 3,
@@ -297,7 +297,7 @@ object SWGraphSpec extends ZIOSpecDefault:
         )
       },
       test("averages the hops from a character to everyone it can reach") {
-        val byName = SWGraph(peopleFilmMap).connectivity.connections.map(c => c.node -> c).toMap
+        val byName = Graph(peopleFilmMap).connectivity.connections.map(c => c.node -> c).toMap
 
         assertTrue(
           byName("Luke").averageSeparation == 1.0,
@@ -306,7 +306,7 @@ object SWGraphSpec extends ZIOSpecDefault:
         )
       },
       test("reports a character nobody shares a film with as reaching no one") {
-        val byName = SWGraph(disconnected).connectivity.connections.map(c => c.node -> c).toMap
+        val byName = Graph(disconnected).connectivity.connections.map(c => c.node -> c).toMap
 
         assertTrue(
           byName("Lobot").coStars == 0,
@@ -315,7 +315,7 @@ object SWGraphSpec extends ZIOSpecDefault:
         )
       },
       test("counts each co-star pair once rather than from both ends") {
-        val connectivity = SWGraph(peopleFilmMap).connectivity
+        val connectivity = Graph(peopleFilmMap).connectivity
 
         assertTrue(
           connectivity.pairs == 2,
@@ -325,18 +325,18 @@ object SWGraphSpec extends ZIOSpecDefault:
       },
       test("reports the widest separation in the graph as its diameter") {
         assertTrue(
-          SWGraph(peopleFilmMap).connectivity.diameter == 2,
-          SWGraph(peopleFilmMap).connectivity.averageSeparation == 8.0 / 6.0
+          Graph(peopleFilmMap).connectivity.diameter == 2,
+          Graph(peopleFilmMap).connectivity.averageSeparation == 8.0 / 6.0
         )
       },
       test("counts one cluster when shared films join everyone, and one per island when they do not") {
         assertTrue(
-          SWGraph(peopleFilmMap).connectivity.clusters == 1,
-          SWGraph(disconnected).connectivity.clusters == 2
+          Graph(peopleFilmMap).connectivity.clusters == 1,
+          Graph(disconnected).connectivity.clusters == 2
         )
       },
       test("sizes each film's cast and counts the characters it alone carries") {
-        val ensembles = SWGraph(peopleFilmMap).connectivity.ensembles
+        val ensembles = Graph(peopleFilmMap).connectivity.ensembles
 
         assertTrue(
           ensembles == List(
@@ -348,7 +348,7 @@ object SWGraphSpec extends ZIOSpecDefault:
       },
       test("never disagrees with the path search about who is reachable and how far away") {
         check(graphGen) { peopleFilms =>
-          val graph  = SWGraph(peopleFilms)
+          val graph  = Graph(peopleFilms)
           val people = peopleFilms.keys.toList
 
           val agrees = graph.connectivity.connections.forall { connection =>

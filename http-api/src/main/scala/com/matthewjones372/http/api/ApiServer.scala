@@ -1,9 +1,9 @@
 package com.matthewjones372.http.api
 
-import com.matthewjones372.data.{DataRepoError, SWDataRepo}
+import com.matthewjones372.data.{DataRepoError, DataRepo}
 import com.matthewjones372.domain.*
-import com.matthewjones372.http.api.SWAPIServerError.*
-import com.matthewjones372.search.{Connectivity, Path, SWGraph}
+import com.matthewjones372.http.api.ApiServerError.*
+import com.matthewjones372.search.{Connectivity, Path, Graph}
 import com.matthewjones372.sorting.{FieldOrdering, SortBy}
 import nl.vroste.rezilience.Bulkhead
 import zio.*
@@ -20,10 +20,10 @@ import java.nio.charset.StandardCharsets
 import scala.compiletime.constValueTuple
 import scala.deriving.Mirror
 
-trait SWHttpServer:
+trait ApiServer:
   def start: URIO[Server, Nothing]
 
-object SWHttpServer:
+object ApiServer:
   def default = measuring(preEncoded = true)
 
   /**
@@ -36,10 +36,10 @@ object SWHttpServer:
    */
   private[matthewjones372] def measuring(preEncoded: Boolean) =
     (for
-      dataRepo <- ZIO.service[SWDataRepo]
+      dataRepo <- ZIO.service[DataRepo]
       graph    <- characterGraph(dataRepo).memoize
       encoded  <- encodedEntities(dataRepo).memoize
-    yield SWHttpServerImpl(dataRepo, graph, encoded, preEncoded)).provideSomeLayer(SWDataRepo.layer)
+    yield ApiServerImpl(dataRepo, graph, encoded, preEncoded)).provideSomeLayer(DataRepo.layer)
 
   /**
    * The server over whatever repo it is handed, which is not pre-encoded.
@@ -48,12 +48,12 @@ object SWHttpServer:
    * resource at startup and never changes. A repo passed in here has made no
    * such promise, so this one asks it per request as it always did.
    */
-  def layer: ZLayer[SWDataRepo, Nothing, SWHttpServer] = ZLayer.fromZIO {
+  def layer: ZLayer[DataRepo, Nothing, ApiServer] = ZLayer.fromZIO {
     for
-      dataRepo <- ZIO.service[SWDataRepo]
+      dataRepo <- ZIO.service[DataRepo]
       graph    <- characterGraph(dataRepo).memoize
       encoded  <- encodedEntities(dataRepo).memoize
-    yield SWHttpServerImpl(dataRepo, graph, encoded, preEncoded = false)
+    yield ApiServerImpl(dataRepo, graph, encoded, preEncoded = false)
   }
 
   /**
@@ -69,7 +69,7 @@ object SWHttpServer:
    * repo until a request needs it, which keeps a stubbed repo in a test doing
    * what the test said and not what a constructor asked for.
    */
-  private[api] def encodedEntities(dataRepo: SWDataRepo): IO[DataRepoError, Encoded] =
+  private[api] def encodedEntities(dataRepo: DataRepo): IO[DataRepoError, Encoded] =
     ZIO.suspendSucceed {
       for
         people    <- dataRepo.getCharacters(None, None, None)
@@ -107,7 +107,7 @@ object SWHttpServer:
     ZIO
       .foreach(entities) { entity =>
         ZIO
-          .fromEither(SWDataRepo.parseEntityId(url(entity)))
+          .fromEither(DataRepo.parseEntityId(url(entity)))
           .mapBoth(
             message => DataRepoError.UnexpectedError(message, new IllegalArgumentException(message)),
             id => id -> encode(entity)
@@ -224,14 +224,14 @@ object SWHttpServer:
     )
 
   // Characters are joined by the films they share, so film urls resolve to titles for the edge labels.
-  private[api] def characterGraph(dataRepo: SWDataRepo): IO[DataRepoError, SWGraph[String]] =
+  private[api] def characterGraph(dataRepo: DataRepo): IO[DataRepoError, Graph[String]] =
     // Suspended so the repo is not touched until a request actually needs the graph.
     ZIO.suspendSucceed {
       for
         people <- dataRepo.getCharacters(None, None, None)
         films  <- dataRepo.getFilms(None, None)
         titles  = films.results.map(film => film.url -> film.title).toMap
-      yield SWGraph(people.results.map(person => person.name -> person.films.flatMap(titles.get)).toMap)
+      yield Graph(people.results.map(person => person.name -> person.films.flatMap(titles.get)).toMap)
     }
 
   inline private def fieldNames[A <: Product](using A: Mirror.ProductOf[A]): List[String] =
@@ -252,7 +252,7 @@ object SWHttpServer:
   val getCharacterEndpoint =
     Endpoint(Method.GET / "people" / characterIdPath)
       .out[Character]
-      .outErrors[SWAPIServerError](
+      .outErrors[ApiServerError](
         HttpCodec.error[CharacterNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
@@ -268,7 +268,7 @@ object SWHttpServer:
           .optional ?? fieldDocString[Character]
       )
       .out[Characters]
-      .outErrors[SWAPIServerError](
+      .outErrors[ApiServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
@@ -277,7 +277,7 @@ object SWHttpServer:
     Endpoint(Method.GET / "films")
       .query(pageQuery)
       .out[Films]
-      .outErrors[SWAPIServerError](
+      .outErrors[ApiServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
@@ -285,7 +285,7 @@ object SWHttpServer:
   val getFilmEndpoint =
     Endpoint(Method.GET / "films" / filmIdPath)
       .out[Film]
-      .outErrors[SWAPIServerError](
+      .outErrors[ApiServerError](
         HttpCodec.error[FilmNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
@@ -295,7 +295,7 @@ object SWHttpServer:
     (Endpoint(Method.GET / "people" / characterIdPath / "path-to" / targetIdPath)
       ?? Doc.p("The shortest chains of shared films connecting two characters, and how many there are"))
       .out[ShortestPath]
-      .outErrors[SWAPIServerError](
+      .outErrors[ApiServerError](
         HttpCodec.error[CharacterNotFound](Status.NotFound),
         HttpCodec.error[PathNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
@@ -306,7 +306,7 @@ object SWHttpServer:
     (Endpoint(Method.GET / "graph" / "insights")
       ?? Doc.p("How connected each character is, and what the whole cast looks like as a graph"))
       .out[GraphInsights]
-      .outErrors[SWAPIServerError](
+      .outErrors[ApiServerError](
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
@@ -389,14 +389,14 @@ object SWHttpServer:
       endPoints
     )
 
-private final case class SWHttpServerImpl(
-  private val dataRepo: SWDataRepo,
-  private val characterGraph: IO[DataRepoError, SWGraph[String]],
-  private val encoded: IO[DataRepoError, SWHttpServer.Encoded],
+private final case class ApiServerImpl(
+  private val dataRepo: DataRepo,
+  private val characterGraph: IO[DataRepoError, Graph[String]],
+  private val encoded: IO[DataRepoError, ApiServer.Encoded],
   private val preEncoded: Boolean
-) extends SWHttpServer:
+) extends ApiServer:
 
-  private def characterOrError(id: EntityId): IO[SWAPIServerError, Character] =
+  private def characterOrError(id: EntityId): IO[ApiServerError, Character] =
     dataRepo.getCharacter(id).catchAll {
       case DataRepoError.CharacterNotFound(message, characterId) =>
         ZIO.fail(CharacterNotFound(message, characterId))
@@ -404,24 +404,24 @@ private final case class SWHttpServerImpl(
         ZIO.fail(UnexpectedError(err.getMessage))
     }
 
-  private val getShortestPathHandler = SWHttpServer.getShortestPathEndpoint.implement { (characterId, targetId) =>
+  private val getShortestPathHandler = ApiServer.getShortestPathEndpoint.implement { (characterId, targetId) =>
     for
       start  <- characterOrError(characterId)
       target <- characterOrError(targetId)
       graph  <- characterGraph.mapError(err => UnexpectedError(err.getMessage))
       paths  <- ZIO
-                 .succeed(graph.shortestPaths(start.name, target.name, SWHttpServer.maxChains))
+                 .succeed(graph.shortestPaths(start.name, target.name, ApiServer.maxChains))
                  .filterOrFail(_.nonEmpty)(PathNotFound(s"No path between ${start.name} and ${target.name}"))
       chains = graph.countShortestPaths(start.name, target.name)
-    yield SWHttpServer.toShortestPath(start.name, target.name, paths, chains)
+    yield ApiServer.toShortestPath(start.name, target.name, paths, chains)
   }.sandbox
 
-  private val getGraphInsightsHandler = SWHttpServer.getGraphInsightsEndpoint.implement { (_: Unit) =>
+  private val getGraphInsightsHandler = ApiServer.getGraphInsightsEndpoint.implement { (_: Unit) =>
     characterGraph
-      .mapBoth(err => UnexpectedError(err.getMessage), graph => SWHttpServer.toGraphInsights(graph.connectivity))
+      .mapBoth(err => UnexpectedError(err.getMessage), graph => ApiServer.toGraphInsights(graph.connectivity))
   }.sandbox
 
-  private val getCharacterHandler = SWHttpServer.getCharacterEndpoint.implement { characterId =>
+  private val getCharacterHandler = ApiServer.getCharacterEndpoint.implement { characterId =>
     dataRepo
       .getCharacter(characterId)
       .catchAll {
@@ -432,13 +432,13 @@ private final case class SWHttpServerImpl(
       }
   }.sandbox
 
-  private val getCharactersHandler = SWHttpServer.getCharactersEndpoint.implement { (page, sortByParams) =>
+  private val getCharactersHandler = ApiServer.getCharactersEndpoint.implement { (page, sortByParams) =>
     dataRepo
-      .getCharacters(page, Some(PageSize.default), sortByParams.map(SWHttpServer.parseSortByList))
+      .getCharacters(page, Some(PageSize.default), sortByParams.map(ApiServer.parseSortByList))
       .catchAll(err => ZIO.fail(UnexpectedError(err.getMessage)))
   }.sandbox
 
-  private def getFilmHandler = SWHttpServer.getFilmEndpoint.implement { filmId =>
+  private def getFilmHandler = ApiServer.getFilmEndpoint.implement { filmId =>
     dataRepo.getFilm(filmId).catchAll {
       case DataRepoError.FilmNotFound(message, _) =>
         ZIO.fail(FilmNotFound(message, filmId))
@@ -447,13 +447,13 @@ private final case class SWHttpServerImpl(
     }
   }.sandbox
 
-  private def getFilmsHandler = SWHttpServer.getFilmsEndpoint.implement { page =>
+  private def getFilmsHandler = ApiServer.getFilmsEndpoint.implement { page =>
     dataRepo.getFilms(page, Some(PageSize.default)).catchAll { err =>
       ZIO.fail(UnexpectedError(err.getMessage))
     }
   }.sandbox
 
-  private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", SWHttpServer.openAPI)
+  private val swaggerRoutes = SwaggerUI.routes("docs" / "openapi", ApiServer.openAPI)
 
   /**
    * The browser UI, which is a single page read from the classpath.
@@ -486,27 +486,27 @@ private final case class SWHttpServerImpl(
   // would have produced. A miss here is a miss in the repo the map was built
   // from, so there is one answer rather than a fallback that could differ.
   private val preEncodedCharacterRoute =
-    SWHttpServer.getCharacterEndpoint.route -> handler { (characterId: EntityId, _: Request) =>
+    ApiServer.getCharacterEndpoint.route -> handler { (characterId: EntityId, _: Request) =>
       encoded
         .map(_.characters.get(characterId))
         .foldZIO(
           error => ZIO.succeed(Response.internalServerError(error.getMessage)),
           {
-            case Some(bytes) => ZIO.succeed(SWHttpServer.jsonResponse(Status.Ok, bytes))
-            case None        => ZIO.succeed(SWHttpServer.notFoundCharacter(characterId))
+            case Some(bytes) => ZIO.succeed(ApiServer.jsonResponse(Status.Ok, bytes))
+            case None        => ZIO.succeed(ApiServer.notFoundCharacter(characterId))
           }
         )
     }
 
   private val preEncodedFilmRoute =
-    SWHttpServer.getFilmEndpoint.route -> handler { (filmId: EntityId, _: Request) =>
+    ApiServer.getFilmEndpoint.route -> handler { (filmId: EntityId, _: Request) =>
       encoded
         .map(_.films.get(filmId))
         .foldZIO(
           error => ZIO.succeed(Response.internalServerError(error.getMessage)),
           {
-            case Some(bytes) => ZIO.succeed(SWHttpServer.jsonResponse(Status.Ok, bytes))
-            case None        => ZIO.succeed(SWHttpServer.notFoundFilm(filmId))
+            case Some(bytes) => ZIO.succeed(ApiServer.jsonResponse(Status.Ok, bytes))
+            case None        => ZIO.succeed(ApiServer.notFoundFilm(filmId))
           }
         )
     }
@@ -522,16 +522,16 @@ private final case class SWHttpServerImpl(
       case _           => None
 
   private val preEncodedCharactersRoute =
-    SWHttpServer.getCharactersEndpoint.route -> handler { (request: Request) =>
+    ApiServer.getCharactersEndpoint.route -> handler { (request: Request) =>
       cleanPage(request) match
         case None       => ZIO.scoped(getCharactersHandler.toHandler.apply(request))
         case Some(page) =>
-          val sortBy = request.url.queryParams.queryParam("sortBy").map(SWHttpServer.parseSortByList)
+          val sortBy = request.url.queryParams.queryParam("sortBy").map(ApiServer.parseSortByList)
           encoded
             .zip(dataRepo.getCharacters(page, Some(PageSize.default), sortBy))
             .fold(
               error => Response.internalServerError(error.getMessage),
-              (bytes, characters) => SWHttpServer.charactersResponse(bytes, characters)
+              (bytes, characters) => ApiServer.charactersResponse(bytes, characters)
             )
     }
 
@@ -557,12 +557,12 @@ private final case class SWHttpServerImpl(
 
   // The API is cacheable and the page is not: the page is how a reader picks up
   // a new deploy, so it revalidates while the data it fetches need not.
-  private val routes = (Routes(handlers) @@ SWHttpServer.cacheable) ++ swaggerRoutes ++ uiRoutes
+  private val routes = (Routes(handlers) @@ ApiServer.cacheable) ++ swaggerRoutes ++ uiRoutes
 
   override def start: URIO[Server, Nothing] =
     ZIO.scoped {
       for
-        bulkhead <- Bulkhead.make(SWHttpServer.maxInFlight, SWHttpServer.maxQueued)
-        served   <- Server.serve(routes.transform(SWHttpServer.shedding(bulkhead)))
+        bulkhead <- Bulkhead.make(ApiServer.maxInFlight, ApiServer.maxQueued)
+        served   <- Server.serve(routes.transform(ApiServer.shedding(bulkhead)))
       yield served
     }

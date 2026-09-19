@@ -1,7 +1,7 @@
 package com.matthewjones372.data.sql
 
 import com.augustnagro.magnum.*
-import com.matthewjones372.data.{DataRepoError, SWDataRepo}
+import com.matthewjones372.data.{DataRepoError, DataRepo}
 import com.matthewjones372.domain.*
 import com.matthewjones372.sorting.{DynamicMultiSorter, FieldOrdering, SortBy}
 import zio.*
@@ -40,12 +40,12 @@ object SqlDataRepo:
         val size = pageSize.getOrElse(PageSize.default)
         Some((page.getOrElse(PageNumber.first) - 1) * size -> size)
 
-  def apply(transactor: ZTransactor): SWDataRepo = SqlDataRepoLive(transactor)
+  def apply(transactor: ZTransactor): DataRepo = SqlDataRepoLive(transactor)
 
-  val layer: URLayer[ZTransactor, SWDataRepo] =
+  val layer: URLayer[ZTransactor, DataRepo] =
     ZLayer.fromFunction(SqlDataRepoLive.apply)
 
-final private case class SqlDataRepoLive(transactor: ZTransactor) extends SWDataRepo:
+final private case class SqlDataRepoLive(transactor: ZTransactor) extends DataRepo:
   import SqlDataRepo.*
 
   private val personColumns =

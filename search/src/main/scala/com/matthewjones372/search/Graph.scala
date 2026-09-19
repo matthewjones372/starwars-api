@@ -5,7 +5,7 @@ import zio.*
 import scala.annotation.tailrec
 import scala.collection.immutable.{HashSet, Queue}
 
-class SWGraph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
+class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
   // We flip the people map so that we can easily find the neighbors of a film
   private val filmPeopleMap: Map[A, Set[A]] = peopleFilmMap.foldLeft(Map.empty[A, Set[A]]) { case (acc, (k, vs)) =>
     vs.foldLeft(acc) { case (acc, v) =>

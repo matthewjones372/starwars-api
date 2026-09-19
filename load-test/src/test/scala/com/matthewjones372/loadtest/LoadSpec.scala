@@ -1,6 +1,6 @@
 package com.matthewjones372.loadtest
 
-import com.matthewjones372.http.api.SWHttpServer
+import com.matthewjones372.http.api.ApiServer
 import io.github.matthewjones372.proofload.ComparisonKt
 import io.github.matthewjones372.proofload.RunResult
 import io.github.matthewjones372.proofload.Scenario
@@ -79,7 +79,7 @@ object LoadSpec extends ProofloadSpec:
   private def serving(preEncoded: Boolean): ZIO[Scope, Throwable, Int] =
     for
       env    <- Server.defaultWithPort(0).build
-      server <- SWHttpServer.measuring(preEncoded)
+      server <- ApiServer.measuring(preEncoded)
       _      <- server.start.provideEnvironment(env).forkScoped
       port   <- env.get[Server].port
       _      <- awaitBound(port)

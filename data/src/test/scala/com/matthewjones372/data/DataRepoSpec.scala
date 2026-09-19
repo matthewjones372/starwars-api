@@ -5,7 +5,7 @@ import com.matthewjones372.sorting.{FieldOrdering, SortBy}
 import zio.*
 import zio.test.*
 
-object SWDataRepoSpec extends ZIOSpecDefault:
+object DataRepoSpec extends ZIOSpecDefault:
 
   private def personWithId(id: Int, name: String = "", height: Option[Int] = None) =
     Character(
@@ -47,54 +47,54 @@ object SWDataRepoSpec extends ZIOSpecDefault:
   private val thirtyPeople = (1 to 30).map(id => personWithId(id)).toList
   private val thirtyFilms  = (1 to 30).map(filmWithId).toList
 
-  private val repo = SWDataRepo.fromEntities(thirtyPeople, thirtyFilms)
+  private val repo = DataRepo.fromEntities(thirtyPeople, thirtyFilms)
 
-  def spec = suite("SWDataRepoSpec")(
+  def spec = suite("DataRepoSpec")(
     suite("paginate")(
       test("a page holds exactly the requested page size") {
-        val page = SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(1)), Some(PageSize(10)))
+        val page = DataRepo.paginate((1 to 30).toList, Some(PageNumber(1)), Some(PageSize(10)))
         assertTrue(page.length == 10, page == (1 to 10).toList)
       },
       test("consecutive pages do not overlap") {
-        val first  = SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(1)), Some(PageSize(10)))
-        val second = SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(2)), Some(PageSize(10)))
+        val first  = DataRepo.paginate((1 to 30).toList, Some(PageNumber(1)), Some(PageSize(10)))
+        val second = DataRepo.paginate((1 to 30).toList, Some(PageNumber(2)), Some(PageSize(10)))
         assertTrue(first.intersect(second).isEmpty, second == (11 to 20).toList)
       },
       test("every page is reachable and the pages tile the data") {
         val pages =
           List(PageNumber(1), PageNumber(2), PageNumber(3))
-            .map(page => SWDataRepo.paginate((1 to 30).toList, Some(page), Some(PageSize(10))))
+            .map(page => DataRepo.paginate((1 to 30).toList, Some(page), Some(PageSize(10))))
         assertTrue(pages.flatten == (1 to 30).toList)
       },
       test("a final partial page is not padded") {
-        val page = SWDataRepo.paginate((1 to 25).toList, Some(PageNumber(3)), Some(PageSize(10)))
+        val page = DataRepo.paginate((1 to 25).toList, Some(PageNumber(3)), Some(PageSize(10)))
         assertTrue(page == (21 to 25).toList)
       },
       test("a page beyond the data is empty") {
-        assertTrue(SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(99)), Some(PageSize(10))).isEmpty)
+        assertTrue(DataRepo.paginate((1 to 30).toList, Some(PageNumber(99)), Some(PageSize(10))).isEmpty)
       },
       test("a page without a fetch size uses the default page size") {
-        val page = SWDataRepo.paginate((1 to 30).toList, Some(PageNumber(2)), None)
+        val page = DataRepo.paginate((1 to 30).toList, Some(PageNumber(2)), None)
         assertTrue(page == (11 to 20).toList)
       },
       test("a fetch size without a page takes from the start") {
-        assertTrue(SWDataRepo.paginate((1 to 30).toList, None, Some(PageSize(5))) == (1 to 5).toList)
+        assertTrue(DataRepo.paginate((1 to 30).toList, None, Some(PageSize(5))) == (1 to 5).toList)
       },
       test("neither a page nor a fetch size returns everything") {
-        assertTrue(SWDataRepo.paginate((1 to 30).toList, None, None) == (1 to 30).toList)
+        assertTrue(DataRepo.paginate((1 to 30).toList, None, None) == (1 to 30).toList)
       }
     ),
     suite("parseEntityId")(
       test("reads the trailing id from an entity url") {
         assertTrue(
-          SWDataRepo.parseEntityId("http://localhost:8080/people/80/") == Right(80),
-          SWDataRepo.parseEntityId("http://localhost:8080/films/6") == Right(6)
+          DataRepo.parseEntityId("http://localhost:8080/people/80/") == Right(80),
+          DataRepo.parseEntityId("http://localhost:8080/films/6") == Right(6)
         )
       },
       test("fails rather than throwing on a url with no numeric id") {
         assertTrue(
-          SWDataRepo.parseEntityId("http://localhost:8080/people/").isLeft,
-          SWDataRepo.parseEntityId("not a url at all").isLeft
+          DataRepo.parseEntityId("http://localhost:8080/people/").isLeft,
+          DataRepo.parseEntityId("not a url at all").isLeft
         )
       }
     ),
@@ -107,7 +107,7 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       },
       test("pages are stable and ordered by id regardless of map ordering") {
         for
-          repo   <- SWDataRepo.fromEntities(scala.util.Random.shuffle(thirtyPeople), thirtyFilms)
+          repo   <- DataRepo.fromEntities(scala.util.Random.shuffle(thirtyPeople), thirtyFilms)
           first  <- repo.getCharacters(Some(PageNumber(1)), Some(PageSize(10)), None)
           second <- repo.getCharacters(Some(PageNumber(2)), Some(PageSize(10)), None)
         yield assertTrue(
@@ -135,14 +135,14 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       test("sorts by the requested field") {
         val people = List(personWithId(1, "Chewbacca"), personWithId(2, "Ackbar"), personWithId(3, "Boba"))
         for
-          repo   <- SWDataRepo.fromEntities(people, Nil)
+          repo   <- DataRepo.fromEntities(people, Nil)
           sorted <- repo.getCharacters(None, None, Some(List(SortBy("name", FieldOrdering.ASC))))
         yield assertTrue(sorted.results.map(_.name) == List("Ackbar", "Boba", "Chewbacca"))
       },
       test("sorts descending when asked") {
         val people = List(personWithId(1, "Chewbacca"), personWithId(2, "Ackbar"), personWithId(3, "Boba"))
         for
-          repo   <- SWDataRepo.fromEntities(people, Nil)
+          repo   <- DataRepo.fromEntities(people, Nil)
           sorted <- repo.getCharacters(None, None, Some(List(SortBy("name", FieldOrdering.DESC))))
         yield assertTrue(sorted.results.map(_.name) == List("Chewbacca", "Boba", "Ackbar"))
       }
@@ -186,7 +186,7 @@ object SWDataRepoSpec extends ZIOSpecDefault:
     suite("layer")(
       test("loads the bundled star wars data from the classpath") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
           person <- repo.getCharacter(EntityId(1))
@@ -200,20 +200,20 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       },
       test("the bundled data is served under the public url, not the paths it is stored as") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           person <- repo.getCharacter(EntityId(1))
           film   <- repo.getFilm(EntityId(1))
         yield assertTrue(
-          person.url == s"${SWDataRepo.defaultPublicUrl}/people/1/",
-          person.films.forall(_.startsWith(SWDataRepo.defaultPublicUrl)),
-          person.homeworld.exists(_.startsWith(SWDataRepo.defaultPublicUrl)),
-          film.url == s"${SWDataRepo.defaultPublicUrl}/films/1/",
-          film.characters.forall(_.startsWith(SWDataRepo.defaultPublicUrl))
+          person.url == s"${DataRepo.defaultPublicUrl}/people/1/",
+          person.films.forall(_.startsWith(DataRepo.defaultPublicUrl)),
+          person.homeworld.exists(_.startsWith(DataRepo.defaultPublicUrl)),
+          film.url == s"${DataRepo.defaultPublicUrl}/films/1/",
+          film.characters.forall(_.startsWith(DataRepo.defaultPublicUrl))
         )
       },
       test("every bundled title carries a media type") {
         for
-          repo  <- ZIO.service[SWDataRepo]
+          repo  <- ZIO.service[DataRepo]
           films <- repo.getFilms(None, None)
         yield assertTrue(
           films.results.forall(_.mediaType.isDefined),
@@ -223,7 +223,7 @@ object SWDataRepoSpec extends ZIOSpecDefault:
       },
       test("pages the bundled data without gaps or repeats") {
         for
-          repo  <- ZIO.service[SWDataRepo]
+          repo  <- ZIO.service[DataRepo]
           first <- repo.getCharacters(Some(PageNumber(1)), Some(PageSize(10)), None)
           rest  <- ZIO.foreach(2 to first.pageCount)(page =>
                     repo.getCharacters(Some(page.asPageNumber), Some(PageSize(10)), None)
@@ -231,12 +231,12 @@ object SWDataRepoSpec extends ZIOSpecDefault:
           fetched = first.results ++ rest.flatMap(_.results)
         yield assertTrue(fetched.length == 205, fetched.map(_.url).distinct.length == 205)
       }
-    ).provideShared(SWDataRepo.layer),
+    ).provideShared(DataRepo.layer),
     suite("resolve")(
       test("roots a stored path at the public url and leaves anything already absolute alone") {
         assertTrue(
-          SWDataRepo.resolve("http://example.test")("/people/1/") == "http://example.test/people/1/",
-          SWDataRepo.resolve("http://example.test")("https://swapi.dev/api/people/1/") ==
+          DataRepo.resolve("http://example.test")("/people/1/") == "http://example.test/people/1/",
+          DataRepo.resolve("http://example.test")("https://swapi.dev/api/people/1/") ==
             "https://swapi.dev/api/people/1/"
         )
       }
@@ -244,7 +244,7 @@ object SWDataRepoSpec extends ZIOSpecDefault:
     suite("fromEntities")(
       test("fails rather than throwing when an entity url has no id") {
         for result <-
-            SWDataRepo.fromEntities(List(personWithId(1).copy(url = "http://localhost:8080/people/")), Nil).exit
+            DataRepo.fromEntities(List(personWithId(1).copy(url = "http://localhost:8080/people/")), Nil).exit
         yield assert(result)(Assertion.failsWithA[DataRepoError.UnexpectedError])
       }
     )

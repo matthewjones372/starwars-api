@@ -204,9 +204,9 @@ films connects them.
 The same search is available directly:
 
 ```scala mdoc:silent
-import com.matthewjones372.search.SWGraph
+import com.matthewjones372.search.Graph
 
-val graph = SWGraph(
+val graph = Graph(
   Map(
     "Lobot"     -> Set("The Empire Strikes Back"),
     "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
@@ -274,15 +274,15 @@ The client wraps the same API with caching, retries and typed errors. Failures
 arrive as `ClientError` values rather than exceptions.
 
 ```scala mdoc:compile-only
-import com.matthewjones372.api.client.SWAPIClientService
+import com.matthewjones372.api.client.UniverseClient
 import zio.*, zio.http.*
 
 object Example extends ZIOAppDefault:
   def run =
     (for
-      films <- SWAPIClientService.getFilmsFromCharacter(1)
+      films <- UniverseClient.getFilmsFromCharacter(1)
       _     <- Console.printLine(films.mkString(", "))
-    yield ()).provide(SWAPIClientService.default, Scope.default, Client.default)
+    yield ()).provide(UniverseClient.default, Scope.default, Client.default)
 ```
 
 Responses are cached for 30 minutes. Server errors are retried with exponential
@@ -309,12 +309,12 @@ import zio.*
 
 import java.nio.file.Path
 
-val source = SwDatabase.file(Path.of("swapi.db"))
+val source = Database.file(Path.of("swapi.db"))
 
 for
-  _         <- SwMigrations.migrate.provideEnvironment(ZEnvironment(source))
+  _         <- Migrations.migrate.provideEnvironment(ZEnvironment(source))
   transactor = ZTransactor(source)
-  _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
+  _         <- Seed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
   people    <- SqlDataRepo(transactor).getCharacters(Some(PageNumber.first), Some(PageSize.default), None)
 yield people
 ```
@@ -322,14 +322,14 @@ yield people
 The database is a file. SQLite's in-memory mode is deliberately not offered:
 a shared-cache in-memory database is destroyed when its last connection
 closes, so it cannot survive a `DataSource` that opens a connection per query.
-Use `SWDataRepo.layer` when you want the data held in memory.
+Use `DataRepo.layer` when you want the data held in memory.
 
 Characters and films are stored in normalised tables, with `people_films`
 carrying the relation the graph search walks. Paging and sorting run in SQL.
 Sort keys are matched against a column whitelist, so a `sortBy` value that is
 not a known field never reaches the query.
 
-Foreign keys are off by default in SQLite, so `SwDatabase` turns them on for
+Foreign keys are off by default in SQLite, so `Database` turns them on for
 every connection it hands out.
 
 ## Modules

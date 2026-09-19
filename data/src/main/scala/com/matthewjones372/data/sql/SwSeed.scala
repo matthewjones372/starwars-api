@@ -41,9 +41,10 @@ object SwSeed:
   private def insertFilm(entry: (Int, Film))(using DbCon): Unit =
     val (id, film) = entry
     val _          =
-      sql"""insert into films (id, title, episode_id, opening_crawl, director, producer, release_date, created, edited, url)
+      sql"""insert into films (id, title, episode_id, opening_crawl, director, producer, release_date, created, edited, url, media_type)
             values ($id, ${film.title}, ${film.episodeId}, ${film.openingCrawl}, ${film.director}, ${film.producer},
-                    ${film.releaseDate}, ${film.created}, ${film.edited}, ${film.url})
+                    ${film.releaseDate}, ${film.created}, ${film.edited}, ${film.url},
+                    ${film.mediaType.map(MediaKind.name)})
             on conflict (id) do nothing""".update.run()
 
     insertUrls("film_characters", "film_id", "character_url", id, film.characters)

@@ -1,7 +1,7 @@
 package com.matthewjones372.data.sql
 
 import com.augustnagro.magnum.DbCodec
-import com.matthewjones372.domain.{Film, Character}
+import com.matthewjones372.domain.{Character, Film, MediaKind}
 
 private[sql] final case class CharacterRow(
   id: Int,
@@ -49,7 +49,8 @@ private[sql] final case class FilmRow(
   releaseDate: String,
   created: String,
   edited: String,
-  url: String
+  url: String,
+  mediaType: Option[String]
 ) derives DbCodec:
   def toFilm(
     characters: Set[String],
@@ -72,5 +73,6 @@ private[sql] final case class FilmRow(
       species = species,
       created = created,
       edited = edited,
-      url = url
+      url = url,
+      mediaType = mediaType.flatMap(MediaKind.from(_).toOption)
     )

@@ -86,8 +86,9 @@
       "http://localhost:8080/species/13/"
     ],
     "created": "2014-12-19T16:52:55.740000Z",
-    "edited": "2014-12-20T10:54:07.216000Z",
-    "url": "http://localhost:8080/films/4/"
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/4/",
+    "media_type": "film"
   },
   {
     "title": "Attack of the Clones",
@@ -186,8 +187,9 @@
       "http://localhost:8080/species/35/"
     ],
     "created": "2014-12-20T10:57:57.886000Z",
-    "edited": "2014-12-20T20:18:48.516000Z",
-    "url": "http://localhost:8080/films/5/"
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/5/",
+    "media_type": "film"
   },
   {
     "title": "The Empire Strikes Back",
@@ -247,8 +249,9 @@
       "http://localhost:8080/species/2/"
     ],
     "created": "2014-12-12T11:26:24.656000Z",
-    "edited": "2014-12-15T13:07:53.386000Z",
-    "url": "http://localhost:8080/films/2/"
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/2/",
+    "media_type": "film"
   },
   {
     "title": "Return of the Jedi",
@@ -322,8 +325,9 @@
       "http://localhost:8080/species/2/"
     ],
     "created": "2014-12-18T10:39:33.255000Z",
-    "edited": "2014-12-20T09:48:37.462000Z",
-    "url": "http://localhost:8080/films/3/"
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/3/",
+    "media_type": "film"
   },
   {
     "title": "Revenge of the Sith",
@@ -435,8 +439,9 @@
       "http://localhost:8080/species/33/"
     ],
     "created": "2014-12-20T18:49:38.403000Z",
-    "edited": "2014-12-20T20:47:52.073000Z",
-    "url": "http://localhost:8080/films/6/"
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/6/",
+    "media_type": "film"
   },
   {
     "title": "A New Hope",
@@ -494,7 +499,703 @@
       "http://localhost:8080/species/2/"
     ],
     "created": "2014-12-10T14:23:31.880000Z",
-    "edited": "2014-12-20T19:49:45.256000Z",
-    "url": "http://localhost:8080/films/1/"
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/1/",
+    "media_type": "film"
+  },
+  {
+    "title": "The Force Awakens",
+    "episode_id": 7,
+    "opening_crawl": "Luke Skywalker has vanished.\r\nIn his absence, the sinister\r\nFIRST ORDER has risen from\r\nthe ashes of the Empire\r\nand will not rest until\r\nSkywalker, the last Jedi,\r\nhas been destroyed.\r\n\r\nWith the support of the\r\nREPUBLIC, General Leia Organa\r\nleads a brave RESISTANCE.\r\nShe is desperate to find her\r\nbrother Luke and gain his\r\nhelp in restoring peace and\r\njustice to the galaxy.\r\n\r\nLeia has sent her most daring\r\npilot on a secret mission\r\nto Jakku, where an old ally\r\nhas discovered a clue to\r\nLuke's whereabouts....",
+    "director": "J. J. Abrams",
+    "producer": "Kathleen Kennedy, J. J. Abrams, Bryan Burk",
+    "release_date": "2015-12-18",
+    "characters": [
+      "http://localhost:8080/people/1/",
+      "http://localhost:8080/people/2/",
+      "http://localhost:8080/people/3/",
+      "http://localhost:8080/people/5/",
+      "http://localhost:8080/people/13/",
+      "http://localhost:8080/people/14/",
+      "http://localhost:8080/people/27/",
+      "http://localhost:8080/people/31/",
+      "http://localhost:8080/people/84/",
+      "http://localhost:8080/people/85/",
+      "http://localhost:8080/people/86/",
+      "http://localhost:8080/people/87/",
+      "http://localhost:8080/people/88/",
+      "http://localhost:8080/people/89/",
+      "http://localhost:8080/people/90/",
+      "http://localhost:8080/people/91/",
+      "http://localhost:8080/people/92/",
+      "http://localhost:8080/people/93/",
+      "http://localhost:8080/people/94/",
+      "http://localhost:8080/people/106/",
+      "http://localhost:8080/people/107/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/61/",
+      "http://localhost:8080/planets/62/",
+      "http://localhost:8080/planets/63/",
+      "http://localhost:8080/planets/64/",
+      "http://localhost:8080/planets/65/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/10/",
+      "http://localhost:8080/starships/76/",
+      "http://localhost:8080/starships/77/",
+      "http://localhost:8080/starships/78/",
+      "http://localhost:8080/starships/79/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/77/",
+      "http://localhost:8080/vehicles/81/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/3/",
+      "http://localhost:8080/species/38/",
+      "http://localhost:8080/species/51/",
+      "http://localhost:8080/species/50/",
+      "http://localhost:8080/species/49/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/7/",
+    "media_type": "film"
+  },
+  {
+    "title": "The Last Jedi",
+    "episode_id": 8,
+    "opening_crawl": "The FIRST ORDER reigns.\r\nHaving decimated the peaceful\r\nRepublic, Supreme Leader Snoke\r\nnow deploys his merciless\r\nlegions to seize military\r\ncontrol of the galaxy.\r\n\r\nOnly General Leia Organa's\r\nband of RESISTANCE fighters\r\nstand against the rising\r\ntyranny, certain that Jedi\r\nMaster Luke Skywalker will\r\nreturn and restore a spark of\r\nhope to the fight.\r\n\r\nBut the Resistance has been\r\nexposed. As the First Order\r\nspeeds toward the rebel base,\r\nthe brave heroes mount a\r\ndesperate escape....",
+    "director": "Rian Johnson",
+    "producer": "Kathleen Kennedy, Ram Bergman",
+    "release_date": "2017-12-15",
+    "characters": [
+      "http://localhost:8080/people/1/",
+      "http://localhost:8080/people/2/",
+      "http://localhost:8080/people/3/",
+      "http://localhost:8080/people/5/",
+      "http://localhost:8080/people/13/",
+      "http://localhost:8080/people/20/",
+      "http://localhost:8080/people/27/",
+      "http://localhost:8080/people/84/",
+      "http://localhost:8080/people/85/",
+      "http://localhost:8080/people/86/",
+      "http://localhost:8080/people/87/",
+      "http://localhost:8080/people/88/",
+      "http://localhost:8080/people/89/",
+      "http://localhost:8080/people/90/",
+      "http://localhost:8080/people/91/",
+      "http://localhost:8080/people/92/",
+      "http://localhost:8080/people/95/",
+      "http://localhost:8080/people/96/",
+      "http://localhost:8080/people/97/",
+      "http://localhost:8080/people/98/",
+      "http://localhost:8080/people/106/",
+      "http://localhost:8080/people/107/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/65/",
+      "http://localhost:8080/planets/66/",
+      "http://localhost:8080/planets/67/",
+      "http://localhost:8080/planets/63/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/10/",
+      "http://localhost:8080/starships/76/",
+      "http://localhost:8080/starships/80/",
+      "http://localhost:8080/starships/81/",
+      "http://localhost:8080/starships/82/",
+      "http://localhost:8080/starships/79/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/78/",
+      "http://localhost:8080/vehicles/18/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/3/",
+      "http://localhost:8080/species/50/",
+      "http://localhost:8080/species/51/",
+      "http://localhost:8080/species/8/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/8/",
+    "media_type": "film"
+  },
+  {
+    "title": "The Rise of Skywalker",
+    "episode_id": 9,
+    "opening_crawl": "The dead speak! The galaxy has\r\nheard a mysterious broadcast, a\r\nthreat of REVENGE in the sinister\r\nvoice of the late EMPEROR PALPATINE.\r\n\r\nGENERAL LEIA ORGANA dispatches\r\nsecret agents to gather\r\nintelligence, while REY, the last\r\nhope of the Jedi, trains for\r\nbattle against the diabolical\r\nFIRST ORDER.\r\n\r\nMeanwhile, Supreme Leader KYLO\r\nREN rages in search of the\r\nphantom Emperor, determined to\r\ndestroy any threat to his\r\npower....",
+    "director": "J. J. Abrams",
+    "producer": "Kathleen Kennedy, J. J. Abrams, Michelle Rejwan",
+    "release_date": "2019-12-20",
+    "characters": [
+      "http://localhost:8080/people/1/",
+      "http://localhost:8080/people/2/",
+      "http://localhost:8080/people/3/",
+      "http://localhost:8080/people/5/",
+      "http://localhost:8080/people/13/",
+      "http://localhost:8080/people/14/",
+      "http://localhost:8080/people/18/",
+      "http://localhost:8080/people/21/",
+      "http://localhost:8080/people/25/",
+      "http://localhost:8080/people/31/",
+      "http://localhost:8080/people/84/",
+      "http://localhost:8080/people/85/",
+      "http://localhost:8080/people/86/",
+      "http://localhost:8080/people/87/",
+      "http://localhost:8080/people/88/",
+      "http://localhost:8080/people/89/",
+      "http://localhost:8080/people/92/",
+      "http://localhost:8080/people/95/",
+      "http://localhost:8080/people/99/",
+      "http://localhost:8080/people/100/",
+      "http://localhost:8080/people/101/",
+      "http://localhost:8080/people/102/",
+      "http://localhost:8080/people/103/",
+      "http://localhost:8080/people/104/",
+      "http://localhost:8080/people/105/",
+      "http://localhost:8080/people/106/",
+      "http://localhost:8080/people/107/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/68/",
+      "http://localhost:8080/planets/69/",
+      "http://localhost:8080/planets/70/",
+      "http://localhost:8080/planets/71/",
+      "http://localhost:8080/planets/113/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/10/",
+      "http://localhost:8080/starships/76/",
+      "http://localhost:8080/starships/83/",
+      "http://localhost:8080/starships/82/",
+      "http://localhost:8080/starships/79/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/79/",
+      "http://localhost:8080/vehicles/77/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/3/",
+      "http://localhost:8080/species/39/",
+      "http://localhost:8080/species/40/",
+      "http://localhost:8080/species/8/",
+      "http://localhost:8080/species/51/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/9/",
+    "media_type": "film"
+  },
+  {
+    "title": "Rogue One",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Gareth Edwards",
+    "producer": "Kathleen Kennedy, Allison Shearmur, Simon Emanuel",
+    "release_date": "2016-12-16",
+    "characters": [
+      "http://localhost:8080/people/4/",
+      "http://localhost:8080/people/5/",
+      "http://localhost:8080/people/12/",
+      "http://localhost:8080/people/28/",
+      "http://localhost:8080/people/68/",
+      "http://localhost:8080/people/108/",
+      "http://localhost:8080/people/109/",
+      "http://localhost:8080/people/110/",
+      "http://localhost:8080/people/111/",
+      "http://localhost:8080/people/112/",
+      "http://localhost:8080/people/113/",
+      "http://localhost:8080/people/114/",
+      "http://localhost:8080/people/115/",
+      "http://localhost:8080/people/116/",
+      "http://localhost:8080/people/117/",
+      "http://localhost:8080/people/118/",
+      "http://localhost:8080/people/119/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/77/",
+      "http://localhost:8080/planets/78/",
+      "http://localhost:8080/planets/79/",
+      "http://localhost:8080/planets/80/",
+      "http://localhost:8080/planets/81/",
+      "http://localhost:8080/planets/3/",
+      "http://localhost:8080/planets/13/",
+      "http://localhost:8080/planets/9/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/84/",
+      "http://localhost:8080/starships/12/",
+      "http://localhost:8080/starships/85/",
+      "http://localhost:8080/starships/22/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/82/",
+      "http://localhost:8080/vehicles/83/",
+      "http://localhost:8080/vehicles/19/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/8/",
+      "http://localhost:8080/species/52/",
+      "http://localhost:8080/species/42/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/10/",
+    "media_type": "film"
+  },
+  {
+    "title": "Solo",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Ron Howard",
+    "producer": "Kathleen Kennedy, Allison Shearmur, Simon Emanuel",
+    "release_date": "2018-05-25",
+    "characters": [
+      "http://localhost:8080/people/13/",
+      "http://localhost:8080/people/14/",
+      "http://localhost:8080/people/25/",
+      "http://localhost:8080/people/44/",
+      "http://localhost:8080/people/120/",
+      "http://localhost:8080/people/121/",
+      "http://localhost:8080/people/122/",
+      "http://localhost:8080/people/123/",
+      "http://localhost:8080/people/124/",
+      "http://localhost:8080/people/125/",
+      "http://localhost:8080/people/126/",
+      "http://localhost:8080/people/127/",
+      "http://localhost:8080/people/128/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/22/",
+      "http://localhost:8080/planets/85/",
+      "http://localhost:8080/planets/86/",
+      "http://localhost:8080/planets/87/",
+      "http://localhost:8080/planets/88/",
+      "http://localhost:8080/planets/36/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/10/",
+      "http://localhost:8080/starships/22/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/84/",
+      "http://localhost:8080/vehicles/85/",
+      "http://localhost:8080/vehicles/90/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/3/",
+      "http://localhost:8080/species/47/",
+      "http://localhost:8080/species/48/",
+      "http://localhost:8080/species/22/",
+      "http://localhost:8080/species/15/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/11/",
+    "media_type": "film"
+  },
+  {
+    "title": "The Mandalorian",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Dave Filoni, Rick Famuyiwa, Bryce Dallas Howard",
+    "producer": "Jon Favreau, Dave Filoni, Kathleen Kennedy, Colin Wilson",
+    "release_date": "2019-11-12",
+    "characters": [
+      "http://localhost:8080/people/1/",
+      "http://localhost:8080/people/3/",
+      "http://localhost:8080/people/22/",
+      "http://localhost:8080/people/45/",
+      "http://localhost:8080/people/129/",
+      "http://localhost:8080/people/130/",
+      "http://localhost:8080/people/131/",
+      "http://localhost:8080/people/132/",
+      "http://localhost:8080/people/133/",
+      "http://localhost:8080/people/134/",
+      "http://localhost:8080/people/135/",
+      "http://localhost:8080/people/136/",
+      "http://localhost:8080/people/137/",
+      "http://localhost:8080/people/138/",
+      "http://localhost:8080/people/139/",
+      "http://localhost:8080/people/140/",
+      "http://localhost:8080/people/141/",
+      "http://localhost:8080/people/142/",
+      "http://localhost:8080/people/143/",
+      "http://localhost:8080/people/144/",
+      "http://localhost:8080/people/145/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/89/",
+      "http://localhost:8080/planets/90/",
+      "http://localhost:8080/planets/91/",
+      "http://localhost:8080/planets/1/",
+      "http://localhost:8080/planets/92/",
+      "http://localhost:8080/planets/93/",
+      "http://localhost:8080/planets/114/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/87/",
+      "http://localhost:8080/starships/21/",
+      "http://localhost:8080/starships/22/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/86/",
+      "http://localhost:8080/vehicles/87/",
+      "http://localhost:8080/vehicles/19/",
+      "http://localhost:8080/vehicles/89/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/6/",
+      "http://localhost:8080/species/41/",
+      "http://localhost:8080/species/35/",
+      "http://localhost:8080/species/15/",
+      "http://localhost:8080/species/52/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/12/",
+    "media_type": "series"
+  },
+  {
+    "title": "The Book of Boba Fett",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Robert Rodriguez, Steph Green, Bryce Dallas Howard",
+    "producer": "Jon Favreau, Dave Filoni, Robert Rodriguez, Kathleen Kennedy",
+    "release_date": "2021-12-29",
+    "characters": [
+      "http://localhost:8080/people/1/",
+      "http://localhost:8080/people/3/",
+      "http://localhost:8080/people/16/",
+      "http://localhost:8080/people/22/",
+      "http://localhost:8080/people/45/",
+      "http://localhost:8080/people/129/",
+      "http://localhost:8080/people/130/",
+      "http://localhost:8080/people/136/",
+      "http://localhost:8080/people/137/",
+      "http://localhost:8080/people/139/",
+      "http://localhost:8080/people/141/",
+      "http://localhost:8080/people/142/",
+      "http://localhost:8080/people/146/",
+      "http://localhost:8080/people/147/",
+      "http://localhost:8080/people/148/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/1/",
+      "http://localhost:8080/planets/92/",
+      "http://localhost:8080/planets/89/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/21/",
+      "http://localhost:8080/starships/87/",
+      "http://localhost:8080/starships/89/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/4/",
+      "http://localhost:8080/vehicles/87/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/5/",
+      "http://localhost:8080/species/3/",
+      "http://localhost:8080/species/42/",
+      "http://localhost:8080/species/35/",
+      "http://localhost:8080/species/6/",
+      "http://localhost:8080/species/15/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/13/",
+    "media_type": "series"
+  },
+  {
+    "title": "Obi-Wan Kenobi",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Deborah Chow",
+    "producer": "Kathleen Kennedy, Michelle Rejwan, Deborah Chow, Ewan McGregor, Joby Harold",
+    "release_date": "2022-05-27",
+    "characters": [
+      "http://localhost:8080/people/4/",
+      "http://localhost:8080/people/5/",
+      "http://localhost:8080/people/6/",
+      "http://localhost:8080/people/7/",
+      "http://localhost:8080/people/10/",
+      "http://localhost:8080/people/11/",
+      "http://localhost:8080/people/32/",
+      "http://localhost:8080/people/68/",
+      "http://localhost:8080/people/149/",
+      "http://localhost:8080/people/150/",
+      "http://localhost:8080/people/151/",
+      "http://localhost:8080/people/152/",
+      "http://localhost:8080/people/153/",
+      "http://localhost:8080/people/154/",
+      "http://localhost:8080/people/155/",
+      "http://localhost:8080/people/156/",
+      "http://localhost:8080/people/157/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/1/",
+      "http://localhost:8080/planets/2/",
+      "http://localhost:8080/planets/95/",
+      "http://localhost:8080/planets/96/",
+      "http://localhost:8080/planets/97/",
+      "http://localhost:8080/planets/98/",
+      "http://localhost:8080/planets/9/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/92/",
+      "http://localhost:8080/starships/22/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/89/",
+      "http://localhost:8080/vehicles/4/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/37/",
+      "http://localhost:8080/species/42/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/14/",
+    "media_type": "series"
+  },
+  {
+    "title": "Andor",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Toby Haynes, Benjamin Caron, Susanna White",
+    "producer": "Tony Gilroy, Sanne Wohlenberg, Kathleen Kennedy, Michelle Rejwan",
+    "release_date": "2022-09-21",
+    "characters": [
+      "http://localhost:8080/people/28/",
+      "http://localhost:8080/people/109/",
+      "http://localhost:8080/people/110/",
+      "http://localhost:8080/people/115/",
+      "http://localhost:8080/people/116/",
+      "http://localhost:8080/people/158/",
+      "http://localhost:8080/people/159/",
+      "http://localhost:8080/people/160/",
+      "http://localhost:8080/people/161/",
+      "http://localhost:8080/people/162/",
+      "http://localhost:8080/people/163/",
+      "http://localhost:8080/people/164/",
+      "http://localhost:8080/people/165/",
+      "http://localhost:8080/people/166/",
+      "http://localhost:8080/people/167/",
+      "http://localhost:8080/people/168/",
+      "http://localhost:8080/people/169/",
+      "http://localhost:8080/people/170/",
+      "http://localhost:8080/people/171/",
+      "http://localhost:8080/people/172/",
+      "http://localhost:8080/people/173/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/99/",
+      "http://localhost:8080/planets/100/",
+      "http://localhost:8080/planets/101/",
+      "http://localhost:8080/planets/102/",
+      "http://localhost:8080/planets/9/",
+      "http://localhost:8080/planets/32/",
+      "http://localhost:8080/planets/77/",
+      "http://localhost:8080/planets/82/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/93/",
+      "http://localhost:8080/starships/94/",
+      "http://localhost:8080/starships/22/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/80/",
+      "http://localhost:8080/vehicles/89/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/8/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/15/",
+    "media_type": "series"
+  },
+  {
+    "title": "Ahsoka",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Dave Filoni, Peter Ramsey, Steph Green, Rick Famuyiwa",
+    "producer": "Dave Filoni, Jon Favreau, Kathleen Kennedy, Carrie Beck",
+    "release_date": "2023-08-22",
+    "characters": [
+      "http://localhost:8080/people/139/",
+      "http://localhost:8080/people/145/",
+      "http://localhost:8080/people/174/",
+      "http://localhost:8080/people/175/",
+      "http://localhost:8080/people/176/",
+      "http://localhost:8080/people/177/",
+      "http://localhost:8080/people/178/",
+      "http://localhost:8080/people/179/",
+      "http://localhost:8080/people/180/",
+      "http://localhost:8080/people/181/",
+      "http://localhost:8080/people/182/",
+      "http://localhost:8080/people/183/",
+      "http://localhost:8080/people/184/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/103/",
+      "http://localhost:8080/planets/104/",
+      "http://localhost:8080/planets/105/",
+      "http://localhost:8080/planets/22/",
+      "http://localhost:8080/planets/89/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/91/",
+      "http://localhost:8080/starships/90/",
+      "http://localhost:8080/starships/89/"
+    ],
+    "vehicles": [
+      "http://localhost:8080/vehicles/87/",
+      "http://localhost:8080/vehicles/88/"
+    ],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/15/",
+      "http://localhost:8080/species/35/",
+      "http://localhost:8080/species/43/",
+      "http://localhost:8080/species/22/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/16/",
+    "media_type": "series"
+  },
+  {
+    "title": "The Acolyte",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Leslye Headland, Kogonada, Alex Garcia Lopez, Hanelle M. Culpepper",
+    "producer": "Leslye Headland, Kathleen Kennedy, Simon Emanuel, Jeff F. King",
+    "release_date": "2024-06-04",
+    "characters": [
+      "http://localhost:8080/people/185/",
+      "http://localhost:8080/people/186/",
+      "http://localhost:8080/people/187/",
+      "http://localhost:8080/people/188/",
+      "http://localhost:8080/people/189/",
+      "http://localhost:8080/people/190/",
+      "http://localhost:8080/people/191/",
+      "http://localhost:8080/people/192/",
+      "http://localhost:8080/people/193/",
+      "http://localhost:8080/people/194/",
+      "http://localhost:8080/people/195/",
+      "http://localhost:8080/people/196/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/108/",
+      "http://localhost:8080/planets/109/",
+      "http://localhost:8080/planets/110/",
+      "http://localhost:8080/planets/9/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/89/"
+    ],
+    "vehicles": [],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/3/",
+      "http://localhost:8080/species/29/",
+      "http://localhost:8080/species/44/",
+      "http://localhost:8080/species/45/",
+      "http://localhost:8080/species/34/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/17/",
+    "media_type": "series"
+  },
+  {
+    "title": "Skeleton Crew",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Jon Watts, David Lowery, Lee Isaac Chung, Bryce Dallas Howard",
+    "producer": "Jon Watts, Christopher Ford, Jon Favreau, Dave Filoni, Kathleen Kennedy",
+    "release_date": "2024-12-02",
+    "characters": [
+      "http://localhost:8080/people/197/",
+      "http://localhost:8080/people/198/",
+      "http://localhost:8080/people/199/",
+      "http://localhost:8080/people/200/",
+      "http://localhost:8080/people/201/",
+      "http://localhost:8080/people/202/",
+      "http://localhost:8080/people/203/",
+      "http://localhost:8080/people/204/",
+      "http://localhost:8080/people/205/"
+    ],
+    "planets": [
+      "http://localhost:8080/planets/111/",
+      "http://localhost:8080/planets/112/",
+      "http://localhost:8080/planets/86/"
+    ],
+    "starships": [
+      "http://localhost:8080/starships/95/"
+    ],
+    "vehicles": [],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/2/",
+      "http://localhost:8080/species/46/",
+      "http://localhost:8080/species/42/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/18/",
+    "media_type": "series"
+  },
+  {
+    "title": "The Mandalorian and Grogu",
+    "episode_id": 0,
+    "opening_crawl": "",
+    "director": "Jon Favreau",
+    "producer": "Jon Favreau, Kathleen Kennedy, Dave Filoni",
+    "release_date": "2026-05-22",
+    "characters": [
+      "http://localhost:8080/people/129/",
+      "http://localhost:8080/people/130/",
+      "http://localhost:8080/people/206/"
+    ],
+    "planets": [],
+    "starships": [
+      "http://localhost:8080/starships/87/"
+    ],
+    "vehicles": [],
+    "species": [
+      "http://localhost:8080/species/1/",
+      "http://localhost:8080/species/5/",
+      "http://localhost:8080/species/6/"
+    ],
+    "created": "2026-09-19T00:00:00.000000Z",
+    "edited": "2026-09-19T00:00:00.000000Z",
+    "url": "http://localhost:8080/films/19/",
+    "media_type": "film"
   }
 ]

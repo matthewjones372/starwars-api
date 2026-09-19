@@ -153,7 +153,8 @@ object ApiRequestResponseStubs:
     ),
     created = "",
     edited = "2014-12-12T11:26:24.656000Z",
-    url = "2014-12-15T13:07:53.386000Z"
+    url = "2014-12-15T13:07:53.386000Z",
+    mediaType = None
   )
 
   lazy val film1Response = Response(
@@ -197,7 +198,8 @@ object ApiRequestResponseStubs:
     ),
     "",
     "2014-12-12T11:26:24.656000Z",
-    "2014-12-15T13:07:53.386000Z"
+    "2014-12-15T13:07:53.386000Z",
+    None
   )
 
   lazy val film2Response = Response(status = Status.Ok, body = Body.from(film2))

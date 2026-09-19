@@ -2,6 +2,7 @@ package com.matthewjones372.http.api
 
 import com.matthewjones372.data.{DataRepoError, SWDataRepo}
 import com.matthewjones372.domain.*
+import com.matthewjones372.search.SWGraph
 import com.matthewjones372.sorting.SortBy
 import stubby.*
 import zio.*
@@ -195,6 +196,70 @@ object SWApiSpec extends ZIOSpecDefault:
           TestServer.layer,
           ZLayer.succeed(repoWith(List(lobot, luke, bobaFett), List(empireStrikesBack, aNewHope))),
           SWHttpServer.layer
+        )
+      }
+    ),
+    suite("graph insights")(
+      test("ranks the cast by how many co-stars each character has") {
+        (for
+          client      <- ZIO.service[Client]
+          swServer    <- ZIO.service[SWHttpServer]
+          _           <- swServer.start.fork
+          testRequest <- requestToCorrectPort
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "graph" / "insights")))
+          body        <- response.body.asString
+        yield assertTrue(
+          response.status == Status.Ok,
+          body.contains("\"characters\":3"),
+          body.contains("\"films\":2"),
+          body.contains("\"pairs\":2"),
+          body.contains("\"diameter\":2"),
+          body.contains("\"clusters\":1"),
+          // Luke shares a film with both of the others, so he outranks them.
+          body.indexOf("Luke") < body.indexOf("Lobot"),
+          body.contains("\"exclusiveCast\":1")
+        )).provideSome[Client & Driver](
+          Scope.default,
+          TestServer.layer,
+          ZLayer.succeed(repoWith(List(lobot, luke, bobaFett), List(empireStrikesBack, aNewHope))),
+          SWHttpServer.layer
+        )
+      }
+    ),
+    suite("insight assembly")(
+      test("ranks the most connected character first and the least connected last") {
+        val insights = SWHttpServer.toGraphInsights(
+          SWGraph(
+            Map(
+              "Lobot"     -> Set("The Empire Strikes Back"),
+              "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
+              "Boba Fett" -> Set("A New Hope")
+            )
+          ).connectivity
+        )
+
+        assertTrue(
+          insights.connections.head == CharacterConnections("Luke", 2, 2, 2, 1.0),
+          insights.connections.last == CharacterConnections("Lobot", 1, 1, 2, 1.5),
+          insights.ensembles == List(FilmEnsemble("A New Hope", 2, 1), FilmEnsemble("The Empire Strikes Back", 2, 1))
+        )
+      },
+      test("rounds the separations, which carry more digits than they mean") {
+        val insights = SWHttpServer.toGraphInsights(
+          SWGraph(
+            Map(
+              "Lobot"     -> Set("The Empire Strikes Back"),
+              "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
+              "Boba Fett" -> Set("A New Hope"),
+              "Lando"     -> Set("The Empire Strikes Back")
+            )
+          ).connectivity
+        )
+
+        assertTrue(
+          insights.averageSeparation == 1.33,
+          insights.density == 0.67,
+          insights.connections.forall(connection => connection.averageSeparation * 100 % 1 == 0)
         )
       }
     ),

@@ -3,7 +3,7 @@ package com.matthewjones372.http.api
 import com.matthewjones372.data.{DataRepoError, SWDataRepo}
 import com.matthewjones372.domain.*
 import com.matthewjones372.http.api.SWAPIServerError.*
-import com.matthewjones372.search.{Path, SWGraph}
+import com.matthewjones372.search.{Connectivity, Path, SWGraph}
 import com.matthewjones372.sorting.{FieldOrdering, SortBy}
 import nl.vroste.rezilience.Bulkhead
 import zio.*
@@ -302,6 +302,15 @@ object SWHttpServer:
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
+  val getGraphInsightsEndpoint =
+    (Endpoint(Method.GET / "graph" / "insights")
+      ?? Doc.p("How connected each character is, and what the whole cast looks like as a graph"))
+      .out[GraphInsights]
+      .outErrors[SWAPIServerError](
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
   private[api] def toShortestPath(start: String, end: String, path: Path[String]): ShortestPath =
     val steps = path.path
       .getOrElse(Chunk.empty)
@@ -309,6 +318,32 @@ object SWHttpServer:
       .map((person, film) => PathStep(person, film))
       .toList
     ShortestPath(start, end, path.length, steps)
+
+  // Two decimals is the resolution the numbers carry: separations run between
+  // one hop and the graph's diameter, and a full double of that is noise.
+  private def rounded(value: Double): Double = math.round(value * 100) / 100.0
+
+  private[api] def toGraphInsights(connectivity: Connectivity[String]): GraphInsights =
+    GraphInsights(
+      characters = connectivity.nodes,
+      films = connectivity.films,
+      pairs = connectivity.pairs,
+      density = rounded(connectivity.density),
+      averageSeparation = rounded(connectivity.averageSeparation),
+      diameter = connectivity.diameter,
+      clusters = connectivity.clusters,
+      connections = connectivity.connections.map { connection =>
+        CharacterConnections(
+          name = connection.node,
+          films = connection.films,
+          coStars = connection.coStars,
+          reach = connection.reach,
+          averageSeparation = rounded(connection.averageSeparation)
+        )
+      },
+      ensembles =
+        connectivity.ensembles.map(ensemble => FilmEnsemble(ensemble.film, ensemble.cast, ensemble.exclusiveCast))
+    )
 
   private[api] def parseSortByList(sortByParam: String): List[SortBy] =
     sortByParam.split(",").toList.flatMap(parseSortBy)
@@ -322,7 +357,14 @@ object SWHttpServer:
     else None
 
   private val endPoints =
-    Chunk(getCharacterEndpoint, getCharactersEndpoint, getFilmsEndpoint, getFilmEndpoint, getShortestPathEndpoint)
+    Chunk(
+      getCharacterEndpoint,
+      getCharactersEndpoint,
+      getFilmsEndpoint,
+      getFilmEndpoint,
+      getShortestPathEndpoint,
+      getGraphInsightsEndpoint
+    )
 
   val openAPI =
     OpenAPIGen.fromEndpoints(
@@ -355,6 +397,11 @@ private final case class SWHttpServerImpl(
                 .fromOption(graph.bfs(start.name, target.name))
                 .orElseFail(PathNotFound(s"No path between ${start.name} and ${target.name}"))
     yield SWHttpServer.toShortestPath(start.name, target.name, path)
+  }.sandbox
+
+  private val getGraphInsightsHandler = SWHttpServer.getGraphInsightsEndpoint.implement { (_: Unit) =>
+    characterGraph
+      .mapBoth(err => UnexpectedError(err.getMessage), graph => SWHttpServer.toGraphInsights(graph.connectivity))
   }.sandbox
 
   private val getCharacterHandler = SWHttpServer.getCharacterEndpoint.implement { characterId =>
@@ -478,9 +525,18 @@ private final case class SWHttpServerImpl(
         preEncodedCharactersRoute,
         getFilmsHandler,
         preEncodedFilmRoute,
-        getShortestPathHandler
+        getShortestPathHandler,
+        getGraphInsightsHandler
       )
-    else Chunk(getCharacterHandler, getCharactersHandler, getFilmsHandler, getFilmHandler, getShortestPathHandler)
+    else
+      Chunk(
+        getCharacterHandler,
+        getCharactersHandler,
+        getFilmsHandler,
+        getFilmHandler,
+        getShortestPathHandler,
+        getGraphInsightsHandler
+      )
 
   // The API is cacheable and the page is not: the page is how a reader picks up
   // a new deploy, so it revalidates while the data it fetches need not.

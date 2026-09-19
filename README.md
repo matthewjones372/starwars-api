@@ -20,7 +20,9 @@ services to start.
 The deployed instance serves a browser UI at `/` and the API alongside it on
 the same origin: search across every character and film, the character graph
 drawn as a force layout, and the shortest chain between any two characters
-traced by clicking one and then another.
+traced by clicking one and then another. A panel ranks the cast by how many
+co-stars each character has, so the most and least connected are a click away,
+and the graph sizes and shades every character by the same measure.
 
 | | |
 | --- | --- |
@@ -58,6 +60,7 @@ curl 'http://localhost:8080/people?page=2&sortBy=height:DESC,name:ASC'
 | GET | `/films` | `page` | Paged films |
 | GET | `/films/{filmId}` | | One film |
 | GET | `/people/{characterId}/path-to/{targetId}` | | Shortest chain of shared films between two characters |
+| GET | `/graph/insights` | | How connected each character is, and the shape of the whole graph |
 | GET | `/docs/openapi` | | Swagger UI |
 | GET | `/` | | Browser UI: search and the character graph |
 
@@ -199,6 +202,50 @@ Both return `None` when no chain exists, and a zero length path when the start
 and target are the same character.
 
 The graph is built once per server and reused across requests.
+
+## How connected is everyone
+
+The same graph also answers who sits at the middle of the cast and who sits at
+its edge. `/graph/insights` measures every character against every other, which
+is one breadth-first search per character, done once and served from:
+
+```sh
+curl 'http://localhost:8080/graph/insights'
+```
+
+```json
+{
+  "characters": 82,
+  "films": 6,
+  "pairs": 1753,
+  "density": 0.53,
+  "averageSeparation": 1.47,
+  "diameter": 2,
+  "clusters": 1,
+  "connections": [
+    { "name": "C-3PO", "films": 6, "coStars": 81, "reach": 81, "averageSeparation": 1.0 }
+  ],
+  "ensembles": [{ "title": "Attack of the Clones", "cast": 40, "exclusiveCast": 13 }]
+}
+```
+
+`coStars` counts the characters who share a film, `reach` how many are
+connected at all, and `averageSeparation` how many hops away the rest of the
+cast is on average. `connections` is ordered most connected first, so its head
+and tail are the two ends of the question. Across the bundled data C-3PO,
+R2-D2 and Obi-Wan Kenobi each share a film with all 81 others, Bossk, IG-88 and
+Lobot with 15, and no two characters are more than two hops apart.
+
+`Connectivity` is available directly from the graph:
+
+```scala
+graph.connectivity.connections.map(c => (c.node, c.coStars))
+// res4: List[Tuple2[String, Int]] = List(
+//   ("Luke", 2),
+//   ("Boba Fett", 1),
+//   ("Lobot", 1)
+// )
+```
 
 ## Typed client
 

@@ -145,5 +145,95 @@ object SWGraphSpec extends ZIOSpecDefault:
           )
         }
       }
+    ),
+    suite("connectivity")(
+      test("ranks characters by how many co-stars they have") {
+        val ranked = SWGraph(peopleFilmMap).connectivity.connections
+
+        assertTrue(
+          ranked.map(_.node) == List("Luke", "Boba Fett", "Lobot"),
+          ranked.head.coStars == 2,
+          ranked.last.coStars == 1
+        )
+      },
+      test("counts the films a character is in, who they share them with, and who they can reach") {
+        val byName = SWGraph(peopleFilmMap).connectivity.connections.map(c => c.node -> c).toMap
+
+        assertTrue(
+          byName("Luke").films == 3,
+          byName("Luke").coStars == 2,
+          byName("Luke").reach == 2,
+          byName("Lobot").films == 1,
+          byName("Lobot").coStars == 1,
+          byName("Lobot").reach == 2
+        )
+      },
+      test("averages the hops from a character to everyone it can reach") {
+        val byName = SWGraph(peopleFilmMap).connectivity.connections.map(c => c.node -> c).toMap
+
+        assertTrue(
+          byName("Luke").averageSeparation == 1.0,
+          byName("Lobot").averageSeparation == 1.5,
+          byName("Boba Fett").averageSeparation == 1.5
+        )
+      },
+      test("reports a character nobody shares a film with as reaching no one") {
+        val byName = SWGraph(disconnected).connectivity.connections.map(c => c.node -> c).toMap
+
+        assertTrue(
+          byName("Lobot").coStars == 0,
+          byName("Lobot").reach == 0,
+          byName("Lobot").averageSeparation == 0.0
+        )
+      },
+      test("counts each co-star pair once rather than from both ends") {
+        val connectivity = SWGraph(peopleFilmMap).connectivity
+
+        assertTrue(
+          connectivity.pairs == 2,
+          connectivity.connections.map(_.coStars).sum == connectivity.pairs * 2,
+          connectivity.density == 2.0 / 3.0
+        )
+      },
+      test("reports the widest separation in the graph as its diameter") {
+        assertTrue(
+          SWGraph(peopleFilmMap).connectivity.diameter == 2,
+          SWGraph(peopleFilmMap).connectivity.averageSeparation == 8.0 / 6.0
+        )
+      },
+      test("counts one cluster when shared films join everyone, and one per island when they do not") {
+        assertTrue(
+          SWGraph(peopleFilmMap).connectivity.clusters == 1,
+          SWGraph(disconnected).connectivity.clusters == 2
+        )
+      },
+      test("sizes each film's cast and counts the characters it alone carries") {
+        val ensembles = SWGraph(peopleFilmMap).connectivity.ensembles
+
+        assertTrue(
+          ensembles == List(
+            Ensemble("A New Hope", 2, 1),
+            Ensemble("The Empire Strikes Back", 2, 1),
+            Ensemble("Return of the Jedi", 1, 0)
+          )
+        )
+      },
+      test("never disagrees with the path search about who is reachable and how far away") {
+        check(graphGen) { peopleFilms =>
+          val graph  = SWGraph(peopleFilms)
+          val people = peopleFilms.keys.toList
+
+          val agrees = graph.connectivity.connections.forall { connection =>
+            val hops = people
+              .filterNot(_ == connection.node)
+              .flatMap(other => graph.distance(connection.node, other))
+
+            connection.reach == hops.size &&
+            connection.averageSeparation == (if hops.isEmpty then 0.0 else hops.sum.toDouble / hops.size)
+          }
+
+          assertTrue(agrees)
+        }
+      }
     )
   )

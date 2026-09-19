@@ -102,6 +102,40 @@
         }
       }
     },
+    "/graph/insights" : {
+      "description" : "How connected each character is, and what the whole cast looks like as a graph\n\n",
+      "get" : {
+        "description" : "How connected each character is, and what the whole cast looks like as a graph\n\n",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GraphInsights"
+                }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "anyOf" : [
+                    {
+                      "$ref" : "#/components/schemas/UnexpectedError"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/ServerError"
+                    }
+                  ],
+                  "description" : ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/people" : {
       "description" : "Get a list of  all people response is paged\n\n",
       "get" : {
@@ -388,6 +422,37 @@
           "url"
         ]
       },
+      "CharacterConnections" : {
+        "type" : "object",
+        "properties" : {
+          "reach" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "films" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "coStars" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "averageSeparation" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "required" : [
+          "name",
+          "films",
+          "coStars",
+          "reach",
+          "averageSeparation"
+        ]
+      },
       "CharacterNotFound" : {
         "type" : "object",
         "properties" : {
@@ -507,6 +572,27 @@
           "url"
         ]
       },
+      "FilmEnsemble" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "cast" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "exclusiveCast" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [
+          "title",
+          "cast",
+          "exclusiveCast"
+        ]
+      },
       "FilmNotFound" : {
         "type" : "object",
         "properties" : {
@@ -540,6 +626,62 @@
         "required" : [
           "count",
           "results"
+        ]
+      },
+      "GraphInsights" : {
+        "type" : "object",
+        "properties" : {
+          "clusters" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "ensembles" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FilmEnsemble"
+            }
+          },
+          "characters" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "films" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "density" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "pairs" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "diameter" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "averageSeparation" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "connections" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CharacterConnections"
+            }
+          }
+        },
+        "required" : [
+          "characters",
+          "films",
+          "pairs",
+          "density",
+          "averageSeparation",
+          "diameter",
+          "clusters",
+          "connections",
+          "ensembles"
         ]
       },
       "PathNotFound" : {

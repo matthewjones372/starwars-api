@@ -17,6 +17,14 @@
     --char: #9aa7c2;
     --path: #ff7a45;
     --match: #5ce8a8;
+    /* A sequential ramp for how connected a character is: one hue, rising in
+       lightness, every step at 3:1 or better against the background so the
+       fringe of the graph stays visible rather than fading into it. */
+    --heat-0: #5b6580;
+    --heat-1: #7a86a3;
+    --heat-2: #9aa7c2;
+    --heat-3: #c2cde1;
+    --heat-4: #eaf0fb;
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
@@ -60,7 +68,7 @@
   }
   #search:focus { border-color: var(--accent); }
   #search::placeholder { color: var(--muted); }
-  #status { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+  #status { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   .panel {
     position: fixed; z-index: 5;
@@ -81,6 +89,11 @@
   }
   #pathfinder { bottom: 18px; left: 18px; width: 268px; }
   #legend { bottom: 18px; right: 18px; }
+  #insights {
+    top: 64px; right: 18px; width: 300px;
+    max-height: calc(100vh - 180px); overflow-y: auto;
+  }
+  #insights[hidden] { display: none; }
 
   .panel h2 {
     margin: 0 0 10px; font-size: 11px; font-weight: 600;
@@ -92,6 +105,7 @@
   #detail dd { margin: 0; text-align: right; }
   #detail .films { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 12px; }
   #detail .films span { color: var(--film); display: block; }
+  #detail .films.people span { color: var(--text); }
 
   .slot {
     display: flex; align-items: center; gap: 8px;
@@ -111,13 +125,49 @@
   }
   button:disabled { background: #2a3145; color: var(--muted); cursor: default; }
   button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); font-weight: 400; }
-  #recenter { width: auto; margin-top: 0; padding: 8px 14px; white-space: nowrap; }
+  #recenter, #toggleinsights { width: auto; margin-top: 0; padding: 8px 14px; white-space: nowrap; }
   #pathresult { margin-top: 10px; font-size: 12px; color: var(--muted); }
   #pathresult .step { color: var(--text); }
   #pathresult .via { color: var(--film); }
 
-  #legend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); }
+  #legend { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--muted); }
   #legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+  #legend .ramp {
+    display: inline-block; width: 72px; height: 8px; margin: 0 6px; border-radius: 4px;
+    vertical-align: middle;
+    background: linear-gradient(to right, var(--heat-0), var(--heat-2), var(--heat-4));
+  }
+
+  #summary { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  #summary b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+  #summary div + div { margin-top: 3px; }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+  .tabs button {
+    flex: 1; width: auto; margin: 0; padding: 6px 4px;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 6px;
+    font-size: 11px; font-weight: 500;
+  }
+  .tabs button[aria-selected="true"] { color: var(--text); border-color: var(--char); background: rgba(154,167,194,0.1); }
+
+  .ranking { list-style: none; margin: 0; padding: 0; }
+  .ranking + h2 { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .ranking button {
+    width: 100%; margin: 0; padding: 5px 0;
+    display: grid; grid-template-columns: 18px 1fr auto; align-items: baseline; gap: 8px;
+    background: transparent; color: var(--text);
+    border: 0; border-radius: 6px;
+    font: inherit; font-size: 12.5px; font-weight: 400; text-align: left;
+  }
+  .ranking button:hover { background: rgba(154,167,194,0.09); }
+  .ranking .pos { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .ranking .val { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .ranking .who { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* A bar under each name, so the ranking reads as magnitudes and not just as
+     an order: the gap between first and second is the point. */
+  .ranking .bar { grid-column: 2 / 4; height: 4px; border-radius: 2px; margin-top: 2px; }
+  .ranking .note { grid-column: 2 / 4; font-size: 10.5px; color: var(--muted); margin-top: 1px; }
 
   .node circle { cursor: pointer; }
   .node text {
@@ -163,7 +213,7 @@
     /* 16px is the threshold below which iOS Safari zooms the page on focus. */
     #search { flex: 1 1 auto; min-width: 0; font-size: 16px; padding: 10px 12px; }
     #status { display: none; }
-    #recenter { padding: 10px 12px; }
+    #recenter, #toggleinsights { padding: 10px 10px; font-size: 13px; }
     #legend { display: none; }
 
     .panel { padding: 12px 14px; border-radius: 10px; }
@@ -172,6 +222,10 @@
       max-height: 38vh; overflow-y: auto;
     }
     #pathfinder { left: 8px; right: 8px; bottom: 8px; width: auto; }
+    #insights {
+      top: 62px; left: 8px; right: 8px; width: auto;
+      max-height: 58vh;
+    }
     #pathresult { max-height: 20vh; overflow-y: auto; }
     .slot { min-height: 40px; }
     button { padding: 11px; }
@@ -196,12 +250,26 @@
   <h1>Star Wars Character Graph</h1>
   <input id="search" type="search" placeholder="Search characters or films…" autocomplete="off" spellcheck="false"/>
   <span id="status"></span>
+  <button id="toggleinsights" class="ghost" aria-expanded="true" aria-controls="insights">Insights</button>
   <button id="recenter" class="ghost">Recenter</button>
 </header>
 
+<div class="panel" id="insights">
+  <h2>The cast, measured</h2>
+  <div id="summary"></div>
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" data-rank="most" aria-selected="true">Most linked</button>
+    <button type="button" role="tab" data-rank="least" aria-selected="false">Least linked</button>
+    <button type="button" role="tab" data-rank="films" aria-selected="false">Most films</button>
+  </div>
+  <ol class="ranking" id="ranking"></ol>
+  <h2>Films by cast</h2>
+  <ol class="ranking" id="ensembles"></ol>
+</div>
+
 <div class="panel" id="detail" hidden>
   <button class="close" id="detailclose" type="button" aria-label="Close">&times;</button>
-  <h2>Character</h2>
+  <h2 class="kind">Character</h2>
   <div class="name"></div>
   <dl></dl>
   <div class="films"></div>
@@ -218,7 +286,7 @@
 
 <div class="panel" id="legend">
   <span><i style="background:var(--film)"></i>Film</span>
-  <span><i style="background:var(--char)"></i>Character</span>
+  <span>Co-stars: fewest<span class="ramp"></span>most</span>
 </div>
 
 <div id="loading">Loading the galaxy…</div>
@@ -236,6 +304,9 @@
   const $ = (sel) => document.querySelector(sel);
   const statusEl = $("#status");
   const setStatus = (t) => { statusEl.textContent = t; };
+  const esc = (value) =>
+    String(value).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const isNarrow = () => window.matchMedia("(max-width: 720px)").matches;
 
   // ---------------------------------------------------------------- data
 
@@ -252,31 +323,77 @@
     return [first, ...rest].flatMap((p) => p.results);
   }
 
+  // The server owns the graph, so it owns what the graph measures too: one
+  // breadth-first search per character is its answer and not ours to recompute.
+  // It is also the one fetch allowed to come back empty -- the API sheds load
+  // under pressure, and a graph without its measurements still draws.
+  async function fetchInsights() {
+    try {
+      const res = await fetch("graph/insights");
+      return res.ok ? await res.json() : null;
+    } catch {
+      return null;
+    }
+  }
+
+  const HEAT = ["var(--heat-0)", "var(--heat-1)", "var(--heat-2)", "var(--heat-3)", "var(--heat-4)"];
+
   async function load() {
-    const [people, films] = await Promise.all([
+    const [people, films, insights] = await Promise.all([
       fetchAllPeople(),
       fetch("films?page=1").then((r) => r.json()).then((f) => f.results),
+      fetchInsights(),
     ]);
 
     const filmByUrl = new Map(films.map((f) => [f.url, f]));
+    const connections = new Map((insights?.connections ?? []).map((c) => [c.name, c]));
+    const ranks = new Map((insights?.connections ?? []).map((c, i) => [c.name, i + 1]));
+    const ensembles = new Map((insights?.ensembles ?? []).map((e) => [e.title, e]));
+
+    const counts = [...connections.values()].map((c) => c.coStars);
+    const most = Math.max(...counts, 1);
+    const fewest = Math.min(...counts, most);
+    const biggestCast = Math.max(...[...ensembles.values()].map((e) => e.cast), 1);
+
+    // Where every character has the same number of co-stars there is no ramp to
+    // walk, so they all take the middle step rather than all taking the top one.
+    const share = (value) => (most === fewest ? 0.5 : (value - fewest) / (most - fewest));
+    const heatOf = (value) => HEAT[Math.min(HEAT.length - 1, Math.floor(share(value) * HEAT.length))];
 
     const nodes = [
-      ...films.map((f) => ({
-        id: "film:" + f.url,
-        kind: "film",
-        label: f.title,
-        episode: f.episode_id,
-        r: 22,
-      })),
-      ...people.map((p) => ({
-        id: "person:" + p.url,
-        kind: "person",
-        label: p.name,
-        entityId: idFromUrl(p.url),
-        data: p,
-        // A character in more films sits on more edges, so give it more mass.
-        r: 4 + Math.min(p.films.length, 6) * 1.2,
-      })),
+      ...films.map((f) => {
+        const ensemble = ensembles.get(f.title);
+        return {
+          id: "film:" + f.url,
+          kind: "film",
+          label: f.title,
+          episode: f.episode_id,
+          data: f,
+          cast: ensemble?.cast ?? null,
+          exclusiveCast: ensemble?.exclusiveCast ?? null,
+          fill: "var(--film)",
+          r: ensemble ? 16 + 8 * Math.sqrt(ensemble.cast / biggestCast) : 22,
+        };
+      }),
+      ...people.map((p) => {
+        const measured = connections.get(p.name);
+        return {
+          id: "person:" + p.url,
+          kind: "person",
+          label: p.name,
+          entityId: idFromUrl(p.url),
+          data: p,
+          measured,
+          rank: ranks.get(p.name) ?? null,
+          fill: measured ? heatOf(measured.coStars) : "var(--char)",
+          // Sized by the square root of its co-stars, so twice the connections
+          // is twice the ink rather than four times it. Without the
+          // measurements it falls back to the films the character is in.
+          r: measured
+            ? 5 + 9 * Math.sqrt(share(measured.coStars))
+            : 4 + Math.min(p.films.length, 6) * 1.2,
+        };
+      }),
     ];
 
     const links = [];
@@ -288,7 +405,7 @@
       }
     }
 
-    return { nodes, links, people, films };
+    return { nodes, links, people, films, insights };
   }
 
   // ---------------------------------------------------------------- render
@@ -306,10 +423,6 @@
     const stage = document.getElementById("stage");
     let width = stage.clientWidth || 1200;
     let height = stage.clientHeight || 800;
-
-    // Asked each time rather than captured, so rotating a phone or dragging a
-    // window across the breakpoint is answered with the layout now in force.
-    const isNarrow = () => window.matchMedia("(max-width: 720px)").matches;
 
     const forceX = d3.forceX(width / 2).strength(0.02);
     const forceY = d3.forceY(height / 2).strength(0.02);
@@ -346,7 +459,7 @@
     node
       .append("circle")
       .attr("r", (d) => d.r)
-      .attr("fill", (d) => (d.kind === "film" ? "var(--film)" : "var(--char)"));
+      .attr("fill", (d) => d.fill);
 
     // The layout never stops drifting, so a character-sized dot is a small
     // moving target. This invisible disc widens what counts as a hit without
@@ -448,6 +561,34 @@
     // `maxScale` is below the zoom ceiling for the automatic fits: early on the
     // layout is still compact, and fitting that tightly would open the page
     // zoomed into a handful of nodes. Panning by hand still reaches 4x.
+    // Where the panels are sheets rather than side panels they cover the canvas,
+    // so the graph is framed against the band left between them instead of
+    // against the viewport it would otherwise share with them. Asked each time
+    // rather than captured, so rotating a phone is answered with the layout now
+    // in force.
+    function viewBand() {
+      const header = isNarrow() ? 56 : 0;
+      const sheet = isNarrow() ? $("#pathfinder").offsetHeight + 16 : 0;
+      return { header, usableH: Math.max(height - header - sheet, 120) };
+    }
+
+    // Brings one node to the middle of that band, for a name picked from a list
+    // rather than found in the graph. It never zooms out: someone who has
+    // pushed in close asked for that scale, and this is not a request to leave.
+    function focus(node) {
+      if (!node || node.x == null || !width || !height) return;
+      autoFit = false;
+      const { header, usableH } = viewBand();
+      const k = Math.max(d3.zoomTransform(svg.node()).k, 1.5);
+      svg
+        .transition()
+        .duration(500)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.translate(width / 2, header + usableH / 2).scale(k).translate(-node.x, -node.y)
+        );
+    }
+
     function fitView(duration = 600, padding = 100, maxScale = 4) {
       if (!width || !height || !nodes.length || nodes.some((n) => n.x == null)) return;
       const xs = nodes.map((n) => n.x);
@@ -459,12 +600,7 @@
       // A fixed margin is most of a phone screen, so it gives way to a share
       // of the viewport whenever that is the smaller of the two.
       const pad = Math.min(padding, width * 0.12, height * 0.12);
-      // Where the panels are sheets rather than side panels they cover the
-      // canvas, so the graph is fitted to the band left between them instead
-      // of to the viewport it would otherwise share with them.
-      const header = isNarrow() ? 56 : 0;
-      const sheet = isNarrow() ? $("#pathfinder").offsetHeight + 16 : 0;
-      const usableH = Math.max(height - header - sheet, 120);
+      const { header, usableH } = viewBand();
       const k = Math.max(
         0.25,
         Math.min(maxScale, (width - pad * 2) / spanX, (usableH - pad * 2) / spanY)
@@ -495,7 +631,7 @@
     });
     observer.observe(stage);
 
-    return { svg, zoom, root, node, link, sim, nodes, links, fitView };
+    return { svg, zoom, root, node, link, sim, nodes, links, fitView, focus };
   }
 
   // ---------------------------------------------------------------- app
@@ -513,11 +649,128 @@
     $("#loading").classList.add("done");
 
     const people = graph.people;
-    setStatus(`${people.length} characters · ${graph.films.length} films`);
+    const insights = graph.insights;
+    const byName = new Map(graph.nodes.map((n) => [n.label, n]));
+    const idle = () =>
+      `${people.length} characters · ${graph.films.length} films` +
+      (insights ? ` · ${insights.averageSeparation} hops apart on average` : "");
+    setStatus(idle());
 
     // Framing is driven by the layout itself (see the tick handler), so there
     // is nothing to schedule here; Recenter is how you ask for it again.
     $("#recenter").addEventListener("click", () => view.fitView(500, 100, 1.2));
+
+    // -- insights: the rankings the server measured, which are the quickest
+    // -- answer to who sits at the middle of this cast and who sits at its edge.
+    const panel = $("#insights");
+    const toggle = $("#toggleinsights");
+
+    function showInsights(open) {
+      panel.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+    }
+
+    const LISTED = 8;
+
+    const TABS = {
+      most: { unit: "co-stars", value: (c) => c.coStars, rows: (all) => all.slice(0, LISTED) },
+      least: { unit: "co-stars", value: (c) => c.coStars, rows: (all) => all.slice(-LISTED).reverse() },
+      films: {
+        unit: "films",
+        value: (c) => c.films,
+        rows: (all) => [...all].sort((a, b) => b.films - a.films || b.coStars - a.coStars).slice(0, LISTED)
+      }
+    };
+
+    function rankingRow(position, name, value, width, colour, note) {
+      return (
+        `<li><button type="button" data-name="${esc(name)}">` +
+        `<span class="pos">${position}</span>` +
+        `<span class="who">${esc(name)}</span>` +
+        `<span class="val">${value}</span>` +
+        `<span class="bar" style="width:${width}%;background:${colour}"></span>` +
+        (note ? `<span class="note">${esc(note)}</span>` : "") +
+        `</button></li>`
+      );
+    }
+
+    function renderRanking(which) {
+      const tab = TABS[which];
+      const rows = tab.rows(insights.connections);
+      // Scaled against the whole cast rather than against the rows on screen,
+      // or the least connected character would draw a full bar for being the
+      // longest of the short ones.
+      const widest = Math.max(...insights.connections.map(tab.value), 1);
+      document.querySelectorAll(".tabs button").forEach((button) => {
+        button.setAttribute("aria-selected", String(button.dataset.rank === which));
+      });
+      $("#ranking").innerHTML = rows
+        .map((c, i) =>
+          rankingRow(
+            i + 1,
+            c.name,
+            `${tab.value(c)} ${tab.unit}`,
+            (tab.value(c) / widest) * 100,
+            // Colour follows the character, not its place in this list, so the
+            // dot beside a name is the dot it has out in the graph.
+            byName.get(c.name)?.fill ?? "var(--heat-2)",
+            null
+          )
+        )
+        .join("");
+    }
+
+    function renderInsights() {
+      if (!insights) {
+        showInsights(false);
+        toggle.hidden = true;
+        return;
+      }
+
+      $("#summary").innerHTML = [
+        `<div><b>${insights.characters}</b> characters across <b>${insights.films}</b> films</div>`,
+        `<div><b>${insights.pairs.toLocaleString()}</b> pairs share a film, ` +
+          `<b>${Math.round(insights.density * 100)}%</b> of every pair there could be</div>`,
+        // Across clusters there is no path at all, so the widest gap is only
+        // the whole cast's when the whole cast is one cluster.
+        insights.clusters === 1
+          ? `<div>Everyone reaches everyone, and no one is more than ` +
+            `<b>${insights.diameter}</b> hop${insights.diameter === 1 ? "" : "s"} away</div>`
+          : `<div><b>${insights.clusters}</b> clusters that never meet, ` +
+            `<b>${insights.diameter}</b> hop${insights.diameter === 1 ? "" : "s"} across the widest of them</div>`
+      ].join("");
+
+      const widest = Math.max(...insights.ensembles.map((e) => e.cast), 1);
+      $("#ensembles").innerHTML = insights.ensembles
+        .map((e, i) =>
+          rankingRow(
+            i + 1,
+            e.title,
+            `${e.cast} cast`,
+            (e.cast / widest) * 100,
+            "var(--film)",
+            `${e.exclusiveCast} appear in no other film`
+          )
+        )
+        .join("");
+
+      renderRanking("most");
+      // A phone has room for one sheet at a time, so the panel waits to be asked.
+      showInsights(!isNarrow());
+    }
+
+    toggle.addEventListener("click", () => showInsights(panel.hidden));
+
+    panel.addEventListener("click", (event) => {
+      const tab = event.target.closest("button[data-rank]");
+      if (tab) { renderRanking(tab.dataset.rank); return; }
+      const row = event.target.closest("button[data-name]");
+      if (!row) return;
+      const node = byName.get(row.dataset.name);
+      select(node);
+      view.focus(node);
+      if (isNarrow()) showInsights(false);
+    });
 
     // -- search: filters the rendered graph rather than the API, because the
     // -- whole data set is already here and a keystroke should cost nothing.
@@ -531,11 +784,7 @@
         }
       }
       applyClasses();
-      setStatus(
-        q
-          ? `${matches.size} match${matches.size === 1 ? "" : "es"}`
-          : `${people.length} characters · ${graph.films.length} films`
-      );
+      setStatus(q ? `${matches.size} match${matches.size === 1 ? "" : "es"}` : idle());
       view.sim.alpha(0.3);
     });
 
@@ -563,28 +812,77 @@
         .classed("onpath", (d) => pathLinks.has(d.source.id + "|" + d.target.id));
     }
 
-    function showDetail(d) {
-      const panel = $("#detail");
-      if (d.kind !== "person") { panel.hidden = true; return; }
-      const p = d.data;
-      panel.hidden = false;
-      panel.querySelector(".name").textContent = p.name;
-      const rows = [
-        ["Birth year", p.birth_year],
-        ["Gender", p.gender],
-        ["Height", p.height ? p.height + " cm" : null],
-        ["Mass", p.mass ? p.mass + " kg" : null],
-        ["Eyes", p.eye_color],
-        ["Hair", p.hair_color],
-      ].filter(([, v]) => v && v !== "n/a");
-      panel.querySelector("dl").innerHTML = rows
-        .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
+    const castOf = (filmUrl) => people.filter((p) => p.films.includes(filmUrl));
+
+    function fillDetail(kind, name, rows, heading, listed) {
+      const detail = $("#detail");
+      const list = detail.querySelector(".films");
+      detail.hidden = false;
+      detail.querySelector(".kind").textContent = kind;
+      detail.querySelector(".name").textContent = name;
+      detail.querySelector("dl").innerHTML = rows
+        .filter(([, value]) => value != null && value !== "" && value !== "n/a")
+        .map(([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(value)}</dd>`)
         .join("");
-      const titles = graph.nodes.filter(
-        (n) => n.kind === "film" && p.films.includes(n.id.slice(5))
+      // A film lists characters and a character lists films, which are the two
+      // colours this page already uses for those things.
+      list.classList.toggle("people", kind === "Film");
+      list.innerHTML = `<h2>${esc(heading)}</h2>` + listed.map((entry) => `<span>${esc(entry)}</span>`).join("");
+    }
+
+    function showFilmDetail(d) {
+      const cast = castOf(d.data.url);
+      // Who carries this film, by the measure the rest of the page uses.
+      const leads = [...cast]
+        .sort((a, b) => (byName.get(b.name)?.measured?.coStars ?? 0) - (byName.get(a.name)?.measured?.coStars ?? 0))
+        .slice(0, 5)
+        .map((p) => p.name);
+
+      fillDetail(
+        "Film",
+        d.label,
+        [
+          ["Episode", d.episode],
+          ["Released", d.data.release_date],
+          ["Director", d.data.director],
+          ["Cast", d.cast ?? cast.length],
+          ["Only here", d.exclusiveCast]
+        ],
+        "Most linked in it",
+        leads
       );
-      panel.querySelector(".films").innerHTML =
-        `<h2>Appears in</h2>` + titles.map((f) => `<span>${f.label}</span>`).join("");
+    }
+
+    function showDetail(d) {
+      if (d.kind === "film") { showFilmDetail(d); return; }
+      const p = d.data;
+      const measured = d.measured;
+      const titles = graph.nodes
+        .filter((n) => n.kind === "film" && p.films.includes(n.id.slice(5)))
+        .map((f) => f.label);
+
+      fillDetail(
+        "Character",
+        p.name,
+        [
+          ...(measured
+            ? [
+                ["Co-stars", `${measured.coStars} of ${insights.characters - 1}`],
+                ["Rank", `#${d.rank} of ${insights.characters}`],
+                ["Avg separation", `${measured.averageSeparation.toFixed(2)} hops`],
+                ["Films", measured.films]
+              ]
+            : [["Films", p.films.length]]),
+          ["Birth year", p.birth_year],
+          ["Gender", p.gender],
+          ["Height", p.height ? p.height + " cm" : null],
+          ["Mass", p.mass ? p.mass + " kg" : null],
+          ["Eyes", p.eye_color],
+          ["Hair", p.hair_color]
+        ],
+        "Appears in",
+        titles
+      );
     }
 
     function updateSlots() {
@@ -603,8 +901,8 @@
       $("#findpath").disabled = !(slots[0] && slots[1]);
     }
 
-    view.node.on("click", (event, d) => {
-      event.stopPropagation();
+    function select(d) {
+      if (!d) return;
       selected = d;
       showDetail(d);
       if (d.kind === "person") {
@@ -622,6 +920,12 @@
         if (slots[0] && slots[1]) tracePath();
       }
       applyClasses();
+    }
+
+    view.node.on("click", (event, d) => {
+      event.stopPropagation();
+      if (isNarrow()) showInsights(false);
+      select(d);
     });
 
     function closeDetail() {
@@ -702,6 +1006,7 @@
     });
 
     updateSlots();
+    renderInsights();
   })();
 })();
 </script>

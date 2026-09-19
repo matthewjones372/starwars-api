@@ -1,6 +1,6 @@
 package com.matthewjones372.data
 
-import com.matthewjones372.domain.EntityId
+import com.matthewjones372.domain.{EntityId, UniverseId}
 
 enum DataRepoError(msg: String) extends RuntimeException(msg):
   case CharacterNotFound(message: String, characterId: EntityId)
@@ -9,5 +9,7 @@ enum DataRepoError(msg: String) extends RuntimeException(msg):
   case UnexpectedError(message: String, exception: Exception)
       extends DataRepoError(s"Data-Repo has encountered an unexpected error: $message. Exception: $exception")
   case FilmsNotFound extends DataRepoError(s"No films found.")
+  case UniverseNotAvailable(universe: UniverseId)
+      extends DataRepoError(s"No data is bundled for the ${universe.label} universe.")
   case PaginatedResponseError
       extends DataRepoError("You need to provide both an offset and a fetch size or provide nothing")

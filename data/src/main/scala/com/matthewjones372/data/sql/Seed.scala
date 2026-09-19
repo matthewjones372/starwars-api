@@ -7,7 +7,7 @@ import zio.*
 
 object Seed:
   def fromBundledData: RIO[ZTransactor, Unit] =
-    DataRepo.bundledEntities.flatMap(seed)
+    DataRepo.bundledEntities(UniverseId.default).flatMap(seed)
 
   def seed(entities: (List[Character], List[Film])): RIO[ZTransactor, Unit] =
     val (people, films) = entities

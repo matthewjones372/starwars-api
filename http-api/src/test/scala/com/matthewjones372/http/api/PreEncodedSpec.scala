@@ -37,19 +37,19 @@ object PreEncodedSpec extends ZIOSpecDefault:
         yield assertTrue(served == made, served._1 == expected)
 
   def spec = suite("pre-encoded responses")(
-    sameBothWays("/people/1", Status.Ok),
-    sameBothWays("/people/9999", Status.NotFound),
-    sameBothWays("/films/1", Status.Ok),
-    sameBothWays("/films/9999", Status.NotFound),
-    sameBothWays("/people", Status.Ok),
-    sameBothWays("/people?page=2", Status.Ok),
-    sameBothWays("/people?page=9", Status.Ok),
-    sameBothWays("/people?page=99", Status.Ok),
-    sameBothWays("/people?sortBy=name:ASC", Status.Ok),
-    sameBothWays("/people?sortBy=height:DESC,name:ASC", Status.Ok),
-    sameBothWays("/people?sortBy=garbage", Status.Ok),
-    sameBothWays("/people?page=2&sortBy=name:ASC", Status.Ok),
-    sameBothWays("/people?page=0", Status.BadRequest),
-    sameBothWays("/people?page=abc", Status.BadRequest),
-    sameBothWays("/people?page=1&page=2", Status.BadRequest)
+    sameBothWays("/starwars/people/1", Status.Ok),
+    sameBothWays("/starwars/people/9999", Status.NotFound),
+    sameBothWays("/starwars/films/1", Status.Ok),
+    sameBothWays("/starwars/films/9999", Status.NotFound),
+    sameBothWays("/starwars/people", Status.Ok),
+    sameBothWays("/starwars/people?page=2", Status.Ok),
+    sameBothWays("/starwars/people?page=9", Status.Ok),
+    sameBothWays("/starwars/people?page=99", Status.Ok),
+    sameBothWays("/starwars/people?sortBy=name:ASC", Status.Ok),
+    sameBothWays("/starwars/people?sortBy=height:DESC,name:ASC", Status.Ok),
+    sameBothWays("/starwars/people?sortBy=garbage", Status.Ok),
+    sameBothWays("/starwars/people?page=2&sortBy=name:ASC", Status.Ok),
+    sameBothWays("/starwars/people?page=0", Status.BadRequest),
+    sameBothWays("/starwars/people?page=abc", Status.BadRequest),
+    sameBothWays("/starwars/people?page=1&page=2", Status.BadRequest)
   ).provide(Client.default) @@ TestAspect.withLiveClock

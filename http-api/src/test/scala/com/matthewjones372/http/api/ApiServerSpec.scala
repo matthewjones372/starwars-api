@@ -26,7 +26,7 @@ object ApiServerSpec extends ZIOSpecDefault:
             swServer    <- ZIO.service[ApiServer]
             _           <- swServer.start.fork
             testRequest <- requestToCorrectPort
-            response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "films")))
+            response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "films")))
           yield assertTrue(response.status == Status.Ok)
         }.provideSome[Client & Driver](
           Scope.default,
@@ -45,7 +45,7 @@ object ApiServerSpec extends ZIOSpecDefault:
             swServer    <- ZIO.service[ApiServer]
             _           <- swServer.start.fork
             testRequest <- requestToCorrectPort
-            response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "films")))
+            response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "films")))
           yield assertTrue(response.status == Status.InternalServerError)
         }.provideSome[Client & Driver](
           Scope.default,
@@ -65,7 +65,7 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people")))
         yield assertTrue(
           response.status == Status.Ok
         )).provideSome[Client & Driver](
@@ -84,7 +84,7 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people")))
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people")))
         yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
@@ -101,7 +101,7 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people" / "1")))
           body        <- response.body.asString
         yield assertTrue(response.status == Status.Ok, body.contains("C-3PO"))).provideSome[Client & Driver](
           Scope.default,
@@ -119,7 +119,7 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "99")))
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people" / "99")))
         yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
@@ -136,7 +136,7 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1")))
+          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people" / "1")))
         yield assertTrue(response.status == Status.InternalServerError)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
@@ -152,9 +152,10 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(
-                        testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1" / "path-to" / "3"))
-                      )
+          response    <-
+            client(
+              testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people" / "1" / "path-to" / "3"))
+            )
           body <- response.body.asString
         yield assertTrue(
           response.status == Status.Ok,
@@ -177,9 +178,10 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(
-                        testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1" / "path-to" / "4"))
-                      )
+          response    <-
+            client(
+              testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people" / "1" / "path-to" / "4"))
+            )
           body <- response.body.asString
         yield assertTrue(
           response.status == Status.Ok,
@@ -200,9 +202,10 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(
-                        testRequest.copy(url = testRequest.url.path(Path.root / "people" / "1" / "path-to" / "2"))
-                      )
+          response    <-
+            client(
+              testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people" / "1" / "path-to" / "2"))
+            )
         yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
@@ -216,9 +219,10 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(
-                        testRequest.copy(url = testRequest.url.path(Path.root / "people" / "99" / "path-to" / "1"))
-                      )
+          response    <-
+            client(
+              testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "people" / "99" / "path-to" / "1"))
+            )
         yield assertTrue(response.status == Status.NotFound)).provideSome[Client & Driver](
           Scope.default,
           TestServer.layer,
@@ -234,8 +238,9 @@ object ApiServerSpec extends ZIOSpecDefault:
           swServer    <- ZIO.service[ApiServer]
           _           <- swServer.start.fork
           testRequest <- requestToCorrectPort
-          response    <- client(testRequest.copy(url = testRequest.url.path(Path.root / "graph" / "insights")))
-          body        <- response.body.asString
+          response    <-
+            client(testRequest.copy(url = testRequest.url.path(Path.root / "starwars" / "graph" / "insights")))
+          body <- response.body.asString
         yield assertTrue(
           response.status == Status.Ok,
           body.contains("\"characters\":3"),
@@ -363,18 +368,18 @@ object ApiServerSpec extends ZIOSpecDefault:
     suite("refined request parameters")(
       test("rejects a page below the first one rather than serving an empty page") {
         for
-          people <- statusOf("/people?page=0")
-          films  <- statusOf("/films?page=-1")
+          people <- statusOf("/starwars/people?page=0")
+          films  <- statusOf("/starwars/films?page=-1")
         yield assertTrue(people == Status.BadRequest, films == Status.BadRequest)
       },
       test("serves the first page") {
-        for status <- statusOf("/people?page=1")
+        for status <- statusOf("/starwars/people?page=1")
         yield assertTrue(status == Status.Ok)
       },
       test("rejects an entity id below the first one without reaching the repo") {
         for
-          person <- statusOf("/people/0")
-          film   <- statusOf("/films/0")
+          person <- statusOf("/starwars/people/0")
+          film   <- statusOf("/starwars/films/0")
         yield assertTrue(person == Status.BadRequest, film == Status.BadRequest)
       }
     ).provideSome[Client & Driver](

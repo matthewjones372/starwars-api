@@ -9,11 +9,11 @@ import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 object ApiRequestResponseStubs:
   lazy val baseUrl = "http://localhost"
 
-  lazy val film1Url       = "films/1/?format=json"
-  lazy val film2Url       = "films/2/?format=json"
-  lazy val personUrl      = "people/1"
-  lazy val personPagedUrl = "people"
-  lazy val filmPagedUrl   = "films"
+  lazy val film1Url       = "starwars/films/1/?format=json"
+  lazy val film2Url       = "starwars/films/2/?format=json"
+  lazy val personUrl      = "starwars/people/1"
+  lazy val personPagedUrl = "starwars/people"
+  lazy val filmPagedUrl   = "starwars/films"
 
   extension (url: Either[Exception, URL])
     def addJsonQueryParam: Either[Exception, URL] =
@@ -52,7 +52,7 @@ object ApiRequestResponseStubs:
       "112BBY",
       None,
       None,
-      Set("/films/1/?format=json", "/films/2/?format=json"),
+      Set("/starwars/films/1/?format=json", "/starwars/films/2/?format=json"),
       None,
       None,
       None,

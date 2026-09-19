@@ -83,20 +83,20 @@ object DataRepo:
       url = at(film.url)
     )
 
-  private[data] def bundledEntities: Task[(List[Character], List[Film])] =
+  private[data] def bundledEntities(universe: UniverseId): Task[(List[Character], List[Film])] =
     for
-      _          <- ZIO.logInfo("Reading in Star Wars Data")
       baseUrl    <- publicUrl
-      peopleJson <- readResource("people_data.json")
-      filmJson   <- readResource("film_data.json")
+      peopleJson <- readResource(s"${universe.slug}_people.json")
+      filmJson   <- readResource(s"${universe.slug}_films.json")
       people     <- decode[Character](peopleJson, "people").map(_.map(resolved(baseUrl)))
       films      <- decode[Film](filmJson, "films").map(_.map(resolved(baseUrl)))
-      _          <- ZIO.logInfo(s"Parsed ${people.size} people and ${films.size} films rooted at $baseUrl")
+      _          <- ZIO.logInfo(s"Parsed ${people.size} people and ${films.size} films for ${universe.label}")
     yield (people, films)
 
-  def layer: RLayer[Any, DataRepo] = ZLayer.fromZIO {
-    bundledEntities.flatMap { case (people, films) => fromEntities(people, films) }
-  }
+  def of(universe: UniverseId): Task[DataRepo] =
+    bundledEntities(universe).flatMap((people, films) => fromEntities(people, films))
+
+  def layer: RLayer[Any, DataRepo] = ZLayer.fromZIO(of(UniverseId.default))
 
   private def readResource(name: String): Task[String] =
     ZIO.scoped {

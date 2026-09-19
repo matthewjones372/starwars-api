@@ -7,11 +7,14 @@
 ![Scala](https://img.shields.io/badge/scala-3.8.4-red)
 ![JDK](https://img.shields.io/badge/JDK-25-orange)
 
-A Star Wars HTTP API in Scala 3 and ZIO, with a typed client, a shortest-path
-search over the character graph, and runtime-configurable multi-field sorting.
+A film-universe HTTP API in Scala 3 and ZIO, with a typed client, a
+shortest-path search over the character graph, and runtime-configurable
+multi-field sorting.
 
-Data covers 205 characters across 12 films and 7 live-action series, served
-from memory with no external services to start.
+Every path begins with the dataset it reads, so `/starwars/people/1` is Luke
+Skywalker. Star Wars is the dataset that ships today, covering 205 characters
+across 12 films and 7 live-action series, served from memory with no external
+services to start. `GET /universes` lists what the running server holds.
 
 ## Live
 
@@ -29,7 +32,7 @@ and the graph sizes and shades every character by the same measure.
 | --- | --- |
 | UI | https://starwars-api-eu.onrender.com/ |
 | API docs | https://starwars-api-eu.onrender.com/docs/openapi |
-| Example | https://starwars-api-eu.onrender.com/people/1 |
+| Example | https://starwars-api-eu.onrender.com/starwars/people/1 |
 
 It runs on a free instance in Frankfurt, which sleeps when idle, so the first
 request after a quiet spell takes a few seconds to wake it. The region is
@@ -60,14 +63,21 @@ curl 'http://localhost:8080/people?page=2&sortBy=height:DESC,name:ASC'
 
 | Method | Path | Query | Returns |
 | ------ | ---- | ----- | ------- |
-| GET | `/people` | `page`, `sortBy` | Paged characters |
-| GET | `/people/{personId}` | | One character |
-| GET | `/films` | `page` | Paged films |
-| GET | `/films/{filmId}` | | One film |
-| GET | `/people/{characterId}/path-to/{targetId}` | | Shortest chains of shared films between two characters |
-| GET | `/graph/insights` | | How connected each character is, and the shape of the whole graph |
+| GET | `/universes` | | The datasets this server holds |
+| GET | `/{universe}/people` | `page`, `sortBy` | Paged characters |
+| GET | `/{universe}/people/{personId}` | | One character |
+| GET | `/{universe}/films` | `page` | Paged films |
+| GET | `/{universe}/films/{filmId}` | | One film |
+| GET | `/{universe}/people/{characterId}/path-to/{targetId}` | | Shortest chains of shared films between two characters |
+| GET | `/{universe}/graph/insights` | | How connected each character is, and the shape of the whole graph |
 | GET | `/docs/openapi` | | Swagger UI |
 | GET | `/` | | Browser UI: search and the character graph |
+
+`{universe}` is one of `starwars`, `mcu`, `lotr` or `hp`. A slug the server
+holds no data for answers 404 rather than 400: the name is one this API knows,
+the dataset is what is missing. The paths that predate the prefix — `/people`,
+`/films` and `/graph` — redirect permanently to the Star Wars dataset, so an
+entity's `url` names exactly one place.
 
 Paged responses carry the total alongside the current page:
 

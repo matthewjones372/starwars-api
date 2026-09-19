@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Star Wars Character Graph</title>
+<title>Character Graph</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <style>
   :root {
@@ -260,7 +260,8 @@
 <div id="stage"></div>
 
 <header>
-  <h1>Star Wars Character Graph</h1>
+  <h1 id="heading">Character Graph</h1>
+  <select id="universe" aria-label="Dataset"></select>
   <input id="search" type="search" placeholder="Search characters or films…" autocomplete="off" spellcheck="false"/>
   <span id="status"></span>
   <button id="toggleinsights" class="ghost" aria-expanded="true" aria-controls="insights">Insights</button>
@@ -323,14 +324,30 @@
 
   // ---------------------------------------------------------------- data
 
+  // The dataset is the first path segment, so every call is relative to it and
+  // switching is a reload of the same page against a different prefix.
+  const UNIVERSES = [
+    { slug: "starwars", label: "Star Wars" },
+    { slug: "mcu", label: "Marvel Cinematic Universe" },
+    { slug: "lotr", label: "The Lord of the Rings" },
+    { slug: "hp", label: "Harry Potter" },
+  ];
+
+  const stored = (() => {
+    try { return localStorage.getItem("universe"); } catch { return null; }
+  })();
+  let universe = UNIVERSES.some((u) => u.slug === stored) ? stored : "starwars";
+
+  function api(resource) { return `${universe}/${resource}`; }
+
   // The API pages at a fixed size and reports the total in `count`, so the
   // first page tells us how many more there are and the rest go out at once.
   async function fetchAll(resource) {
-    const first = await fetch(`${resource}?page=1`).then((r) => r.json());
+    const first = await fetch(`${api(resource)}?page=1`).then((r) => r.json());
     const pages = Math.ceil(first.count / PAGE_SIZE);
     const rest = await Promise.all(
       Array.from({ length: pages - 1 }, (_, i) =>
-        fetch(`${resource}?page=${i + 2}`).then((r) => r.json())
+        fetch(`${api(resource)}?page=${i + 2}`).then((r) => r.json())
       )
     );
     return [first, ...rest].flatMap((p) => p.results);
@@ -342,7 +359,7 @@
   // under pressure, and a graph without its measurements still draws.
   async function fetchInsights() {
     try {
-      const res = await fetch("graph/insights");
+      const res = await fetch(api("graph/insights"));
       return res.ok ? await res.json() : null;
     } catch {
       return null;
@@ -696,8 +713,40 @@
 
   // ---------------------------------------------------------------- app
 
+  // Only the datasets the server actually holds are offered. The enum names
+  // more slugs than there is data for while the other universes are landing.
+  async function fillUniversePicker() {
+    const select = $("#universe");
+    let offered = UNIVERSES;
+    try {
+      const res = await fetch("universes");
+      if (res.ok) {
+        const body = await res.json();
+        if (body.results && body.results.length) offered = body.results;
+      }
+    } catch {
+      // Falls back to the full list, where a pick that has no data reports it.
+    }
+    if (!offered.some((u) => u.slug === universe)) universe = offered[0].slug;
+    select.innerHTML = "";
+    for (const u of offered) {
+      const option = document.createElement("option");
+      option.value = u.slug;
+      option.textContent = u.label;
+      select.appendChild(option);
+    }
+    select.value = universe;
+    select.hidden = offered.length < 2;
+    select.addEventListener("change", () => {
+      universe = select.value;
+      try { localStorage.setItem("universe", universe); } catch { /* private window */ }
+      location.reload();
+    });
+  }
+
   (async () => {
     let graph;
+    await fillUniversePicker();
     try {
       graph = await load();
     } catch (err) {
@@ -1024,7 +1073,7 @@
       const result = $("#pathresult");
       result.textContent = "Tracing…";
       try {
-        const res = await fetch(`people/${a.entityId}/path-to/${b.entityId}`);
+        const res = await fetch(api(`people/${a.entityId}/path-to/${b.entityId}`));
         if (!res.ok) { result.textContent = `No path (${res.status})`; return; }
         const path = await res.json();
 

@@ -204,10 +204,10 @@ object DataRepoSpec extends ZIOSpecDefault:
           person <- repo.getCharacter(EntityId(1))
           film   <- repo.getFilm(EntityId(1))
         yield assertTrue(
-          person.url == s"${DataRepo.defaultPublicUrl}/people/1/",
+          person.url == s"${DataRepo.defaultPublicUrl}/starwars/people/1/",
           person.films.forall(_.startsWith(DataRepo.defaultPublicUrl)),
           person.homeworld.exists(_.startsWith(DataRepo.defaultPublicUrl)),
-          film.url == s"${DataRepo.defaultPublicUrl}/films/1/",
+          film.url == s"${DataRepo.defaultPublicUrl}/starwars/films/1/",
           film.characters.forall(_.startsWith(DataRepo.defaultPublicUrl))
         )
       },

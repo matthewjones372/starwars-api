@@ -1,6 +1,6 @@
 package com.matthewjones372.http.api
 
-import com.matthewjones372.data.{DataRepoError, DataRepo}
+import com.matthewjones372.data.{DataRepo, DataRepoError, Universes}
 import com.matthewjones372.domain.*
 import com.matthewjones372.http.api.ApiServerError.*
 import com.matthewjones372.search.{Connectivity, Path, Graph}
@@ -8,6 +8,7 @@ import com.matthewjones372.sorting.{FieldOrdering, SortBy}
 import nl.vroste.rezilience.Bulkhead
 import zio.*
 import zio.http.*
+import zio.http.Path as HttpPath
 import zio.http.codec.*
 import zio.http.codec.PathCodec.*
 import zio.http.endpoint.*
@@ -35,11 +36,7 @@ object ApiServer:
    * [default], and nothing outside this build can ask for the slow path.
    */
   private[matthewjones372] def measuring(preEncoded: Boolean) =
-    (for
-      dataRepo <- ZIO.service[DataRepo]
-      graph    <- characterGraph(dataRepo).memoize
-      encoded  <- encodedEntities(dataRepo).memoize
-    yield ApiServerImpl(dataRepo, graph, encoded, preEncoded)).provideSomeLayer(DataRepo.layer)
+    ZIO.serviceWithZIO[Universes](build(_, preEncoded)).provideSomeLayer(Universes.layer)
 
   /**
    * The server over whatever repo it is handed, which is not pre-encoded.
@@ -49,12 +46,29 @@ object ApiServer:
    * such promise, so this one asks it per request as it always did.
    */
   def layer: ZLayer[DataRepo, Nothing, ApiServer] = ZLayer.fromZIO {
-    for
-      dataRepo <- ZIO.service[DataRepo]
-      graph    <- characterGraph(dataRepo).memoize
-      encoded  <- encodedEntities(dataRepo).memoize
-    yield ApiServerImpl(dataRepo, graph, encoded, preEncoded = false)
+    ZIO
+      .service[DataRepo]
+      .flatMap(repo => build(Universes.fromRepos(Map(UniverseId.default -> repo)), preEncoded = false))
   }
+
+  def universes: ZLayer[Universes, Nothing, ApiServer] = ZLayer.fromZIO {
+    ZIO.serviceWithZIO[Universes](build(_, preEncoded = false))
+  }
+
+  // The graph and the encoded bytes are built per universe and memoized, as the
+  // single pair was: nothing touches a repo until a request needs what it holds.
+  private def build(universes: Universes, preEncoded: Boolean): UIO[ApiServer] =
+    for
+      graphs  <- perUniverse(universes)(characterGraph)
+      encoded <- perUniverse(universes)(encodedEntities)
+    yield ApiServerImpl(universes, graphs, encoded, preEncoded)
+
+  private def perUniverse[A](universes: Universes)(
+    of: DataRepo => IO[DataRepoError, A]
+  ): UIO[Map[UniverseId, IO[DataRepoError, A]]] =
+    ZIO
+      .foreach(universes.available)(universe => universes.repo(universe).flatMap(of).memoize.map(universe -> _))
+      .map(_.toMap)
 
   /**
    * Every entity turned into response bytes once.
@@ -123,9 +137,16 @@ object ApiServer:
   private val filmCodec: BinaryCodec[Film]                           = schemaBasedBinaryCodec[Film]
   private val characterNotFoundCodec: BinaryCodec[CharacterNotFound] = schemaBasedBinaryCodec[CharacterNotFound]
   private val filmNotFoundCodec: BinaryCodec[FilmNotFound]           = schemaBasedBinaryCodec[FilmNotFound]
+  private val universeNotFoundCodec: BinaryCodec[UniverseNotFound]   = schemaBasedBinaryCodec[UniverseNotFound]
 
   private[api] def notFoundCharacter(id: EntityId): Response =
     jsonResponse(Status.NotFound, characterNotFoundCodec.encode(CharacterNotFound("Character not found", id)))
+
+  private[api] def notFoundUniverse(slug: String): Response =
+    jsonResponse(
+      Status.NotFound,
+      universeNotFoundCodec.encode(UniverseNotFound(s"No data is served for '$slug'", slug))
+    )
 
   private[api] def notFoundFilm(id: EntityId): Response =
     jsonResponse(Status.NotFound, filmNotFoundCodec.encode(FilmNotFound("Film not found", id)))
@@ -216,6 +237,14 @@ object ApiServer:
       else response
     }
 
+  private[api] def redirecting(segment: String): Handler[Any, Nothing, (HttpPath, Request), Response] =
+    handler { (rest: HttpPath, request: Request) =>
+      val target = HttpPath.root / UniverseId.default.slug / segment ++ rest
+      Response
+        .redirect(request.url.path(target), isPermanent = true)
+        .addHeader(Header.CacheControl.MaxAge(300))
+    }
+
   private[api] def jsonResponse(status: Status, body: Chunk[Byte]): Response =
     Response(
       status = status,
@@ -250,6 +279,13 @@ object ApiServer:
       s"Fields: ${fieldNames[A].mkString(",")}"
     )
 
+  // Left as a string rather than decoded to a UniverseId here: a path codec that
+  // fails has no route to report it on, so an unknown slug would surface as an
+  // unhandled error. It is resolved in the handler instead, where it is a 404.
+  private val universePath =
+    PathCodec.string("universe") ??
+      Doc.p(s"The dataset to read. One of ${UniverseId.slugs.mkString(", ")}.")
+
   private val characterIdPath = PathCodec.int("characterId").transformOrFailLeft(EntityId.from)(identity)
   private val filmIdPath      = PathCodec.int("filmId").transformOrFailLeft(EntityId.from)(identity)
   private val targetIdPath    = PathCodec.int("targetId").transformOrFailLeft(EntityId.from)(identity)
@@ -257,17 +293,26 @@ object ApiServer:
   private val pageQuery =
     QueryCodec.query[Int]("page").transformOrFail(PageNumber.from)(page => Right(page)).optional
 
+  val getUniversesEndpoint =
+    (Endpoint(Method.GET / "universes") ?? Doc.p("The datasets this API serves, and the slug each answers on"))
+      .out[AvailableUniverses]
+      .outErrors[ApiServerError](
+        HttpCodec.error[UnexpectedError](Status.InternalServerError),
+        HttpCodec.error[ServerError](Status.InternalServerError)
+      )
+
   val getCharacterEndpoint =
-    Endpoint(Method.GET / "people" / characterIdPath)
+    Endpoint(Method.GET / universePath / "people" / characterIdPath)
       .out[Character]
       .outErrors[ApiServerError](
         HttpCodec.error[CharacterNotFound](Status.NotFound),
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
   val getCharactersEndpoint =
-    (Endpoint(Method.GET / "people") ?? Doc.p("Get a list of  all people response is paged"))
+    (Endpoint(Method.GET / universePath / "people") ?? Doc.p("Get a list of  all people response is paged"))
       .query(pageQuery)
       .query(
         QueryCodec
@@ -277,44 +322,49 @@ object ApiServer:
       )
       .out[Characters]
       .outErrors[ApiServerError](
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
   val getFilmsEndpoint =
-    Endpoint(Method.GET / "films")
+    Endpoint(Method.GET / universePath / "films")
       .query(pageQuery)
       .out[Films]
       .outErrors[ApiServerError](
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
   val getFilmEndpoint =
-    Endpoint(Method.GET / "films" / filmIdPath)
+    Endpoint(Method.GET / universePath / "films" / filmIdPath)
       .out[Film]
       .outErrors[ApiServerError](
         HttpCodec.error[FilmNotFound](Status.NotFound),
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
   val getShortestPathEndpoint =
-    (Endpoint(Method.GET / "people" / characterIdPath / "path-to" / targetIdPath)
+    (Endpoint(Method.GET / universePath / "people" / characterIdPath / "path-to" / targetIdPath)
       ?? Doc.p("The shortest chains of shared films connecting two characters, and how many there are"))
       .out[ShortestPath]
       .outErrors[ApiServerError](
         HttpCodec.error[CharacterNotFound](Status.NotFound),
         HttpCodec.error[PathNotFound](Status.NotFound),
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
 
   val getGraphInsightsEndpoint =
-    (Endpoint(Method.GET / "graph" / "insights")
+    (Endpoint(Method.GET / universePath / "graph" / "insights")
       ?? Doc.p("How connected each character is, and what the whole cast looks like as a graph"))
       .out[GraphInsights]
       .outErrors[ApiServerError](
+        HttpCodec.error[UniverseNotFound](Status.NotFound),
         HttpCodec.error[UnexpectedError](Status.InternalServerError),
         HttpCodec.error[ServerError](Status.InternalServerError)
       )
@@ -389,6 +439,7 @@ object ApiServer:
 
   private val endPoints =
     Chunk(
+      getUniversesEndpoint,
       getCharacterEndpoint,
       getCharactersEndpoint,
       getFilmsEndpoint,
@@ -399,31 +450,58 @@ object ApiServer:
 
   val openAPI =
     OpenAPIGen.fromEndpoints(
-      title = "Star Wars API",
+      title = "Film Universe API",
       version = "1.0",
       endPoints
     )
 
 private final case class ApiServerImpl(
-  private val dataRepo: DataRepo,
-  private val characterGraph: IO[DataRepoError, ApiServer.CharacterGraph],
-  private val encoded: IO[DataRepoError, ApiServer.Encoded],
+  private val universes: Universes,
+  private val graphs: Map[UniverseId, IO[DataRepoError, ApiServer.CharacterGraph]],
+  private val encodedByUniverse: Map[UniverseId, IO[DataRepoError, ApiServer.Encoded]],
   private val preEncoded: Boolean
 ) extends ApiServer:
 
-  private def characterOrError(id: EntityId): IO[ApiServerError, Character] =
-    dataRepo.getCharacter(id).catchAll {
-      case DataRepoError.CharacterNotFound(message, characterId) =>
-        ZIO.fail(CharacterNotFound(message, characterId))
-      case err =>
-        ZIO.fail(UnexpectedError(err.getMessage))
+  // A slug this API does not know and one it knows but ships no data for are the
+  // same answer: the dataset is not here. Neither is a bad request -- the caller
+  // named a resource, and it does not exist.
+  private def missing(slug: String) = UniverseNotFound(s"No data is served for '$slug'", slug)
+
+  private def universeOf(slug: String): IO[ApiServerError, UniverseId] =
+    ZIO.fromEither(UniverseId.from(slug)).orElseFail(missing(slug))
+
+  private def repoOf(slug: String): IO[ApiServerError, DataRepo] =
+    universeOf(slug).flatMap(universe => universes.repo(universe).orElseFail(missing(slug)))
+
+  private def held[A](from: Map[UniverseId, IO[DataRepoError, A]], slug: String): IO[ApiServerError, A] =
+    universeOf(slug).flatMap { universe =>
+      ZIO
+        .fromOption(from.get(universe))
+        .orElseFail(missing(slug))
+        .flatMap(_.mapError(err => UnexpectedError(err.getMessage)))
     }
 
-  private val getShortestPathHandler = ApiServer.getShortestPathEndpoint.implement { (characterId, targetId) =>
+  private def graphOf(slug: String) = held(graphs, slug)
+
+  private def encodedOf(slug: String) = held(encodedByUniverse, slug)
+
+  private def errorResponse(error: ApiServerError): Response = error match
+    case UniverseNotFound(_, slug) => ApiServer.notFoundUniverse(slug)
+    case other                     => Response.internalServerError(other.getMessage)
+
+  private def characterOrError(universe: String, id: EntityId): IO[ApiServerError, Character] =
+    repoOf(universe).flatMap(_.getCharacter(id)).catchAll {
+      case DataRepoError.CharacterNotFound(message, characterId) =>
+        ZIO.fail(CharacterNotFound(message, characterId))
+      case err: ApiServerError => ZIO.fail(err)
+      case err                 => ZIO.fail(UnexpectedError(err.getMessage))
+    }
+
+  private val getShortestPathHandler = ApiServer.getShortestPathEndpoint.implement { (universe, characterId, targetId) =>
     for
-      start  <- characterOrError(characterId)
-      target <- characterOrError(targetId)
-      graph  <- characterGraph.mapError(err => UnexpectedError(err.getMessage))
+      start  <- characterOrError(universe, characterId)
+      target <- characterOrError(universe, targetId)
+      graph  <- graphOf(universe)
       paths  <- ZIO
                  .succeed(graph.graph.shortestPaths(start.name, target.name, ApiServer.maxChains))
                  .filterOrFail(_.nonEmpty)(PathNotFound(s"No path between ${start.name} and ${target.name}"))
@@ -431,43 +509,41 @@ private final case class ApiServerImpl(
     yield ApiServer.toShortestPath(graph, start.name, target.name, paths, chains)
   }.sandbox
 
-  private val getGraphInsightsHandler = ApiServer.getGraphInsightsEndpoint.implement { (_: Unit) =>
-    characterGraph
-      .mapBoth(
-        err => UnexpectedError(err.getMessage),
-        graph => ApiServer.toGraphInsights(graph, graph.graph.connectivity)
-      )
+  private val getGraphInsightsHandler = ApiServer.getGraphInsightsEndpoint.implement { (universe: String) =>
+    graphOf(universe).map(graph => ApiServer.toGraphInsights(graph, graph.graph.connectivity))
   }.sandbox
 
-  private val getCharacterHandler = ApiServer.getCharacterEndpoint.implement { characterId =>
-    dataRepo
-      .getCharacter(characterId)
+  private val getUniversesHandler = ApiServer.getUniversesEndpoint.implement { (_: Unit) =>
+    val offered = universes.available.map(universe => UniverseSummary(universe.slug, universe.label))
+    ZIO.succeed(AvailableUniverses(offered.size, offered))
+  }.sandbox
+
+  private val getCharacterHandler = ApiServer.getCharacterEndpoint.implement { (universe, characterId) =>
+    characterOrError(universe, characterId)
+  }.sandbox
+
+  private val getCharactersHandler = ApiServer.getCharactersEndpoint.implement { (universe, page, sortByParams) =>
+    repoOf(universe)
+      .flatMap(_.getCharacters(page, Some(PageSize.default), sortByParams.map(ApiServer.parseSortByList)))
       .catchAll {
-        case DataRepoError.CharacterNotFound(message, characterId) =>
-          ZIO.fail(CharacterNotFound(message, characterId))
-        case err =>
-          ZIO.fail(UnexpectedError(err.getMessage))
+        case err: ApiServerError => ZIO.fail(err)
+        case err                 => ZIO.fail(UnexpectedError(err.getMessage))
       }
   }.sandbox
 
-  private val getCharactersHandler = ApiServer.getCharactersEndpoint.implement { (page, sortByParams) =>
-    dataRepo
-      .getCharacters(page, Some(PageSize.default), sortByParams.map(ApiServer.parseSortByList))
-      .catchAll(err => ZIO.fail(UnexpectedError(err.getMessage)))
-  }.sandbox
-
-  private def getFilmHandler = ApiServer.getFilmEndpoint.implement { filmId =>
-    dataRepo.getFilm(filmId).catchAll {
+  private def getFilmHandler = ApiServer.getFilmEndpoint.implement { (universe, filmId) =>
+    repoOf(universe).flatMap(_.getFilm(filmId)).catchAll {
       case DataRepoError.FilmNotFound(message, _) =>
         ZIO.fail(FilmNotFound(message, filmId))
-      case err =>
-        ZIO.fail(UnexpectedError(err.getMessage))
+      case err: ApiServerError => ZIO.fail(err)
+      case err                 => ZIO.fail(UnexpectedError(err.getMessage))
     }
   }.sandbox
 
-  private def getFilmsHandler = ApiServer.getFilmsEndpoint.implement { page =>
-    dataRepo.getFilms(page, Some(PageSize.default)).catchAll { err =>
-      ZIO.fail(UnexpectedError(err.getMessage))
+  private def getFilmsHandler = ApiServer.getFilmsEndpoint.implement { (universe, page) =>
+    repoOf(universe).flatMap(_.getFilms(page, Some(PageSize.default))).catchAll {
+      case err: ApiServerError => ZIO.fail(err)
+      case err                 => ZIO.fail(UnexpectedError(err.getMessage))
     }
   }.sandbox
 
@@ -504,11 +580,11 @@ private final case class ApiServerImpl(
   // would have produced. A miss here is a miss in the repo the map was built
   // from, so there is one answer rather than a fallback that could differ.
   private val preEncodedCharacterRoute =
-    ApiServer.getCharacterEndpoint.route -> handler { (characterId: EntityId, _: Request) =>
-      encoded
+    ApiServer.getCharacterEndpoint.route -> handler { (universe: String, characterId: EntityId, _: Request) =>
+      encodedOf(universe)
         .map(_.characters.get(characterId))
         .foldZIO(
-          error => ZIO.succeed(Response.internalServerError(error.getMessage)),
+          error => ZIO.succeed(errorResponse(error)),
           {
             case Some(bytes) => ZIO.succeed(ApiServer.jsonResponse(Status.Ok, bytes))
             case None        => ZIO.succeed(ApiServer.notFoundCharacter(characterId))
@@ -517,11 +593,11 @@ private final case class ApiServerImpl(
     }
 
   private val preEncodedFilmRoute =
-    ApiServer.getFilmEndpoint.route -> handler { (filmId: EntityId, _: Request) =>
-      encoded
+    ApiServer.getFilmEndpoint.route -> handler { (universe: String, filmId: EntityId, _: Request) =>
+      encodedOf(universe)
         .map(_.films.get(filmId))
         .foldZIO(
-          error => ZIO.succeed(Response.internalServerError(error.getMessage)),
+          error => ZIO.succeed(errorResponse(error)),
           {
             case Some(bytes) => ZIO.succeed(ApiServer.jsonResponse(Status.Ok, bytes))
             case None        => ZIO.succeed(ApiServer.notFoundFilm(filmId))
@@ -540,15 +616,21 @@ private final case class ApiServerImpl(
       case _           => None
 
   private val preEncodedCharactersRoute =
-    ApiServer.getCharactersEndpoint.route -> handler { (request: Request) =>
+    ApiServer.getCharactersEndpoint.route -> handler { (universe: String, request: Request) =>
       cleanPage(request) match
         case None       => ZIO.scoped(getCharactersHandler.toHandler.apply(request))
         case Some(page) =>
           val sortBy = request.url.queryParams.queryParam("sortBy").map(ApiServer.parseSortByList)
-          encoded
-            .zip(dataRepo.getCharacters(page, Some(PageSize.default), sortBy))
+          encodedOf(universe)
+            .zip(
+              repoOf(universe)
+                .flatMap(
+                  _.getCharacters(page, Some(PageSize.default), sortBy)
+                    .mapError(err => UnexpectedError(err.getMessage))
+                )
+            )
             .fold(
-              error => Response.internalServerError(error.getMessage),
+              error => errorResponse(error),
               (bytes, characters) => ApiServer.charactersResponse(bytes, characters)
             )
     }
@@ -556,6 +638,7 @@ private final case class ApiServerImpl(
   private val handlers =
     if preEncoded then
       Chunk(
+        getUniversesHandler,
         preEncodedCharacterRoute,
         preEncodedCharactersRoute,
         getFilmsHandler,
@@ -565,6 +648,7 @@ private final case class ApiServerImpl(
       )
     else
       Chunk(
+        getUniversesHandler,
         getCharacterHandler,
         getCharactersHandler,
         getFilmsHandler,
@@ -573,9 +657,24 @@ private final case class ApiServerImpl(
         getGraphInsightsHandler
       )
 
+  /**
+   * Where the api answered before it carried a universe.
+   *
+   * A redirect rather than a second set of routes: an entity's `url` can name
+   * only one of the two, so the unprefixed one has to point at the prefixed one
+   * rather than stand beside it as an equal.
+   */
+  private val legacyRoutes =
+    Routes(
+      Method.GET / "people" / PathCodec.trailing -> ApiServer.redirecting("people"),
+      Method.GET / "films" / PathCodec.trailing  -> ApiServer.redirecting("films"),
+      Method.GET / "graph" / PathCodec.trailing  -> ApiServer.redirecting("graph")
+    )
+
   // The API is cacheable and the page is not: the page is how a reader picks up
   // a new deploy, so it revalidates while the data it fetches need not.
-  private val routes = (Routes(handlers) @@ ApiServer.cacheable) ++ swaggerRoutes ++ uiRoutes
+  private val routes =
+    (Routes(handlers) @@ ApiServer.cacheable) ++ legacyRoutes ++ swaggerRoutes ++ uiRoutes
 
   override def start: URIO[Server, Nothing] =
     ZIO.scoped {

@@ -17,8 +17,8 @@ object GenerateDataFromSwapi extends ZIOAppDefault:
       films     <- swapi.getFilms
       people    <- swapi.getCharacters
       _         <- ZIO.logInfo(s"Got data films of size: ${films.size} and people: ${people.size}")
-      filmJson   = encodeAs(films).replaceAll("https://swapi.dev/api/", "http://localhost:8080/")
-      peopleJson = encodeAs(people).replaceAll("https://swapi.dev/api/", "http://localhost:8080/")
+      filmJson   = encodeAs(films).replaceAll("https://swapi.dev/api/", "/")
+      peopleJson = encodeAs(people).replaceAll("https://swapi.dev/api/", "/")
       _         <- ZIO.logInfo("Writing data to file")
       _         <- ZIO.writeFile("data/src/main/resources/people_data2.json", peopleJson)
       _         <- ZIO.writeFile("data/src/main/resources/film_data2.json", filmJson)

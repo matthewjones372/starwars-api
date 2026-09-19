@@ -46,6 +46,10 @@ sbt "runMain ServerExample"
 The server listens on port 8080. Interactive API docs are at
 http://localhost:8080/docs/openapi.
 
+Entities link to each other by absolute url. The dataset stores those as paths
+and the host is applied once at startup, so a deployment sets `PUBLIC_BASE_URL`
+to the origin its callers reach it on; it defaults to `http://localhost:8080`.
+
 ```sh
 curl 'http://localhost:8080/people/1'
 curl 'http://localhost:8080/films?page=1'

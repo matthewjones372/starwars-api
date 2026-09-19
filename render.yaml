@@ -8,3 +8,5 @@ services:
     envVars:
       - key: PORT
         value: 8080
+      - key: PUBLIC_BASE_URL
+        value: https://starwars-api-eu.onrender.com

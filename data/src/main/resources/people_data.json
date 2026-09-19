@@ -8,16 +8,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/14/",
+    "homeworld": "/planets/14/",
     "films": [
-      "http://localhost:8080/films/6/"
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/3/"
+      "/species/3/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/80/"
+    "url": "/people/80/"
   },
   {
     "name": "Wedge Antilles",
@@ -28,21 +28,21 @@
     "eye_color": "hazel",
     "birth_year": "21BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/22/",
+    "homeworld": "/planets/22/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/9/"
+      "/films/1/",
+      "/films/2/",
+      "/films/3/",
+      "/films/9/"
     ],
     "species": [],
     "vehicles": [
-      "http://localhost:8080/vehicles/14/"
+      "/vehicles/14/"
     ],
     "starships": [
-      "http://localhost:8080/starships/12/"
+      "/starships/12/"
     ],
-    "url": "http://localhost:8080/people/18/"
+    "url": "/people/18/"
   },
   {
     "name": "Ki-Adi-Mundi",
@@ -53,18 +53,18 @@
     "eye_color": "yellow",
     "birth_year": "92BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/43/",
+    "homeworld": "/planets/43/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/20/"
+      "/species/20/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/52/"
+    "url": "/people/52/"
   },
   {
     "name": "Mon Mothma",
@@ -75,16 +75,16 @@
     "eye_color": "blue",
     "birth_year": "48BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/32/",
+    "homeworld": "/planets/32/",
     "films": [
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/10/",
-      "http://localhost:8080/films/15/"
+      "/films/3/",
+      "/films/10/",
+      "/films/15/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/28/"
+    "url": "/people/28/"
   },
   {
     "name": "Bib Fortuna",
@@ -95,18 +95,18 @@
     "eye_color": "pink",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/37/",
+    "homeworld": "/planets/37/",
     "films": [
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "/films/3/",
+      "/films/12/",
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/15/"
+      "/species/15/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/45/"
+    "url": "/people/45/"
   },
   {
     "name": "Finis Valorum",
@@ -117,14 +117,14 @@
     "eye_color": "blue",
     "birth_year": "91BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/9/",
+    "homeworld": "/planets/9/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/34/"
+    "url": "/people/34/"
   },
   {
     "name": "Dooku",
@@ -135,19 +135,19 @@
     "eye_color": "brown",
     "birth_year": "102BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/52/",
+    "homeworld": "/planets/52/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/55/"
+      "/vehicles/55/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/67/"
+    "url": "/people/67/"
   },
   {
     "name": "Wilhuff Tarkin",
@@ -158,16 +158,16 @@
     "eye_color": "blue",
     "birth_year": "64BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/21/",
+    "homeworld": "/planets/21/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/10/"
+      "/films/1/",
+      "/films/6/",
+      "/films/10/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/12/"
+    "url": "/people/12/"
   },
   {
     "name": "Dormé",
@@ -178,16 +178,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/66/"
+    "url": "/people/66/"
   },
   {
     "name": "Mace Windu",
@@ -198,16 +198,16 @@
     "eye_color": "brown",
     "birth_year": "72BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/42/",
+    "homeworld": "/planets/42/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/51/"
+    "url": "/people/51/"
   },
   {
     "name": "R5-D4",
@@ -218,16 +218,16 @@
     "eye_color": "red",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/1/"
+      "/films/1/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/8/"
+    "url": "/people/8/"
   },
   {
     "name": "Taun We",
@@ -238,16 +238,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/10/",
+    "homeworld": "/planets/10/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/32/"
+      "/species/32/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/73/"
+    "url": "/people/73/"
   },
   {
     "name": "Shaak Ti",
@@ -258,17 +258,17 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/58/",
+    "homeworld": "/planets/58/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/35/"
+      "/species/35/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/78/"
+    "url": "/people/78/"
   },
   {
     "name": "Jek Tono Porkins",
@@ -279,16 +279,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/26/",
+    "homeworld": "/planets/26/",
     "films": [
-      "http://localhost:8080/films/1/"
+      "/films/1/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/12/"
+      "/starships/12/"
     ],
-    "url": "http://localhost:8080/people/19/"
+    "url": "/people/19/"
   },
   {
     "name": "IG-88",
@@ -299,16 +299,16 @@
     "eye_color": "red",
     "birth_year": "15BBY",
     "gender": "none",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/2/"
+      "/films/2/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/23/"
+    "url": "/people/23/"
   },
   {
     "name": "Cliegg Lars",
@@ -319,14 +319,14 @@
     "eye_color": "blue",
     "birth_year": "82BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/62/"
+    "url": "/people/62/"
   },
   {
     "name": "Darth Vader",
@@ -337,21 +337,21 @@
     "eye_color": "yellow",
     "birth_year": "41.9BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/10/",
-      "http://localhost:8080/films/14/"
+      "/films/1/",
+      "/films/2/",
+      "/films/3/",
+      "/films/6/",
+      "/films/10/",
+      "/films/14/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/13/"
+      "/starships/13/"
     ],
-    "url": "http://localhost:8080/people/4/"
+    "url": "/people/4/"
   },
   {
     "name": "San Hill",
@@ -362,16 +362,16 @@
     "eye_color": "gold",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/57/",
+    "homeworld": "/planets/57/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/34/"
+      "/species/34/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/77/"
+    "url": "/people/77/"
   },
   {
     "name": "Watto",
@@ -382,17 +382,17 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/34/",
+    "homeworld": "/planets/34/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/"
+      "/films/4/",
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/13/"
+      "/species/13/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/40/"
+    "url": "/people/40/"
   },
   {
     "name": "Greedo",
@@ -403,16 +403,16 @@
     "eye_color": "black",
     "birth_year": "44BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/23/",
+    "homeworld": "/planets/23/",
     "films": [
-      "http://localhost:8080/films/1/"
+      "/films/1/"
     ],
     "species": [
-      "http://localhost:8080/species/4/"
+      "/species/4/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/15/"
+    "url": "/people/15/"
   },
   {
     "name": "Anakin Skywalker",
@@ -423,24 +423,24 @@
     "eye_color": "blue",
     "birth_year": "41.9BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/14/"
+      "/films/4/",
+      "/films/5/",
+      "/films/6/",
+      "/films/14/"
     ],
     "species": [],
     "vehicles": [
-      "http://localhost:8080/vehicles/44/",
-      "http://localhost:8080/vehicles/46/"
+      "/vehicles/44/",
+      "/vehicles/46/"
     ],
     "starships": [
-      "http://localhost:8080/starships/39/",
-      "http://localhost:8080/starships/59/",
-      "http://localhost:8080/starships/65/"
+      "/starships/39/",
+      "/starships/59/",
+      "/starships/65/"
     ],
-    "url": "http://localhost:8080/people/11/"
+    "url": "/people/11/"
   },
   {
     "name": "Biggs Darklighter",
@@ -451,16 +451,16 @@
     "eye_color": "brown",
     "birth_year": "24BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/1/"
+      "/films/1/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/12/"
+      "/starships/12/"
     ],
-    "url": "http://localhost:8080/people/9/"
+    "url": "/people/9/"
   },
   {
     "name": "Darth Maul",
@@ -471,21 +471,21 @@
     "eye_color": "yellow",
     "birth_year": "54BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/36/",
+    "homeworld": "/planets/36/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/11/"
+      "/films/4/",
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/22/"
+      "/species/22/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/42/"
+      "/vehicles/42/"
     ],
     "starships": [
-      "http://localhost:8080/starships/41/"
+      "/starships/41/"
     ],
-    "url": "http://localhost:8080/people/44/"
+    "url": "/people/44/"
   },
   {
     "name": "Nute Gunray",
@@ -496,18 +496,18 @@
     "eye_color": "red",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/18/",
+    "homeworld": "/planets/18/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/11/"
+      "/species/11/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/33/"
+    "url": "/people/33/"
   },
   {
     "name": "Boba Fett",
@@ -518,20 +518,20 @@
     "eye_color": "brown",
     "birth_year": "31.5BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/10/",
+    "homeworld": "/planets/10/",
     "films": [
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "/films/2/",
+      "/films/3/",
+      "/films/5/",
+      "/films/12/",
+      "/films/13/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/21/"
+      "/starships/21/"
     ],
-    "url": "http://localhost:8080/people/22/"
+    "url": "/people/22/"
   },
   {
     "name": "Saesee Tiin",
@@ -542,17 +542,17 @@
     "eye_color": "orange",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/47/",
+    "homeworld": "/planets/47/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/24/"
+      "/species/24/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/56/"
+    "url": "/people/56/"
   },
   {
     "name": "Adi Gallia",
@@ -563,17 +563,17 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/9/",
+    "homeworld": "/planets/9/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/23/"
+      "/species/23/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/55/"
+    "url": "/people/55/"
   },
   {
     "name": "Lobot",
@@ -584,14 +584,14 @@
     "eye_color": "blue",
     "birth_year": "37BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/6/",
+    "homeworld": "/planets/6/",
     "films": [
-      "http://localhost:8080/films/2/"
+      "/films/2/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/26/"
+    "url": "/people/26/"
   },
   {
     "name": "Ben Quadinaros",
@@ -602,16 +602,16 @@
     "eye_color": "orange",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/41/",
+    "homeworld": "/planets/41/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [
-      "http://localhost:8080/species/19/"
+      "/species/19/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/50/"
+    "url": "/people/50/"
   },
   {
     "name": "Roos Tarpals",
@@ -622,16 +622,16 @@
     "eye_color": "orange",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [
-      "http://localhost:8080/species/12/"
+      "/species/12/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/37/"
+    "url": "/people/37/"
   },
   {
     "name": "Bail Prestor Organa",
@@ -642,19 +642,19 @@
     "eye_color": "brown",
     "birth_year": "67BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/2/",
+    "homeworld": "/planets/2/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/10/",
-      "http://localhost:8080/films/14/"
+      "/films/5/",
+      "/films/6/",
+      "/films/10/",
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/68/"
+    "url": "/people/68/"
   },
   {
     "name": "Cordé",
@@ -665,14 +665,14 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/61/"
+    "url": "/people/61/"
   },
   {
     "name": "Chewbacca",
@@ -683,28 +683,28 @@
     "eye_color": "blue",
     "birth_year": "200BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/14/",
+    "homeworld": "/planets/14/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/",
-      "http://localhost:8080/films/11/"
+      "/films/1/",
+      "/films/2/",
+      "/films/3/",
+      "/films/6/",
+      "/films/7/",
+      "/films/8/",
+      "/films/9/",
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/3/"
+      "/species/3/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/19/"
+      "/vehicles/19/"
     ],
     "starships": [
-      "http://localhost:8080/starships/10/",
-      "http://localhost:8080/starships/22/"
+      "/starships/10/",
+      "/starships/22/"
     ],
-    "url": "http://localhost:8080/people/13/"
+    "url": "/people/13/"
   },
   {
     "name": "Ayla Secura",
@@ -715,18 +715,18 @@
     "eye_color": "hazel",
     "birth_year": "48BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/37/",
+    "homeworld": "/planets/37/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/15/"
+      "/species/15/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/46/"
+    "url": "/people/46/"
   },
   {
     "name": "Bossk",
@@ -737,16 +737,16 @@
     "eye_color": "red",
     "birth_year": "53BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/29/",
+    "homeworld": "/planets/29/",
     "films": [
-      "http://localhost:8080/films/2/"
+      "/films/2/"
     ],
     "species": [
-      "http://localhost:8080/species/7/"
+      "/species/7/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/24/"
+    "url": "/people/24/"
   },
   {
     "name": "Tion Medon",
@@ -757,16 +757,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/12/",
+    "homeworld": "/planets/12/",
     "films": [
-      "http://localhost:8080/films/6/"
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/37/"
+      "/species/37/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/83/"
+    "url": "/people/83/"
   },
   {
     "name": "Padmé Amidala",
@@ -777,20 +777,20 @@
     "eye_color": "brown",
     "birth_year": "46BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/39/",
-      "http://localhost:8080/starships/49/",
-      "http://localhost:8080/starships/64/"
+      "/starships/39/",
+      "/starships/49/",
+      "/starships/64/"
     ],
-    "url": "http://localhost:8080/people/35/"
+    "url": "/people/35/"
   },
   {
     "name": "Jabba Desilijic Tiure",
@@ -801,19 +801,19 @@
     "eye_color": "orange",
     "birth_year": "600BBY",
     "gender": "hermaphrodite",
-    "homeworld": "http://localhost:8080/planets/24/",
+    "homeworld": "/planets/24/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/13/"
+      "/films/1/",
+      "/films/3/",
+      "/films/4/",
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/5/"
+      "/species/5/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/16/"
+    "url": "/people/16/"
   },
   {
     "name": "Grievous",
@@ -824,20 +824,20 @@
     "eye_color": "green, yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/59/",
+    "homeworld": "/planets/59/",
     "films": [
-      "http://localhost:8080/films/6/"
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/36/"
+      "/species/36/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/60/"
+      "/vehicles/60/"
     ],
     "starships": [
-      "http://localhost:8080/starships/74/"
+      "/starships/74/"
     ],
-    "url": "http://localhost:8080/people/79/"
+    "url": "/people/79/"
   },
   {
     "name": "Leia Organa",
@@ -848,24 +848,24 @@
     "eye_color": "brown",
     "birth_year": "19BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/2/",
+    "homeworld": "/planets/2/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/",
-      "http://localhost:8080/films/10/",
-      "http://localhost:8080/films/14/"
+      "/films/1/",
+      "/films/2/",
+      "/films/3/",
+      "/films/6/",
+      "/films/7/",
+      "/films/8/",
+      "/films/9/",
+      "/films/10/",
+      "/films/14/"
     ],
     "species": [],
     "vehicles": [
-      "http://localhost:8080/vehicles/30/"
+      "/vehicles/30/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/5/"
+    "url": "/people/5/"
   },
   {
     "name": "Lama Su",
@@ -876,16 +876,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/10/",
+    "homeworld": "/planets/10/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/32/"
+      "/species/32/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/72/"
+    "url": "/people/72/"
   },
   {
     "name": "Obi-Wan Kenobi",
@@ -896,28 +896,28 @@
     "eye_color": "blue-gray",
     "birth_year": "57BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/20/",
+    "homeworld": "/planets/20/",
     "films": [
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/14/"
+      "/films/3/",
+      "/films/4/",
+      "/films/1/",
+      "/films/5/",
+      "/films/6/",
+      "/films/2/",
+      "/films/14/"
     ],
     "species": [],
     "vehicles": [
-      "http://localhost:8080/vehicles/38/"
+      "/vehicles/38/"
     ],
     "starships": [
-      "http://localhost:8080/starships/64/",
-      "http://localhost:8080/starships/59/",
-      "http://localhost:8080/starships/48/",
-      "http://localhost:8080/starships/65/",
-      "http://localhost:8080/starships/74/"
+      "/starships/64/",
+      "/starships/59/",
+      "/starships/48/",
+      "/starships/65/",
+      "/starships/74/"
     ],
-    "url": "http://localhost:8080/people/10/"
+    "url": "/people/10/"
   },
   {
     "name": "Mas Amedda",
@@ -928,17 +928,17 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/50/",
+    "homeworld": "/planets/50/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/"
+      "/films/4/",
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/27/"
+      "/species/27/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/59/"
+    "url": "/people/59/"
   },
   {
     "name": "Dud Bolt",
@@ -949,16 +949,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/39/",
+    "homeworld": "/planets/39/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [
-      "http://localhost:8080/species/17/"
+      "/species/17/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/48/"
+    "url": "/people/48/"
   },
   {
     "name": "Palpatine",
@@ -969,19 +969,19 @@
     "eye_color": "yellow",
     "birth_year": "82BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/9/"
+      "/films/5/",
+      "/films/3/",
+      "/films/4/",
+      "/films/6/",
+      "/films/2/",
+      "/films/9/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/21/"
+    "url": "/people/21/"
   },
   {
     "name": "Wat Tambor",
@@ -992,16 +992,16 @@
     "eye_color": "unknown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/56/",
+    "homeworld": "/planets/56/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/33/"
+      "/species/33/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/76/"
+    "url": "/people/76/"
   },
   {
     "name": "Eeth Koth",
@@ -1012,17 +1012,17 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/45/",
+    "homeworld": "/planets/45/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/22/"
+      "/species/22/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/54/"
+    "url": "/people/54/"
   },
   {
     "name": "Shmi Skywalker",
@@ -1033,15 +1033,15 @@
     "eye_color": "brown",
     "birth_year": "72BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/"
+      "/films/4/",
+      "/films/5/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/43/"
+    "url": "/people/43/"
   },
   {
     "name": "Barriss Offee",
@@ -1052,16 +1052,16 @@
     "eye_color": "blue",
     "birth_year": "40BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/51/",
+    "homeworld": "/planets/51/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/29/"
+      "/species/29/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/65/"
+    "url": "/people/65/"
   },
   {
     "name": "Dexter Jettster",
@@ -1072,16 +1072,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/55/",
+    "homeworld": "/planets/55/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/31/"
+      "/species/31/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/71/"
+    "url": "/people/71/"
   },
   {
     "name": "Yarael Poof",
@@ -1092,16 +1092,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/48/",
+    "homeworld": "/planets/48/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [
-      "http://localhost:8080/species/25/"
+      "/species/25/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/57/"
+    "url": "/people/57/"
   },
   {
     "name": "Qui-Gon Jinn",
@@ -1112,17 +1112,17 @@
     "eye_color": "blue",
     "birth_year": "92BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/14/"
+      "/films/4/",
+      "/films/14/"
     ],
     "species": [],
     "vehicles": [
-      "http://localhost:8080/vehicles/38/"
+      "/vehicles/38/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/32/"
+    "url": "/people/32/"
   },
   {
     "name": "Owen Lars",
@@ -1133,17 +1133,17 @@
     "eye_color": "blue",
     "birth_year": "52BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/14/"
+      "/films/1/",
+      "/films/5/",
+      "/films/6/",
+      "/films/14/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/6/"
+    "url": "/people/6/"
   },
   {
     "name": "Jar Jar Binks",
@@ -1154,17 +1154,17 @@
     "eye_color": "orange",
     "birth_year": "52BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/"
+      "/films/4/",
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/12/"
+      "/species/12/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/36/"
+    "url": "/people/36/"
   },
   {
     "name": "Luke Skywalker",
@@ -1175,28 +1175,28 @@
     "eye_color": "blue",
     "birth_year": "19BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/",
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "/films/1/",
+      "/films/2/",
+      "/films/3/",
+      "/films/6/",
+      "/films/7/",
+      "/films/8/",
+      "/films/9/",
+      "/films/12/",
+      "/films/13/"
     ],
     "species": [],
     "vehicles": [
-      "http://localhost:8080/vehicles/14/",
-      "http://localhost:8080/vehicles/30/"
+      "/vehicles/14/",
+      "/vehicles/30/"
     ],
     "starships": [
-      "http://localhost:8080/starships/12/",
-      "http://localhost:8080/starships/22/"
+      "/starships/12/",
+      "/starships/22/"
     ],
-    "url": "http://localhost:8080/people/1/"
+    "url": "/people/1/"
   },
   {
     "name": "Ric Olié",
@@ -1207,16 +1207,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/40/"
+      "/starships/40/"
     ],
-    "url": "http://localhost:8080/people/39/"
+    "url": "/people/39/"
   },
   {
     "name": "Sly Moore",
@@ -1227,15 +1227,15 @@
     "eye_color": "white",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/60/",
+    "homeworld": "/planets/60/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/82/"
+    "url": "/people/82/"
   },
   {
     "name": "Gasgano",
@@ -1246,16 +1246,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/40/",
+    "homeworld": "/planets/40/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [
-      "http://localhost:8080/species/18/"
+      "/species/18/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/49/"
+    "url": "/people/49/"
   },
   {
     "name": "Lando Calrissian",
@@ -1266,19 +1266,19 @@
     "eye_color": "brown",
     "birth_year": "31BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/30/",
+    "homeworld": "/planets/30/",
     "films": [
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/9/",
-      "http://localhost:8080/films/11/"
+      "/films/2/",
+      "/films/3/",
+      "/films/9/",
+      "/films/11/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/10/"
+      "/starships/10/"
     ],
-    "url": "http://localhost:8080/people/25/"
+    "url": "/people/25/"
   },
   {
     "name": "Gregar Typho",
@@ -1289,16 +1289,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/39/"
+      "/starships/39/"
     ],
-    "url": "http://localhost:8080/people/60/"
+    "url": "/people/60/"
   },
   {
     "name": "Han Solo",
@@ -1309,22 +1309,22 @@
     "eye_color": "brown",
     "birth_year": "29BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/22/",
+    "homeworld": "/planets/22/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/9/",
-      "http://localhost:8080/films/11/"
+      "/films/1/",
+      "/films/2/",
+      "/films/3/",
+      "/films/7/",
+      "/films/9/",
+      "/films/11/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/10/",
-      "http://localhost:8080/starships/22/"
+      "/starships/10/",
+      "/starships/22/"
     ],
-    "url": "http://localhost:8080/people/14/"
+    "url": "/people/14/"
   },
   {
     "name": "Ratts Tyerel",
@@ -1335,16 +1335,16 @@
     "eye_color": "unknown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/38/",
+    "homeworld": "/planets/38/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [
-      "http://localhost:8080/species/16/"
+      "/species/16/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/47/"
+    "url": "/people/47/"
   },
   {
     "name": "Nien Nunb",
@@ -1355,20 +1355,20 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/33/",
+    "homeworld": "/planets/33/",
     "films": [
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/9/"
+      "/films/3/",
+      "/films/7/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/10/"
+      "/species/10/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/10/"
+      "/starships/10/"
     ],
-    "url": "http://localhost:8080/people/31/"
+    "url": "/people/31/"
   },
   {
     "name": "Jango Fett",
@@ -1379,14 +1379,14 @@
     "eye_color": "brown",
     "birth_year": "66BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/53/",
+    "homeworld": "/planets/53/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/69/"
+    "url": "/people/69/"
   },
   {
     "name": "Plo Koon",
@@ -1397,20 +1397,20 @@
     "eye_color": "black",
     "birth_year": "22BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/49/",
+    "homeworld": "/planets/49/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/26/"
+      "/species/26/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/48/"
+      "/starships/48/"
     ],
-    "url": "http://localhost:8080/people/58/"
+    "url": "/people/58/"
   },
   {
     "name": "Luminara Unduli",
@@ -1421,17 +1421,17 @@
     "eye_color": "blue",
     "birth_year": "58BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/51/",
+    "homeworld": "/planets/51/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/29/"
+      "/species/29/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/64/"
+    "url": "/people/64/"
   },
   {
     "name": "Kit Fisto",
@@ -1442,18 +1442,18 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/44/",
+    "homeworld": "/planets/44/",
     "films": [
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/4/",
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/21/"
+      "/species/21/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/53/"
+    "url": "/people/53/"
   },
   {
     "name": "Quarsh Panaka",
@@ -1464,14 +1464,14 @@
     "eye_color": "brown",
     "birth_year": "62BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/42/"
+    "url": "/people/42/"
   },
   {
     "name": "R4-P17",
@@ -1482,15 +1482,15 @@
     "eye_color": "red, blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/75/"
+    "url": "/people/75/"
   },
   {
     "name": "Yoda",
@@ -1501,21 +1501,21 @@
     "eye_color": "brown",
     "birth_year": "896BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/8/"
+      "/films/5/",
+      "/films/3/",
+      "/films/4/",
+      "/films/6/",
+      "/films/2/",
+      "/films/8/"
     ],
     "species": [
-      "http://localhost:8080/species/6/"
+      "/species/6/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/20/"
+    "url": "/people/20/"
   },
   {
     "name": "Ackbar",
@@ -1526,18 +1526,18 @@
     "eye_color": "orange",
     "birth_year": "41BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/31/",
+    "homeworld": "/planets/31/",
     "films": [
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/"
+      "/films/3/",
+      "/films/7/",
+      "/films/8/"
     ],
     "species": [
-      "http://localhost:8080/species/8/"
+      "/species/8/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/27/"
+    "url": "/people/27/"
   },
   {
     "name": "Zam Wesell",
@@ -1548,18 +1548,18 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/54/",
+    "homeworld": "/planets/54/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/30/"
+      "/species/30/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/45/"
+      "/vehicles/45/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/70/"
+    "url": "/people/70/"
   },
   {
     "name": "C-3PO",
@@ -1570,24 +1570,24 @@
     "eye_color": "yellow",
     "birth_year": "112BBY",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/3/",
+      "/films/4/",
+      "/films/1/",
+      "/films/5/",
+      "/films/6/",
+      "/films/2/",
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/2/"
+    "url": "/people/2/"
   },
   {
     "name": "Rugor Nass",
@@ -1598,16 +1598,16 @@
     "eye_color": "orange",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [
-      "http://localhost:8080/species/12/"
+      "/species/12/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/38/"
+    "url": "/people/38/"
   },
   {
     "name": "Raymus Antilles",
@@ -1618,15 +1618,15 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/2/",
+    "homeworld": "/planets/2/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/6/"
+      "/films/1/",
+      "/films/6/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/81/"
+    "url": "/people/81/"
   },
   {
     "name": "Wicket Systri Warrick",
@@ -1637,16 +1637,16 @@
     "eye_color": "brown",
     "birth_year": "8BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/7/",
+    "homeworld": "/planets/7/",
     "films": [
-      "http://localhost:8080/films/3/"
+      "/films/3/"
     ],
     "species": [
-      "http://localhost:8080/species/9/"
+      "/species/9/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/30/"
+    "url": "/people/30/"
   },
   {
     "name": "Beru Whitesun lars",
@@ -1657,17 +1657,17 @@
     "eye_color": "blue",
     "birth_year": "47BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/14/"
+      "/films/1/",
+      "/films/5/",
+      "/films/6/",
+      "/films/14/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/7/"
+    "url": "/people/7/"
   },
   {
     "name": "Arvel Crynyd",
@@ -1678,16 +1678,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/3/"
+      "/films/3/"
     ],
     "species": [],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/28/"
+      "/starships/28/"
     ],
-    "url": "http://localhost:8080/people/29/"
+    "url": "/people/29/"
   },
   {
     "name": "Sebulba",
@@ -1698,16 +1698,16 @@
     "eye_color": "orange",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/35/",
+    "homeworld": "/planets/35/",
     "films": [
-      "http://localhost:8080/films/4/"
+      "/films/4/"
     ],
     "species": [
-      "http://localhost:8080/species/14/"
+      "/species/14/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/41/"
+    "url": "/people/41/"
   },
   {
     "name": "Poggle the Lesser",
@@ -1718,17 +1718,17 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/11/",
+    "homeworld": "/planets/11/",
     "films": [
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/"
+      "/films/5/",
+      "/films/6/"
     ],
     "species": [
-      "http://localhost:8080/species/28/"
+      "/species/28/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/63/"
+    "url": "/people/63/"
   },
   {
     "name": "R2-D2",
@@ -1739,26 +1739,26 @@
     "eye_color": "red",
     "birth_year": "33BBY",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/8/",
+    "homeworld": "/planets/8/",
     "films": [
-      "http://localhost:8080/films/3/",
-      "http://localhost:8080/films/4/",
-      "http://localhost:8080/films/1/",
-      "http://localhost:8080/films/5/",
-      "http://localhost:8080/films/6/",
-      "http://localhost:8080/films/2/",
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/",
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "/films/3/",
+      "/films/4/",
+      "/films/1/",
+      "/films/5/",
+      "/films/6/",
+      "/films/2/",
+      "/films/7/",
+      "/films/8/",
+      "/films/9/",
+      "/films/12/",
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/3/"
+    "url": "/people/3/"
   },
   {
     "name": "Jocasta Nu",
@@ -1769,16 +1769,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/9/",
+    "homeworld": "/planets/9/",
     "films": [
-      "http://localhost:8080/films/5/"
+      "/films/5/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/74/"
+    "url": "/people/74/"
   },
   {
     "name": "Rey",
@@ -1789,20 +1789,20 @@
     "eye_color": "hazel",
     "birth_year": "15ABY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/61/",
+    "homeworld": "/planets/61/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/10/"
+      "/starships/10/"
     ],
-    "url": "http://localhost:8080/people/84/"
+    "url": "/people/84/"
   },
   {
     "name": "Finn",
@@ -1813,20 +1813,20 @@
     "eye_color": "brown",
     "birth_year": "11ABY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/10/"
+      "/starships/10/"
     ],
-    "url": "http://localhost:8080/people/85/"
+    "url": "/people/85/"
   },
   {
     "name": "Poe Dameron",
@@ -1837,21 +1837,21 @@
     "eye_color": "brown",
     "birth_year": "2ABY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/3/",
+    "homeworld": "/planets/3/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/76/",
-      "http://localhost:8080/starships/10/"
+      "/starships/76/",
+      "/starships/10/"
     ],
-    "url": "http://localhost:8080/people/86/"
+    "url": "/people/86/"
   },
   {
     "name": "Kylo Ren",
@@ -1862,21 +1862,21 @@
     "eye_color": "brown",
     "birth_year": "5ABY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/32/",
+    "homeworld": "/planets/32/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/82/",
-      "http://localhost:8080/starships/78/"
+      "/starships/82/",
+      "/starships/78/"
     ],
-    "url": "http://localhost:8080/people/87/"
+    "url": "/people/87/"
   },
   {
     "name": "BB-8",
@@ -1887,18 +1887,18 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/88/"
+    "url": "/people/88/"
   },
   {
     "name": "Armitage Hux",
@@ -1909,20 +1909,20 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/72/",
+    "homeworld": "/planets/72/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/79/"
+      "/starships/79/"
     ],
-    "url": "http://localhost:8080/people/89/"
+    "url": "/people/89/"
   },
   {
     "name": "Captain Phasma",
@@ -1933,17 +1933,17 @@
     "eye_color": "unknown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/73/",
+    "homeworld": "/planets/73/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/"
+      "/films/7/",
+      "/films/8/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/90/"
+    "url": "/people/90/"
   },
   {
     "name": "Snoke",
@@ -1954,19 +1954,19 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/68/",
+    "homeworld": "/planets/68/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/"
+      "/films/7/",
+      "/films/8/"
     ],
     "species": [
-      "http://localhost:8080/species/50/"
+      "/species/50/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/81/"
+      "/starships/81/"
     ],
-    "url": "http://localhost:8080/people/91/"
+    "url": "/people/91/"
   },
   {
     "name": "Maz Kanata",
@@ -1977,18 +1977,18 @@
     "eye_color": "brown",
     "birth_year": "973BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/62/",
+    "homeworld": "/planets/62/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/51/"
+      "/species/51/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/92/"
+    "url": "/people/92/"
   },
   {
     "name": "Lor San Tekka",
@@ -1999,16 +1999,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/61/",
+    "homeworld": "/planets/61/",
     "films": [
-      "http://localhost:8080/films/7/"
+      "/films/7/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/93/"
+    "url": "/people/93/"
   },
   {
     "name": "Unkar Plutt",
@@ -2019,16 +2019,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/61/",
+    "homeworld": "/planets/61/",
     "films": [
-      "http://localhost:8080/films/7/"
+      "/films/7/"
     ],
     "species": [
-      "http://localhost:8080/species/38/"
+      "/species/38/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/94/"
+    "url": "/people/94/"
   },
   {
     "name": "Rose Tico",
@@ -2039,19 +2039,19 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/74/",
+    "homeworld": "/planets/74/",
     "films": [
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/78/"
+      "/vehicles/78/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/95/"
+    "url": "/people/95/"
   },
   {
     "name": "Amilyn Holdo",
@@ -2062,18 +2062,18 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/75/",
+    "homeworld": "/planets/75/",
     "films": [
-      "http://localhost:8080/films/8/"
+      "/films/8/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/80/"
+      "/starships/80/"
     ],
-    "url": "http://localhost:8080/people/96/"
+    "url": "/people/96/"
   },
   {
     "name": "DJ",
@@ -2084,16 +2084,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/8/"
+      "/films/8/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/97/"
+    "url": "/people/97/"
   },
   {
     "name": "Paige Tico",
@@ -2104,16 +2104,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/74/",
+    "homeworld": "/planets/74/",
     "films": [
-      "http://localhost:8080/films/8/"
+      "/films/8/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/98/"
+    "url": "/people/98/"
   },
   {
     "name": "Zorii Bliss",
@@ -2124,16 +2124,16 @@
     "eye_color": "unknown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/70/",
+    "homeworld": "/planets/70/",
     "films": [
-      "http://localhost:8080/films/9/"
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/99/"
+    "url": "/people/99/"
   },
   {
     "name": "Jannah",
@@ -2144,18 +2144,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/71/",
+    "homeworld": "/planets/71/",
     "films": [
-      "http://localhost:8080/films/9/"
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/79/"
+      "/vehicles/79/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/100/"
+    "url": "/people/100/"
   },
   {
     "name": "Babu Frik",
@@ -2166,16 +2166,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/70/",
+    "homeworld": "/planets/70/",
     "films": [
-      "http://localhost:8080/films/9/"
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/39/"
+      "/species/39/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/101/"
+    "url": "/people/101/"
   },
   {
     "name": "D-O",
@@ -2186,16 +2186,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/9/"
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/102/"
+    "url": "/people/102/"
   },
   {
     "name": "Enric Pryde",
@@ -2206,18 +2206,18 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/9/"
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/83/"
+      "/starships/83/"
     ],
-    "url": "http://localhost:8080/people/103/"
+    "url": "/people/103/"
   },
   {
     "name": "Beaumont Kin",
@@ -2228,16 +2228,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/9/"
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/104/"
+    "url": "/people/104/"
   },
   {
     "name": "Klaud",
@@ -2248,16 +2248,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/9/"
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/40/"
+      "/species/40/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/105/"
+    "url": "/people/105/"
   },
   {
     "name": "Kaydel Ko Connix",
@@ -2268,18 +2268,18 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/106/"
+    "url": "/people/106/"
   },
   {
     "name": "Temmin Wexley",
@@ -2290,20 +2290,20 @@
     "eye_color": "brown",
     "birth_year": "5ABY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/76/",
+    "homeworld": "/planets/76/",
     "films": [
-      "http://localhost:8080/films/7/",
-      "http://localhost:8080/films/8/",
-      "http://localhost:8080/films/9/"
+      "/films/7/",
+      "/films/8/",
+      "/films/9/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/76/"
+      "/starships/76/"
     ],
-    "url": "http://localhost:8080/people/107/"
+    "url": "/people/107/"
   },
   {
     "name": "Jyn Erso",
@@ -2314,18 +2314,18 @@
     "eye_color": "brown",
     "birth_year": "21BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/81/",
+    "homeworld": "/planets/81/",
     "films": [
-      "http://localhost:8080/films/10/"
+      "/films/10/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/96/"
+      "/starships/96/"
     ],
-    "url": "http://localhost:8080/people/108/"
+    "url": "/people/108/"
   },
   {
     "name": "Cassian Andor",
@@ -2336,19 +2336,19 @@
     "eye_color": "brown",
     "birth_year": "26BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/82/",
+    "homeworld": "/planets/82/",
     "films": [
-      "http://localhost:8080/films/10/",
-      "http://localhost:8080/films/15/"
+      "/films/10/",
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/96/"
+      "/starships/96/"
     ],
-    "url": "http://localhost:8080/people/109/"
+    "url": "/people/109/"
   },
   {
     "name": "K-2SO",
@@ -2359,19 +2359,19 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/10/",
-      "http://localhost:8080/films/15/"
+      "/films/10/",
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/96/"
+      "/starships/96/"
     ],
-    "url": "http://localhost:8080/people/110/"
+    "url": "/people/110/"
   },
   {
     "name": "Chirrut Îmwe",
@@ -2382,16 +2382,16 @@
     "eye_color": "white",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/78/",
+    "homeworld": "/planets/78/",
     "films": [
-      "http://localhost:8080/films/10/"
+      "/films/10/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/111/"
+    "url": "/people/111/"
   },
   {
     "name": "Baze Malbus",
@@ -2402,16 +2402,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/78/",
+    "homeworld": "/planets/78/",
     "films": [
-      "http://localhost:8080/films/10/"
+      "/films/10/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/112/"
+    "url": "/people/112/"
   },
   {
     "name": "Bodhi Rook",
@@ -2422,18 +2422,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/78/",
+    "homeworld": "/planets/78/",
     "films": [
-      "http://localhost:8080/films/10/"
+      "/films/10/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/85/"
+      "/starships/85/"
     ],
-    "url": "http://localhost:8080/people/113/"
+    "url": "/people/113/"
   },
   {
     "name": "Galen Erso",
@@ -2444,16 +2444,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/10/"
+      "/films/10/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/114/"
+    "url": "/people/114/"
   },
   {
     "name": "Orson Krennic",
@@ -2464,19 +2464,19 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/84/",
+    "homeworld": "/planets/84/",
     "films": [
-      "http://localhost:8080/films/10/",
-      "http://localhost:8080/films/15/"
+      "/films/10/",
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/85/"
+      "/starships/85/"
     ],
-    "url": "http://localhost:8080/people/115/"
+    "url": "/people/115/"
   },
   {
     "name": "Saw Gerrera",
@@ -2487,17 +2487,17 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/83/",
+    "homeworld": "/planets/83/",
     "films": [
-      "http://localhost:8080/films/10/",
-      "http://localhost:8080/films/15/"
+      "/films/10/",
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/116/"
+    "url": "/people/116/"
   },
   {
     "name": "Lyra Erso",
@@ -2508,16 +2508,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/10/"
+      "/films/10/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/117/"
+    "url": "/people/117/"
   },
   {
     "name": "Davits Draven",
@@ -2528,16 +2528,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/10/"
+      "/films/10/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/118/"
+    "url": "/people/118/"
   },
   {
     "name": "Raddus",
@@ -2548,18 +2548,18 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/31/",
+    "homeworld": "/planets/31/",
     "films": [
-      "http://localhost:8080/films/10/"
+      "/films/10/"
     ],
     "species": [
-      "http://localhost:8080/species/8/"
+      "/species/8/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/84/"
+      "/starships/84/"
     ],
-    "url": "http://localhost:8080/people/119/"
+    "url": "/people/119/"
   },
   {
     "name": "Qi'ra",
@@ -2570,16 +2570,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/22/",
+    "homeworld": "/planets/22/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/120/"
+    "url": "/people/120/"
   },
   {
     "name": "Tobias Beckett",
@@ -2590,18 +2590,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/10/"
+      "/starships/10/"
     ],
-    "url": "http://localhost:8080/people/121/"
+    "url": "/people/121/"
   },
   {
     "name": "Val",
@@ -2612,16 +2612,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/122/"
+    "url": "/people/122/"
   },
   {
     "name": "Rio Durant",
@@ -2632,18 +2632,18 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/47/"
+      "/species/47/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/10/"
+      "/starships/10/"
     ],
-    "url": "http://localhost:8080/people/123/"
+    "url": "/people/123/"
   },
   {
     "name": "L3-37",
@@ -2654,18 +2654,18 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/10/"
+      "/starships/10/"
     ],
-    "url": "http://localhost:8080/people/124/"
+    "url": "/people/124/"
   },
   {
     "name": "Enfys Nest",
@@ -2676,18 +2676,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/91/"
+      "/vehicles/91/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/125/"
+    "url": "/people/125/"
   },
   {
     "name": "Dryden Vos",
@@ -2698,16 +2698,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/126/"
+    "url": "/people/126/"
   },
   {
     "name": "Lady Proxima",
@@ -2718,16 +2718,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/22/",
+    "homeworld": "/planets/22/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/48/"
+      "/species/48/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/127/"
+    "url": "/people/127/"
   },
   {
     "name": "Moloch",
@@ -2738,16 +2738,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/22/",
+    "homeworld": "/planets/22/",
     "films": [
-      "http://localhost:8080/films/11/"
+      "/films/11/"
     ],
     "species": [
-      "http://localhost:8080/species/48/"
+      "/species/48/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/128/"
+    "url": "/people/128/"
   },
   {
     "name": "Din Djarin",
@@ -2758,22 +2758,22 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/94/",
+    "homeworld": "/planets/94/",
     "films": [
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/",
-      "http://localhost:8080/films/19/"
+      "/films/12/",
+      "/films/13/",
+      "/films/19/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/87/"
+      "/vehicles/87/"
     ],
     "starships": [
-      "http://localhost:8080/starships/87/"
+      "/starships/87/"
     ],
-    "url": "http://localhost:8080/people/129/"
+    "url": "/people/129/"
   },
   {
     "name": "Grogu",
@@ -2784,18 +2784,18 @@
     "eye_color": "black",
     "birth_year": "41BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/",
-      "http://localhost:8080/films/19/"
+      "/films/12/",
+      "/films/13/",
+      "/films/19/"
     ],
     "species": [
-      "http://localhost:8080/species/6/"
+      "/species/6/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/130/"
+    "url": "/people/130/"
   },
   {
     "name": "Greef Karga",
@@ -2806,16 +2806,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/89/",
+    "homeworld": "/planets/89/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/131/"
+    "url": "/people/131/"
   },
   {
     "name": "Cara Dune",
@@ -2826,16 +2826,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/2/",
+    "homeworld": "/planets/2/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/132/"
+    "url": "/people/132/"
   },
   {
     "name": "IG-11",
@@ -2846,16 +2846,16 @@
     "eye_color": "red",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/133/"
+    "url": "/people/133/"
   },
   {
     "name": "Kuiil",
@@ -2866,18 +2866,18 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/41/"
+      "/species/41/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/86/"
+      "/vehicles/86/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/134/"
+    "url": "/people/134/"
   },
   {
     "name": "Moff Gideon",
@@ -2888,18 +2888,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/22/"
+      "/starships/22/"
     ],
-    "url": "http://localhost:8080/people/135/"
+    "url": "/people/135/"
   },
   {
     "name": "The Armorer",
@@ -2910,17 +2910,17 @@
     "eye_color": "unknown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/92/",
+    "homeworld": "/planets/92/",
     "films": [
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "/films/12/",
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/136/"
+    "url": "/people/136/"
   },
   {
     "name": "Fennec Shand",
@@ -2931,21 +2931,21 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "/films/12/",
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/87/"
+      "/vehicles/87/"
     ],
     "starships": [
-      "http://localhost:8080/starships/21/"
+      "/starships/21/"
     ],
-    "url": "http://localhost:8080/people/137/"
+    "url": "/people/137/"
   },
   {
     "name": "Bo-Katan Kryze",
@@ -2956,16 +2956,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/92/",
+    "homeworld": "/planets/92/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/138/"
+    "url": "/people/138/"
   },
   {
     "name": "Ahsoka Tano",
@@ -2976,20 +2976,20 @@
     "eye_color": "blue",
     "birth_year": "36BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/58/",
+    "homeworld": "/planets/58/",
     "films": [
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/",
-      "http://localhost:8080/films/16/"
+      "/films/12/",
+      "/films/13/",
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/35/"
+      "/species/35/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/89/"
+      "/starships/89/"
     ],
-    "url": "http://localhost:8080/people/139/"
+    "url": "/people/139/"
   },
   {
     "name": "Migs Mayfeld",
@@ -3000,16 +3000,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/140/"
+    "url": "/people/140/"
   },
   {
     "name": "Peli Motto",
@@ -3020,17 +3020,17 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "/films/12/",
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/141/"
+    "url": "/people/141/"
   },
   {
     "name": "Cobb Vanth",
@@ -3041,19 +3041,19 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/13/"
+      "/films/12/",
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [
-      "http://localhost:8080/vehicles/87/"
+      "/vehicles/87/"
     ],
     "starships": [],
-    "url": "http://localhost:8080/people/142/"
+    "url": "/people/142/"
   },
   {
     "name": "Carson Teva",
@@ -3064,18 +3064,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/12/"
+      "/starships/12/"
     ],
-    "url": "http://localhost:8080/people/143/"
+    "url": "/people/143/"
   },
   {
     "name": "Penn Pershing",
@@ -3086,16 +3086,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/12/"
+      "/films/12/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/144/"
+    "url": "/people/144/"
   },
   {
     "name": "Morgan Elsbeth",
@@ -3106,19 +3106,19 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/36/",
+    "homeworld": "/planets/36/",
     "films": [
-      "http://localhost:8080/films/12/",
-      "http://localhost:8080/films/16/"
+      "/films/12/",
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/90/"
+      "/starships/90/"
     ],
-    "url": "http://localhost:8080/people/145/"
+    "url": "/people/145/"
   },
   {
     "name": "Black Krrsantan",
@@ -3129,16 +3129,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/14/",
+    "homeworld": "/planets/14/",
     "films": [
-      "http://localhost:8080/films/13/"
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/3/"
+      "/species/3/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/146/"
+    "url": "/people/146/"
   },
   {
     "name": "Drash",
@@ -3149,16 +3149,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/1/",
+    "homeworld": "/planets/1/",
     "films": [
-      "http://localhost:8080/films/13/"
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/147/"
+    "url": "/people/147/"
   },
   {
     "name": "Mok Shaiz",
@@ -3169,16 +3169,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/13/"
+      "/films/13/"
     ],
     "species": [
-      "http://localhost:8080/species/42/"
+      "/species/42/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/148/"
+    "url": "/people/148/"
   },
   {
     "name": "Reva Sevander",
@@ -3189,16 +3189,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/149/"
+    "url": "/people/149/"
   },
   {
     "name": "The Grand Inquisitor",
@@ -3209,16 +3209,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/12/",
+    "homeworld": "/planets/12/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/37/"
+      "/species/37/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/150/"
+    "url": "/people/150/"
   },
   {
     "name": "Fifth Brother",
@@ -3229,16 +3229,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/151/"
+    "url": "/people/151/"
   },
   {
     "name": "Fourth Sister",
@@ -3249,16 +3249,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/152/"
+    "url": "/people/152/"
   },
   {
     "name": "Tala Durith",
@@ -3269,16 +3269,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/153/"
+    "url": "/people/153/"
   },
   {
     "name": "Haja Estree",
@@ -3289,16 +3289,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/154/"
+    "url": "/people/154/"
   },
   {
     "name": "Roken",
@@ -3309,16 +3309,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/155/"
+    "url": "/people/155/"
   },
   {
     "name": "NED-B",
@@ -3329,16 +3329,16 @@
     "eye_color": "white",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/156/"
+    "url": "/people/156/"
   },
   {
     "name": "Vect Nokru",
@@ -3349,16 +3349,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/95/",
+    "homeworld": "/planets/95/",
     "films": [
-      "http://localhost:8080/films/14/"
+      "/films/14/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/157/"
+    "url": "/people/157/"
   },
   {
     "name": "Maarva Andor",
@@ -3369,16 +3369,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/99/",
+    "homeworld": "/planets/99/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/158/"
+    "url": "/people/158/"
   },
   {
     "name": "Luthen Rael",
@@ -3389,18 +3389,18 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/94/"
+      "/starships/94/"
     ],
-    "url": "http://localhost:8080/people/159/"
+    "url": "/people/159/"
   },
   {
     "name": "Bix Caleen",
@@ -3411,18 +3411,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/99/",
+    "homeworld": "/planets/99/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/93/"
+      "/starships/93/"
     ],
-    "url": "http://localhost:8080/people/160/"
+    "url": "/people/160/"
   },
   {
     "name": "Dedra Meero",
@@ -3433,16 +3433,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/161/"
+    "url": "/people/161/"
   },
   {
     "name": "Syril Karn",
@@ -3453,16 +3453,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/9/",
+    "homeworld": "/planets/9/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/162/"
+    "url": "/people/162/"
   },
   {
     "name": "Kleya Marki",
@@ -3473,16 +3473,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/163/"
+    "url": "/people/163/"
   },
   {
     "name": "Vel Sartha",
@@ -3493,16 +3493,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/32/",
+    "homeworld": "/planets/32/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/164/"
+    "url": "/people/164/"
   },
   {
     "name": "Cinta Kaz",
@@ -3513,16 +3513,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/165/"
+    "url": "/people/165/"
   },
   {
     "name": "Kino Loy",
@@ -3533,16 +3533,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/166/"
+    "url": "/people/166/"
   },
   {
     "name": "Brasso",
@@ -3553,16 +3553,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/99/",
+    "homeworld": "/planets/99/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/167/"
+    "url": "/people/167/"
   },
   {
     "name": "B2EMO",
@@ -3573,16 +3573,16 @@
     "eye_color": "white",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/99/",
+    "homeworld": "/planets/99/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/168/"
+    "url": "/people/168/"
   },
   {
     "name": "Eedy Karn",
@@ -3593,16 +3593,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/9/",
+    "homeworld": "/planets/9/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/169/"
+    "url": "/people/169/"
   },
   {
     "name": "Major Partagaz",
@@ -3613,16 +3613,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/170/"
+    "url": "/people/170/"
   },
   {
     "name": "Wilmon Paak",
@@ -3633,16 +3633,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/99/",
+    "homeworld": "/planets/99/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/171/"
+    "url": "/people/171/"
   },
   {
     "name": "Perrin Fertha",
@@ -3653,16 +3653,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/32/",
+    "homeworld": "/planets/32/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/172/"
+    "url": "/people/172/"
   },
   {
     "name": "Leida Mothma",
@@ -3673,16 +3673,16 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/32/",
+    "homeworld": "/planets/32/",
     "films": [
-      "http://localhost:8080/films/15/"
+      "/films/15/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/173/"
+    "url": "/people/173/"
   },
   {
     "name": "Sabine Wren",
@@ -3693,18 +3693,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/106/",
+    "homeworld": "/planets/106/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/91/"
+      "/starships/91/"
     ],
-    "url": "http://localhost:8080/people/174/"
+    "url": "/people/174/"
   },
   {
     "name": "Hera Syndulla",
@@ -3715,18 +3715,18 @@
     "eye_color": "green",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/37/",
+    "homeworld": "/planets/37/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/15/"
+      "/species/15/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/91/"
+      "/starships/91/"
     ],
-    "url": "http://localhost:8080/people/175/"
+    "url": "/people/175/"
   },
   {
     "name": "Ezra Bridger",
@@ -3737,16 +3737,16 @@
     "eye_color": "blue",
     "birth_year": "19BBY",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/103/",
+    "homeworld": "/planets/103/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/176/"
+    "url": "/people/176/"
   },
   {
     "name": "Thrawn",
@@ -3757,18 +3757,18 @@
     "eye_color": "red",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/107/",
+    "homeworld": "/planets/107/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/43/"
+      "/species/43/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/97/"
+      "/starships/97/"
     ],
-    "url": "http://localhost:8080/people/177/"
+    "url": "/people/177/"
   },
   {
     "name": "Baylan Skoll",
@@ -3779,18 +3779,18 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/90/"
+      "/starships/90/"
     ],
-    "url": "http://localhost:8080/people/178/"
+    "url": "/people/178/"
   },
   {
     "name": "Shin Hati",
@@ -3801,18 +3801,18 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/90/"
+      "/starships/90/"
     ],
-    "url": "http://localhost:8080/people/179/"
+    "url": "/people/179/"
   },
   {
     "name": "Huyang",
@@ -3823,18 +3823,18 @@
     "eye_color": "blue",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/89/"
+      "/starships/89/"
     ],
-    "url": "http://localhost:8080/people/180/"
+    "url": "/people/180/"
   },
   {
     "name": "Chopper",
@@ -3845,18 +3845,18 @@
     "eye_color": "white",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/103/",
+    "homeworld": "/planets/103/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/91/"
+      "/starships/91/"
     ],
-    "url": "http://localhost:8080/people/181/"
+    "url": "/people/181/"
   },
   {
     "name": "Jacen Syndulla",
@@ -3867,16 +3867,16 @@
     "eye_color": "green",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/103/",
+    "homeworld": "/planets/103/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/15/"
+      "/species/15/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/182/"
+    "url": "/people/182/"
   },
   {
     "name": "Marrok",
@@ -3887,16 +3887,16 @@
     "eye_color": "unknown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/183/"
+    "url": "/people/183/"
   },
   {
     "name": "Captain Enoch",
@@ -3907,16 +3907,16 @@
     "eye_color": "unknown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/105/",
+    "homeworld": "/planets/105/",
     "films": [
-      "http://localhost:8080/films/16/"
+      "/films/16/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/184/"
+    "url": "/people/184/"
   },
   {
     "name": "Osha Aniseya",
@@ -3927,16 +3927,16 @@
     "eye_color": "brown",
     "birth_year": "148BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/108/",
+    "homeworld": "/planets/108/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/185/"
+    "url": "/people/185/"
   },
   {
     "name": "Mae Aniseya",
@@ -3947,16 +3947,16 @@
     "eye_color": "brown",
     "birth_year": "148BBY",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/108/",
+    "homeworld": "/planets/108/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/186/"
+    "url": "/people/186/"
   },
   {
     "name": "Sol",
@@ -3967,16 +3967,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/187/"
+    "url": "/people/187/"
   },
   {
     "name": "Vernestra Rwoh",
@@ -3987,16 +3987,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/51/",
+    "homeworld": "/planets/51/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/29/"
+      "/species/29/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/188/"
+    "url": "/people/188/"
   },
   {
     "name": "Qimir",
@@ -4007,16 +4007,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/189/"
+    "url": "/people/189/"
   },
   {
     "name": "Jecki Lon",
@@ -4027,16 +4027,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/44/"
+      "/species/44/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/190/"
+    "url": "/people/190/"
   },
   {
     "name": "Yord Fandar",
@@ -4047,16 +4047,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/191/"
+    "url": "/people/191/"
   },
   {
     "name": "Indara",
@@ -4067,16 +4067,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/192/"
+    "url": "/people/192/"
   },
   {
     "name": "Aniseya",
@@ -4087,16 +4087,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/108/",
+    "homeworld": "/planets/108/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/193/"
+    "url": "/people/193/"
   },
   {
     "name": "Kelnacca",
@@ -4107,16 +4107,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/14/",
+    "homeworld": "/planets/14/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/3/"
+      "/species/3/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/194/"
+    "url": "/people/194/"
   },
   {
     "name": "Bazil",
@@ -4127,16 +4127,16 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/45/"
+      "/species/45/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/195/"
+    "url": "/people/195/"
   },
   {
     "name": "Darth Plagueis",
@@ -4147,16 +4147,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/57/",
+    "homeworld": "/planets/57/",
     "films": [
-      "http://localhost:8080/films/17/"
+      "/films/17/"
     ],
     "species": [
-      "http://localhost:8080/species/34/"
+      "/species/34/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/196/"
+    "url": "/people/196/"
   },
   {
     "name": "Wim",
@@ -4167,18 +4167,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/111/",
+    "homeworld": "/planets/111/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/95/"
+      "/starships/95/"
     ],
-    "url": "http://localhost:8080/people/197/"
+    "url": "/people/197/"
   },
   {
     "name": "Fern",
@@ -4189,18 +4189,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/111/",
+    "homeworld": "/planets/111/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/95/"
+      "/starships/95/"
     ],
-    "url": "http://localhost:8080/people/198/"
+    "url": "/people/198/"
   },
   {
     "name": "KB",
@@ -4211,18 +4211,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/111/",
+    "homeworld": "/planets/111/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/95/"
+      "/starships/95/"
     ],
-    "url": "http://localhost:8080/people/199/"
+    "url": "/people/199/"
   },
   {
     "name": "Neel",
@@ -4233,18 +4233,18 @@
     "eye_color": "black",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/111/",
+    "homeworld": "/planets/111/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/46/"
+      "/species/46/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/95/"
+      "/starships/95/"
     ],
-    "url": "http://localhost:8080/people/200/"
+    "url": "/people/200/"
   },
   {
     "name": "Jod Na Nawood",
@@ -4255,18 +4255,18 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/95/"
+      "/starships/95/"
     ],
-    "url": "http://localhost:8080/people/201/"
+    "url": "/people/201/"
   },
   {
     "name": "SM-33",
@@ -4277,18 +4277,18 @@
     "eye_color": "red",
     "birth_year": "unknown",
     "gender": "n/a",
-    "homeworld": "http://localhost:8080/planets/28/",
+    "homeworld": "/planets/28/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/2/"
+      "/species/2/"
     ],
     "vehicles": [],
     "starships": [
-      "http://localhost:8080/starships/95/"
+      "/starships/95/"
     ],
-    "url": "http://localhost:8080/people/202/"
+    "url": "/people/202/"
   },
   {
     "name": "Wendle",
@@ -4299,16 +4299,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/111/",
+    "homeworld": "/planets/111/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/203/"
+    "url": "/people/203/"
   },
   {
     "name": "Brutus",
@@ -4319,16 +4319,16 @@
     "eye_color": "yellow",
     "birth_year": "unknown",
     "gender": "male",
-    "homeworld": "http://localhost:8080/planets/112/",
+    "homeworld": "/planets/112/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/52/"
+      "/species/52/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/204/"
+    "url": "/people/204/"
   },
   {
     "name": "Fara",
@@ -4339,16 +4339,16 @@
     "eye_color": "brown",
     "birth_year": "unknown",
     "gender": "female",
-    "homeworld": "http://localhost:8080/planets/111/",
+    "homeworld": "/planets/111/",
     "films": [
-      "http://localhost:8080/films/18/"
+      "/films/18/"
     ],
     "species": [
-      "http://localhost:8080/species/1/"
+      "/species/1/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/205/"
+    "url": "/people/205/"
   },
   {
     "name": "Rotta the Hutt",
@@ -4359,15 +4359,15 @@
     "eye_color": "orange",
     "birth_year": "unknown",
     "gender": "hermaphrodite",
-    "homeworld": "http://localhost:8080/planets/24/",
+    "homeworld": "/planets/24/",
     "films": [
-      "http://localhost:8080/films/19/"
+      "/films/19/"
     ],
     "species": [
-      "http://localhost:8080/species/5/"
+      "/species/5/"
     ],
     "vehicles": [],
     "starships": [],
-    "url": "http://localhost:8080/people/206/"
+    "url": "/people/206/"
   }
 ]

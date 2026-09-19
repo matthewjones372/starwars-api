@@ -50,14 +50,48 @@ object SWDataRepo:
       .fromEither(parseEntityId(url))
       .mapError(message => DataRepoError.UnexpectedError(message, new IllegalArgumentException(message)))
 
+  private[data] val defaultPublicUrl = "http://localhost:8080"
+
+  // The bundled data holds paths, so the host a client should call back on is
+  // only known at startup. Resolving here rather than per request keeps the
+  // promise `http-api` encodes its responses once on.
+  private[data] def publicUrl: UIO[String] =
+    System.envOrElse("PUBLIC_BASE_URL", defaultPublicUrl).orDie.map(_.stripSuffix("/"))
+
+  private[data] def resolve(baseUrl: String)(path: String): String =
+    if path.startsWith("/") then baseUrl + path else path
+
+  private[data] def resolved(baseUrl: String)(person: Character): Character =
+    val at = resolve(baseUrl)
+    person.copy(
+      homeworld = person.homeworld.map(at),
+      films = person.films.map(at),
+      species = person.species.map(_.map(at)),
+      vehicles = person.vehicles.map(_.map(at)),
+      starships = person.starships.map(_.map(at)),
+      url = at(person.url)
+    )
+
+  private[data] def resolved(baseUrl: String)(film: Film): Film =
+    val at = resolve(baseUrl)
+    film.copy(
+      characters = film.characters.map(at),
+      planets = film.planets.map(at),
+      starships = film.starships.map(at),
+      vehicles = film.vehicles.map(at),
+      species = film.species.map(at),
+      url = at(film.url)
+    )
+
   private[data] def bundledEntities: Task[(List[Character], List[Film])] =
     for
       _          <- ZIO.logInfo("Reading in Star Wars Data")
+      baseUrl    <- publicUrl
       peopleJson <- readResource("people_data.json")
       filmJson   <- readResource("film_data.json")
-      people     <- decode[Character](peopleJson, "people")
-      films      <- decode[Film](filmJson, "films")
-      _          <- ZIO.logInfo(s"Parsed ${people.size} people and ${films.size} films")
+      people     <- decode[Character](peopleJson, "people").map(_.map(resolved(baseUrl)))
+      films      <- decode[Film](filmJson, "films").map(_.map(resolved(baseUrl)))
+      _          <- ZIO.logInfo(s"Parsed ${people.size} people and ${films.size} films rooted at $baseUrl")
     yield (people, films)
 
   def layer: RLayer[Any, SWDataRepo] = ZLayer.fromZIO {

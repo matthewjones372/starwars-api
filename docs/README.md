@@ -18,8 +18,9 @@ Wars, the Marvel Cinematic Universe, The Lord of the Rings and Harry Potter,
 to start. `GET /universes` lists what the running server holds.
 
 Actors sit outside all of it. An actor belongs to no single universe, which
-makes them the one edge in this API that crosses a dataset: Christopher Lee is
-Count Dooku and Saruman, and Andy Serkis is in three of the four. `GET
+makes them the one edge in this API that crosses a dataset -- 46 of them are in
+more than one. Christopher Lee is Count Dooku and Saruman, and Andy Serkis is
+in three of the four. `GET
 /actors/{id}/path-to/{id}` is a Bacon number that does not care which franchise
 either end is in.
 
@@ -389,10 +390,22 @@ makes an actor graph spanning four universes possible from one source. The
 public SPARQL endpoint throttles, so the script retries with a backoff and each
 franchise is queried on its own: a query joining across all four times out.
 
-Star Wars cast coverage is the thin part. Wikidata's Star Wars film series
-carries ten titles against swapi's nineteen, so 42 of the 205 characters have
-an actor. The other three universes are built from Wikidata throughout and do
-not have that gap.
+The Star Wars live-action series are not part of any series item in Wikidata,
+so P179 does not reach them and they are named one by one, as are Rogue One,
+Solo and The Mandalorian and Grogu. Without them the scrape saw ten of the
+nineteen titles.
+
+The two sides also number and name things differently: swapi's sixth film is
+"Return of the Jedi" where Wikidata's is "Star Wars: Episode VI - Return of
+the Jedi", and both write a url as `/starwars/films/6/` meaning different
+films. So the merge translates every Wikidata url onto the swapi entity it
+means, and drops a credit it cannot translate rather than letting a number
+that happens to exist stand in for it. Titles and character names are then
+taken from the dataset, so a role reads the way the entity it points at does.
+
+92 of the 301 Star Wars characters have an actor, and all 19 titles have a
+cast. The rest are droids, creatures and background aliens that swapi lists
+and Wikidata does not credit to a named performer.
 
 ```sh
 sbt "runMain scripts.GenerateUniverseData"

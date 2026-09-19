@@ -54,10 +54,49 @@ object ActorRepoSpec extends ZIOSpecDefault:
         played <- repo.portraying(anyRole.character)
       yield assertTrue(cast.count > 0, played.count > 0)
     },
+    // Star Wars keeps swapi's entities while its cast comes from Wikidata, and
+    // the two number their films and characters differently. Both spell a url
+    // the same way, so a role that was not translated points at whatever else
+    // holds that number -- Harrison Ford billed in Rogue One, playing someone
+    // he has never played.
+    test("every role points at an entity the api actually serves") {
+      for
+        actors    <- ZIO.serviceWithZIO[ActorRepo](_.getActors(None, None, None))
+        universes <- ZIO.service[Universes]
+        checked   <- ZIO.foreach(actors.results.flatMap(_.roles).distinct) { role =>
+                     for
+                       repo      <- universes.repo(role.universe)
+                       id        <- ZIO.fromEither(DataRepo.parseEntityId(role.character)).orElseFail(role)
+                       filmId    <- ZIO.fromEither(DataRepo.parseEntityId(role.film)).orElseFail(role)
+                       character <- repo.getCharacter(id)
+                       film      <- repo.getFilm(filmId)
+                     // The names, not the urls: a url that was never translated
+                     // still resolves, just to somebody else.
+                     yield character.name.equalsIgnoreCase(role.characterName) &&
+                       film.title.equalsIgnoreCase(role.filmTitle)
+                   }
+      yield assertTrue(checked.nonEmpty, checked.forall(identity))
+    },
+    test("a film's cast and its actors' film lists agree") {
+      for
+        actors    <- ZIO.serviceWithZIO[ActorRepo](_.getActors(None, None, None))
+        universes <- ZIO.service[Universes]
+        byUrl      = actors.results.map(actor => actor.url -> actor).toMap
+        offered    = universes.available
+        agreed    <- ZIO.foreach(offered) { universe =>
+                    for
+                      repo  <- universes.repo(universe)
+                      films <- repo.getFilms(None, None)
+                    yield films.results.forall(film =>
+                      film.cast.forall(url => byUrl.get(url).forall(_.films.contains(film.url)))
+                    )
+                  }
+      yield assertTrue(agreed.forall(identity))
+    },
     test("an actor id that is not there is a typed failure") {
       for
         repo   <- ZIO.service[ActorRepo]
         result <- repo.getActor(EntityId(999999)).either
       yield assertTrue(result.left.exists(_.isInstanceOf[DataRepoError.ActorNotFound]))
     }
-  ).provide(ActorRepo.layer)
+  ).provide(ActorRepo.layer, Universes.layer)

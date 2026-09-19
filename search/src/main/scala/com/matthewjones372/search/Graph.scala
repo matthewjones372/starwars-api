@@ -5,12 +5,19 @@ import zio.*
 import scala.annotation.tailrec
 import scala.collection.immutable.{HashSet, Queue}
 
-class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
+class Graph[A: Ordering](private val nodeEdges: Map[A, Set[A]]) {
   // We flip the people map so that we can easily find the neighbors of a film
-  private val filmPeopleMap: Map[A, Set[A]] = peopleFilmMap.foldLeft(Map.empty[A, Set[A]]) { case (acc, (k, vs)) =>
+  private val edgeNodes: Map[A, Set[A]] = nodeEdges.foldLeft(Map.empty[A, Set[A]]) { case (acc, (k, vs)) =>
     vs.foldLeft(acc) { case (acc, v) =>
       acc.updated(v, acc.getOrElse(v, Set.empty) + k)
     }
+  }
+
+  // Held rather than derived per call: a sweep asks for a node's neighbours once
+  // per visit, and rebuilding that set from the node's films each time made the
+  // sweep quadratic in allocations rather than in hops.
+  private val adjacency: Map[A, Set[A]] = nodeEdges.map { case (node, edges) =>
+    node -> (edges.flatMap(edge => edgeNodes.getOrElse(edge, Set.empty)) - node)
   }
 
   /**
@@ -29,11 +36,11 @@ class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
 
         if (currentPoint == target) currentPath.lastOption.map { case (_, movie) => currentPath :+ (target -> movie) }
         else {
-          val (updatedRemaining, updatedPaths, updatedVisited) = peopleFilmMap
+          val (updatedRemaining, updatedPaths, updatedVisited) = nodeEdges
             .get(currentPoint)
             .map { films =>
               films
-                .flatMap(film => filmPeopleMap(film).map((_, film))) // Get the neighbors and the films connecting them
+                .flatMap(film => edgeNodes(film).map((_, film))) // Get the neighbors and the films connecting them
                 .foldLeft((newRemaining, paths, visited)) { case ((remAcc, pathAcc, visitAcc), (neighbor, film)) =>
                   if (!visitAcc.contains(neighbor)) // Filter out visited nodes
                     (
@@ -51,15 +58,23 @@ class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
       }
 
     if (start == target)
-      Option.when(peopleFilmMap.contains(start))(Path(start, target, Some(Chunk.empty)))
+      Option.when(nodeEdges.contains(start))(Path(start, target, Some(Chunk.empty)))
     else
       loop(Queue(start), Map(start -> Chunk.empty), HashSet(start)).map(path => Path(start, target, Some(path)))
   }
 
-  def coStars(person: A): Set[A] =
-    peopleFilmMap.getOrElse(person, Set.empty).flatMap(film => filmPeopleMap.getOrElse(film, Set.empty)) - person
+  def neighbours(person: A): Set[A] = adjacency.getOrElse(person, Set.empty)
 
-  def films(person: A): Set[A] = peopleFilmMap.getOrElse(person, Set.empty)
+  def edgesOf(person: A): Set[A] = nodeEdges.getOrElse(person, Set.empty)
+
+  private final case class Sweep(
+    connections: List[Connections[A]],
+    hopSum: Long,
+    hopCount: Long,
+    diameter: Int,
+    seen: Set[A],
+    clusters: Int
+  )
 
   /**
    * Every character measured against every other, which is one breadth-first
@@ -69,45 +84,53 @@ class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
    * built, so the whole sweep is work to do once and then serve from.
    */
   lazy val connectivity: Connectivity[A] = {
-    val people   = peopleFilmMap.keySet.toList
-    val hopsFrom = people.map(person => person -> separations(person)).toMap
-    val allHops  = hopsFrom.values.flatMap(_.values).toList
+    val people = nodeEdges.keySet.toList
 
-    val connections = people.map { person =>
-      val hops = hopsFrom(person)
-      Connections(
-        node = person,
-        films = films(person).size,
-        coStars = coStars(person).size,
-        reach = hops.size,
-        averageSeparation = if (hops.isEmpty) 0.0 else hops.values.sum.toDouble / hops.size
+    // Folded as the sweep goes rather than collected and summed afterwards.
+    // Holding every node's distances at once costs the square of the node count,
+    // which is affordable for one film's cast and is not for an actor graph
+    // spanning every universe.
+    val swept = people.foldLeft(Sweep(Nil, 0L, 0L, 0, Set.empty, 0)) { (acc, person) =>
+      val hops    = separations(person)
+      val hopSum  = hops.values.sum
+      val visited = acc.seen.contains(person)
+
+      Sweep(
+        connections = Connections(
+          node = person,
+          films = edgesOf(person).size,
+          coStars = neighbours(person).size,
+          reach = hops.size,
+          averageSeparation = if (hops.isEmpty) 0.0 else hopSum.toDouble / hops.size
+        ) :: acc.connections,
+        hopSum = acc.hopSum + hopSum,
+        hopCount = acc.hopCount + hops.size,
+        diameter = math.max(acc.diameter, hops.values.maxOption.getOrElse(0)),
+        // A cluster is counted from the first of its members the fold reaches, so
+        // the rest of them are already seen by the time it gets to them.
+        seen = if (visited) acc.seen else acc.seen + person ++ hops.keySet,
+        clusters = if (visited) acc.clusters else acc.clusters + 1
       )
     }
-      .sortBy(connection => (-connection.coStars, connection.node))
 
-    val ensembles = filmPeopleMap.toList
-      .map((film, cast) => Ensemble(film, cast.size, cast.count(films(_).size == 1)))
+    val connections = swept.connections.sortBy(connection => (-connection.coStars, connection.node))
+
+    val ensembles = edgeNodes.toList
+      .map((film, cast) => Ensemble(film, cast.size, cast.count(edgesOf(_).size == 1)))
       .sortBy(ensemble => (-ensemble.cast, ensemble.film))
 
     // Each co-star pair is counted from both ends, so the edges are half the degrees.
     val pairs         = connections.map(_.coStars).sum / 2
     val possiblePairs = people.size.toDouble * (people.size - 1) / 2
 
-    // A cluster is counted from the first of its members the fold reaches, so
-    // the rest of them are already seen by the time it gets to them.
-    val (_, clusters) = people.foldLeft((Set.empty[A], 0)) { case ((seen, count), person) =>
-      if (seen.contains(person)) (seen, count)
-      else (seen + person ++ hopsFrom(person).keySet, count + 1)
-    }
-
     Connectivity(
       nodes = people.size,
-      films = filmPeopleMap.size,
+      films = edgeNodes.size,
       pairs = pairs,
       density = if (possiblePairs == 0) 0.0 else pairs / possiblePairs,
-      averageSeparation = if (allHops.isEmpty) 0.0 else allHops.sum.toDouble / allHops.size,
-      diameter = allHops.maxOption.getOrElse(0),
-      clusters = clusters,
+      averageSeparation = if (swept.hopCount == 0) 0.0 else swept.hopSum.toDouble / swept.hopCount,
+      diameter = swept.diameter,
+      clusters = swept.clusters,
       connections = connections,
       ensembles = ensembles
     )
@@ -125,16 +148,16 @@ class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
   def shortestPaths(start: A, target: A, limit: Int): List[Path[A]] =
     if (limit <= 0) Nil
     else if (start == target)
-      if (peopleFilmMap.contains(start)) List(Path(start, target, Some(Chunk.empty))) else Nil
+      if (nodeEdges.contains(start)) List(Path(start, target, Some(Chunk.empty))) else Nil
     else {
       val hops    = separations(start)
       val depthOf = hops + (start -> 0)
 
-      def sharedFilms(one: A, other: A): List[A] = films(one).intersect(films(other)).toList.sorted
+      def sharedFilms(one: A, other: A): List[A] = edgesOf(one).intersect(edgesOf(other)).toList.sorted
 
       def stepsInto(node: A): List[(A, A)] =
         val closer = depthOf(node) - 1
-        coStars(node).toList.sorted.filter(depthOf.get(_).contains(closer)).flatMap { pred =>
+        neighbours(node).toList.sorted.filter(depthOf.get(_).contains(closer)).flatMap { pred =>
           sharedFilms(pred, node).map(pred -> _)
         }
 
@@ -159,7 +182,7 @@ class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
    * once a pair has more routes than the caller asked to see.
    */
   def countShortestPaths(start: A, target: A): Int =
-    if (start == target) (if (peopleFilmMap.contains(start)) 1 else 0)
+    if (start == target) (if (nodeEdges.contains(start)) 1 else 0)
     else {
       val hops    = separations(start)
       val depthOf = hops + (start -> 0)
@@ -168,8 +191,8 @@ class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
         if (node == start) 1
         else
           val closer = depthOf(node) - 1
-          coStars(node).toList.filter(depthOf.get(_).contains(closer)).foldLeft(0) { (total, pred) =>
-            total + count(pred) * films(pred).intersect(films(node)).size
+          neighbours(node).toList.filter(depthOf.get(_).contains(closer)).foldLeft(0) { (total, pred) =>
+            total + count(pred) * edgesOf(pred).intersect(edgesOf(node)).size
           }
 
       if (!hops.contains(target)) 0 else count(target)
@@ -181,10 +204,10 @@ class Graph[A: Ordering](private val peopleFilmMap: Map[A, Set[A]]) {
       frontier.dequeueOption match {
         case None                           => seen
         case Some(((current, depth), rest)) =>
-          val found = coStars(current).filterNot(seen.contains).map(_ -> (depth + 1))
+          val found = neighbours(current).filterNot(seen.contains).map(_ -> (depth + 1))
           loop(rest ++ found, seen ++ found)
       }
 
-    if (peopleFilmMap.contains(start)) loop(Queue(start -> 0), Map(start -> 0)) - start else Map.empty
+    if (nodeEdges.contains(start)) loop(Queue(start -> 0), Map(start -> 0)) - start else Map.empty
   }
 }

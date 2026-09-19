@@ -223,15 +223,23 @@ object ApiServer:
       body = Body.fromChunk(body)
     )
 
-  // Characters are joined by the films they share, so film urls resolve to titles for the edge labels.
-  private[api] def characterGraph(dataRepo: DataRepo): IO[DataRepoError, Graph[String]] =
+  // The edges are film urls rather than titles because two films can share a
+  // title, and an edge labelled with the title would merge them into one.
+  private[api] final case class CharacterGraph(graph: Graph[String], titles: Map[String, String]):
+    def titleOf(film: String): String = titles.getOrElse(film, film)
+
+  // Characters are joined by the films they share.
+  private[api] def characterGraph(dataRepo: DataRepo): IO[DataRepoError, CharacterGraph] =
     // Suspended so the repo is not touched until a request actually needs the graph.
     ZIO.suspendSucceed {
       for
         people <- dataRepo.getCharacters(None, None, None)
         films  <- dataRepo.getFilms(None, None)
         titles  = films.results.map(film => film.url -> film.title).toMap
-      yield Graph(people.results.map(person => person.name -> person.films.flatMap(titles.get)).toMap)
+      yield CharacterGraph(
+        Graph(people.results.map(person => person.name -> person.films.filter(titles.contains)).toMap),
+        titles
+      )
     }
 
   inline private def fieldNames[A <: Product](using A: Mirror.ProductOf[A]): List[String] =
@@ -321,17 +329,23 @@ object ApiServer:
    */
   private[api] val maxChains = 10
 
-  private[api] def stepsOf(path: Path[String]): List[PathStep] =
-    path.path.getOrElse(Chunk.empty).dropRight(1).map((person, film) => PathStep(person, film)).toList
+  private[api] def stepsOf(graph: CharacterGraph)(path: Path[String]): List[PathStep] =
+    path.path.getOrElse(Chunk.empty).dropRight(1).map((person, film) => PathStep(person, graph.titleOf(film))).toList
 
-  private[api] def toShortestPath(start: String, end: String, paths: List[Path[String]], chains: Int): ShortestPath =
+  private[api] def toShortestPath(
+    graph: CharacterGraph,
+    start: String,
+    end: String,
+    paths: List[Path[String]],
+    chains: Int
+  ): ShortestPath =
     val chosen = paths.headOption
     ShortestPath(
       start = start,
       end = end,
       films = chosen.map(_.length).getOrElse(0),
-      steps = chosen.map(stepsOf).getOrElse(Nil),
-      alternatives = paths.drop(1).map(path => Chain(stepsOf(path))),
+      steps = chosen.map(stepsOf(graph)).getOrElse(Nil),
+      alternatives = paths.drop(1).map(path => Chain(stepsOf(graph)(path))),
       chains = chains
     )
 
@@ -339,7 +353,7 @@ object ApiServer:
   // one hop and the graph's diameter, and a full double of that is noise.
   private def rounded(value: Double): Double = math.round(value * 100) / 100.0
 
-  private[api] def toGraphInsights(connectivity: Connectivity[String]): GraphInsights =
+  private[api] def toGraphInsights(graph: CharacterGraph, connectivity: Connectivity[String]): GraphInsights =
     GraphInsights(
       characters = connectivity.nodes,
       films = connectivity.films,
@@ -357,8 +371,9 @@ object ApiServer:
           averageSeparation = rounded(connection.averageSeparation)
         )
       },
-      ensembles =
-        connectivity.ensembles.map(ensemble => FilmEnsemble(ensemble.film, ensemble.cast, ensemble.exclusiveCast))
+      ensembles = connectivity.ensembles.map(ensemble =>
+        FilmEnsemble(graph.titleOf(ensemble.film), ensemble.cast, ensemble.exclusiveCast)
+      )
     )
 
   private[api] def parseSortByList(sortByParam: String): List[SortBy] =
@@ -391,7 +406,7 @@ object ApiServer:
 
 private final case class ApiServerImpl(
   private val dataRepo: DataRepo,
-  private val characterGraph: IO[DataRepoError, Graph[String]],
+  private val characterGraph: IO[DataRepoError, ApiServer.CharacterGraph],
   private val encoded: IO[DataRepoError, ApiServer.Encoded],
   private val preEncoded: Boolean
 ) extends ApiServer:
@@ -410,15 +425,18 @@ private final case class ApiServerImpl(
       target <- characterOrError(targetId)
       graph  <- characterGraph.mapError(err => UnexpectedError(err.getMessage))
       paths  <- ZIO
-                 .succeed(graph.shortestPaths(start.name, target.name, ApiServer.maxChains))
+                 .succeed(graph.graph.shortestPaths(start.name, target.name, ApiServer.maxChains))
                  .filterOrFail(_.nonEmpty)(PathNotFound(s"No path between ${start.name} and ${target.name}"))
-      chains = graph.countShortestPaths(start.name, target.name)
-    yield ApiServer.toShortestPath(start.name, target.name, paths, chains)
+      chains = graph.graph.countShortestPaths(start.name, target.name)
+    yield ApiServer.toShortestPath(graph, start.name, target.name, paths, chains)
   }.sandbox
 
   private val getGraphInsightsHandler = ApiServer.getGraphInsightsEndpoint.implement { (_: Unit) =>
     characterGraph
-      .mapBoth(err => UnexpectedError(err.getMessage), graph => ApiServer.toGraphInsights(graph.connectivity))
+      .mapBoth(
+        err => UnexpectedError(err.getMessage),
+        graph => ApiServer.toGraphInsights(graph, graph.graph.connectivity)
+      )
   }.sandbox
 
   private val getCharacterHandler = ApiServer.getCharacterEndpoint.implement { characterId =>

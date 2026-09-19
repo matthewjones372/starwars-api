@@ -12,6 +12,8 @@ import zio.http.netty.server.NettyDriver
 import zio.test.*
 
 object ApiServerSpec extends ZIOSpecDefault:
+  private val emptyGraph = ApiServer.CharacterGraph(Graph(Map.empty[String, Set[String]]), Map.empty)
+
   def spec = suite("ApiServerSpec")(
     suite("getFilms")(
       test("returns a set of films") {
@@ -252,17 +254,35 @@ object ApiServerSpec extends ZIOSpecDefault:
         )
       }
     ),
+    suite("character graph")(
+      test("keeps two films that share a title as two edges") {
+        val reissue = aNewHope.copy(url = "/films/9/")
+        val extra   = bobaFett.copy(name = "Wedge", films = Set("/films/9/"))
+        val repo    = repoWith(List(luke, bobaFett, extra), List(aNewHope, empireStrikesBack, reissue))
+
+        for graph <- ApiServer.characterGraph(repo)
+        yield assertTrue(
+          graph.graph.edgesOf("Boba Fett") == Set("/films/4/"),
+          graph.graph.edgesOf("Wedge") == Set("/films/9/"),
+          graph.graph.neighbours("Boba Fett") == Set("Luke"),
+          !graph.graph.neighbours("Boba Fett").contains("Wedge"),
+          graph.titleOf("/films/9/") == "A New Hope"
+        )
+      }
+    ),
     suite("insight assembly")(
       test("ranks the most connected character first and the least connected last") {
-        val insights = ApiServer.toGraphInsights(
+        val graph = ApiServer.CharacterGraph(
           Graph(
             Map(
               "Lobot"     -> Set("The Empire Strikes Back"),
               "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
               "Boba Fett" -> Set("A New Hope")
             )
-          ).connectivity
+          ),
+          Map.empty
         )
+        val insights = ApiServer.toGraphInsights(graph, graph.graph.connectivity)
 
         assertTrue(
           insights.connections.head == CharacterConnections("Luke", 2, 2, 2, 1.0),
@@ -271,7 +291,7 @@ object ApiServerSpec extends ZIOSpecDefault:
         )
       },
       test("rounds the separations, which carry more digits than they mean") {
-        val insights = ApiServer.toGraphInsights(
+        val graph = ApiServer.CharacterGraph(
           Graph(
             Map(
               "Lobot"     -> Set("The Empire Strikes Back"),
@@ -279,8 +299,10 @@ object ApiServerSpec extends ZIOSpecDefault:
               "Boba Fett" -> Set("A New Hope"),
               "Lando"     -> Set("The Empire Strikes Back")
             )
-          ).connectivity
+          ),
+          Map.empty
         )
+        val insights = ApiServer.toGraphInsights(graph, graph.graph.connectivity)
 
         assertTrue(
           insights.averageSeparation == 1.33,
@@ -290,11 +312,15 @@ object ApiServerSpec extends ZIOSpecDefault:
       }
     ),
     suite("path assembly")(
+      // The steps here are spelled as titles already, and titleOf falls back to
+      // the edge it is given, so an empty lookup leaves them as written.
+
       test("drops the terminal entry, which repeats the film of the hop before it") {
         val path = com.matthewjones372.search
           .Path("Lobot", "Boba Fett", Some(Chunk(("Lobot", "ESB"), ("Luke", "ANH"), ("Boba Fett", "ANH"))))
 
-        val assembled = ApiServer.toShortestPath("Lobot", "Boba Fett", List(path), 1)
+        val assembled =
+          ApiServer.toShortestPath(emptyGraph, "Lobot", "Boba Fett", List(path), 1)
 
         assertTrue(
           assembled.films == 2,
@@ -307,7 +333,7 @@ object ApiServerSpec extends ZIOSpecDefault:
       },
       test("reports no steps when the start and target are the same character") {
         val path      = com.matthewjones372.search.Path("Luke", "Luke", Some(Chunk.empty))
-        val assembled = ApiServer.toShortestPath("Luke", "Luke", List(path), 1)
+        val assembled = ApiServer.toShortestPath(emptyGraph, "Luke", "Luke", List(path), 1)
 
         assertTrue(assembled.films == 0, assembled.steps.isEmpty)
       },
@@ -317,7 +343,7 @@ object ApiServerSpec extends ZIOSpecDefault:
         val throughLeia = com.matthewjones372.search
           .Path("Lobot", "Boba Fett", Some(Chunk(("Lobot", "ESB"), ("Leia", "ANH"), ("Boba Fett", "ANH"))))
 
-        val assembled = ApiServer.toShortestPath("Lobot", "Boba Fett", List(throughLuke, throughLeia), 2)
+        val assembled = ApiServer.toShortestPath(emptyGraph, "Lobot", "Boba Fett", List(throughLuke, throughLeia), 2)
 
         assertTrue(
           assembled.steps == List(PathStep("Lobot", "ESB"), PathStep("Luke", "ANH")),
@@ -329,7 +355,7 @@ object ApiServerSpec extends ZIOSpecDefault:
         val path = com.matthewjones372.search
           .Path("Lobot", "Boba Fett", Some(Chunk(("Lobot", "ESB"), ("Luke", "ANH"), ("Boba Fett", "ANH"))))
 
-        val assembled = ApiServer.toShortestPath("Lobot", "Boba Fett", List(path), 24)
+        val assembled = ApiServer.toShortestPath(emptyGraph, "Lobot", "Boba Fett", List(path), 24)
 
         assertTrue(assembled.alternatives.isEmpty, assembled.chains == 24)
       }

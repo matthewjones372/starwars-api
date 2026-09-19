@@ -198,6 +198,19 @@ object SWDataRepoSpec extends ZIOSpecDefault:
           film.title.nonEmpty
         )
       },
+      test("the bundled data is served under the public url, not the paths it is stored as") {
+        for
+          repo   <- ZIO.service[SWDataRepo]
+          person <- repo.getCharacter(EntityId(1))
+          film   <- repo.getFilm(EntityId(1))
+        yield assertTrue(
+          person.url == s"${SWDataRepo.defaultPublicUrl}/people/1/",
+          person.films.forall(_.startsWith(SWDataRepo.defaultPublicUrl)),
+          person.homeworld.exists(_.startsWith(SWDataRepo.defaultPublicUrl)),
+          film.url == s"${SWDataRepo.defaultPublicUrl}/films/1/",
+          film.characters.forall(_.startsWith(SWDataRepo.defaultPublicUrl))
+        )
+      },
       test("every bundled title carries a media type") {
         for
           repo  <- ZIO.service[SWDataRepo]
@@ -219,6 +232,15 @@ object SWDataRepoSpec extends ZIOSpecDefault:
         yield assertTrue(fetched.length == 205, fetched.map(_.url).distinct.length == 205)
       }
     ).provideShared(SWDataRepo.layer),
+    suite("resolve")(
+      test("roots a stored path at the public url and leaves anything already absolute alone") {
+        assertTrue(
+          SWDataRepo.resolve("http://example.test")("/people/1/") == "http://example.test/people/1/",
+          SWDataRepo.resolve("http://example.test")("https://swapi.dev/api/people/1/") ==
+            "https://swapi.dev/api/people/1/"
+        )
+      }
+    ),
     suite("fromEntities")(
       test("fails rather than throwing when an entity url has no id") {
         for result <-

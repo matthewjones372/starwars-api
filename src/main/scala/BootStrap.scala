@@ -1,6 +1,6 @@
-import com.matthewjones372.api.client.SWAPIClientService
-import com.matthewjones372.http.api.SWHttpServer
-import com.matthewjones372.search.SWGraph
+import com.matthewjones372.api.client.UniverseClient
+import com.matthewjones372.http.api.ApiServer
+import com.matthewjones372.search.Graph
 import zio.*
 import zio.Runtime.removeDefaultLoggers
 import zio.config.typesafe.TypesafeConfigProvider
@@ -16,12 +16,12 @@ object ClientExample extends ZIOAppDefault:
 
   def run =
     (for
-      swapi                 <- ZIO.service[SWAPIClientService]
+      swapi                 <- ZIO.service[UniverseClient]
       (time, people)        <- swapi.getFilmsFromCharacters.timed
       _                     <- Console.printLine(s"There are ${people.size} people and it took ${time.toMillis} ms")
       (time2, films)        <- swapi.getFilms.timed
       _                     <- Console.printLine(s"There are ${films.size} films and it took ${time2.toMillis} ms")
-      (time3, shortestPath) <- ZIO.succeed(SWGraph(people).bfs("Darth Maul", "Greedo")).timed
+      (time3, shortestPath) <- ZIO.succeed(Graph(people).bfs("Darth Maul", "Greedo")).timed
       _                     <- Console.printLine(s"bfs took ${time3.toMillis} ms")
       _                     <- Console.printLine(
              s"The shortest path between Darth Maul and Greedo is: ${shortestPath.map(_.length).getOrElse(0)} films"
@@ -29,7 +29,7 @@ object ClientExample extends ZIOAppDefault:
       _ <- Console.printLine(shortestPath.mkString)
     yield ExitCode.success)
       .provide(
-        SWAPIClientService.default,
+        UniverseClient.default,
         Scope.default,
         Client.default
       )
@@ -65,7 +65,7 @@ object ServerExample extends ZIOAppDefault:
     )
 
   def run = (for
-    server <- SWHttpServer.default
+    server <- ApiServer.default
     _      <- server.start
   yield ()).provide(
     serverConfig,

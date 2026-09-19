@@ -2,33 +2,29 @@ package com.matthewjones372.domain
 
 import com.matthewjones372.sorting.DynamicMultiSorter
 import zio.schema.*
-import zio.schema.Schema.primitive
 import zio.schema.annotation.fieldName
-import scala.math.Ordering.ordered
-import scala.math.Ordered.orderingToOrdered
 
+/**
+ * A character in one of the universes this API serves.
+ *
+ * Only what every universe has is a field. A homeworld, a house and a realm are
+ * all facts about a character that only one universe records, so they ride in
+ * [attributes] when they are values and in [links] when they are urls. Keeping
+ * them out of the type is what lets one schema, one sorter and one set of
+ * endpoints serve every dataset.
+ */
 final case class Character(
   name: String,
-  height: Option[Int],
-  mass: Option[Int],
-  @fieldName("hair_color") hairColor: String,
-  @fieldName("skin_color") skinColor: String,
-  @fieldName("eye_color") eyeColor: String,
-  @fieldName("birth_year") birthYear: String,
-  gender: Option[String],
-  homeworld: Option[String],
   films: Set[String],
-  species: Option[Set[String]],
-  vehicles: Option[Set[String]],
-  starships: Option[Set[String]],
+  @fieldName("portrayed_by") portrayedBy: Set[String],
+  attributes: Map[String, String],
+  links: Map[String, Set[String]],
   url: String
-) derives DynamicMultiSorter
+) derives Schema,
+      DynamicMultiSorter
 
 object Character:
-  // Numbers arrive from swapi as strings, and unmeasured ones as "unknown", which is absent rather than empty.
-  given Schema[Option[Int]] =
-    Schema.option[String].transform(_.flatMap(_.toIntOption), _.map(_.toString))
-
-  given Schema[Character] = DeriveSchema.gen
+  def apply(name: String, films: Set[String], url: String): Character =
+    Character(name, films, Set.empty, Map.empty, Map.empty, url)
 
 final case class Characters(count: Int, results: List[Character]) extends Paged[Character] derives Schema

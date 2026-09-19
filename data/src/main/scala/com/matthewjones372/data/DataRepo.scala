@@ -1,7 +1,7 @@
 package com.matthewjones372.data
 
 import com.matthewjones372.domain.*
-import com.matthewjones372.sorting.{DynamicMultiSorter, SortBy}
+import com.matthewjones372.sorting.SortBy
 import zio.*
 import zio.http.*
 import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
@@ -9,7 +9,7 @@ import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
 
-trait SWDataRepo:
+trait DataRepo:
   def getFilm(id: EntityId): IO[DataRepoError, Film]
   def getCharacter(id: EntityId): IO[DataRepoError, Character]
   def getCharacters(
@@ -19,7 +19,7 @@ trait SWDataRepo:
   ): IO[DataRepoError, Characters]
   def getFilms(from: Option[PageNumber], fetchSize: Option[PageSize]): IO[DataRepoError, Films]
 
-object SWDataRepo:
+object DataRepo:
   // Public because an entity's id is only in its url, and `http-api` needs it to
   // key a response by the id the path carries.
   def parseEntityId(url: String): Either[String, EntityId] =
@@ -39,7 +39,7 @@ object SWDataRepo:
         val offset = (page.getOrElse(PageNumber.first) - 1) * size
         data.slice(offset, offset + size)
 
-  def fromEntities(people: List[Character], films: List[Film]): IO[DataRepoError, SWDataRepo] =
+  def fromEntities(people: List[Character], films: List[Film]): IO[DataRepoError, DataRepo] =
     for
       peopleById <- ZIO.foreach(people)(person => keyOf(person.url).map(_ -> person)).map(_.toMap)
       filmsById  <- ZIO.foreach(films)(film => keyOf(film.url).map(_ -> film)).map(_.toMap)
@@ -61,14 +61,14 @@ object SWDataRepo:
   private[data] def resolve(baseUrl: String)(path: String): String =
     if path.startsWith("/") then baseUrl + path else path
 
+  // Every relation a universe records lives in `links`, so a new one resolves
+  // here without a line of its own.
   private[data] def resolved(baseUrl: String)(person: Character): Character =
     val at = resolve(baseUrl)
     person.copy(
-      homeworld = person.homeworld.map(at),
       films = person.films.map(at),
-      species = person.species.map(_.map(at)),
-      vehicles = person.vehicles.map(_.map(at)),
-      starships = person.starships.map(_.map(at)),
+      portrayedBy = person.portrayedBy.map(at),
+      links = person.links.view.mapValues(_.map(at)).toMap,
       url = at(person.url)
     )
 
@@ -76,29 +76,27 @@ object SWDataRepo:
     val at = resolve(baseUrl)
     film.copy(
       characters = film.characters.map(at),
-      planets = film.planets.map(at),
-      starships = film.starships.map(at),
-      vehicles = film.vehicles.map(at),
-      species = film.species.map(at),
+      cast = film.cast.map(at),
+      links = film.links.view.mapValues(_.map(at)).toMap,
       url = at(film.url)
     )
 
-  private[data] def bundledEntities: Task[(List[Character], List[Film])] =
+  private[data] def bundledEntities(universe: UniverseId): Task[(List[Character], List[Film])] =
     for
-      _          <- ZIO.logInfo("Reading in Star Wars Data")
       baseUrl    <- publicUrl
-      peopleJson <- readResource("people_data.json")
-      filmJson   <- readResource("film_data.json")
+      peopleJson <- readResource(s"${universe.slug}_people.json")
+      filmJson   <- readResource(s"${universe.slug}_films.json")
       people     <- decode[Character](peopleJson, "people").map(_.map(resolved(baseUrl)))
       films      <- decode[Film](filmJson, "films").map(_.map(resolved(baseUrl)))
-      _          <- ZIO.logInfo(s"Parsed ${people.size} people and ${films.size} films rooted at $baseUrl")
+      _          <- ZIO.logInfo(s"Parsed ${people.size} people and ${films.size} films for ${universe.label}")
     yield (people, films)
 
-  def layer: RLayer[Any, SWDataRepo] = ZLayer.fromZIO {
-    bundledEntities.flatMap { case (people, films) => fromEntities(people, films) }
-  }
+  def of(universe: UniverseId): Task[DataRepo] =
+    bundledEntities(universe).flatMap((people, films) => fromEntities(people, films))
 
-  private def readResource(name: String): Task[String] =
+  def layer: RLayer[Any, DataRepo] = ZLayer.fromZIO(of(UniverseId.default))
+
+  private[data] def readResource(name: String): Task[String] =
     ZIO.scoped {
       ZIO
         .fromAutoCloseable(
@@ -120,7 +118,7 @@ object SWDataRepo:
       .mapError(error => new RuntimeException(s"Failed to parse $label data: $error"))
 
 final private case class InMemoryDataRepo(peopleById: Map[EntityId, Character], filmsById: Map[EntityId, Film])
-    extends SWDataRepo:
+    extends DataRepo:
 
   private val orderedPeople = peopleById.toList.sortBy(_._1).map(_._2)
   private val orderedFilms  = filmsById.toList.sortBy(_._1).map(_._2)
@@ -132,12 +130,12 @@ final private case class InMemoryDataRepo(peopleById: Map[EntityId, Character], 
     ZIO.fromOption(peopleById.get(id)).orElseFail(DataRepoError.CharacterNotFound("Character not found", id))
 
   override def getFilms(from: Option[PageNumber], fetchSize: Option[PageSize]): IO[DataRepoError, Films] =
-    ZIO.succeed(Films(orderedFilms.size, SWDataRepo.paginate(orderedFilms, from, fetchSize)))
+    ZIO.succeed(Films(orderedFilms.size, DataRepo.paginate(orderedFilms, from, fetchSize)))
 
   override def getCharacters(
     from: Option[PageNumber],
     fetchSize: Option[PageSize],
     sortBy: Option[List[SortBy]]
   ): IO[DataRepoError, Characters] =
-    val sorted = sortBy.fold(orderedPeople)(DynamicMultiSorter.sort(orderedPeople, _))
-    ZIO.succeed(Characters(orderedPeople.size, SWDataRepo.paginate(sorted, from, fetchSize)))
+    val sorted = sortBy.fold(orderedPeople)(Sorting.characters(orderedPeople, _))
+    ZIO.succeed(Characters(orderedPeople.size, DataRepo.paginate(sorted, from, fetchSize)))

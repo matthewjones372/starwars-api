@@ -1,6 +1,6 @@
 package scripts
 
-import com.matthewjones372.api.client.SWAPIClientService
+import com.matthewjones372.api.client.UniverseClient
 import com.matthewjones372.domain.*
 import zio.*
 import zio.http.*
@@ -12,7 +12,7 @@ object GenerateDataFromSwapi extends ZIOAppDefault:
 
   def run =
     (for
-      swapi     <- ZIO.service[SWAPIClientService]
+      swapi     <- ZIO.service[UniverseClient]
       _         <- ZIO.logInfo("Getting data from swapi..")
       films     <- swapi.getFilms
       people    <- swapi.getCharacters
@@ -24,7 +24,7 @@ object GenerateDataFromSwapi extends ZIOAppDefault:
       _         <- ZIO.writeFile("data/src/main/resources/film_data2.json", filmJson)
     yield ExitCode.success)
       .provide(
-        SWAPIClientService.default,
+        UniverseClient.default,
         Scope.default,
         Client.default
       )

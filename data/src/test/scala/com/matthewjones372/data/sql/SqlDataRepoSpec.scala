@@ -1,6 +1,6 @@
 package com.matthewjones372.data.sql
 
-import com.matthewjones372.data.{DataRepoError, SWDataRepo}
+import com.matthewjones372.data.{DataRepoError, DataRepo}
 import com.matthewjones372.domain.*
 import com.matthewjones372.sorting.{FieldOrdering, SortBy}
 import zio.*
@@ -17,15 +17,15 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       .acquireRelease(ZIO.attemptBlocking(Files.createTempFile("swapi-test", ".db")))(path =>
         ZIO.attemptBlocking(Files.deleteIfExists(path)).orDie
       )
-      .map(SwDatabase.file)
+      .map(Database.file)
 
-  private val seededRepo: ZLayer[Any, Throwable, SWDataRepo] =
+  private val seededRepo: ZLayer[Any, Throwable, DataRepo] =
     ZLayer.scoped {
       for
         source    <- dataSource
-        _         <- SwMigrations.migrate.provideEnvironment(ZEnvironment(source))
+        _         <- Migrations.migrate.provideEnvironment(ZEnvironment(source))
         transactor = ZTransactor(source)
-        _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
+        _         <- Seed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
       yield SqlDataRepo(transactor)
     }
 
@@ -37,8 +37,13 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
         assertTrue(
           SqlDataRepo.orderByClause(ascendingName) == "order by name asc, id asc",
           SqlDataRepo.orderByClause(Some(List(SortBy("height", FieldOrdering.DESC)))) ==
-            "order by height desc, id asc"
+            s"order by ${SqlDataRepo.attributeOrder("height", "desc")}, id asc"
         )
+      },
+      test("orders an attribute numerically, so 9 does not come after 172") {
+        val clause = SqlDataRepo.attributeOrder("height", "desc")
+
+        assertTrue(clause.contains("cast("), clause.contains("as real"), clause.contains("key = 'height'"))
       },
       test("every derived sort column exists in the people table") {
         val ddl         = scala.io.Source.fromResource("db/migration/V1__initial_schema.sql").mkString
@@ -50,46 +55,55 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
           SqlDataRepo.sortableColumns.values.forall(columns.contains)
         )
       },
-      test("derives its keys from the character fields, leaving out the url sets") {
+      test("derives its column keys from the character fields, leaving out the bags") {
         assertTrue(
-          SqlDataRepo.sortableColumns.keySet ==
-            Set(
-              "name",
-              "height",
-              "mass",
-              "hairColor",
-              "skinColor",
-              "eyeColor",
-              "birthYear",
-              "gender",
-              "homeworld",
-              "url"
-            ),
+          SqlDataRepo.sortableColumns.keySet == Set("name", "url"),
           SqlDataRepo.toColumn("hairColor") == "hair_color",
           SqlDataRepo.toColumn("name") == "name"
         )
       },
-      test("drops sort keys that are not columns, including injection attempts") {
+      test("drops sort keys that could not be an attribute name, including injection attempts") {
         val injection = Some(List(SortBy("name; drop table people --", FieldOrdering.ASC)))
+        val quoted    = Some(List(SortBy("height' or '1'='1", FieldOrdering.ASC)))
 
         assertTrue(
           SqlDataRepo.orderByClause(injection) == "order by id asc",
-          SqlDataRepo.orderByClause(Some(List(SortBy("nonsense", FieldOrdering.ASC)))) == "order by id asc",
+          SqlDataRepo.orderByClause(quoted) == "order by id asc",
           SqlDataRepo.orderByClause(None) == "order by id asc"
+        )
+      },
+      // An unknown key is a plausible attribute name, so it reaches the subquery
+      // rather than being dropped. It finds nothing, which is a no-op order by.
+      test("treats an unrecognised but well formed key as an attribute") {
+        assertTrue(
+          SqlDataRepo.orderByClause(Some(List(SortBy("patronus", FieldOrdering.ASC)))).contains("key = 'patronus'")
         )
       }
     ),
     suite("against sqlite")(
       test("migrates, seeds and reads back the bundled data") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           people <- repo.getCharacters(None, None, None)
           films  <- repo.getFilms(None, None)
         yield assertTrue(people.count == 301, films.count == 19, people.results.length == 301)
       },
+      test("sorts on an attribute numerically against the real database") {
+        for
+          repo    <- ZIO.service[DataRepo]
+          tallest <- repo.getCharacters(
+                       Some(PageNumber.first),
+                       Some(PageSize(3)),
+                       Some(List(SortBy("height", FieldOrdering.DESC)))
+                     )
+        yield assertTrue(
+          tallest.results.head.name == "Yarael Poof",
+          tallest.results.head.attributes.get("height").contains("264")
+        )
+      },
       test("pages without gaps or repeats") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           first  <- repo.getCharacters(Some(PageNumber(1)), Some(PageSize(10)), None)
           second <- repo.getCharacters(Some(PageNumber(2)), Some(PageSize(10)), None)
           rest   <- ZIO.foreach(3 to first.pageCount)(page =>
@@ -105,27 +119,27 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       },
       test("finds a person and a film by id") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           person <- repo.getCharacter(EntityId(1))
           film   <- repo.getFilm(EntityId(1))
         yield assertTrue(person.url.endsWith("/people/1/"), film.url.endsWith("/films/1/"))
       },
       test("a media type survives the round trip through the database") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           film   <- repo.getFilm(EntityId(1))
           series <- repo.getFilm(EntityId(15))
         yield assertTrue(film.mediaType.contains(MediaKind.Film), series.mediaType.contains(MediaKind.Series))
       },
       test("reassembles the url sets belonging to a person") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           person <- repo.getCharacter(EntityId(1))
         yield assertTrue(person.films.nonEmpty, person.films.forall(_.contains("/films/")))
       },
       test("fails with CharacterNotFound and FilmNotFound for unknown ids") {
         for
-          repo     <- ZIO.service[SWDataRepo]
+          repo     <- ZIO.service[DataRepo]
           noPerson <- repo.getCharacter(EntityId(9999)).exit
           noFilm   <- repo.getFilm(EntityId(9999)).exit
         yield assert(noPerson)(Assertion.failsWithA[DataRepoError.CharacterNotFound]) &&
@@ -133,7 +147,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       },
       test("sorts by name in both directions") {
         for
-          repo       <- ZIO.service[SWDataRepo]
+          repo       <- ZIO.service[DataRepo]
           ascending  <- repo.getCharacters(None, None, ascendingName)
           descending <- repo.getCharacters(None, None, Some(List(SortBy("name", FieldOrdering.DESC))))
         yield assertTrue(
@@ -143,7 +157,7 @@ object SqlDataRepoSpec extends ZIOSpecDefault:
       },
       test("ignores an unknown sort key rather than failing") {
         for
-          repo   <- ZIO.service[SWDataRepo]
+          repo   <- ZIO.service[DataRepo]
           people <- repo.getCharacters(
                       Some(PageNumber(1)),
                       Some(PageSize(5)),

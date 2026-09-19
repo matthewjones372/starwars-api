@@ -41,6 +41,10 @@ object DynamicMultiSorter:
     @nowarn("msg=unused local definition")
     given setOrdering[B: Ordering]: Ordering[Set[B]] = Ordering.by(_.toSeq.sorted)
 
+    // Same reasoning for the attribute bags a universe-neutral entity carries.
+    @nowarn("msg=unused local definition")
+    given mapOrdering[K: Ordering, V: Ordering]: Ordering[Map[K, V]] = Ordering.by(_.toSeq.sorted)
+
     val orders         = summonAll[Tuple.Map[A.MirroredElemTypes, Ordering]]
     val fieldNames     = constValueTuple[A.MirroredElemLabels].toList.asInstanceOf[List[String]]
     val vectorOfOrders = orders.toList.asInstanceOf[List[Ordering[Any]]].zipWithIndex

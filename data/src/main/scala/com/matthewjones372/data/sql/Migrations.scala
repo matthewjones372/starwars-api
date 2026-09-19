@@ -5,7 +5,7 @@ import zio.*
 
 import javax.sql.DataSource
 
-object SwMigrations:
+object Migrations:
   def migrate: RIO[DataSource, Int] =
     for
       dataSource <- ZIO.service[DataSource]

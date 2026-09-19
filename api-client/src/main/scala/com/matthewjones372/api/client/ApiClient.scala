@@ -1,7 +1,7 @@
 package com.matthewjones372.api.client
 
 import com.matthewjones372.api.client.ClientError.*
-import com.matthewjones372.api.client.SWAPIClientService.SWAPIEnv
+import com.matthewjones372.api.client.UniverseClient.ClientEnv
 import com.matthewjones372.api.client.config.HttpClientConfig
 import com.matthewjones372.domain.*
 import zio.*
@@ -64,7 +64,7 @@ object ApiClient:
   private def cacheOf[K, V](capacity: Int)(lookup: K => IO[ClientError, V]) =
     Cache.makeWith(capacity, Lookup(lookup))(exit => if exit.isSuccess then 30.minutes else Duration.Zero)
 
-  def live: RLayer[SWAPIEnv, ApiClient] =
+  def live: RLayer[ClientEnv, ApiClient] =
     ZLayer.fromZIO {
       for
         client     <- ZIO.service[Client]
@@ -93,14 +93,14 @@ object ApiClient:
     private val env = ZEnvironment(client, scope)
 
     override def getCharacterFrom(id: Int): IO[ClientError, Character] =
-      get[Character]((httpConfig.baseUrl / "people" / id.toString).addQueryParam("format", "json"))
+      get[Character](httpConfig.entityUrl("people").addPath(id.toString).addQueryParam("format", "json"))
         .provideEnvironment(env)
 
     override def getCharacters: IO[ClientError, Set[Character]] =
       getPagedResponse[Characters, Character]("people").provideEnvironment(env)
 
     override def getFilmFrom(id: Int): IO[ClientError, Film] =
-      get[Film]((httpConfig.baseUrl / "films" / id.toString).addQueryParam("format", "json"))
+      get[Film](httpConfig.entityUrl("films").addPath(id.toString).addQueryParam("format", "json"))
         .provideEnvironment(env)
 
     override def getFilmFromUrl(url: URL): IO[ClientError, Film] =
@@ -110,11 +110,12 @@ object ApiClient:
       getPagedResponse[Films, Film]("films").provideEnvironment(env)
 
     private def getPagedResponse[A <: Paged[B]: BinaryCodec, B](entity: String) = {
-      get[A]((httpConfig.baseUrl / entity).addQueryParam("format", "json")).flatMap { firstPage =>
+      get[A](httpConfig.entityUrl(entity).addQueryParam("format", "json")).flatMap { firstPage =>
         ZIO
           .foreachPar(2 to firstPage.pageCount)(page =>
             get[A](
-              (httpConfig.baseUrl / entity)
+              httpConfig
+                .entityUrl(entity)
                 .addQueryParam("format", "json")
                 .addQueryParam("page", page.toString)
             )

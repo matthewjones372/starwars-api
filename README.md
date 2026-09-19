@@ -7,11 +7,22 @@
 ![Scala](https://img.shields.io/badge/scala-3.8.4-red)
 ![JDK](https://img.shields.io/badge/JDK-25-orange)
 
-A Star Wars HTTP API in Scala 3 and ZIO, with a typed client, a shortest-path
-search over the character graph, and runtime-configurable multi-field sorting.
+A film-universe HTTP API in Scala 3 and ZIO, with a typed client, a
+shortest-path search over the character graph, and runtime-configurable
+multi-field sorting.
 
-Data covers 301 characters across 12 films and 7 live-action series, served
-from memory with no external services to start.
+Every path begins with the dataset it reads, so `/starwars/people/1` is Luke
+Skywalker and `/hp/people/41` is Hermione Granger. Four datasets ship: Star
+Wars, the Marvel Cinematic Universe, The Lord of the Rings and Harry Potter,
+920 characters across 80 titles, served from memory with no external services
+to start. `GET /universes` lists what the running server holds.
+
+Actors sit outside all of it. An actor belongs to no single universe, which
+makes them the one edge in this API that crosses a dataset -- 46 of them are in
+more than one. Christopher Lee is Count Dooku and Saruman, and Andy Serkis is
+in three of the four. `GET
+/actors/{id}/path-to/{id}` is a Bacon number that does not care which franchise
+either end is in.
 
 ## Live
 
@@ -29,7 +40,7 @@ and the graph sizes and shades every character by the same measure.
 | --- | --- |
 | UI | https://starwars-api-eu.onrender.com/ |
 | API docs | https://starwars-api-eu.onrender.com/docs/openapi |
-| Example | https://starwars-api-eu.onrender.com/people/1 |
+| Example | https://starwars-api-eu.onrender.com/starwars/people/1 |
 
 It runs on a free instance in Frankfurt, which sleeps when idle, so the first
 request after a quiet spell takes a few seconds to wake it. The region is
@@ -51,23 +62,39 @@ and the host is applied once at startup, so a deployment sets `PUBLIC_BASE_URL`
 to the origin its callers reach it on; it defaults to `http://localhost:8080`.
 
 ```sh
-curl 'http://localhost:8080/people/1'
-curl 'http://localhost:8080/films?page=1'
-curl 'http://localhost:8080/people?page=2&sortBy=height:DESC,name:ASC'
+curl 'http://localhost:8080/universes'
+curl 'http://localhost:8080/starwars/people/1'
+curl 'http://localhost:8080/starwars/films?page=1'
+curl 'http://localhost:8080/starwars/people?page=2&sortBy=height:DESC,name:ASC'
 ```
 
 ## Endpoints
 
 | Method | Path | Query | Returns |
 | ------ | ---- | ----- | ------- |
-| GET | `/people` | `page`, `sortBy` | Paged characters |
-| GET | `/people/{personId}` | | One character |
-| GET | `/films` | `page` | Paged films |
-| GET | `/films/{filmId}` | | One film |
-| GET | `/people/{characterId}/path-to/{targetId}` | | Shortest chains of shared films between two characters |
-| GET | `/graph/insights` | | How connected each character is, and the shape of the whole graph |
+| GET | `/universes` | | The datasets this server holds |
+| GET | `/actors` | `page`, `sortBy` | Every actor, across every universe |
+| GET | `/actors/{actorId}` | | One actor, with every role they played |
+| GET | `/actors/{actorId}/path-to/{targetId}` | | Shortest chains of shared films between two actors |
+| GET | `/actors/graph/insights` | | The whole cast of every universe as one graph |
+| GET | `/{universe}/actors` | `page` | The actors who appear in one universe |
+| GET | `/{universe}/films/{filmId}/cast` | | Who appeared in a film |
+| GET | `/{universe}/people/{characterId}/portrayals` | | Who has played a character |
+| GET | `/{universe}/people` | `page`, `sortBy` | Paged characters |
+| GET | `/{universe}/people/{personId}` | | One character |
+| GET | `/{universe}/films` | `page` | Paged films |
+| GET | `/{universe}/films/{filmId}` | | One film |
+| GET | `/{universe}/people/{characterId}/path-to/{targetId}` | | Shortest chains of shared films between two characters |
+| GET | `/{universe}/graph/insights` | | How connected each character is, and the shape of the whole graph |
 | GET | `/docs/openapi` | | Swagger UI |
 | GET | `/` | | Browser UI: search and the character graph |
+
+`{universe}` is one of `starwars`, `mcu`, `lotr` or `hp`. The actor paths carry
+no universe, because actors are not in one. A slug the server
+holds no data for answers 404 rather than 400: the name is one this API knows,
+the dataset is what is missing. The paths that predate the prefix — `/people`,
+`/films` and `/graph` — redirect permanently to the Star Wars dataset, so an
+entity's `url` names exactly one place.
 
 Paged responses carry the total alongside the current page:
 
@@ -77,20 +104,33 @@ Paged responses carry the total alongside the current page:
   "results": [
     {
       "name": "Luke Skywalker",
-      "height": "172",
-      "mass": "77",
-      "hair_color": "blond",
-      "birth_year": "19BBY",
-      "films": ["http://localhost:8080/films/1/"],
-      "url": "http://localhost:8080/people/1/"
+      "films": ["http://localhost:8080/starwars/films/1/"],
+      "attributes": {
+        "height": "172",
+        "mass": "77",
+        "hair_color": "blond",
+        "birth_year": "19BBY"
+      },
+      "links": {
+        "homeworld": ["http://localhost:8080/starwars/planets/1/"]
+      },
+      "url": "http://localhost:8080/starwars/people/1/"
     }
   ]
 }
 ```
 
-`height` and `mass` are carried as strings. Values recorded as `unknown`
-upstream are absent from the response rather than reported as a number or an
-empty string.
+Only what every universe has is a field. A homeworld, a house and a realm are
+each recorded by one universe, so they ride in `attributes` when they are
+values and in `links` when they are urls. That is what lets one schema, one
+sorter and one set of endpoints serve four datasets — and what lets a new
+universe arrive without a migration.
+
+Attribute values are strings, and they carry whatever the source recorded —
+including `unknown`, which is what swapi reports for a fact nobody has
+established. The two exceptions are `height` and `mass`: those were numbers
+before the bag and an unmeasured one was absent rather than zero, so they are
+still left out rather than carrying a word where a number belongs.
 
 ## Films and series
 
@@ -143,15 +183,19 @@ one is expected, and need no unwrapping to reach SQL or JSON.
 
 ## Sorting
 
-`sortBy` takes a comma separated list of `field:direction` pairs, applied left
-to right. Directions are `ASC` and `DESC`. Field names are the Scala field
-names, so `eyeColor` rather than `eye_color`.
+`sortBy` takes a comma separated list of `key:direction` pairs, applied left to
+right. Directions are `ASC` and `DESC`. A key is either a field of the entity
+(`name`, `url`) or an attribute key (`height`, `house`, `race`).
 
 ```sh
-curl 'http://localhost:8080/people?sortBy=eyeColor:ASC,height:DESC'
+curl 'http://localhost:8080/starwars/people?sortBy=height:DESC,name:ASC'
 ```
 
-Unknown field names are ignored rather than rejected.
+Attribute values are strings, so the ones that are numbers are compared as
+numbers: `height:DESC` puts Yarael Poof at 264 above Luke at 172, not "9" above
+"172". Numbers sort before text and characters with no value for the key sort
+last, whichever direction is asked for. Keys nothing carries are ignored rather
+than rejected.
 
 The sorter behind this is a standalone module with no dependencies. Derive it
 for any case class and sort by field name at runtime:
@@ -216,9 +260,9 @@ films connects them.
 The same search is available directly:
 
 ```scala
-import com.matthewjones372.search.SWGraph
+import com.matthewjones372.search.Graph
 
-val graph = SWGraph(
+val graph = Graph(
   Map(
     "Lobot"     -> Set("The Empire Strikes Back"),
     "Luke"      -> Set("The Empire Strikes Back", "A New Hope"),
@@ -292,15 +336,15 @@ The client wraps the same API with caching, retries and typed errors. Failures
 arrive as `ClientError` values rather than exceptions.
 
 ```scala
-import com.matthewjones372.api.client.SWAPIClientService
+import com.matthewjones372.api.client.UniverseClient
 import zio.*, zio.http.*
 
 object Example extends ZIOAppDefault:
   def run =
     (for
-      films <- SWAPIClientService.getFilmsFromCharacter(1)
+      films <- UniverseClient.getFilmsFromCharacter(1)
       _     <- Console.printLine(films.mkString(", "))
-    yield ()).provide(SWAPIClientService.default, Scope.default, Client.default)
+    yield ()).provide(UniverseClient.default, Scope.default, Client.default)
 ```
 
 Responses are cached for 30 minutes. Server errors are retried with exponential
@@ -327,12 +371,12 @@ import zio.*
 
 import java.nio.file.Path
 
-val source = SwDatabase.file(Path.of("swapi.db"))
+val source = Database.file(Path.of("swapi.db"))
 
 for
-  _         <- SwMigrations.migrate.provideEnvironment(ZEnvironment(source))
+  _         <- Migrations.migrate.provideEnvironment(ZEnvironment(source))
   transactor = ZTransactor(source)
-  _         <- SwSeed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
+  _         <- Seed.fromBundledData.provideEnvironment(ZEnvironment(transactor))
   people    <- SqlDataRepo(transactor).getCharacters(Some(PageNumber.first), Some(PageSize.default), None)
 yield people
 ```
@@ -340,15 +384,50 @@ yield people
 The database is a file. SQLite's in-memory mode is deliberately not offered:
 a shared-cache in-memory database is destroyed when its last connection
 closes, so it cannot survive a `DataSource` that opens a connection per query.
-Use `SWDataRepo.layer` when you want the data held in memory.
+Use `DataRepo.layer` when you want the data held in memory.
 
 Characters and films are stored in normalised tables, with `people_films`
 carrying the relation the graph search walks. Paging and sorting run in SQL.
 Sort keys are matched against a column whitelist, so a `sortBy` value that is
 not a known field never reaches the query.
 
-Foreign keys are off by default in SQLite, so `SwDatabase` turns them on for
+Foreign keys are off by default in SQLite, so `Database` turns them on for
 every connection it hands out.
+
+## Where the data comes from
+
+Star Wars keeps its swapi data, which records heights, homeworlds and species
+that Wikidata does not. Everything else — the other three universes, and the
+cast of all four — is built from Wikidata by
+`scripts.GenerateUniverseData`, which is run by hand; what ships is the JSON it
+writes.
+
+One query shape serves every franchise, and the pass that finds a film's cast
+finds the character each performer played in the same statement, which is what
+makes an actor graph spanning four universes possible from one source. The
+public SPARQL endpoint throttles, so the script retries with a backoff and each
+franchise is queried on its own: a query joining across all four times out.
+
+The Star Wars live-action series are not part of any series item in Wikidata,
+so P179 does not reach them and they are named one by one, as are Rogue One,
+Solo and The Mandalorian and Grogu. Without them the scrape saw ten of the
+nineteen titles.
+
+The two sides also number and name things differently: swapi's sixth film is
+"Return of the Jedi" where Wikidata's is "Star Wars: Episode VI - Return of
+the Jedi", and both write a url as `/starwars/films/6/` meaning different
+films. So the merge translates every Wikidata url onto the swapi entity it
+means, and drops a credit it cannot translate rather than letting a number
+that happens to exist stand in for it. Titles and character names are then
+taken from the dataset, so a role reads the way the entity it points at does.
+
+92 of the 301 Star Wars characters have an actor, and all 19 titles have a
+cast. The rest are droids, creatures and background aliens that swapi lists
+and Wikidata does not credit to a named performer.
+
+```sh
+sbt "runMain scripts.GenerateUniverseData"
+```
 
 ## Modules
 
@@ -358,7 +437,7 @@ every connection it hands out.
 | `data` | In-memory and SQLite backed repositories, migrations and seeding |
 | `http-api` | Endpoint definitions, handlers and OpenAPI generation |
 | `api-client` | Caching HTTP client with retry policies |
-| `search` | Breadth first search over the character graph |
+| `search` | Breadth first search over the character and actor graphs |
 | `multi-sort` | Runtime multi-field sorting derived from case classes |
 
 `api-client` and `multi-sort` are published to GitHub Packages.

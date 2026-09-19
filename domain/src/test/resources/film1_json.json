@@ -1,1 +1,49 @@
-{"title":"The Empire Strikes Back","episode_id":5,"opening_crawl":"opening","director":"Irvin Kershner","producer":"Gary Kurtz, Rick McCallum","release_date":"1980-05-17","characters":[],"planets":["https://swapi.dev/api/planets/4/","https://swapi.dev/api/planets/5/","https://swapi.dev/api/planets/6/","https://swapi.dev/api/planets/27/"],"starships":["https://swapi.dev/api/starships/3/","https://swapi.dev/api/starships/10/","https://swapi.dev/api/starships/11/","https://swapi.dev/api/starships/12/","https://swapi.dev/api/starships/15/","https://swapi.dev/api/starships/17/","https://swapi.dev/api/starships/21/","https://swapi.dev/api/starships/22/","https://swapi.dev/api/starships/23/"],"vehicles":["https://swapi.dev/api/vehicles/8/","https://swapi.dev/api/vehicles/14/","https://swapi.dev/api/vehicles/16/","https://swapi.dev/api/vehicles/18/","https://swapi.dev/api/vehicles/19/","https://swapi.dev/api/vehicles/20/"],"species":["https://swapi.dev/api/species/1/","https://swapi.dev/api/species/2/","https://swapi.dev/api/species/3/","https://swapi.dev/api/species/6/","https://swapi.dev/api/species/7/"],"created":"2014-12-12T11:26:24.656000Z","edited":"2014-12-15T13:07:53.386000Z","url":"https://swapi.dev/api/films/2/"}
+{
+  "title": "The Empire Strikes Back",
+  "episode_id": 5,
+  "director": "Irvin Kershner",
+  "producer": "Gary Kurtz, Rick McCallum",
+  "release_date": "1980-05-17",
+  "characters": [],
+  "attributes": {
+    "opening_crawl": "opening",
+    "created": "2014-12-12T11:26:24.656000Z",
+    "edited": "2014-12-15T13:07:53.386000Z"
+  },
+  "links": {
+    "planets": [
+      "https://swapi.dev/api/planets/27/",
+      "https://swapi.dev/api/planets/4/",
+      "https://swapi.dev/api/planets/5/",
+      "https://swapi.dev/api/planets/6/"
+    ],
+    "starships": [
+      "https://swapi.dev/api/starships/10/",
+      "https://swapi.dev/api/starships/11/",
+      "https://swapi.dev/api/starships/12/",
+      "https://swapi.dev/api/starships/15/",
+      "https://swapi.dev/api/starships/17/",
+      "https://swapi.dev/api/starships/21/",
+      "https://swapi.dev/api/starships/22/",
+      "https://swapi.dev/api/starships/23/",
+      "https://swapi.dev/api/starships/3/"
+    ],
+    "vehicles": [
+      "https://swapi.dev/api/vehicles/14/",
+      "https://swapi.dev/api/vehicles/16/",
+      "https://swapi.dev/api/vehicles/18/",
+      "https://swapi.dev/api/vehicles/19/",
+      "https://swapi.dev/api/vehicles/20/",
+      "https://swapi.dev/api/vehicles/8/"
+    ],
+    "species": [
+      "https://swapi.dev/api/species/1/",
+      "https://swapi.dev/api/species/2/",
+      "https://swapi.dev/api/species/3/",
+      "https://swapi.dev/api/species/6/",
+      "https://swapi.dev/api/species/7/"
+    ]
+  },
+  "url": "https://swapi.dev/api/films/2/",
+  "cast": []
+}

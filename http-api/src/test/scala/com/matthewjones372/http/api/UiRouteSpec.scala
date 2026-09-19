@@ -14,7 +14,7 @@ object UiRouteSpec extends ZIOSpecDefault:
   private def serving: ZIO[Scope, Throwable, Int] =
     for
       env    <- Server.defaultWithPort(0).build
-      server <- SWHttpServer.default
+      server <- ApiServer.default
       _      <- server.start.provideEnvironment(env).forkScoped
       port   <- env.get[Server].port
       _      <- awaitBound(port)
@@ -32,6 +32,14 @@ object UiRouteSpec extends ZIOSpecDefault:
       body     <- response.body.asString
     yield (response.status, response.header(Header.ContentType), body)
 
+  // Redirects are the point here, so this client is told not to follow them.
+  private def locationOf(port: Int, path: String) =
+    for
+      client   <- ZIO.service[Client]
+      response <- client(Request.get(URL.decode(s"http://localhost:$port$path").toOption.get)).disconnect
+      location  = response.header(Header.Location).map(_.url.encode)
+    yield location.map(response.status -> _)
+
   private def cacheControl(port: Int, path: String) =
     for
       client   <- ZIO.service[Client]
@@ -47,7 +55,7 @@ object UiRouteSpec extends ZIOSpecDefault:
         yield assertTrue(
           status == Status.Ok,
           contentType.exists(_.mediaType == MediaType.text.html),
-          body.contains("<title>Star Wars Character Graph</title>")
+          body.contains("<title>Character Graph</title>")
         )
     ,
     test("is revalidated rather than left to the browser's own guess"):
@@ -80,11 +88,47 @@ object UiRouteSpec extends ZIOSpecDefault:
       ZIO.scoped:
         for
           port              <- serving
-          (person, _, body) <- get(port, "/people/1")
+          (person, _, body) <- get(port, "/starwars/people/1")
           (docs, _, _)      <- get(port, "/docs/openapi")
         yield assertTrue(
           person == Status.Ok,
           docs == Status.Ok,
           body.contains("Luke Skywalker")
+        )
+    ,
+    test("answers 404 for a universe it does not serve"):
+      ZIO.scoped:
+        for
+          port                <- serving
+          (unknown, _, uBody) <- get(port, "/startrek/people/1")
+          (list, _, _)        <- get(port, "/startrek/people")
+          (graph, _, _)       <- get(port, "/startrek/graph/insights")
+        yield assertTrue(
+          unknown == Status.NotFound,
+          list == Status.NotFound,
+          graph == Status.NotFound,
+          uBody.contains("startrek")
+        )
+    ,
+    test("serves every universe it does hold"):
+      ZIO.scoped:
+        for
+          port  <- serving
+          codes <- ZIO.foreach(List("starwars", "mcu", "lotr", "hp"))(slug => get(port, s"/$slug/films/1").map(_._1))
+        yield assertTrue(codes.forall(_ == Status.Ok))
+    ,
+    test("sends the paths the api answered on before the universe prefix to the default one"):
+      ZIO.scoped:
+        for
+          port   <- serving
+          person <- locationOf(port, "/people/1")
+          people <- locationOf(port, "/people?page=2")
+          films  <- locationOf(port, "/films/1")
+          graph  <- locationOf(port, "/graph/insights")
+        yield assertTrue(
+          person == Some(Status.PermanentRedirect -> "/starwars/people/1"),
+          people == Some(Status.PermanentRedirect -> "/starwars/people?page=2"),
+          films == Some(Status.PermanentRedirect -> "/starwars/films/1"),
+          graph == Some(Status.PermanentRedirect -> "/starwars/graph/insights")
         )
   ).provide(Client.default) @@ TestAspect.withLiveClock

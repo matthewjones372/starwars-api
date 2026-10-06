@@ -17,24 +17,22 @@ Wars, the Marvel Cinematic Universe, The Lord of the Rings and Harry Potter,
 920 characters across 80 titles, served from memory with no external services
 to start. `GET /universes` lists what the running server holds.
 
-Actors sit outside all of it. An actor belongs to no single universe, which
-makes them the one edge in this API that crosses a dataset -- 46 of them are in
-more than one. Christopher Lee is Count Dooku and Saruman, and Andy Serkis is
-in three of the four. `GET
-/actors/{id}/path-to/{id}` is a Bacon number that does not care which franchise
-either end is in.
+Actors are the exception. An actor belongs to no single universe, so actors
+are the only link in this API between datasets: 46 of them are in more than
+one. Christopher Lee is Count Dooku and Saruman, and Andy Serkis is in three of
+the four. `GET /actors/{id}/path-to/{id}` finds the shortest chain of shared
+films between two actors, whichever universe each one is in.
 
 ## Live
 
 **[starwars-api-eu.onrender.com](https://starwars-api-eu.onrender.com/)**
 
-The deployed instance serves a browser UI at `/` and the API alongside it on
-the same origin: search across every character and film, the character graph
-drawn as a force layout, and the shortest chain between any two characters
-traced by clicking one and then another, with the arrow keys cycling between
-the equally short chains that connect them. A panel ranks the cast by how many
-co-stars each character has, so the most and least connected are a click away,
-and the graph sizes and shades every character by the same measure.
+The deployed instance serves a browser UI at `/` and the API on the same
+origin. The UI has search across every character and film, and draws the
+character graph as a force layout. Click one character and then another to see
+the shortest chain between them; the arrow keys cycle through other chains of
+the same length. A panel ranks the cast by how many co-stars each character
+has, and the graph sizes and shades each character by the same number.
 
 | | |
 | --- | --- |
@@ -43,10 +41,10 @@ and the graph sizes and shades every character by the same measure.
 | Example | https://starwars-api-eu.onrender.com/starwars/people/1 |
 
 It runs on a free instance in Frankfurt, which sleeps when idle, so the first
-request after a quiet spell takes a few seconds to wake it. The region is
-chosen for where the readers are rather than where the data is: the same image
-served from Oregon answered in about 190ms against Frankfurt's 60ms, and
-almost all of that difference was the round trip rather than the work.
+request after a quiet spell takes a few seconds to wake it. Frankfurt is
+closer to most readers: the same image served from Oregon answered in about
+190ms against Frankfurt's 60ms, and almost all of that difference was network
+round trip.
 
 ## Quick start
 
@@ -90,11 +88,11 @@ curl 'http://localhost:8080/starwars/people?page=2&sortBy=height:DESC,name:ASC'
 | GET | `/` | | Browser UI: search and the character graph |
 
 `{universe}` is one of `starwars`, `mcu`, `lotr` or `hp`. The actor paths carry
-no universe, because actors are not in one. A slug the server
-holds no data for answers 404 rather than 400: the name is one this API knows,
-the dataset is what is missing. The paths that predate the prefix — `/people`,
-`/films` and `/graph` — redirect permanently to the Star Wars dataset, so an
-entity's `url` names exactly one place.
+no universe, because actors are not in one. A universe slug the server has
+no data for answers 404, not 400, because the name is valid and only the data
+is missing. The older paths without a prefix (`/people`, `/films` and `/graph`)
+redirect permanently to the Star Wars dataset, so each entity's `url` points to
+exactly one place.
 
 Paged responses carry the total alongside the current page:
 
@@ -120,17 +118,17 @@ Paged responses carry the total alongside the current page:
 }
 ```
 
-Only what every universe has is a field. A homeworld, a house and a realm are
-each recorded by one universe, so they ride in `attributes` when they are
-values and in `links` when they are urls. That is what lets one schema, one
-sorter and one set of endpoints serve four datasets — and what lets a new
-universe arrive without a migration.
+Only data every universe has gets its own field. A homeworld, a house and a
+realm are each recorded by only one universe, so they go in `attributes` when
+they are values and in `links` when they are urls. This way one schema, one
+sorter and one set of endpoints serve all four datasets, and a new universe
+needs no migration.
 
-Attribute values are strings, and they carry whatever the source recorded —
-including `unknown`, which is what swapi reports for a fact nobody has
-established. The two exceptions are `height` and `mass`: those were numbers
-before the bag and an unmeasured one was absent rather than zero, so they are
-still left out rather than carrying a word where a number belongs.
+Attribute values are strings holding whatever the source recorded, including
+`unknown`, which is what swapi uses for a fact nobody has established. The
+exceptions are `height` and `mass`. They used to be numeric fields where an
+unmeasured value was left out, so they are still left out when unknown instead
+of holding a word.
 
 ## Films and series
 
@@ -379,14 +377,13 @@ every connection it hands out.
 ## Where the data comes from
 
 Star Wars keeps its swapi data, which records heights, homeworlds and species
-that Wikidata does not. Everything else — the other three universes, and the
-cast of all four — is built from Wikidata by
-`scripts.GenerateUniverseData`, which is run by hand; what ships is the JSON it
-writes.
+that Wikidata does not. Everything else (the other three universes, and the
+cast of all four) is built from Wikidata by `scripts.GenerateUniverseData`.
+The script is run by hand, and the repository ships the JSON it writes.
 
-One query shape serves every franchise, and the pass that finds a film's cast
-finds the character each performer played in the same statement, which is what
-makes an actor graph spanning four universes possible from one source. The
+One query shape serves every franchise. The query that finds a film's cast
+also finds the character each performer played, which is what makes an actor
+graph across four universes possible from one source. The
 public SPARQL endpoint throttles, so the script retries with a backoff and each
 franchise is queried on its own: a query joining across all four times out.
 

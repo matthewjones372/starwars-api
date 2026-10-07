@@ -436,8 +436,28 @@ sbt "runMain scripts.GenerateUniverseData"
 | `api-client` | Caching HTTP client with retry policies |
 | `search` | Breadth first search over the character and actor graphs |
 | `multi-sort` | Runtime multi-field sorting derived from case classes |
+| `load-test` | A load test of the running API, outside the root aggregate |
 
 `api-client` and `multi-sort` are published to GitHub Packages.
+
+## Load testing
+
+[`load-test/`](load-test) drives the API with
+[Proofload](https://github.com/matthewjones372/proofload), from Scala, at a
+ladder of rates against `GET /people/{id}`. It reports the service's own time
+separately from time spent waiting, and says on each run whether the generator
+kept to its schedule, so a slow load generator is not mistaken for a slow API.
+It is outside the root aggregate, so `sbt test` never runs it:
+
+```sh
+sbt "load-test/test"
+```
+
+A workflow runs it weekly and on demand. Its first runs found that
+`Middleware.debug` was costing the API three to four times its capacity: the
+knee was between 2,000 and 4,000 requests a second with it on, and between
+8,000 and 12,000 with it off. The middleware has since been removed.
+[`load-test/FINDINGS.md`](load-test/FINDINGS.md) has the measurements.
 
 ## Building
 
@@ -462,3 +482,7 @@ compiled and their results produced by mdoc, then regenerate it:
 ```sh
 sbt docs/mdoc
 ```
+
+## License
+
+MIT. See [LICENSE](LICENSE).

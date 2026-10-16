@@ -11,7 +11,7 @@ permissions:
 jobs:
   load-test:
 
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-mattjones372
 
     steps:
       - uses: actions/checkout@v4

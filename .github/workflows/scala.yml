@@ -16,7 +16,7 @@ permissions:
 jobs:
   build:
 
-    runs-on: namespace-profile-mattjones372
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
